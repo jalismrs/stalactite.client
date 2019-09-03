@@ -10,6 +10,9 @@ abstract class AbstractClient
     /** @var string $apiHost */
     protected $apiHost;
 
+    /** @var string $userAgent */
+    protected $userAgent;
+
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
 
@@ -21,12 +24,7 @@ abstract class AbstractClient
     public function __construct(string $apiHost, ?string $userAgent = null)
     {
         $this->apiHost = $apiHost;
-
-        if ($userAgent) {
-            $this->httpClient = HttpClient::create(['headers' => ['User-Agent' => $userAgent]]);
-        } else {
-            $this->httpClient = HttpClient::create();
-        }
+        $this->userAgent = $userAgent;
     }
 
     /**
@@ -34,6 +32,14 @@ abstract class AbstractClient
      */
     public function getHttpClient(): HttpClientInterface
     {
+        if (!($this->httpClient instanceof HttpClientInterface)) {
+            if ($this->userAgent) {
+                $this->httpClient = HttpClient::create(['headers' => ['User-Agent' => $this->userAgent]]);
+            } else {
+                $this->httpClient = HttpClient::create();
+            }
+        }
+
         return $this->httpClient;
     }
 
@@ -47,5 +53,4 @@ abstract class AbstractClient
         $this->httpClient = $httpClient;
         return $this;
     }
-
 }

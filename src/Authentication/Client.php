@@ -25,7 +25,7 @@ class Client extends AbstractClient
      */
     public function getRSAPublicKey(): ResponseInterface
     {
-        return $this->httpClient->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
+        return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
     }
 
     /**
