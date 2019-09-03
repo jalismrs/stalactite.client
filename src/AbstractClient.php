@@ -2,8 +2,13 @@
 
 namespace jalismrs\Stalactite\Client;
 
+use hunomina\Validator\Json\Data\JsonData;
+use hunomina\Validator\Json\Exception\InvalidDataException;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Throwable;
 
 abstract class AbstractClient
 {
@@ -52,5 +57,38 @@ abstract class AbstractClient
     {
         $this->httpClient = $httpClient;
         return $this;
+    }
+
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
+     * @return array|null
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * Method to contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
+     */
+    protected function request(string $method, string $url, array $options, JsonSchema $schema): array
+    {
+        try {
+            $response = $this->getHttpClient()->request($method, $url, $options);
+        } catch (Throwable $t) {
+            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
+        }
+
+        $data = new JsonData();
+        try {
+            $data->setData($response->getContent());
+        } catch (Throwable $t) {
+            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
+        }
+
+        if (!$schema->validate($data)) {
+            throw new ClientException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
+        }
+
+        return $data->getData() ?? [];
     }
 }

@@ -2,7 +2,8 @@
 
 namespace jalismrs\Stalactite\Client\Authentication;
 
-use hunomina\Validator\Json\Data\JsonData;
+use hunomina\Validator\Json\Exception\InvalidDataException;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
@@ -80,21 +81,16 @@ class Client extends AbstractClient
      * @return array
      * @throws ClientException
      * @throws InvalidSchemaException
-     * Authenticate to the Stalactite API using a dedicated trusted app and the user google jwt
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
      */
     public function login(string $appName, string $appToken, string $userGoogleJwt): array
     {
-        try {
-            $response = $this->getHttpClient()->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', [
-                'json' => [
-                    'appName' => $appName,
-                    'appToken' => $appToken,
-                    'userGoogleJwt' => $userGoogleJwt
-                ]
-            ]);
-        } catch (Throwable $t) {
-            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
-        }
+        $data = [
+            'appName' => $appName,
+            'appToken' => $appToken,
+            'userGoogleJwt' => $userGoogleJwt
+        ];
 
         $schema = (new JsonSchema())->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
@@ -102,18 +98,7 @@ class Client extends AbstractClient
             'jwt' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $data = new JsonData();
-        try {
-            $data->setData($response->getContent());
-        } catch (Throwable $t) {
-            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
-        }
-
-        if (!$schema->validate($data)) {
-            throw new ClientException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
-        }
-
-        return $data->getData();
+        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', ['json' => $data], $schema);
     }
 
     public function trustedApps(): TrustedAppClient
