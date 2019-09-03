@@ -105,7 +105,7 @@ class Client extends AbstractClient
         }
 
         if (!$schema->validate($data)) {
-            throw new RuntimeException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
+            throw new ClientException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
         }
 
         return $data->getData();
