@@ -20,6 +20,7 @@ class Client extends AbstractClient
     {
         if (!($this->authClient instanceof Authentication\Client)) {
             $this->authClient = new Authentication\Client($this->apiHost, $this->userAgent);
+            $this->authClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->authClient;
@@ -32,6 +33,7 @@ class Client extends AbstractClient
     {
         if (!($this->dataManagementClient instanceof DataManagement\Client)) {
             $this->dataManagementClient = new DataManagement\Client($this->apiHost, $this->userAgent);
+            $this->dataManagementClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->dataManagementClient;
@@ -44,6 +46,7 @@ class Client extends AbstractClient
     {
         if (!($this->accessManagementClient instanceof AccessManagement\Client)) {
             $this->accessManagementClient = new AccessManagement\Client($this->apiHost, $this->userAgent);
+            $this->accessManagementClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->accessManagementClient;

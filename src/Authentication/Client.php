@@ -113,6 +113,7 @@ class Client extends AbstractClient
     {
         if (!($this->trustedAppClient instanceof TrustedAppClient)) {
             $this->trustedAppClient = new TrustedAppClient($this->apiHost, $this->userAgent);
+            $this->trustedAppClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->trustedAppClient;
