@@ -1,6 +1,6 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Data;
+namespace jalismrs\Stalactite\Client\DataManagement;
 
 use jalismrs\Stalactite\Client\AbstractClient;
 

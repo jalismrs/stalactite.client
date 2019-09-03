@@ -1,6 +1,6 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Access;
+namespace jalismrs\Stalactite\Client\AccessManagement;
 
 use jalismrs\Stalactite\Client\AbstractClient;
 
