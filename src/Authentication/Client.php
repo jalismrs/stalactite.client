@@ -13,25 +13,27 @@ use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
 class Client extends AbstractClient
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
 
-    private const API_URL_PREFIX = '/auth';
+    public const API_URL_PREFIX = '/auth';
     private const AUTHORIZED_JWT_TYPES = ['user', 'customer'];
 
+    /** @var TrustedAppClient $trustedAppClient */
+    private $trustedAppClient;
+
     /**
-     * @return ResponseInterface
+     * @return string
      * @throws ClientException
      * Get the Stalactite API RSA public key
      */
-    public function getRSAPublicKey(): ResponseInterface
+    public function getRSAPublicKey(): string
     {
         try {
-            return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
+            return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey')->getContent();
         } catch (Throwable $t) {
             throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
         }
@@ -56,14 +58,8 @@ class Client extends AbstractClient
 
         if ($jwt->validate($data) && !$jwt->isExpired() && in_array($jwt->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
 
-            $publicKey = $this->getRSAPublicKey();
-            try {
-                $publicKey = new Key($publicKey->getContent());
-            } catch (Throwable $e) {
-                throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
-            }
-
             $signer = new Sha256();
+            $publicKey = new Key($this->getRSAPublicKey());
 
             try {
                 return $jwt->verify($signer, $publicKey);
@@ -118,5 +114,14 @@ class Client extends AbstractClient
         }
 
         return $data->getData();
+    }
+
+    public function trustedApps(): TrustedAppClient
+    {
+        if (!($this->trustedAppClient instanceof TrustedAppClient)) {
+            $this->trustedAppClient = new TrustedAppClient($this->apiHost, $this->userAgent);
+        }
+
+        return $this->trustedAppClient;
     }
 }
