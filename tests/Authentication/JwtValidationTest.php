@@ -3,6 +3,7 @@
 namespace jalismrs\Stalactite\Client\Test\Authentication;
 
 use jalismrs\Stalactite\Client\Authentication\Client;
+use jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -66,6 +67,40 @@ class JwtValidationTest extends TestCase
         return file_get_contents(self::TEST_RSA_PUBLIC_KEY);
     }
 
+    /**
+     * @throws ClientException
+     */
+    public function testTransportExceptionThrownWhileFetchingRSAPublicKey(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
+
+        $client = new Client('invalidHost');
+        $client->getRSAPublicKey();
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function testInvalidKeyExceptionThrownWhileUsingRSAPublicKey(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse('fakeRSAPublicKey')
+        ]);
+
+        $mockAPIClient = new Client('http://fakeHost');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        // validate() should throw an exception not even return false
+        $mockAPIClient->validate(self::generateValidTestJwt());
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function testTokenValidation(): void
     {
         // use a mock http client to mock the public key http call
