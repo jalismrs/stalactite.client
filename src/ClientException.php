@@ -20,4 +20,9 @@ class ClientException extends Exception
      * Invalid Stalactite RSA public key used
      */
     public const INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR = 2;
+
+    /**
+     * Invalid user JWT string used
+     */
+    public const INVALID_USER_JWT_ERROR = 3;
 }

@@ -20,13 +20,13 @@ class JwtValidationTest extends TestCase
     /**
      * @return Token
      */
-    private static function generateValidTestJwt(): Token
+    private static function generateValidTestJwt(): string
     {
         $signer = new Sha256();
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
 
         $time = time();
-        return (new Builder())
+        return (string)(new Builder())
             ->issuedBy(Client::JWT_ISSUER)
             ->permittedFor('testTrustedAppName')
             ->relatedTo('0123456789')
@@ -43,13 +43,13 @@ class JwtValidationTest extends TestCase
      * - has a wrong issuer
      * - has a wrong user type
      */
-    private static function generateInvalidTestJwt(): Token
+    private static function generateInvalidTestJwt(): string
     {
         $signer = new Sha256();
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
 
         $time = time();
-        return (new Builder())
+        return (string)(new Builder())
             ->issuedBy('Invalid issuer')
             ->permittedFor('testTrustedAppName')
             ->relatedTo('0123456789')

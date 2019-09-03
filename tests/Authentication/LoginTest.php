@@ -2,6 +2,8 @@
 
 namespace jalismrs\Stalactite\Client\Test\Authentication;
 
+use hunomina\Validator\Json\Exception\InvalidDataException;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
 use jalismrs\Stalactite\Client\ClientException;
@@ -13,6 +15,8 @@ class LoginTest extends TestCase
 {
     /**
      * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
     public function testSchemaValidationOnLogin(): void
@@ -54,6 +58,8 @@ class LoginTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
     public function testExceptionThrownOnInvalidAPIHost(): void
@@ -67,6 +73,8 @@ class LoginTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
     public function testExceptionThrownOnInvalidAPIResponse(): void
@@ -87,6 +95,8 @@ class LoginTest extends TestCase
     /**
      * @throws ClientException
      * @throws InvalidSchemaException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
      */
     public function testExceptionThrownOnInvalidAPIResponseContent(): void
     {

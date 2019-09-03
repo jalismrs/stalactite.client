@@ -10,6 +10,7 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
+use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
@@ -41,13 +42,19 @@ class Client extends AbstractClient
     }
 
     /**
-     * @param Token $jwt
+     * @param string $jwt
      * @return bool
      * @throws ClientException
      * Check if the given JWT is a valid Stalactite API JWT
      */
-    public function validate(Token $jwt): bool
+    public function validate(string $jwt): bool
     {
+        try {
+            $token = $this->getTokenFromString($jwt);
+        } catch (Throwable $t) {
+            throw new ClientException('Invalid user JWT', ClientException::INVALID_USER_JWT_ERROR, $t);
+        }
+
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
         $data->has('iss');
@@ -57,13 +64,13 @@ class Client extends AbstractClient
         $data->has('iat');
         $data->has('exp');
 
-        if ($jwt->validate($data) && !$jwt->isExpired() && in_array($jwt->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
+        if ($token->validate($data) && !$token->isExpired() && in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
 
             $signer = new Sha256();
             $publicKey = new Key($this->getRSAPublicKey());
 
             try {
-                return $jwt->verify($signer, $publicKey);
+                return $token->verify($signer, $publicKey);
             } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
                 throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
             } catch (Throwable $t) { // other exceptions result in an invalid token
@@ -92,7 +99,8 @@ class Client extends AbstractClient
             'userGoogleJwt' => $userGoogleJwt
         ];
 
-        $schema = (new JsonSchema())->setSchema([
+        $schema = new JsonSchema();
+        $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
             'jwt' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
@@ -108,5 +116,15 @@ class Client extends AbstractClient
         }
 
         return $this->trustedAppClient;
+    }
+
+    /**
+     * @param string $jwt
+     * @return Token
+     * @throws Throwable
+     */
+    protected function getTokenFromString(string $jwt): Token
+    {
+        return (new Parser())->parse($jwt);
     }
 }
