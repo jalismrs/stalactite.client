@@ -15,4 +15,9 @@ class ClientException extends Exception
      * An error occurred while contacting the API
      */
     public const CLIENT_TRANSPORT_ERROR = 1;
+
+    /**
+     * Invalid Stalactite RSA public key used
+     */
+    public const INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR = 2;
 }
