@@ -2,6 +2,10 @@
 
 namespace jalismrs\Stalactite\Client\Authentication;
 
+use hunomina\Validator\Json\Data\JsonData;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Signer\Key;
@@ -62,5 +66,48 @@ class Client extends AbstractClient
         }
 
         return false;
+    }
+
+    /**
+     * @param string $appName
+     * @param string $appToken
+     * @param string $userGoogleJwt
+     * @return array
+     * @throws ClientException
+     * @throws InvalidSchemaException
+     * Authenticate to the Stalactite API using a dedicated trusted app and the user google jwt
+     */
+    public function login(string $appName, string $appToken, string $userGoogleJwt): array
+    {
+        try {
+            $response = $this->getHttpClient()->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', [
+                'json' => [
+                    'appName' => $appName,
+                    'appToken' => $appToken,
+                    'userGoogleJwt' => $userGoogleJwt
+                ]
+            ]);
+        } catch (Throwable $t) {
+            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
+        }
+
+        $schema = (new JsonSchema())->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'jwt' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
+        ]);
+
+        $data = new JsonData();
+        try {
+            $data->setData($response->getContent());
+        } catch (Throwable $t) {
+            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
+        }
+
+        if (!$schema->validate($data)) {
+            throw new RuntimeException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
+        }
+
+        return $data->getData();
     }
 }
