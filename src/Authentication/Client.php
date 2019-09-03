@@ -3,12 +3,12 @@
 namespace jalismrs\Stalactite\Client\Authentication;
 
 use jalismrs\Stalactite\Client\AbstractClient;
+use jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
 use RuntimeException;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
@@ -21,16 +21,22 @@ class Client extends AbstractClient
 
     /**
      * @return ResponseInterface
-     * @throws TransportExceptionInterface
+     * @throws ClientException
+     * Get the Stalactite API RSA public key
      */
     public function getRSAPublicKey(): ResponseInterface
     {
-        return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
+        try {
+            return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
+        } catch (Throwable $t) {
+            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
+        }
     }
 
     /**
      * @param Token $jwt
-     * @return bool if $jwt is a valid JWT from the Stalactite API
+     * @return bool
+     * Check if the given JWT is a valid Stalactite API JWT
      */
     public function validate(Token $jwt): bool
     {
