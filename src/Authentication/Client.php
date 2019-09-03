@@ -6,13 +6,13 @@ use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
-use RuntimeException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
@@ -33,13 +33,14 @@ class Client extends AbstractClient
         try {
             return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey');
         } catch (Throwable $t) {
-            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
+            throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
         }
     }
 
     /**
      * @param Token $jwt
      * @return bool
+     * @throws ClientException
      * Check if the given JWT is a valid Stalactite API JWT
      */
     public function validate(Token $jwt): bool
@@ -55,14 +56,22 @@ class Client extends AbstractClient
 
         if ($jwt->validate($data) && !$jwt->isExpired() && in_array($jwt->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
 
+            $publicKey = $this->getRSAPublicKey();
             try {
-                $publicKey = new Key($this->getRSAPublicKey()->getContent());
+                $publicKey = new Key($publicKey->getContent());
             } catch (Throwable $e) {
-                throw new RuntimeException('Invalid RSA public key');
+                throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
             }
 
             $signer = new Sha256();
-            return $jwt->verify($signer, $publicKey);
+
+            try {
+                return $jwt->verify($signer, $publicKey);
+            } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
+                throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
+            } catch (Throwable $t) { // other exceptions result in an invalid token
+                return false;
+            }
         }
 
         return false;
