@@ -64,7 +64,7 @@ abstract class AbstractClient
      * @param string $url
      * @param array $options
      * @param JsonSchema $schema
-     * @return array|null
+     * @return array
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
