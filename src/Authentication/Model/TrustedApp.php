@@ -4,25 +4,25 @@ namespace jalismrs\Stalactite\Client\Authentication\Model;
 
 class TrustedApp
 {
-    /** @var string $uid */
+    /** @var null|string $uid */
     private $uid;
 
-    /** @var string $name */
+    /** @var null|string $name */
     private $name;
 
-    /** @var string $googleOAuthClientId */
+    /** @var null|string $googleOAuthClientId */
     private $googleOAuthClientId;
 
-    /** @var string $authToken */
+    /** @var null|string $authToken */
     private $authToken;
 
-    /** @var string $resetToken */
+    /** @var null|string $resetToken */
     private $resetToken;
 
     /**
      * @return string
      */
-    public function getUid(): string
+    public function getUid(): ?string
     {
         return $this->uid;
     }
@@ -31,7 +31,7 @@ class TrustedApp
      * @param string $uid
      * @return TrustedApp
      */
-    public function setUid(string $uid): TrustedApp
+    public function setUid(?string $uid): TrustedApp
     {
         $this->uid = $uid;
         return $this;
@@ -40,7 +40,7 @@ class TrustedApp
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -49,7 +49,7 @@ class TrustedApp
      * @param string $name
      * @return TrustedApp
      */
-    public function setName(string $name): TrustedApp
+    public function setName(?string $name): TrustedApp
     {
         $this->name = $name;
         return $this;
@@ -58,7 +58,7 @@ class TrustedApp
     /**
      * @return string
      */
-    public function getGoogleOAuthClientId(): string
+    public function getGoogleOAuthClientId(): ?string
     {
         return $this->googleOAuthClientId;
     }
@@ -67,7 +67,7 @@ class TrustedApp
      * @param string $googleOAuthClientId
      * @return TrustedApp
      */
-    public function setGoogleOAuthClientId(string $googleOAuthClientId): TrustedApp
+    public function setGoogleOAuthClientId(?string $googleOAuthClientId): TrustedApp
     {
         $this->googleOAuthClientId = $googleOAuthClientId;
         return $this;
@@ -76,7 +76,7 @@ class TrustedApp
     /**
      * @return string
      */
-    public function getAuthToken(): string
+    public function getAuthToken(): ?string
     {
         return $this->authToken;
     }
@@ -85,7 +85,7 @@ class TrustedApp
      * @param string $authToken
      * @return TrustedApp
      */
-    public function setAuthToken(string $authToken): TrustedApp
+    public function setAuthToken(?string $authToken): TrustedApp
     {
         $this->authToken = $authToken;
         return $this;
@@ -94,7 +94,7 @@ class TrustedApp
     /**
      * @return string
      */
-    public function getResetToken(): string
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
@@ -103,7 +103,7 @@ class TrustedApp
      * @param string $resetToken
      * @return TrustedApp
      */
-    public function setResetToken(string $resetToken): TrustedApp
+    public function setResetToken(?string $resetToken): TrustedApp
     {
         $this->resetToken = $resetToken;
         return $this;
