@@ -20,7 +20,7 @@ class JwtValidationTest extends TestCase
     /**
      * @return Token
      */
-    private static function generateValidTestJwt(): string
+    private static function getValidTestableJwt(): string
     {
         $signer = new Sha256();
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
@@ -43,7 +43,7 @@ class JwtValidationTest extends TestCase
      * - has a wrong issuer
      * - has a wrong user type
      */
-    private static function generateInvalidTestJwt(): string
+    private static function getInvalidTestableJwt(): string
     {
         $signer = new Sha256();
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
@@ -70,7 +70,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      */
-    public function testTransportExceptionThrownWhileFetchingRSAPublicKey(): void
+    public function testTransportExceptionThrownOnRSAPublicKeyFetching(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
@@ -95,7 +95,7 @@ class JwtValidationTest extends TestCase
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         // validate() should throw an exception not even return false
-        $mockAPIClient->validate(self::generateValidTestJwt());
+        $mockAPIClient->validate(self::getValidTestableJwt());
     }
 
     /**
@@ -111,8 +111,8 @@ class JwtValidationTest extends TestCase
         $mockAPIClient = new Client('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $validToken = self::generateValidTestJwt();
-        $invalidToken = self::generateInvalidTestJwt();
+        $validToken = self::getValidTestableJwt();
+        $invalidToken = self::getInvalidTestableJwt();
 
         $this->assertTrue($mockAPIClient->validate($validToken));
         $this->assertFalse($mockAPIClient->validate($invalidToken));
