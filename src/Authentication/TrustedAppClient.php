@@ -14,7 +14,7 @@ use function array_merge;
 
 class TrustedAppClient extends AbstractClient
 {
-    public const API_URL_PREFIX = '/trustedApps';
+    public const API_URL_PREFIX = Client::API_URL_PREFIX . '/trustedApps';
 
     /**
      * @param string $jwt
@@ -33,7 +33,7 @@ class TrustedAppClient extends AbstractClient
             'trustedApps' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::TRUSTED_APP]
         ]);
 
-        return $this->request('GET', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX, ['headers' => ['X-API-TOKEN' => $jwt]], $schema);
+        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX, ['headers' => ['X-API-TOKEN' => $jwt]], $schema);
     }
 
     /**
@@ -54,7 +54,7 @@ class TrustedAppClient extends AbstractClient
             'trustedApps' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::TRUSTED_APP, 'null' => true]
         ]);
 
-        return $this->request('GET', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX . '/' . $uid, ['headers' => ['X-API-TOKEN' => $jwt]], $schema);
+        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, ['headers' => ['X-API-TOKEN' => $jwt]], $schema);
     }
 
     /**
@@ -74,7 +74,7 @@ class TrustedAppClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('PUT', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
+        return $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => [
                 'name' => $trustedApp->getName(),
@@ -104,7 +104,7 @@ class TrustedAppClient extends AbstractClient
             )]
         ]);
 
-        return $this->request('POST', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX, [
+        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => [
                 'name' => $trustedApp->getName(),
@@ -130,7 +130,7 @@ class TrustedAppClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
+        return $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => [
                 'resetToken' => $trustedApp->getResetToken()
@@ -156,7 +156,7 @@ class TrustedAppClient extends AbstractClient
             'trustedApp' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::TRUSTED_APP]
         ]);
 
-        return $this->request('PUT', $this->apiHost . Client::API_URL_PREFIX . self::API_URL_PREFIX . '/' . $trustedApp->getUid() . '/authToken/reset', [
+        return $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid() . '/authToken/reset', [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => [
                 'resetToken' => $trustedApp->getResetToken()
