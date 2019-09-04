@@ -1,0 +1,31 @@
+{
+  "name": "jalismrs/stalactite-api.client",
+  "license": "proprietary",
+  "description": "PHP Client for Stalactite API",
+  "type": "library",
+  "authors": [
+    {
+      "name": "hunomina",
+      "email": "hugo.f972@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "symfony/http-client": "^4.3",
+    "lcobucci/jwt": "^3.3",
+    "hunomina/json-data-validator": "^1.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">7 <9"
+  },
+  "autoload": {
+    "psr-4": {
+      "jalismrs\\Stalactite\\Client\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "jalismrs\\Stalactite\\Client\\Test\\": "tests/"
+    }
+  }
+}
