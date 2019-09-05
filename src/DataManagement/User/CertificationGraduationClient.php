@@ -14,7 +14,7 @@ use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
 
-class CertificationClient extends AbstractClient
+class CertificationGraduationClient extends AbstractClient
 {
     public const API_URL_PREFIX = '/certifications';
 
@@ -54,7 +54,7 @@ class CertificationClient extends AbstractClient
     public function addCertification(User $user, CertificationGraduation $certificationGraduation, string $jwt): array
     {
         if (!($certificationGraduation->getType() instanceof CertificationType)) {
-            throw new ClientException('Certification Graduation type must be a Certification Type');
+            throw new ClientException('Certification Graduation type must be a Certification Type', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
         }
 
         $body = [

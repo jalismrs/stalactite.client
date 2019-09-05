@@ -9,12 +9,12 @@ use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
 use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\User\CertificationClient;
+use jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduationClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class CertificationClientTest extends TestCase
+class CertificationGraduationClientTest extends TestCase
 {
     /**
      * @return User
@@ -57,7 +57,7 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $this->assertIsArray($mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt'));
@@ -82,7 +82,7 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt');
@@ -103,7 +103,7 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $this->assertIsArray($mockAPIClient->addCertification(self::getTestableUser(), self::getTestableCertificationGraduation(), 'fake user jwt'));
@@ -127,7 +127,7 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $mockAPIClient->addCertification(self::getTestableUser(), self::getTestableCertificationGraduation(), 'fake user jwt');
@@ -142,9 +142,9 @@ class CertificationClientTest extends TestCase
     public function testThrowExceptionOnInvalidCertificationTypeAddCertification(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $certification = self::getTestableCertificationGraduation()->setType(null);
 
         $mockAPIClient->addCertification(self::getTestableUser(), $certification, 'fake user jwt');
@@ -165,7 +165,7 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $this->assertIsArray($mockAPIClient->removeCertification(self::getTestableUser(), self::getTestableCertificationGraduation(), 'fake user jwt'));
@@ -189,9 +189,9 @@ class CertificationClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new CertificationClient('http://fakeHost');
+        $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->addCertification(self::getTestableUser(), self::getTestableCertificationGraduation(), 'fake user jwt');
+        $mockAPIClient->removeCertification(self::getTestableUser(), self::getTestableCertificationGraduation(), 'fake user jwt');
     }
 }
