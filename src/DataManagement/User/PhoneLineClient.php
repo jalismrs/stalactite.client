@@ -6,7 +6,7 @@ use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
 
-class PhoneClient extends AbstractClient
+class PhoneLineClient extends AbstractClient
 {
     public const API_URL_PREFIX = '/phone/lines';
 
@@ -37,7 +37,7 @@ class PhoneClient extends AbstractClient
      * @param string $jwt
      * @return array
      */
-    public function deletePhoneLine(User $user, PhoneLine $phoneLine, string $jwt): array
+    public function removePhoneLine(User $user, PhoneLine $phoneLine, string $jwt): array
     {
 
     }

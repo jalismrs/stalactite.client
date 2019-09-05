@@ -29,7 +29,7 @@ class UserClient extends AbstractClient
     /** @var CertificationGraduationClient $certificationClient */
     private $certificationClient;
 
-    /** @var PhoneClient $phoneClient */
+    /** @var PhoneLineClient $phoneClient */
     private $phoneClient;
 
     /**
@@ -85,12 +85,12 @@ class UserClient extends AbstractClient
     }
 
     /**
-     * @return PhoneClient
+     * @return PhoneLineClient
      */
-    public function phones(): PhoneClient
+    public function phones(): PhoneLineClient
     {
-        if (!($this->phoneClient instanceof PhoneClient)) {
-            $this->phoneClient = new PhoneClient($this->apiHost, $this->userAgent);
+        if (!($this->phoneClient instanceof PhoneLineClient)) {
+            $this->phoneClient = new PhoneLineClient($this->apiHost, $this->userAgent);
             $this->phoneClient->setHttpClient($this->getHttpClient());
         }
 
