@@ -9,13 +9,14 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
+use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
 
-class LeadClient extends AbstractClient
+class CertificationGraduationClient extends AbstractClient
 {
-    public const API_URL_PREFIX = '/leads';
+    public const API_URL_PREFIX = '/certifications';
 
     /**
      * @param User $user
@@ -32,7 +33,7 @@ class LeadClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'leads' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::POST]
+            'certifications' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::CERTIFICATION_GRADUATION]
         ]);
 
         return $this->request('GET', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
@@ -42,7 +43,7 @@ class LeadClient extends AbstractClient
 
     /**
      * @param User $user
-     * @param array $leads
+     * @param CertificationGraduation $certificationGraduation
      * @param string $jwt
      * @return array
      * @throws ClientException
@@ -50,24 +51,23 @@ class LeadClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addLeads(User $user, array $leads, string $jwt): array
+    public function addCertification(User $user, CertificationGraduation $certificationGraduation, string $jwt): array
     {
-        $body = ['leads' => []];
-
-        foreach ($leads as $lead) {
-            if (!($lead instanceof Post)) {
-                throw new ClientException('$leads array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-            }
-
-            if ($lead->getUid() !== null) {
-                $body['leads'][] = $lead->getUid();
-            }
+        if (!($certificationGraduation->getType() instanceof CertificationType)) {
+            throw new ClientException('Certification Graduation type must be a Certification Type', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
         }
+
+        $body = [
+            'date' => $certificationGraduation->getDate(),
+            'type' => [
+                'uid' => $certificationGraduation->getType()->getUid()
+            ]
+        ];
 
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
         ]);
 
         return $this->request('POST', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
@@ -78,7 +78,7 @@ class LeadClient extends AbstractClient
 
     /**
      * @param User $user
-     * @param array $leads
+     * @param CertificationGraduation $certificationGraduation
      * @param string $jwt
      * @return array
      * @throws ClientException
@@ -86,29 +86,16 @@ class LeadClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function removeLeads(User $user, array $leads, string $jwt): array
+    public function removeCertification(User $user, CertificationGraduation $certificationGraduation, string $jwt): array
     {
-        $body = ['leads' => []];
-
-        foreach ($leads as $lead) {
-            if (!($lead instanceof Post)) {
-                throw new ClientException('$leads array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-            }
-
-            if ($lead->getUid() !== null) {
-                $body['posts'][] = $lead->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
-            'headers' => ['X-API-TOKEN' => $jwt],
-            'json' => $body
+        return $this->request('DELETE', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $certificationGraduation->getUid(), [
+            'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
     }
 }

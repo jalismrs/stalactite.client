@@ -12,12 +12,12 @@ use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
 use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
 use jalismrs\Stalactite\Client\DataManagement\Model\Post;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\User\UserClient;
+use jalismrs\Stalactite\Client\DataManagement\User\MeClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class UserClientTest extends TestCase
+class MeClientTest extends TestCase
 {
     /**
      * @return User
@@ -92,22 +92,20 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testGetAll(): void
+    public function testGet(): void
     {
         $mockHttpClient = new MockHttpClient(
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'users' => [
-                    self::getTestableUser()->asMinimalArray()
-                ]
+                'me' => self::getTestableUser()->asArray()
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $this->assertIsArray($mockAPIClient->get('fake user jwt'));
     }
 
     /**
@@ -116,7 +114,7 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnGetAll(): void
+    public function testThrowExceptionOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -125,108 +123,14 @@ class UserClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'users' => null // invalid type
+                'me' => [self::getTestableUser()->asArray()] // invalid type
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->getAll('fake user jwt');
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testGetOne(): void
-    {
-        $mockHttpClient = new MockHttpClient(
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'user' => self::getTestableUser()->asArray()
-            ]))
-        );
-
-        $mockAPIClient = new UserClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $this->assertIsArray($mockAPIClient->get(new User(), 'fake user jwt'));
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testThrowOnInvalidResponseOnGetOne(): void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient(
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'user' => [] // should not be an empty array
-            ]))
-        );
-
-        $mockAPIClient = new UserClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->get(new User(), 'fake user jwt');
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testCreate(): void
-    {
-        $mockHttpClient = new MockHttpClient(
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'user' => self::getTestableUser()->asArray()
-            ]))
-        );
-
-        $mockAPIClient = new UserClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $this->assertIsArray($mockAPIClient->create(new User(), 'fake user jwt'));
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testThrowOnInvalidResponseOnCreate(): void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient(
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'user' => null // can not be null
-            ]))
-        );
-
-        $mockAPIClient = new UserClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->create(new User(), 'fake user jwt');
+        $mockAPIClient->get('fake user jwt');
     }
 
     /**
@@ -244,10 +148,10 @@ class UserClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(new User(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->update(self::getTestableUser(), 'fake user jwt'));
     }
 
     /**
@@ -256,7 +160,7 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnUpdate(): void
+    public function testThrowExceptionOnInvalidResponseUpdate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -268,10 +172,10 @@ class UserClientTest extends TestCase
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->update(new User(), 'fake user jwt');
+        $mockAPIClient->update(self::getTestableUser(), 'fake user jwt');
     }
 
     /**
@@ -280,20 +184,19 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testDelete(): void
+    public function testAddPhoneLine(): void
     {
         $mockHttpClient = new MockHttpClient(
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => null,
-                'user' => self::getTestableUser()->asArray()
+                'error' => null
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(new User(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->addPhoneLine(self::getTestablePhoneLine(), 'fake user jwt'));
     }
 
     /**
@@ -302,7 +205,7 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnDelete(): void
+    public function testThrowExceptionOnInvalidResponseAddPhoneLine(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -310,13 +213,84 @@ class UserClientTest extends TestCase
         $mockHttpClient = new MockHttpClient(
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => false, // invalid type
+                'error' => false // invalid type
             ]))
         );
 
-        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->delete(new User(), 'fake user jwt');
+        $mockAPIClient->addPhoneLine(self::getTestablePhoneLine(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidPhoneTypeAddPhoneLine(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
+
+        $mockHttpClient = new MockHttpClient(
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null // invalid type
+            ]))
+        );
+
+        $mockAPIClient = new MeClient('http://fakeHost');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $phoneLine = self::getTestablePhoneLine()->setType(null);
+
+        $mockAPIClient->addPhoneLine($phoneLine, 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testRemovePhoneLine(): void
+    {
+        $mockHttpClient = new MockHttpClient(
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null
+            ]))
+        );
+
+        $mockAPIClient = new MeClient('http://fakeHost');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $this->assertIsArray($mockAPIClient->removePhoneLine(self::getTestablePhoneLine(), 'fake user jwt'));
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidResponseRemovePhoneLine(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient(
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => false // invalid type
+            ]))
+        );
+
+        $mockAPIClient = new MeClient('http://fakeHost');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $mockAPIClient->removePhoneLine(self::getTestablePhoneLine(), 'fake user jwt');
     }
 }
