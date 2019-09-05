@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c0af21f2639dbffeeaa4d3d2d95dcaa",
+    "content-hash": "4e6db29f1089c10266dc5d3f54ce6056",
     "packages": [
         {
             "name": "hunomina/json-data-validator",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hunomina/json-data-validator.git",
-                "reference": "81c8506afe87626d1f4f71f3878ced12b154b0ed"
+                "reference": "fff2a660b60587af507c33cbc4184ef04ebbbccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hunomina/json-data-validator/zipball/81c8506afe87626d1f4f71f3878ced12b154b0ed",
-                "reference": "81c8506afe87626d1f4f71f3878ced12b154b0ed",
+                "url": "https://api.github.com/repos/hunomina/json-data-validator/zipball/fff2a660b60587af507c33cbc4184ef04ebbbccb",
+                "reference": "fff2a660b60587af507c33cbc4184ef04ebbbccb",
                 "shasum": ""
             },
             "require": {
@@ -43,7 +43,7 @@
                 }
             ],
             "description": "Library for json schemas validation",
-            "time": "2019-08-09T13:43:29+00:00"
+            "time": "2019-09-05T08:34:15+00:00"
         },
         {
             "name": "lcobucci/jwt",
@@ -1851,6 +1851,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": []
 }
