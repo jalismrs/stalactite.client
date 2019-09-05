@@ -25,4 +25,9 @@ class ClientException extends Exception
      * Invalid user JWT string used
      */
     public const INVALID_USER_JWT_ERROR = 3;
+
+    /**
+     * Invalid parameter passed to the API client
+     */
+    public const INVALID_PARAMETER_PASSED_TO_CLIENT = 4;
 }
