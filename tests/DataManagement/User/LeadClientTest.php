@@ -81,7 +81,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt'));
+        $mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt');
     }
 
     /**
@@ -126,7 +126,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt'));
+        $mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt');
     }
 
     /**
@@ -150,7 +150,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt'));
+        $mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt');
     }
 
     /**
@@ -195,7 +195,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt'));
+        $mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt');
     }
 
     /**
@@ -219,6 +219,6 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt'));
+        $mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt');
     }
 }

@@ -75,7 +75,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->getAll('fake user jwt'));
+        $mockClient->trustedApps()->getAll('fake user jwt');
     }
 
     /**
@@ -127,7 +127,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt'));
+        $mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt');
     }
 
     /**
@@ -179,7 +179,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->create(self::generateTrustedApp(), 'fake user jwt'));
+        $mockClient->trustedApps()->create(self::generateTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -224,7 +224,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->update(self::generateTrustedApp(), 'fake user jwt'));
+        $mockClient->trustedApps()->update(self::generateTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -269,7 +269,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->delete(self::generateTrustedApp(), 'fake user jwt'));
+        $mockClient->trustedApps()->delete(self::generateTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -320,6 +320,6 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->resetAuthToken(self::generateTrustedApp(), 'fake user jwt'));
+        $mockClient->trustedApps()->resetAuthToken(self::generateTrustedApp(), 'fake user jwt');
     }
 }

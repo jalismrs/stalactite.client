@@ -132,7 +132,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $mockAPIClient->getAll('fake user jwt');
     }
 
     /**
@@ -179,7 +179,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(new User(), 'fake user jwt'));
+        $mockAPIClient->get(new User(), 'fake user jwt');
     }
 
     /**
@@ -226,7 +226,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(new User(), 'fake user jwt'));
+        $mockAPIClient->create(new User(), 'fake user jwt');
     }
 
     /**
@@ -271,7 +271,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(new User(), 'fake user jwt'));
+        $mockAPIClient->update(new User(), 'fake user jwt');
     }
 
     /**
@@ -317,6 +317,6 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(new User(), 'fake user jwt'));
+        $mockAPIClient->delete(new User(), 'fake user jwt');
     }
 }

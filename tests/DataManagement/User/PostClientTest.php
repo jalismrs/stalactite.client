@@ -81,7 +81,7 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt'));
+        $mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt');
     }
 
     /**
@@ -126,7 +126,7 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addPosts(self::getTestableUser(), [self::getTestablePost()], 'fake user jwt'));
+        $mockAPIClient->addPosts(self::getTestableUser(), [self::getTestablePost()], 'fake user jwt');
     }
 
     /**
@@ -150,7 +150,7 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addPosts(self::getTestableUser(), [self::getTestablePost()->asArray()], 'fake user jwt'));
+        $mockAPIClient->addPosts(self::getTestableUser(), [self::getTestablePost()->asArray()], 'fake user jwt');
     }
 
     /**
@@ -195,7 +195,7 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removePosts(self::getTestableUser(), [self::getTestablePost()], 'fake user jwt'));
+        $mockAPIClient->removePosts(self::getTestableUser(), [self::getTestablePost()], 'fake user jwt');
     }
 
     /**
@@ -219,6 +219,6 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removePosts(self::getTestableUser(), [self::getTestablePost()->asArray()], 'fake user jwt'));
+        $mockAPIClient->removePosts(self::getTestableUser(), [self::getTestablePost()->asArray()], 'fake user jwt');
     }
 }
