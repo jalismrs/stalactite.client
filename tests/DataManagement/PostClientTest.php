@@ -1,43 +1,38 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Test\Authentication;
+namespace jalismrs\Stalactite\Client\Test\DataManagement;
 
 use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use jalismrs\Stalactite\Client\Authentication\Client;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\PostClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class TrustedAppTest extends TestCase
+class PostClientTest extends TestCase
 {
     /**
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function testGetAllTrustedApps(): void
+    public function testGetAll(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => [[
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake trusted app',
-                    'authToken' => 'qsdfghjklm',
-                    'googleOAuthClientId' => 'wxcvbn'
-                ]]
+                'posts' => [ModelFactory::getTestablePost()->asArray()]
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->getAll('fake user jwt'));
+        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
     }
 
     /**
@@ -46,7 +41,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testInvalidResponseFromApiWhileGettingTrustedApps(): void
+    public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -55,14 +50,14 @@ class TrustedAppTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => 'wrong response type'
+                'posts' => ModelFactory::getTestablePost()->asArray() // invalid type
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->getAll('fake user jwt');
+        $mockAPIClient->getAll('fake user jwt');
     }
 
     /**
@@ -71,25 +66,20 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testGetTrustedApp(): void
+    public function testGet(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake trusted app',
-                    'authToken' => 'qsdfghjklm',
-                    'googleOAuthClientId' => 'wxcvbn'
-                ]
+                'post' => ModelFactory::getTestablePost()->asArray()
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestablePost(), 'fake user jwt'));
     }
 
     /**
@@ -98,7 +88,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testInvalidResponseFromApiWhileGettingTrustedApp(): void
+    public function testThrowExceptionOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -107,14 +97,14 @@ class TrustedAppTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => 'wrong response type'
+                'post' => [] // invalid post
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestablePost(), 'fake user jwt');
     }
 
     /**
@@ -123,26 +113,20 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testCreateTrustedApp(): void
+    public function testGetUsers(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApp' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake name',
-                    'googleOAuthClientId' => 'qsdfghjklm',
-                    'authToken' => 'wxcvbn',
-                    'resetToken' => '1234567890'
-                ]
+                'users' => [ModelFactory::getTestableUser()->asArray()]
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->getUsers(ModelFactory::getTestablePost(), 'fake user jwt'));
     }
 
     /**
@@ -151,7 +135,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnCreateTrustedApp(): void
+    public function testThrowExceptionOnInvalidResponseGetUsers(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -159,14 +143,15 @@ class TrustedAppTest extends TestCase
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => null
+                'error' => null,
+                'users' => null // invalid type
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockAPIClient->getUsers(ModelFactory::getTestablePost(), 'fake user jwt');
     }
 
     /**
@@ -175,19 +160,20 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testUpdateTrustedApp(): void
+    public function testCreate(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => null
+                'error' => null,
+                'post' => ModelFactory::getTestablePost()->asArray()
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestablePost(), 'fake user jwt'));
     }
 
     /**
@@ -196,7 +182,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnUpdateTrustedApp(): void
+    public function testThrowExceptionOnInvalidResponseCreate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -204,14 +190,15 @@ class TrustedAppTest extends TestCase
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => false
+                'error' => null,
+                'post' => [] // invalid post
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockAPIClient->create(ModelFactory::getTestablePost(), 'fake user jwt');
     }
 
     /**
@@ -220,7 +207,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testDeleteTrustedApp(): void
+    public function testUpdate(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
@@ -229,10 +216,10 @@ class TrustedAppTest extends TestCase
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestablePost(), 'fake user jwt'));
     }
 
     /**
@@ -241,7 +228,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnDeleteTrustedApp(): void
+    public function testThrowExceptionOnInvalidResponseUpdate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -249,14 +236,14 @@ class TrustedAppTest extends TestCase
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => false
+                'error' => false // invalid type
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockAPIClient->update(ModelFactory::getTestablePost(), 'fake user jwt');
     }
 
     /**
@@ -265,25 +252,19 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testResetTrustedAppAuthToken(): void
+    public function testDelete(): void
     {
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => null,
-                'trustedApp' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake name',
-                    'googleOAuthClientId' => 'qsdfghjklm',
-                    'authToken' => 'wxcvbn'
-                ]
+                'error' => null
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestablePost(), 'fake user jwt'));
     }
 
     /**
@@ -292,7 +273,7 @@ class TrustedAppTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnResetTrustedAppAuthToken(): void
+    public function testThrowExceptionOnInvalidResponseDelete(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -300,13 +281,13 @@ class TrustedAppTest extends TestCase
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => false
+                'error' => false // invalid type
             ]))
         ]);
 
-        $mockClient = new Client('http://fakeClient');
-        $mockClient->setHttpClient($mockHttpClient);
+        $mockAPIClient = new PostClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockAPIClient->delete(ModelFactory::getTestablePost(), 'fake user jwt');
     }
 }

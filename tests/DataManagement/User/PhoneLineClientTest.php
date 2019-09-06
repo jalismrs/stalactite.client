@@ -6,41 +6,14 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\User\PhoneLineClient;
+use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class PhoneLineClientTest extends TestCase
 {
-    /**
-     * @return User
-     */
-    private static function getTestableUser(): User
-    {
-        $user = new User();
-        $user->setUid('azertyuiop');
-
-        return $user;
-    }
-
-    /**
-     * @return PhoneLine
-     */
-    private static function getTestablePhoneLine(): PhoneLine
-    {
-        $type = new PhoneType();
-        $type->setName('azerty')->setUid('azertyuiop');
-
-        $phoneLine = new PhoneLine();
-        $phoneLine->setValue('0123456789')->setType($type)->setUid('azertyuiop');
-
-        return $phoneLine;
-    }
-
     /**
      * @throws ClientException
      * @throws InvalidDataException
@@ -53,14 +26,14 @@ class PhoneLineClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'phoneLines' => [self::getTestablePhoneLine()->asArray()]
+                'phoneLines' => [ModelFactory::getTestablePhoneLine()->asArray()]
             ]))
         );
 
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt'));
     }
 
     /**
@@ -78,14 +51,14 @@ class PhoneLineClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'phoneLines' => self::getTestablePhoneLine()->asArray() // invalid type
+                'phoneLines' => ModelFactory::getTestablePhoneLine()->asArray() // invalid type
             ]))
         );
 
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt');
+        $mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt');
     }
 
     /**
@@ -106,7 +79,7 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addPhoneLine(self::getTestableUser(), self::getTestablePhoneLine(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->addPhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
     }
 
     /**
@@ -130,7 +103,7 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->addPhoneLine(self::getTestableUser(), self::getTestablePhoneLine(), 'fake user jwt');
+        $mockAPIClient->addPhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt');
     }
 
     /**
@@ -145,9 +118,9 @@ class PhoneLineClientTest extends TestCase
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
 
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
-        $phoneLine = self::getTestablePhoneLine()->setType(null);
+        $phoneLine = ModelFactory::getTestablePhoneLine()->setType(null);
 
-        $mockAPIClient->addPhoneLine(self::getTestableUser(), $phoneLine, 'fake user jwt');
+        $mockAPIClient->addPhoneLine(ModelFactory::getTestableUser(), $phoneLine, 'fake user jwt');
     }
 
     /**
@@ -168,7 +141,7 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removePhoneLine(self::getTestableUser(), self::getTestablePhoneLine(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->removePhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
     }
 
     /**
@@ -192,6 +165,6 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->removePhoneLine(self::getTestableUser(), self::getTestablePhoneLine(), 'fake user jwt');
+        $mockAPIClient->removePhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt');
     }
 }

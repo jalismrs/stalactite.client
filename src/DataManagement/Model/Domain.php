@@ -6,9 +6,6 @@ use jalismrs\Stalactite\Client\AbstractModel;
 
 class Domain extends AbstractModel
 {
-    /** @var null|string $uid */
-    private $uid;
-
     /** @var null|string $name */
     private $name;
 
@@ -18,8 +15,8 @@ class Domain extends AbstractModel
     /** @var null|string $apiKey */
     private $apiKey;
 
-    /** @var null|string $externalAuth */
-    private $externalAuth;
+    /** @var bool $externalAuth */
+    private $externalAuth = false;
 
     /** @var null|string $generationDate */
     private $generationDate;
@@ -79,18 +76,18 @@ class Domain extends AbstractModel
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
-    public function getExternalAuth(): ?string
+    public function getExternalAuth(): bool
     {
         return $this->externalAuth;
     }
 
     /**
-     * @param string|null $externalAuth
+     * @param bool $externalAuth
      * @return Domain
      */
-    public function setExternalAuth(?string $externalAuth): Domain
+    public function setExternalAuth(bool $externalAuth): Domain
     {
         $this->externalAuth = $externalAuth;
         return $this;
