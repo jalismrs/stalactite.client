@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\CertificationTypeClient;
+use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -32,7 +33,10 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $response = $mockAPIClient->getAll('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(CertificationType::class, $response->getData()['certificationTypes']);
     }
 
     /**
@@ -79,7 +83,10 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestableCertificationType(), 'fake user jwt'));
+        $response = $mockAPIClient->get(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(CertificationType::class, $response->getData()['certificationType']);
     }
 
     /**
@@ -126,7 +133,10 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestableCertificationType(), 'fake user jwt'));
+        $response = $mockAPIClient->create(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(CertificationType::class, $response->getData()['certificationType']);
     }
 
     /**
@@ -172,7 +182,9 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestableCertificationType(), 'fake user jwt'));
+        $response = $mockAPIClient->update(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -217,7 +229,9 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestableCertificationType(), 'fake user jwt'));
+        $response = $mockAPIClient->delete(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
