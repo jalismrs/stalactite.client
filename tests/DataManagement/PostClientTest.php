@@ -6,6 +6,8 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\PostClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -32,7 +34,10 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $response = $mockAPIClient->getAll('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(Post::class, $response->getData()['posts']);
     }
 
     /**
@@ -79,7 +84,10 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestablePost(), 'fake user jwt'));
+        $response = $mockAPIClient->get(ModelFactory::getTestablePost(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Post::class, $response->getData()['post']);
     }
 
     /**
@@ -126,7 +134,10 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getUsers(ModelFactory::getTestablePost(), 'fake user jwt'));
+        $response = $mockAPIClient->getUsers(ModelFactory::getTestablePost(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(User::class, $response->getData()['users']);
     }
 
     /**
@@ -173,7 +184,10 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestablePost(), 'fake user jwt'));
+        $response = $mockAPIClient->create(ModelFactory::getTestablePost(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Post::class, $response->getData()['post']);
     }
 
     /**
@@ -219,7 +233,9 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestablePost(), 'fake user jwt'));
+        $response = $mockAPIClient->update(ModelFactory::getTestablePost(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -264,7 +280,9 @@ class PostClientTest extends TestCase
         $mockAPIClient = new PostClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestablePost(), 'fake user jwt'));
+        $response = $mockAPIClient->delete(ModelFactory::getTestablePost(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
