@@ -6,37 +6,14 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\User\LeadClient;
+use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class LeadClientTest extends TestCase
 {
-    /**
-     * @return User
-     */
-    private static function getTestableUser(): User
-    {
-        $user = new User();
-        $user->setUid('azertyuiop');
-
-        return $user;
-    }
-
-    /**
-     * @return Post
-     */
-    private static function getTestableLead(): Post
-    {
-        $post = new Post();
-        $post->setShortName('aze')->setPrivilege('user')->setRank(1)->setName('azerty')->setUid('azertyuiop');
-
-        return $post;
-    }
-
     /**
      * @throws ClientException
      * @throws InvalidDataException
@@ -49,14 +26,14 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'leads' => [self::getTestableLead()->asArray()]
+                'leads' => [ModelFactory::getTestablePost()->asArray()]
             ]))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt'));
     }
 
     /**
@@ -74,14 +51,14 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'leads' => self::getTestableLead()->asArray() // invalid type
+                'leads' => ModelFactory::getTestablePost()->asArray() // invalid type
             ]))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->getAll(self::getTestableUser(), 'fake user jwt');
+        $mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt');
     }
 
     /**
@@ -102,7 +79,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt'));
     }
 
     /**
@@ -126,7 +103,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt');
+        $mockAPIClient->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
     }
 
     /**
@@ -150,7 +127,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->addLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt');
+        $mockAPIClient->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()->asArray()], 'fake user jwt');
     }
 
     /**
@@ -171,7 +148,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt'));
     }
 
     /**
@@ -195,7 +172,7 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()], 'fake user jwt');
+        $mockAPIClient->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
     }
 
     /**
@@ -219,6 +196,6 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->removeLeads(self::getTestableUser(), [self::getTestableLead()->asArray()], 'fake user jwt');
+        $mockAPIClient->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()->asArray()], 'fake user jwt');
     }
 }

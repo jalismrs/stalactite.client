@@ -7,28 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Customer\MeClient;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 class MeClientTest extends TestCase
 {
-    /**
-     * @return Customer
-     */
-    private static function getTestableCustomer(): Customer
-    {
-        $customer = new Customer();
-        $customer->setEmail('goodmorning@hello.hi')
-            ->setFirstName('azerty')
-            ->setLastName('uiop')
-            ->setGoogleId('0123456789')
-            ->setUid('azertyuiop');
-
-        return $customer;
-    }
-
     /**
      * @throws ClientException
      * @throws InvalidDataException
@@ -41,7 +26,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'me' => self::getTestableCustomer()->asArray()
+                'me' => ModelFactory::getTestableCustomer()->asArray()
             ]))
         ]);
 

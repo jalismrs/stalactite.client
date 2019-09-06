@@ -2,9 +2,12 @@
 
 namespace jalismrs\Stalactite\Client\Test\DataManagement\Customer;
 
+use hunomina\Validator\Json\Exception\InvalidDataException;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Customer\CustomerClient;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -12,22 +15,10 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class CustomerClientTest extends TestCase
 {
     /**
-     * @return Customer
-     */
-    private static function getTestableCustomer(): Customer
-    {
-        $customer = new Customer();
-        $customer->setEmail('goodmorning@hello.hi')
-            ->setFirstName('azerty')
-            ->setLastName('uiop')
-            ->setGoogleId('0123456789')
-            ->setUid('azertyuiop');
-
-        return $customer;
-    }
-
-    /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testGetAll(): void
     {
@@ -35,7 +26,7 @@ class CustomerClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'customers' => [self::getTestableCustomer()->asArray()]
+                'customers' => [ModelFactory::getTestableCustomer()->asArray()]
             ]))
         ]);
 
@@ -46,7 +37,10 @@ class CustomerClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
@@ -57,7 +51,7 @@ class CustomerClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'customers' => self::getTestableCustomer()->asArray() // invalid type
+                'customers' => ModelFactory::getTestableCustomer()->asArray() // invalid type
             ]))
         ]);
 
@@ -68,7 +62,10 @@ class CustomerClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testGet(): void
     {
@@ -76,18 +73,21 @@ class CustomerClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'customer' => self::getTestableCustomer()->asArray()
+                'customer' => ModelFactory::getTestableCustomer()->asArray()
             ]))
         ]);
 
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(self::getTestableCustomer(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestableCustomer(), 'fake user jwt'));
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseGet(): void
     {
@@ -105,11 +105,14 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(self::getTestableCustomer(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestableCustomer(), 'fake user jwt');
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testCreate(): void
     {
@@ -117,18 +120,21 @@ class CustomerClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'customer' => self::getTestableCustomer()->asArray()
+                'customer' => ModelFactory::getTestableCustomer()->asArray()
             ]))
         ]);
 
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(self::getTestableCustomer(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestableCustomer(), 'fake user jwt'));
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseCreate(): void
     {
@@ -146,11 +152,14 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->create(self::getTestableCustomer(), 'fake user jwt');
+        $mockAPIClient->create(ModelFactory::getTestableCustomer(), 'fake user jwt');
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testUpdate(): void
     {
@@ -164,11 +173,14 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(self::getTestableCustomer(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestableCustomer(), 'fake user jwt'));
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseUpdate(): void
     {
@@ -185,11 +197,14 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->update(self::getTestableCustomer(), 'fake user jwt');
+        $mockAPIClient->update(ModelFactory::getTestableCustomer(), 'fake user jwt');
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testDelete(): void
     {
@@ -203,11 +218,14 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(self::getTestableCustomer(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestableCustomer(), 'fake user jwt'));
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseDelete(): void
     {
@@ -224,6 +242,6 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(self::getTestableCustomer(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestableCustomer(), 'fake user jwt'));
     }
 }
