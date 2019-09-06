@@ -6,6 +6,7 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
 use jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -32,7 +33,10 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $response = $mockAPIClient->getAll('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(PhoneType::class, $response->getData()['phoneTypes']);
     }
 
     /**
@@ -79,7 +83,10 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestablePhoneType(), 'fake user jwt'));
+        $response = $mockAPIClient->get(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(PhoneType::class, $response->getData()['phoneType']);
     }
 
     /**
@@ -126,7 +133,10 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestablePhoneType(), 'fake user jwt'));
+        $response = $mockAPIClient->create(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(PhoneType::class, $response->getData()['phoneType']);
     }
 
     /**
@@ -172,7 +182,9 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestablePhoneType(), 'fake user jwt'));
+        $response = $mockAPIClient->update(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -217,7 +229,9 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestablePhoneType(), 'fake user jwt'));
+        $response = $mockAPIClient->delete(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
