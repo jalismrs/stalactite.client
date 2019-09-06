@@ -1,7 +1,10 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Test;
+namespace jalismrs\Stalactite\Client\Test\DataManagement;
 
+use hunomina\Validator\Json\Exception\InvalidDataException;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
 use jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient;
@@ -23,7 +26,10 @@ class PhoneTypeClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testGetAll(): void
     {
@@ -41,6 +47,12 @@ class PhoneTypeClientTest extends TestCase
         $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
         $this->expectException(ClientException::class);
@@ -60,6 +72,12 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient->getAll('fake user jwt');
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testGet(): void
     {
         $mockHttpClient = new MockHttpClient([
@@ -76,6 +94,12 @@ class PhoneTypeClientTest extends TestCase
         $this->assertIsArray($mockAPIClient->get(self::getTestablePhoneType(), 'fake user jwt'));
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testThrowExceptionOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
@@ -96,7 +120,10 @@ class PhoneTypeClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testCreate(): void
     {
@@ -114,6 +141,12 @@ class PhoneTypeClientTest extends TestCase
         $this->assertIsArray($mockAPIClient->create(self::getTestablePhoneType(), 'fake user jwt'));
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testThrowExceptionOnInvalidResponseCreate(): void
     {
         $this->expectException(ClientException::class);
@@ -133,6 +166,12 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient->create(self::getTestablePhoneType(), 'fake user jwt');
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testUpdate(): void
     {
         $mockHttpClient = new MockHttpClient([
@@ -148,6 +187,12 @@ class PhoneTypeClientTest extends TestCase
         $this->assertIsArray($mockAPIClient->update(self::getTestablePhoneType(), 'fake user jwt'));
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testThrowExceptionOnInvalidResponseUpdate(): void
     {
         $this->expectException(ClientException::class);
@@ -167,7 +212,10 @@ class PhoneTypeClientTest extends TestCase
     }
 
     /**
-     *
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testDelete(): void
     {
@@ -184,6 +232,12 @@ class PhoneTypeClientTest extends TestCase
         $this->assertIsArray($mockAPIClient->delete(self::getTestablePhoneType(), 'fake user jwt'));
     }
 
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testThrowExceptionOnInvalidResponseDelete(): void
     {
         $this->expectException(ClientException::class);

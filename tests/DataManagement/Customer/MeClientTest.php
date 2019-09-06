@@ -1,6 +1,6 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Test\Customer;
+namespace jalismrs\Stalactite\Client\Test\DataManagement\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;

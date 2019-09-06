@@ -1,6 +1,6 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Test\Customer;
+namespace jalismrs\Stalactite\Client\Test\DataManagement\Customer;
 
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Customer\CustomerClient;
