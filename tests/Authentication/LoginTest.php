@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\Response;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -43,17 +44,15 @@ class LoginTest extends TestCase
 
         // assert valid return and response content
         $response = $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
-        $this->assertIsArray($response);
-        $this->assertTrue($response['success']);
-        $this->assertNull($response['error']);
-        $this->assertIsString($response['jwt']);
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertIsString($response->getData()['jwt']);
 
         // assert valid return and response content
         $response = $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
-        $this->assertIsArray($response);
-        $this->assertFalse($response['success']);
-        $this->assertNotNull($response['error']);
-        $this->assertNull($response['jwt']);
+        $this->assertFalse($response->success());
+        $this->assertNotNull($response->getError());
+        $this->assertNull($response->getData()['jwt']);
     }
 
     /**
