@@ -6,7 +6,6 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
-use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -14,18 +13,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 class TrustedAppTest extends TestCase
 {
-    private static function generateTrustedApp(): TrustedApp
-    {
-        $trustedApp = new TrustedApp();
-        $trustedApp->setName('fake name')
-            ->setUid('azertyuiop')
-            ->setGoogleOAuthClientId('qsdfghjklm')
-            ->setAuthToken('aqwzsxedcrfv')
-            ->setResetToken('tgbyhnujikol');
-
-        return $trustedApp;
-    }
-
     /**
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
@@ -155,7 +142,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->create(self::generateTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
     }
 
     /**
@@ -179,7 +166,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->create(self::generateTrustedApp(), 'fake user jwt');
+        $mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -200,7 +187,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->update(self::generateTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
     }
 
     /**
@@ -224,7 +211,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->update(self::generateTrustedApp(), 'fake user jwt');
+        $mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -245,7 +232,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->delete(self::generateTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
     }
 
     /**
@@ -269,7 +256,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->delete(self::generateTrustedApp(), 'fake user jwt');
+        $mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -296,7 +283,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->resetAuthToken(self::generateTrustedApp(), 'fake user jwt'));
+        $this->assertIsArray($mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
     }
 
     /**
@@ -320,6 +307,6 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->resetAuthToken(self::generateTrustedApp(), 'fake user jwt');
+        $mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
     }
 }
