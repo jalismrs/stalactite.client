@@ -2,11 +2,10 @@
 
 namespace jalismrs\Stalactite\Client\Authentication\Model;
 
-class TrustedApp
-{
-    /** @var null|string $uid */
-    private $uid;
+use jalismrs\Stalactite\Client\AbstractModel;
 
+class TrustedApp extends AbstractModel
+{
     /** @var null|string $name */
     private $name;
 
@@ -18,24 +17,6 @@ class TrustedApp
 
     /** @var null|string $resetToken */
     private $resetToken;
-
-    /**
-     * @return string
-     */
-    public function getUid(): ?string
-    {
-        return $this->uid;
-    }
-
-    /**
-     * @param string $uid
-     * @return TrustedApp
-     */
-    public function setUid(?string $uid): TrustedApp
-    {
-        $this->uid = $uid;
-        return $this;
-    }
 
     /**
      * @return string
@@ -107,5 +88,19 @@ class TrustedApp
     {
         $this->resetToken = $resetToken;
         return $this;
+    }
+
+    /**
+     * @return array
+     * Return the object as an array
+     */
+    public function asArray(): array
+    {
+        return [
+            'uid' => $this->uid,
+            'name' => $this->name,
+            'authToken' => $this->authToken,
+            'googleOAuthClientId' => $this->googleOAuthClientId
+        ];
     }
 }
