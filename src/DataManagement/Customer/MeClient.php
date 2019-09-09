@@ -9,7 +9,9 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
+use jalismrs\Stalactite\Client\Response;
 
 class MeClient extends AbstractClient
 {
@@ -17,13 +19,13 @@ class MeClient extends AbstractClient
 
     /**
      * @param string $jwt
-     * @return array
+     * @return Response
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function get(string $jwt): array
+    public function get(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -32,8 +34,15 @@ class MeClient extends AbstractClient
             'me' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'me' => ModelFactory::createCustomer($r['me'])
+        ]);
+
+        return $response;
     }
 }

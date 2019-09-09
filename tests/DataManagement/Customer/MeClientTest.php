@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Customer\MeClient;
+use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -33,7 +34,10 @@ class MeClientTest extends TestCase
         $mockAPIClient = new MeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get('fake user jwt'));
+        $response = $mockAPIClient->get('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Customer::class, $response->getData()['me']);
     }
 
     /**
