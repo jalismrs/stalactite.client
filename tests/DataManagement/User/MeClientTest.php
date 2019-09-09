@@ -6,6 +6,7 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\User\MeClient;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +34,10 @@ class MeClientTest extends TestCase
         $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get('fake user jwt'));
+        $response = $mockAPIClient->get('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(User::class, $response->getData()['me']);
     }
 
     /**
@@ -79,7 +83,9 @@ class MeClientTest extends TestCase
         $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestableUser(), 'fake user jwt'));
+        $response = $mockAPIClient->update(ModelFactory::getTestableUser(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -124,7 +130,9 @@ class MeClientTest extends TestCase
         $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addPhoneLine(ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
+        $response = $mockAPIClient->addPhoneLine(ModelFactory::getTestablePhoneLine(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -195,7 +203,9 @@ class MeClientTest extends TestCase
         $mockAPIClient = new MeClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removePhoneLine(ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
+        $response = $mockAPIClient->removePhoneLine(ModelFactory::getTestablePhoneLine(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
