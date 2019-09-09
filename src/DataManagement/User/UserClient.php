@@ -10,8 +10,10 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Client;
+use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
+use jalismrs\Stalactite\Client\Response;
 
 class UserClient extends AbstractClient
 {
@@ -99,13 +101,13 @@ class UserClient extends AbstractClient
 
     /**
      * @param string $jwt
-     * @return array
+     * @return Response
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function getAll(string $jwt): array
+    public function getAll(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -114,21 +116,33 @@ class UserClient extends AbstractClient
             'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::MINIMAL_USER]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $users = [];
+        foreach ($r['users'] as $user) {
+            $users[] = ModelFactory::createUser($user);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'users' => $users
+        ]);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(User $user, string $jwt): array
+    public function get(User $user, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -137,21 +151,28 @@ class UserClient extends AbstractClient
             'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'user' => ModelFactory::createUser($r['user'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function create(User $user, string $jwt): array
+    public function create(User $user, string $jwt): Response
     {
         $body = $user->asMinimalArray();
 
@@ -170,22 +191,29 @@ class UserClient extends AbstractClient
             'user' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::USER]
         ]);
 
-        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'user' => ModelFactory::createUser($r['user'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(User $user, string $jwt): array
+    public function update(User $user, string $jwt): Response
     {
         $body = $user->asMinimalArray();
         unset($body['googleId'], $body['uid']);
@@ -196,22 +224,27 @@ class UserClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
+        $r = $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(User $user, string $jwt): array
+    public function delete(User $user, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -219,8 +252,13 @@ class UserClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 }

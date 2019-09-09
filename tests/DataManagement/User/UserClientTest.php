@@ -36,7 +36,10 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $response = $mockAPIClient->getAll('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(User::class, $response->getData()['users']);
     }
 
     /**
@@ -83,7 +86,10 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(new User(), 'fake user jwt'));
+        $response = $mockAPIClient->get(new User(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(User::class, $response->getData()['user']);
     }
 
     /**
@@ -130,7 +136,10 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(new User(), 'fake user jwt'));
+        $response = $mockAPIClient->create(new User(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(User::class, $response->getData()['user']);
     }
 
     /**
@@ -176,7 +185,9 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(new User(), 'fake user jwt'));
+        $response = $mockAPIClient->update(new User(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -222,7 +233,9 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(new User(), 'fake user jwt'));
+        $response = $mockAPIClient->delete(new User(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
