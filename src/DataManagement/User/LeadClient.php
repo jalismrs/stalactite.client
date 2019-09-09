@@ -9,9 +9,11 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Model\Post;
 use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
+use jalismrs\Stalactite\Client\Response;
 
 class LeadClient extends AbstractClient
 {
@@ -20,13 +22,13 @@ class LeadClient extends AbstractClient
     /**
      * @param User $user
      * @param string $jwt
-     * @return array
-     * @throws InvalidSchemaException
+     * @return Response
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
-     * @throws ClientException
+     * @throws InvalidSchemaException
      */
-    public function getAll(User $user, string $jwt): array
+    public function getAll(User $user, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -35,22 +37,34 @@ class LeadClient extends AbstractClient
             'leads' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::POST]
         ]);
 
-        return $this->request('GET', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
+        $r = $this->request('GET', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $leads = [];
+        foreach ($r['leads'] as $lead) {
+            $leads[] = ModelFactory::createPost($lead);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'leads' => $leads
+        ]);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param array $leads
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addLeads(User $user, array $leads, string $jwt): array
+    public function addLeads(User $user, array $leads, string $jwt): Response
     {
         $body = ['leads' => []];
 
@@ -70,23 +84,28 @@ class LeadClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('POST', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
+        $r = $this->request('POST', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 
     /**
      * @param User $user
      * @param array $leads
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function removeLeads(User $user, array $leads, string $jwt): array
+    public function removeLeads(User $user, array $leads, string $jwt): Response
     {
         $body = ['leads' => []];
 
@@ -106,9 +125,14 @@ class LeadClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
+        $r = $this->request('DELETE', $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 }
