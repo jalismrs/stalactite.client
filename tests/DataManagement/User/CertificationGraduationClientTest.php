@@ -6,6 +6,7 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
 use jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduationClient;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +34,10 @@ class CertificationGraduationClientTest extends TestCase
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt'));
+        $response = $mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(CertificationGraduation::class, $response->getData()['certifications']);
     }
 
     /**
@@ -79,7 +83,9 @@ class CertificationGraduationClientTest extends TestCase
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addCertification(ModelFactory::getTestableUser(), ModelFactory::getTestableCertificationGraduation(), 'fake user jwt'));
+        $response = $mockAPIClient->addCertification(ModelFactory::getTestableUser(), ModelFactory::getTestableCertificationGraduation(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -141,7 +147,9 @@ class CertificationGraduationClientTest extends TestCase
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removeCertification(ModelFactory::getTestableUser(), ModelFactory::getTestableCertificationGraduation(), 'fake user jwt'));
+        $response = $mockAPIClient->removeCertification(ModelFactory::getTestableUser(), ModelFactory::getTestableCertificationGraduation(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
