@@ -11,7 +11,9 @@ use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Client;
 use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
+use jalismrs\Stalactite\Client\Response;
 
 class CustomerClient extends AbstractClient
 {
@@ -35,13 +37,13 @@ class CustomerClient extends AbstractClient
 
     /**
      * @param string $jwt
-     * @return array
+     * @return Response
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function getAll(string $jwt): array
+    public function getAll(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -50,21 +52,33 @@ class CustomerClient extends AbstractClient
             'customers' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::CUSTOMER]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $customers = [];
+        foreach ($r['customers'] as $customer) {
+            $customers[] = ModelFactory::createCustomer($customer);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'customers' => $customers
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Customer $customer
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Customer $customer, string $jwt): array
+    public function get(Customer $customer, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -73,21 +87,28 @@ class CustomerClient extends AbstractClient
             'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'customer' => ModelFactory::createCustomer($r['customer'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Customer $customer
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function create(Customer $customer, string $jwt): array
+    public function create(Customer $customer, string $jwt): Response
     {
         $body = [
             'firstName' => $customer->getFirstName(),
@@ -102,22 +123,29 @@ class CustomerClient extends AbstractClient
             'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
         ]);
 
-        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'customer' => ModelFactory::createCustomer($r['customer'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Customer $customer
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(Customer $customer, string $jwt): array
+    public function update(Customer $customer, string $jwt): Response
     {
         $body = [
             'firstName' => $customer->getFirstName(),
@@ -131,22 +159,27 @@ class CustomerClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 
     /**
      * @param Customer $customer
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Customer $customer, string $jwt): array
+    public function delete(Customer $customer, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -154,8 +187,13 @@ class CustomerClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 }

@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Customer\CustomerClient;
+use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -33,7 +34,11 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll('fake user jwt'));
+        $response = $mockAPIClient->getAll('fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(Customer::class, $response->getData()['customers']);
+
     }
 
     /**
@@ -80,7 +85,10 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->get(ModelFactory::getTestableCustomer(), 'fake user jwt'));
+        $response = $mockAPIClient->get(ModelFactory::getTestableCustomer(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Customer::class, $response->getData()['customer']);
     }
 
     /**
@@ -127,7 +135,10 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->create(ModelFactory::getTestableCustomer(), 'fake user jwt'));
+        $response = $mockAPIClient->create(ModelFactory::getTestableCustomer(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Customer::class, $response->getData()['customer']);
     }
 
     /**
@@ -173,7 +184,9 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->update(ModelFactory::getTestableCustomer(), 'fake user jwt'));
+        $response = $mockAPIClient->update(ModelFactory::getTestableCustomer(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -218,7 +231,9 @@ class CustomerClientTest extends TestCase
         $mockAPIClient = new CustomerClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestableCustomer(), 'fake user jwt'));
+        $response = $mockAPIClient->delete(ModelFactory::getTestableCustomer(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
