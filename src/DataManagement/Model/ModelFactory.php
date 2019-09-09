@@ -27,20 +27,28 @@ abstract class ModelFactory
             ->setGender($data['gender'] ?? null)
             ->setUid($data['uid'] ?? null);
 
-        foreach ($data['phoneLines'] as $phoneLine) {
-            $user->addPhoneLine(self::createPhoneLine($phoneLine));
+        if (isset($data['phoneLines'])) {
+            foreach ($data['phoneLines'] as $phoneLine) {
+                $user->addPhoneLine(self::createPhoneLine($phoneLine));
+            }
         }
 
-        foreach ($data['certifications'] as $certification) {
-            $user->addCertification(self::createCertificationGraduation($certification));
+        if (isset($data['certifications'])) {
+            foreach ($data['certifications'] as $certification) {
+                $user->addCertification(self::createCertificationGraduation($certification));
+            }
         }
 
-        foreach ($data['posts'] as $post) {
-            $user->addPost(self::createPost($post));
+        if (isset($data['posts'])) {
+            foreach ($data['posts'] as $post) {
+                $user->addPost(self::createPost($post));
+            }
         }
 
-        foreach ($data['leads'] as $lead) {
-            $user->addLead(self::createPost($lead));
+        if (isset($data['leads'])) {
+            foreach ($data['leads'] as $lead) {
+                $user->addLead(self::createPost($lead));
+            }
         }
 
         return $user;
