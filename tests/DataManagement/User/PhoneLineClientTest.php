@@ -6,6 +6,7 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
 use jalismrs\Stalactite\Client\DataManagement\User\PhoneLineClient;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +34,10 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt'));
+        $response = $mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(PhoneLine::class, $response->getData()['phoneLines']);
     }
 
     /**
@@ -79,7 +83,9 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addPhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
+        $response = $mockAPIClient->addPhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -141,7 +147,9 @@ class PhoneLineClientTest extends TestCase
         $mockAPIClient = new PhoneLineClient('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removePhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt'));
+        $response = $mockAPIClient->removePhoneLine(ModelFactory::getTestableUser(), ModelFactory::getTestablePhoneLine(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**

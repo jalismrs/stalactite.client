@@ -10,6 +10,7 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -85,13 +86,13 @@ class Client extends AbstractClient
      * @param string $appName
      * @param string $appToken
      * @param string $userGoogleJwt
-     * @return array
+     * @return Response
      * @throws ClientException
-     * @throws InvalidSchemaException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function login(string $appName, string $appToken, string $userGoogleJwt): array
+    public function login(string $appName, string $appToken, string $userGoogleJwt): Response
     {
         $data = [
             'appName' => $appName,
@@ -106,7 +107,14 @@ class Client extends AbstractClient
             'jwt' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', ['json' => $data], $schema);
+        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', ['json' => $data], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'jwt' => $r['jwt']
+        ]);
+
+        return $response;
     }
 
     public function trustedApps(): TrustedAppClient

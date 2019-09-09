@@ -6,6 +6,7 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
+use jalismrs\Stalactite\Client\DataManagement\Model\Post;
 use jalismrs\Stalactite\Client\DataManagement\User\LeadClient;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -33,7 +34,10 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt'));
+        $response = $mockAPIClient->getAll(ModelFactory::getTestableUser(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(Post::class, $response->getData()['leads']);
     }
 
     /**
@@ -79,7 +83,9 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt'));
+        $response = $mockAPIClient->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -148,7 +154,9 @@ class LeadClientTest extends TestCase
         $mockAPIClient = new LeadClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt'));
+        $response = $mockAPIClient->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**

@@ -10,6 +10,8 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
+use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use jalismrs\Stalactite\Client\Response;
 
 class DomainClient extends AbstractClient
 {
@@ -17,13 +19,13 @@ class DomainClient extends AbstractClient
 
     /**
      * @param string $jwt
-     * @return array
+     * @return Response
+     * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function getAll(string $jwt): array
+    public function getAll(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -32,21 +34,33 @@ class DomainClient extends AbstractClient
             'domains' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::DOMAIN]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $domains = [];
+        foreach ($r['domains'] as $domain) {
+            $domains[] = ModelFactory::createDomain($domain);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domains' => $domains
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Domain $domain
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Domain $domain, string $jwt): array
+    public function get(Domain $domain, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -55,21 +69,28 @@ class DomainClient extends AbstractClient
             'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
         ]);
 
-        return $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domain' => ModelFactory::createDomain($r['domain'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Domain $domain
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function create(Domain $domain, string $jwt): array
+    public function create(Domain $domain, string $jwt): Response
     {
         $body = [
             'name' => $domain->getName(),
@@ -86,22 +107,29 @@ class DomainClient extends AbstractClient
             'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
         ]);
 
-        return $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
+        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domain' => ModelFactory::createDomain($r['domain'])
+        ]);
+
+        return $response;
     }
 
     /**
      * @param Domain $domain
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(Domain $domain, string $jwt): array
+    public function update(Domain $domain, string $jwt): Response
     {
         $body = [
             'name' => $domain->getName(),
@@ -117,22 +145,27 @@ class DomainClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('PUT', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => $body
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 
     /**
      * @param Domain $domain
      * @param string $jwt
-     * @return array
+     * @return Response
      * @throws ClientException
      * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Domain $domain, string $jwt): array
+    public function delete(Domain $domain, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -140,8 +173,13 @@ class DomainClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        return $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error']);
+
+        return $response;
     }
 }

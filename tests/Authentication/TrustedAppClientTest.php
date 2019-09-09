@@ -6,12 +6,13 @@ use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
+use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class TrustedAppTest extends TestCase
+class TrustedAppClientTest extends TestCase
 {
     /**
      * @throws InvalidDataException
@@ -25,19 +26,18 @@ class TrustedAppTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => [[
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake trusted app',
-                    'authToken' => 'qsdfghjklm',
-                    'googleOAuthClientId' => 'wxcvbn'
-                ]]
+                'trustedApps' => [ModelFactory::getTestableTrustedApp()->asArray()]
             ]))
         ]);
 
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->getAll('fake user jwt'));
+        $response = $mockClient->trustedApps()->getAll('fake user jwt');
+
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(TrustedApp::class, $response->getData()['trustedApps']);
     }
 
     /**
@@ -77,19 +77,17 @@ class TrustedAppTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApps' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake trusted app',
-                    'authToken' => 'qsdfghjklm',
-                    'googleOAuthClientId' => 'wxcvbn'
-                ]
+                'trustedApp' => ModelFactory::getTestableTrustedApp()->asArray()
             ]))
         ]);
 
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt'));
+        $response = $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(TrustedApp::class, $response->getData()['trustedApp']);
     }
 
     /**
@@ -114,7 +112,7 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->get('fake trusted app uid', 'fake user jwt');
+        $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
     }
 
     /**
@@ -125,24 +123,22 @@ class TrustedAppTest extends TestCase
      */
     public function testCreateTrustedApp(): void
     {
+        $ta = ModelFactory::getTestableTrustedApp();
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApp' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake name',
-                    'googleOAuthClientId' => 'qsdfghjklm',
-                    'authToken' => 'wxcvbn',
-                    'resetToken' => '1234567890'
-                ]
+                'trustedApp' => array_merge($ta->asArray(), ['resetToken' => $ta->getResetToken()])
             ]))
         ]);
 
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $response = $mockClient->trustedApps()->create(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(TrustedApp::class, $response->getData()['trustedApp']);
     }
 
     /**
@@ -159,7 +155,8 @@ class TrustedAppTest extends TestCase
         $mockHttpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'success' => true,
-                'error' => null
+                'error' => null,
+                'trustedApp' => []
             ]))
         ]);
 
@@ -187,7 +184,9 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $response = $mockClient->trustedApps()->update(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -232,7 +231,9 @@ class TrustedAppTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $response = $mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
     }
 
     /**
@@ -271,19 +272,17 @@ class TrustedAppTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'trustedApp' => [
-                    'uid' => 'azertyuiop',
-                    'name' => 'fake name',
-                    'googleOAuthClientId' => 'qsdfghjklm',
-                    'authToken' => 'wxcvbn'
-                ]
+                'trustedApp' => ModelFactory::getTestableTrustedApp()->asArray()
             ]))
         ]);
 
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt'));
+        $response = $mockClient->trustedApps()->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(TrustedApp::class, $response->getData()['trustedApp']);
     }
 
     /**
