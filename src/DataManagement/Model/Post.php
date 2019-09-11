@@ -6,6 +6,8 @@ use jalismrs\Stalactite\Client\AbstractModel;
 
 class Post extends AbstractModel
 {
+    private const ADMIN_PRIVILEGE = 'admin';
+
     /** @var null|string $privilege */
     private $privilege;
 
@@ -88,6 +90,14 @@ class Post extends AbstractModel
     {
         $this->rank = $rank;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAdminPrivilege(): bool
+    {
+        return $this->privilege === self::ADMIN_PRIVILEGE;
     }
 
     /**
