@@ -9,6 +9,7 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use jalismrs\Stalactite\Client\AbstractClient;
+use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
@@ -83,8 +84,7 @@ class Client extends AbstractClient
     }
 
     /**
-     * @param string $appName
-     * @param string $appToken
+     * @param TrustedApp $trustedApp
      * @param string $userGoogleJwt
      * @return Response
      * @throws ClientException
@@ -92,11 +92,11 @@ class Client extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function login(string $appName, string $appToken, string $userGoogleJwt): Response
+    public function login(TrustedApp $trustedApp, string $userGoogleJwt): Response
     {
         $data = [
-            'appName' => $appName,
-            'appToken' => $appToken,
+            'appName' => $trustedApp->getName(),
+            'appToken' => $trustedApp->getAuthToken(),
             'userGoogleJwt' => $userGoogleJwt
         ];
 
@@ -117,6 +117,9 @@ class Client extends AbstractClient
         return $response;
     }
 
+    /**
+     * @return TrustedAppClient
+     */
     public function trustedApps(): TrustedAppClient
     {
         if (!($this->trustedAppClient instanceof TrustedAppClient)) {
