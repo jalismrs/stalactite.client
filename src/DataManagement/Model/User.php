@@ -6,6 +6,12 @@ use jalismrs\Stalactite\Client\AbstractModel;
 
 class User extends AbstractModel
 {
+    private const USER_PRIVILEGE = 'user';
+
+    private const ADMIN_PRIVILEGE = 'admin';
+
+    private const SUPER_ADMIN_PRIVILEGE = 'superadmin';
+
     /** @var null|string $email */
     private $email;
 
@@ -161,6 +167,16 @@ class User extends AbstractModel
         return $this->privilege;
     }
 
+    public function isAdmin(): bool
+    {
+        return ($this->privilege === self::ADMIN_PRIVILEGE) || $this->isSuperAdmin() || $this->hasAdminPost();
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->privilege === self::SUPER_ADMIN_PRIVILEGE;
+    }
+
     /**
      * @param string $privilege
      * @return User
@@ -237,6 +253,20 @@ class User extends AbstractModel
     {
         $this->posts[] = $post;
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAdminPost(): bool
+    {
+        foreach ($this->getPosts() as $post) {
+            if ($post->hasAdminPrivilege()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
