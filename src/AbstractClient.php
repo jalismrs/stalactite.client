@@ -15,7 +15,7 @@ abstract class AbstractClient
     /** @var string $apiHost */
     protected $apiHost;
 
-    /** @var string $userAgent */
+    /** @var string|null $userAgent */
     protected $userAgent;
 
     /** @var HttpClientInterface $httpClient */
@@ -30,6 +30,42 @@ abstract class AbstractClient
     {
         $this->apiHost = $apiHost;
         $this->userAgent = $userAgent;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiHost(): string
+    {
+        return $this->apiHost;
+    }
+
+    /**
+     * @param string $apiHost
+     * @return AbstractClient
+     */
+    public function setApiHost(string $apiHost): AbstractClient
+    {
+        $this->apiHost = $apiHost;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * @param string|null $userAgent
+     * @return AbstractClient
+     */
+    public function setUserAgent(?string $userAgent): AbstractClient
+    {
+        $this->userAgent = $userAgent;
+        return $this;
     }
 
     /**
