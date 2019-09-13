@@ -172,6 +172,40 @@ class UserClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
+    public function getByEmailAndGoogleId(User $user, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => [
+                'email' => $user->getEmail(),
+                'googleId' => $user->getGoogleId()
+            ]
+        ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'user' => ModelFactory::createUser($r['user'])
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param User $user
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function create(User $user, string $jwt): Response
     {
         $body = $user->asMinimalArray();

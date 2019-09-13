@@ -90,6 +90,81 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
+    public function getByName(Domain $domain, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'domains' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::DOMAIN]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => ['name' => $domain->getName()]
+        ], $schema);
+
+        $domains = [];
+        foreach ($r['domains'] as $domain) {
+            $domains[] = ModelFactory::createDomain($domain);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domains' => $domains
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param Domain $domain
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function getByNameAndApiKey(Domain $domain, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'domains' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::DOMAIN]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => [
+                'name' => $domain->getName(),
+                'apiKey' => $domain->getApiKey()
+            ]
+        ], $schema);
+
+        $domains = [];
+        foreach ($r['domains'] as $domain) {
+            $domains[] = ModelFactory::createDomain($domain);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domains' => $domains
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param Domain $domain
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function create(Domain $domain, string $jwt): Response
     {
         $body = [
