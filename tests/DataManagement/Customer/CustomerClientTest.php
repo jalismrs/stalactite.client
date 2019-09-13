@@ -122,6 +122,60 @@ class CustomerClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
+    public function testGetByEmailAndGoogleId(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'customer' => ModelFactory::getTestableCustomer()->asArray()
+            ]))
+        ]);
+
+        $mockAPIClient = new CustomerClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $c = ModelFactory::getTestableCustomer();
+
+        $response = $mockAPIClient->getByEmailAndGoogleId($c->getEmail(), $c->getGoogleId(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(Customer::class, $response->getData()['customer']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'customer' => []
+            ]))
+        ]);
+
+        $mockAPIClient = new CustomerClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $c = ModelFactory::getTestableCustomer();
+
+        $mockAPIClient->getByEmailAndGoogleId($c->getEmail(), $c->getGoogleId(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testCreate(): void
     {
         $mockHttpClient = new MockHttpClient([

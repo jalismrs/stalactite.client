@@ -120,6 +120,110 @@ class DomainClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
+    public function testGetByName(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'domains' => [ModelFactory::getTestableDomain()->asArray()]
+            ]))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $response = $mockAPIClient->getByName(ModelFactory::getTestableDomain()->getName(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(Domain::class, $response->getData()['domains']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnInvalidResponseGetByName(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'domains' => ModelFactory::getTestableDomain()->asArray() // invalid type
+            ]))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $mockAPIClient->getByName(ModelFactory::getTestableDomain()->getName(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testGetByNameAndApiKey(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'domains' => [ModelFactory::getTestableDomain()->asArray()]
+            ]))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $d = ModelFactory::getTestableDomain();
+
+        $response = $mockAPIClient->getByNameAndApiKey($d->getName(), $d->getApiKey(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertContainsOnlyInstancesOf(Domain::class, $response->getData()['domains']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnInvalidResponseGetByNameAndApiKey(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'domains' => ModelFactory::getTestableDomain()->asArray() // invalid type
+            ]))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $d = ModelFactory::getTestableDomain();
+
+        $mockAPIClient->getByNameAndApiKey($d->getName(), $d->getApiKey(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
     public function testCreate(): void
     {
         $mockHttpClient = new MockHttpClient([
