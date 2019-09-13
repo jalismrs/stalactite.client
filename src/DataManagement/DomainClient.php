@@ -52,7 +52,7 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,7 +60,7 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Domain $domain, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -69,7 +69,7 @@ class DomainClient extends AbstractClient
             'domain' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
@@ -82,7 +82,7 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $name
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -90,7 +90,7 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByName(Domain $domain, string $jwt): Response
+    public function getByName(string $name, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -101,7 +101,7 @@ class DomainClient extends AbstractClient
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
-            'query' => ['name' => $domain->getName()]
+            'query' => ['name' => $name]
         ], $schema);
 
         $domains = [];
@@ -118,7 +118,8 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $name
+     * @param string $apiKey
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -126,7 +127,7 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByNameAndApiKey(Domain $domain, string $jwt): Response
+    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -138,8 +139,8 @@ class DomainClient extends AbstractClient
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'query' => [
-                'name' => $domain->getName(),
-                'apiKey' => $domain->getApiKey()
+                'name' => $name,
+                'apiKey' => $apiKey
             ]
         ], $schema);
 
@@ -232,7 +233,7 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -240,7 +241,7 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Domain $domain, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -248,7 +249,7 @@ class DomainClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

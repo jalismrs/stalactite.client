@@ -51,7 +51,7 @@ class TrustedAppClient extends AbstractClient
     }
 
     /**
-     * @param TrustedApp $trustedApp
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -59,7 +59,7 @@ class TrustedAppClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(TrustedApp $trustedApp, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -68,7 +68,7 @@ class TrustedAppClient extends AbstractClient
             'trustedApp' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::TRUSTED_APP, 'null' => true]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
@@ -149,7 +149,8 @@ class TrustedAppClient extends AbstractClient
     }
 
     /**
-     * @param TrustedApp $trustedApp
+     * @param string $uid
+     * @param string $resetToken
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -157,7 +158,7 @@ class TrustedAppClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(TrustedApp $trustedApp, string $jwt): Response
+    public function delete(string $uid, string $resetToken, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -165,10 +166,10 @@ class TrustedAppClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'json' => [
-                'resetToken' => $trustedApp->getResetToken()
+                'resetToken' => $resetToken
             ]
         ], $schema);
 

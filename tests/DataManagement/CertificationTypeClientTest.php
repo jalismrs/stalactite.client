@@ -83,7 +83,7 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->get(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $response = $mockAPIClient->get(ModelFactory::getTestableCertificationType()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(CertificationType::class, $response->getData()['certificationType']);
@@ -111,7 +111,7 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestableCertificationType()->getUid(), 'fake user jwt');
     }
 
     /**
@@ -229,7 +229,7 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->delete(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $response = $mockAPIClient->delete(ModelFactory::getTestableCertificationType()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -255,6 +255,6 @@ class CertificationTypeClientTest extends TestCase
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->delete(ModelFactory::getTestableCertificationType(), 'fake user jwt');
+        $mockAPIClient->delete(ModelFactory::getTestableCertificationType()->getUid(), 'fake user jwt');
     }
 }

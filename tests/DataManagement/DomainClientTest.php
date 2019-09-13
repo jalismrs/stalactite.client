@@ -83,7 +83,7 @@ class DomainClientTest extends TestCase
         $mockAPIClient = new DomainClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->get(ModelFactory::getTestableDomain(), 'fake user jwt');
+        $response = $mockAPIClient->get(ModelFactory::getTestableDomain()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(Domain::class, $response->getData()['domain']);
@@ -111,7 +111,7 @@ class DomainClientTest extends TestCase
         $mockAPIClient = new DomainClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(ModelFactory::getTestableDomain(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestableDomain()->getUid(), 'fake user jwt');
     }
 
     /**
@@ -333,7 +333,7 @@ class DomainClientTest extends TestCase
         $mockAPIClient = new DomainClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->delete(ModelFactory::getTestableDomain(), 'fake user jwt');
+        $response = $mockAPIClient->delete(ModelFactory::getTestableDomain()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -359,6 +359,6 @@ class DomainClientTest extends TestCase
         $mockAPIClient = new DomainClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->delete(ModelFactory::getTestableDomain(), 'fake user jwt');
+        $mockAPIClient->delete(ModelFactory::getTestableDomain()->getUid(), 'fake user jwt');
     }
 }

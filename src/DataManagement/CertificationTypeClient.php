@@ -52,7 +52,7 @@ class CertificationTypeClient extends AbstractClient
     }
 
     /**
-     * @param CertificationType $certificationType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,7 +60,7 @@ class CertificationTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(CertificationType $certificationType, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -69,7 +69,7 @@ class CertificationTypeClient extends AbstractClient
             'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CERTIFICATION_TYPE]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
@@ -147,7 +147,7 @@ class CertificationTypeClient extends AbstractClient
     }
 
     /**
-     * @param CertificationType $certificationType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -155,7 +155,7 @@ class CertificationTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(CertificationType $certificationType, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -163,7 +163,7 @@ class CertificationTypeClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

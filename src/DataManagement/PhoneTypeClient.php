@@ -52,7 +52,7 @@ class PhoneTypeClient extends AbstractClient
     }
 
     /**
-     * @param PhoneType $phoneType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,7 +60,7 @@ class PhoneTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(PhoneType $phoneType, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -69,7 +69,7 @@ class PhoneTypeClient extends AbstractClient
             'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::PHONE_TYPE]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
@@ -149,7 +149,7 @@ class PhoneTypeClient extends AbstractClient
     }
 
     /**
-     * @param PhoneType $phoneType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -157,7 +157,7 @@ class PhoneTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(PhoneType $phoneType, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -165,7 +165,7 @@ class PhoneTypeClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

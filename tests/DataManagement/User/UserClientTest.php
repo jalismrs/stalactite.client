@@ -86,7 +86,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->get(new User(), 'fake user jwt');
+        $response = $mockAPIClient->get(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(User::class, $response->getData()['user']);
@@ -114,7 +114,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(new User(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
     }
 
     /**
@@ -287,7 +287,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->delete(new User(), 'fake user jwt');
+        $response = $mockAPIClient->delete(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -313,6 +313,6 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->delete(new User(), 'fake user jwt');
+        $mockAPIClient->delete(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
     }
 }

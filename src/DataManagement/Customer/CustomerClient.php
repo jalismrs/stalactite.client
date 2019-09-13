@@ -70,7 +70,7 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -78,7 +78,7 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Customer $customer, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -87,7 +87,7 @@ class CustomerClient extends AbstractClient
             'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
@@ -100,7 +100,8 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
+     * @param string $email
+     * @param string $googleId
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -108,7 +109,7 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(Customer $customer, string $jwt): Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -120,8 +121,8 @@ class CustomerClient extends AbstractClient
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => $jwt],
             'query' => [
-                'email' => $customer->getEmail(),
-                'googleId' => $customer->getGoogleId()
+                'email' => $email,
+                'googleId' => $googleId
             ]
         ], $schema);
 
@@ -205,7 +206,7 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -213,7 +214,7 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Customer $customer, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -221,7 +222,7 @@ class CustomerClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
