@@ -84,7 +84,7 @@ class CustomerClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
@@ -93,7 +93,7 @@ class CustomerClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'customer' => ModelFactory::createCustomer($r['customer'])
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;
@@ -127,7 +127,7 @@ class CustomerClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'customer' => ModelFactory::createCustomer($r['customer'])
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;
@@ -154,7 +154,7 @@ class CustomerClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -164,7 +164,7 @@ class CustomerClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'customer' => ModelFactory::createCustomer($r['customer'])
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;

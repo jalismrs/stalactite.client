@@ -66,7 +66,7 @@ class PostClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'post' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::POST]
+            'post' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::POST]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $post->getUid(), [
@@ -75,7 +75,7 @@ class PostClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'post' => ModelFactory::createPost($r['post'])
+            'post' => $r['post'] ? ModelFactory::createPost($r['post']) : null
         ]);
 
         return $response;
@@ -103,7 +103,7 @@ class PostClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'post' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::POST]
+            'post' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::POST]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -113,7 +113,7 @@ class PostClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'post' => ModelFactory::createPost($r['post'])
+            'post' => $r['post'] ? ModelFactory::createPost($r['post']) : null
         ]);
 
         return $response;

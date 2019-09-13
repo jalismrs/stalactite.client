@@ -66,7 +66,7 @@ class CertificationTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CERTIFICATION_TYPE]
+            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CERTIFICATION_TYPE]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(), [
@@ -75,7 +75,7 @@ class CertificationTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'certificationType' => ModelFactory::createCertificationType($r['certificationType'])
+            'certificationType' => $r['certificationType'] ? ModelFactory::createCertificationType($r['certificationType']) : null
         ]);
 
         return $response;
@@ -100,7 +100,7 @@ class CertificationTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CERTIFICATION_TYPE]
+            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CERTIFICATION_TYPE]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -110,7 +110,7 @@ class CertificationTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'certificationType' => ModelFactory::createCertificationType($r['certificationType'])
+            'certificationType' => $r['certificationType'] ? ModelFactory::createCertificationType($r['certificationType']) : null
         ]);
 
         return $response;

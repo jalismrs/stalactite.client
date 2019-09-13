@@ -66,7 +66,7 @@ class PhoneTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::PHONE_TYPE]
+            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::PHONE_TYPE]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(), [
@@ -75,7 +75,7 @@ class PhoneTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'phoneType' => ModelFactory::createPhoneType($r['phoneType'])
+            'phoneType' => $r['phoneType'] ? ModelFactory::createPhoneType($r['phoneType']) : null
         ]);
 
         return $response;
@@ -100,7 +100,7 @@ class PhoneTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::PHONE_TYPE]
+            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::PHONE_TYPE]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -110,7 +110,7 @@ class PhoneTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'phoneType' => ModelFactory::createPhoneType($r['phoneType'])
+            'phoneType' => $r['phoneType'] ? ModelFactory::createPhoneType($r['phoneType']) : null
         ]);
 
         return $response;

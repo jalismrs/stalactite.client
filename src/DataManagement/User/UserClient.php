@@ -157,7 +157,7 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => ModelFactory::createUser($r['user'])
+            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
         ]);
 
         return $response;
@@ -191,7 +191,7 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => ModelFactory::createUser($r['user'])
+            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
         ]);
 
         return $response;
@@ -222,7 +222,7 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'user' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::USER]
+            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -232,7 +232,7 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => ModelFactory::createUser($r['user'])
+            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
         ]);
 
         return $response;

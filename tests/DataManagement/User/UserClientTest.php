@@ -211,7 +211,7 @@ class UserClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'user' => null // can not be null
+                'user' => [] // invalid type
             ]))
         );
 

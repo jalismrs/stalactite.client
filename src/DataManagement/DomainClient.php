@@ -66,7 +66,7 @@ class DomainClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
+            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
@@ -75,7 +75,7 @@ class DomainClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'domain' => ModelFactory::createDomain($r['domain'])
+            'domain' => $r['domain'] ? ModelFactory::createDomain($r['domain']) : null
         ]);
 
         return $response;
@@ -179,7 +179,7 @@ class DomainClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
+            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -189,7 +189,7 @@ class DomainClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'domain' => ModelFactory::createDomain($r['domain'])
+            'domain' => $r['domain'] ? ModelFactory::createDomain($r['domain']) : null
         ]);
 
         return $response;
