@@ -7,7 +7,6 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\Response;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -43,13 +42,13 @@ class LoginTest extends TestCase
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         // assert valid return and response content
-        $response = $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
+        $response = $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertIsString($response->getData()['jwt']);
 
         // assert valid return and response content
-        $response = $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
+        $response = $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
         $this->assertFalse($response->success());
         $this->assertNotNull($response->getError());
         $this->assertNull($response->getData()['jwt']);
@@ -67,7 +66,7 @@ class LoginTest extends TestCase
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
 
         $client = new Client('invalidHost');
-        $client->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
+        $client->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
     }
 
     /**
@@ -88,7 +87,7 @@ class LoginTest extends TestCase
         $mockAPIClient = new Client('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
+        $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
     }
 
     /**
@@ -115,6 +114,6 @@ class LoginTest extends TestCase
         $mockAPIClient = new Client('http://fakeHost');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->login('fakeAppName', 'fakeAppToken', 'fakeUserGoogleToken');
+        $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
     }
 }
