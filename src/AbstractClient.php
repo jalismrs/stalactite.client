@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
 abstract class AbstractClient
@@ -21,7 +22,7 @@ abstract class AbstractClient
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
 
-    /** @var string|null $lastResponse */
+    /** @var ResponseInterface|null $lastResponse */
     protected $lastResponse;
 
     /**
@@ -99,18 +100,18 @@ abstract class AbstractClient
     }
 
     /**
-     * @return string|null
+     * @return ResponseInterface|null
      */
-    public function getLastResponse(): ?string
+    public function getLastResponse(): ?ResponseInterface
     {
         return $this->lastResponse;
     }
 
     /**
-     * @param string|null $lastResponse
+     * @param ResponseInterface|null $lastResponse
      * @return AbstractClient
      */
-    public function setLastResponse(?string $lastResponse): AbstractClient
+    public function setLastResponse(?ResponseInterface $lastResponse): AbstractClient
     {
         $this->lastResponse = $lastResponse;
         return $this;
@@ -135,11 +136,11 @@ abstract class AbstractClient
             throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
         }
 
+        $this->lastResponse = $response;
+
         $data = new JsonData();
         try {
-            $response = $response->getContent();
-            $this->lastResponse = $response;
-            $data->setData($response);
+            $data->setData($response->getContent());
         } catch (Throwable $t) {
             throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
         }
