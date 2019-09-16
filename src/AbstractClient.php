@@ -21,6 +21,9 @@ abstract class AbstractClient
     /** @var HttpClientInterface $httpClient */
     protected $httpClient;
 
+    /** @var string|null $lastResponse */
+    protected $lastResponse;
+
     /**
      * AbstractClient constructor.
      * @param string $apiHost
@@ -96,6 +99,24 @@ abstract class AbstractClient
     }
 
     /**
+     * @return string|null
+     */
+    public function getLastResponse(): ?string
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * @param string|null $lastResponse
+     * @return AbstractClient
+     */
+    public function setLastResponse(?string $lastResponse): AbstractClient
+    {
+        $this->lastResponse = $lastResponse;
+        return $this;
+    }
+
+    /**
      * @param string $method
      * @param string $url
      * @param array $options
@@ -116,7 +137,9 @@ abstract class AbstractClient
 
         $data = new JsonData();
         try {
-            $data->setData($response->getContent());
+            $response = $response->getContent();
+            $this->lastResponse = $response;
+            $data->setData($response);
         } catch (Throwable $t) {
             throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
         }
