@@ -52,7 +52,7 @@ class PhoneTypeClient extends AbstractClient
     }
 
     /**
-     * @param PhoneType $phoneType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,22 +60,22 @@ class PhoneTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(PhoneType $phoneType, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::PHONE_TYPE]
+            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::PHONE_TYPE]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'phoneType' => ModelFactory::createPhoneType($r['phoneType'])
+            'phoneType' => $r['phoneType'] ? ModelFactory::createPhoneType($r['phoneType']) : null
         ]);
 
         return $response;
@@ -100,7 +100,7 @@ class PhoneTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::PHONE_TYPE]
+            'phoneType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::PHONE_TYPE]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -110,7 +110,7 @@ class PhoneTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'phoneType' => ModelFactory::createPhoneType($r['phoneType'])
+            'phoneType' => $r['phoneType'] ? ModelFactory::createPhoneType($r['phoneType']) : null
         ]);
 
         return $response;
@@ -149,7 +149,7 @@ class PhoneTypeClient extends AbstractClient
     }
 
     /**
-     * @param PhoneType $phoneType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -157,7 +157,7 @@ class PhoneTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(PhoneType $phoneType, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -165,7 +165,7 @@ class PhoneTypeClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

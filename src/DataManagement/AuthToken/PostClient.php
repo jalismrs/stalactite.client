@@ -13,9 +13,9 @@ use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
 use jalismrs\Stalactite\Client\Response;
 
-class UserClient extends AbstractClient
+class PostClient extends AbstractClient
 {
-    public const API_URL_PREFIX = AuthTokenClient::API_URL_PREFIX . '/users';
+    public const API_URL_PREFIX = AuthTokenClient::API_URL_PREFIX . '/posts';
 
     /**
      * @param string $apiAuthToken
@@ -33,58 +33,21 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::USER]
+            'posts' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::POST]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => (string)$jwt]
         ], $schema);
 
-        $users = [];
-        foreach ($r['users'] as $user) {
-            $users[] = ModelFactory::createUser($user);
+        $posts = [];
+        foreach ($r['posts'] as $post) {
+            $posts[] = ModelFactory::createPost($post);
         }
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'users' => $users
-        ]);
-
-        return $response;
-    }
-
-    /**
-     * @param string $email
-     * @param string $googleId
-     * @param string $apiAuthToken
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $apiAuthToken): Response
-    {
-        $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
-
-        $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
-        ]);
-
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
-            'headers' => ['X-API-TOKEN' => (string)$jwt],
-            'query' => [
-                'email' => $email,
-                'googleId' => $googleId
-            ]
-        ], $schema);
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
+            'posts' => $posts
         ]);
 
         return $response;
@@ -107,7 +70,7 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
+            'post' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::POST]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
@@ -116,7 +79,44 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
+            'post' => $r['post'] ? ModelFactory::createPost($r['post']) : null
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param string $uid
+     * @param string $apiAuthToken
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function getUsers(string $uid, string $apiAuthToken): Response
+    {
+        $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
+
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::USER]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users', [
+            'headers' => ['X-API-TOKEN' => (string)$jwt]
+        ], $schema);
+
+        $users = [];
+        foreach ($r['users'] as $user) {
+            $users[] = ModelFactory::createUser($user);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'users' => $users
         ]);
 
         return $response;

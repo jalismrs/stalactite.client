@@ -84,7 +84,7 @@ class TrustedAppClientTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $response = $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $response = $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(TrustedApp::class, $response->getData()['trustedApp']);
@@ -112,7 +112,7 @@ class TrustedAppClientTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockClient->trustedApps()->get(ModelFactory::getTestableTrustedApp()->getUid(), 'fake user jwt');
     }
 
     /**
@@ -231,7 +231,9 @@ class TrustedAppClientTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $response = $mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $ta = ModelFactory::getTestableTrustedApp();
+
+        $response = $mockClient->trustedApps()->delete($ta->getUid(), $ta->getResetToken(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -257,7 +259,9 @@ class TrustedAppClientTest extends TestCase
         $mockClient = new Client('http://fakeClient');
         $mockClient->setHttpClient($mockHttpClient);
 
-        $mockClient->trustedApps()->delete(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $ta = ModelFactory::getTestableTrustedApp();
+
+        $mockClient->trustedApps()->delete($ta->getUid(), $ta->getResetToken(), 'fake user jwt');
     }
 
     /**

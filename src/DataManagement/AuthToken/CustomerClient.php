@@ -13,9 +13,9 @@ use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
 use jalismrs\Stalactite\Client\Response;
 
-class UserClient extends AbstractClient
+class CustomerClient extends AbstractClient
 {
-    public const API_URL_PREFIX = AuthTokenClient::API_URL_PREFIX . '/users';
+    public const API_URL_PREFIX = AuthTokenClient::API_URL_PREFIX . '/customers';
 
     /**
      * @param string $apiAuthToken
@@ -33,21 +33,21 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::USER]
+            'customers' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
             'headers' => ['X-API-TOKEN' => (string)$jwt]
         ], $schema);
 
-        $users = [];
-        foreach ($r['users'] as $user) {
-            $users[] = ModelFactory::createUser($user);
+        $customers = [];
+        foreach ($r['customers'] as $customer) {
+            $customers[] = ModelFactory::createCustomer($customer);
         }
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'users' => $users
+            'customers' => $customers
         ]);
 
         return $response;
@@ -71,7 +71,7 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
@@ -84,7 +84,7 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;
@@ -107,7 +107,7 @@ class UserClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'user' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
@@ -116,7 +116,7 @@ class UserClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'user' => $r['user'] ? ModelFactory::createUser($r['user']) : null
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;

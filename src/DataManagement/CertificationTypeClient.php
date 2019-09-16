@@ -52,7 +52,7 @@ class CertificationTypeClient extends AbstractClient
     }
 
     /**
-     * @param CertificationType $certificationType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,22 +60,22 @@ class CertificationTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(CertificationType $certificationType, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CERTIFICATION_TYPE]
+            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CERTIFICATION_TYPE]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'certificationType' => ModelFactory::createCertificationType($r['certificationType'])
+            'certificationType' => $r['certificationType'] ? ModelFactory::createCertificationType($r['certificationType']) : null
         ]);
 
         return $response;
@@ -100,7 +100,7 @@ class CertificationTypeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CERTIFICATION_TYPE]
+            'certificationType' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CERTIFICATION_TYPE]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -110,7 +110,7 @@ class CertificationTypeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'certificationType' => ModelFactory::createCertificationType($r['certificationType'])
+            'certificationType' => $r['certificationType'] ? ModelFactory::createCertificationType($r['certificationType']) : null
         ]);
 
         return $response;
@@ -147,7 +147,7 @@ class CertificationTypeClient extends AbstractClient
     }
 
     /**
-     * @param CertificationType $certificationType
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -155,7 +155,7 @@ class CertificationTypeClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(CertificationType $certificationType, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -163,7 +163,7 @@ class CertificationTypeClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

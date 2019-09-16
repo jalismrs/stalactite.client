@@ -52,7 +52,7 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -60,22 +60,98 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Domain $domain, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
+            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'domain' => ModelFactory::createDomain($r['domain'])
+            'domain' => $r['domain'] ? ModelFactory::createDomain($r['domain']) : null
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param string $name
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function getByName(string $name, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'domains' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::DOMAIN]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => ['name' => $name]
+        ], $schema);
+
+        $domains = [];
+        foreach ($r['domains'] as $domain) {
+            $domains[] = ModelFactory::createDomain($domain);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domains' => $domains
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param string $name
+     * @param string $apiKey
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'domains' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::DOMAIN]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => [
+                'name' => $name,
+                'apiKey' => $apiKey
+            ]
+        ], $schema);
+
+        $domains = [];
+        foreach ($r['domains'] as $domain) {
+            $domains[] = ModelFactory::createDomain($domain);
+        }
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'domains' => $domains
         ]);
 
         return $response;
@@ -104,7 +180,7 @@ class DomainClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::DOMAIN]
+            'domain' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -114,7 +190,7 @@ class DomainClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'domain' => ModelFactory::createDomain($r['domain'])
+            'domain' => $r['domain'] ? ModelFactory::createDomain($r['domain']) : null
         ]);
 
         return $response;
@@ -157,7 +233,7 @@ class DomainClient extends AbstractClient
     }
 
     /**
-     * @param Domain $domain
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -165,7 +241,7 @@ class DomainClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Domain $domain, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -173,7 +249,7 @@ class DomainClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

@@ -23,6 +23,7 @@ abstract class ModelFactory
             ->setLastName('uiop')
             ->setGender('male')
             ->setEmail('goodMorning@hello.hi')
+            ->setGoogleId('0123456789')
             ->setPrivilege('user')
             ->setBirthday('2000-01-01')
             ->addPost(self::getTestablePost())

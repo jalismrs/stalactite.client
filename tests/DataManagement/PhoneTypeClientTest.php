@@ -83,7 +83,7 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->get(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $response = $mockAPIClient->get(ModelFactory::getTestablePhoneType()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(PhoneType::class, $response->getData()['phoneType']);
@@ -111,7 +111,7 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestablePhoneType()->getUid(), 'fake user jwt');
     }
 
     /**
@@ -229,7 +229,7 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->delete(ModelFactory::getTestablePhoneType(), 'fake user jwt');
+        $response = $mockAPIClient->delete(ModelFactory::getTestablePhoneType()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -255,6 +255,6 @@ class PhoneTypeClientTest extends TestCase
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestablePhoneType(), 'fake user jwt'));
+        $this->assertIsArray($mockAPIClient->delete(ModelFactory::getTestablePhoneType()->getUid(), 'fake user jwt'));
     }
 }

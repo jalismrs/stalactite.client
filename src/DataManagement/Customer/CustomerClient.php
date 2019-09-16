@@ -70,7 +70,7 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -78,22 +78,57 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(Customer $customer, string $jwt): Response
+    public function get(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'customer' => ModelFactory::createCustomer($r['customer'])
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param string $email
+     * @param string $googleId
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
+        ]);
+
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'query' => [
+                'email' => $email,
+                'googleId' => $googleId
+            ]
+        ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;
@@ -120,7 +155,7 @@ class CustomerClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::CUSTOMER]
+            'customer' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::CUSTOMER]
         ]);
 
         $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX, [
@@ -130,7 +165,7 @@ class CustomerClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'customer' => ModelFactory::createCustomer($r['customer'])
+            'customer' => $r['customer'] ? ModelFactory::createCustomer($r['customer']) : null
         ]);
 
         return $response;
@@ -171,7 +206,7 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
+     * @param string $uid
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -179,7 +214,7 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(Customer $customer, string $jwt): Response
+    public function delete(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -187,7 +222,7 @@ class CustomerClient extends AbstractClient
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
         ]);
 
-        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(), [
+        $r = $this->request('DELETE', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 

@@ -73,7 +73,7 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testGetOne(): void
+    public function testGet(): void
     {
         $mockHttpClient = new MockHttpClient(
             new MockResponse(json_encode([
@@ -86,7 +86,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->get(new User(), 'fake user jwt');
+        $response = $mockAPIClient->get(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
         $this->assertInstanceOf(User::class, $response->getData()['user']);
@@ -98,7 +98,7 @@ class UserClientTest extends TestCase
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnGetOne(): void
+    public function testThrowOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -114,7 +114,61 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->get(new User(), 'fake user jwt');
+        $mockAPIClient->get(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testGetByEmailAndGoogleId(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'user' => ModelFactory::getTestableUser()->asArray()
+            ]))
+        ]);
+
+        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $u = ModelFactory::getTestableUser();
+
+        $response = $mockAPIClient->getByEmailAndGoogleId($u->getEmail(), $u->getGoogleId(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(User::class, $response->getData()['user']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'user' => []
+            ]))
+        ]);
+
+        $mockAPIClient = new UserClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $u = ModelFactory::getTestableUser();
+
+        $mockAPIClient->getByEmailAndGoogleId($u->getEmail(), $u->getGoogleId(), 'fake user jwt');
     }
 
     /**
@@ -157,7 +211,7 @@ class UserClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'user' => null // can not be null
+                'user' => [] // invalid type
             ]))
         );
 
@@ -233,7 +287,7 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $response = $mockAPIClient->delete(new User(), 'fake user jwt');
+        $response = $mockAPIClient->delete(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
         $this->assertTrue($response->success());
         $this->assertNull($response->getError());
     }
@@ -259,6 +313,6 @@ class UserClientTest extends TestCase
         $mockAPIClient = new UserClient('http://fakeClient');
         $mockAPIClient->setHttpClient($mockHttpClient);
 
-        $mockAPIClient->delete(new User(), 'fake user jwt');
+        $mockAPIClient->delete(ModelFactory::getTestableUser()->getUid(), 'fake user jwt');
     }
 }

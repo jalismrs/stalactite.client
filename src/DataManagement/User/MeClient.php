@@ -34,7 +34,7 @@ class MeClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'me' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::USER]
+            'me' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::USER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
@@ -43,7 +43,7 @@ class MeClient extends AbstractClient
 
         $response = new Response();
         $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'me' => ModelFactory::createUser($r['me'])
+            'me' => $r['me'] ? ModelFactory::createUser($r['me']) : null
         ]);
 
         return $response;
