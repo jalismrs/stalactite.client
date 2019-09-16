@@ -13,10 +13,20 @@ class AuthTokenClient extends AbstractClient
 {
     public const API_URL_PREFIX = Client::API_URL_PREFIX . '/auth-token';
 
+    /** @var int Short time access token */
     private const JWT_DURATION = 60;
 
     /** @var UserClient $userClient */
     private $userClient;
+
+    /** @var DomainClient $domainClient */
+    private $domainClient;
+
+    /** @var PostClient $postClient */
+    private $postClient;
+
+    /** @var CustomerClient $customerClient */
+    private $customerClient;
 
     /**
      * @param string $apiAuthToken
@@ -53,5 +63,44 @@ class AuthTokenClient extends AbstractClient
         }
 
         return $this->userClient;
+    }
+
+    /**
+     * @return CustomerClient
+     */
+    public function customers(): CustomerClient
+    {
+        if (!($this->customerClient instanceof CustomerClient)) {
+            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+            $this->customerClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->customerClient;
+    }
+
+    /**
+     * @return DomainClient
+     */
+    public function domains(): DomainClient
+    {
+        if (!($this->domainClient instanceof DomainClient)) {
+            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+            $this->domainClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->domainClient;
+    }
+
+    /**
+     * @return PostClient
+     */
+    public function posts(): PostClient
+    {
+        if (!($this->postClient instanceof PostClient)) {
+            $this->postClient = new PostClient($this->apiHost, $this->userAgent);
+            $this->postClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->postClient;
     }
 }
