@@ -66,21 +66,28 @@ class Client extends AbstractClient
         $data->has('iat');
         $data->has('exp');
 
-        if ($token->validate($data) && !$token->isExpired() && in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
-
-            $signer = new Sha256();
-            $publicKey = new Key($this->getRSAPublicKey());
-
-            try {
-                return $token->verify($signer, $publicKey);
-            } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
-                throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
-            } catch (Throwable $t) { // other exceptions result in an invalid token
-                return false;
-            }
+        if ($token->isExpired()) {
+            throw new ClientException('Expired JWT', ClientException::EXPIRED_USER_JWT_ERROR);
         }
 
-        return false;
+        if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
+            throw new ClientException('Invalid JWT user type', ClientException::INVALID_JWT_USER_TYPE_ERROR);
+        }
+
+        if (!$token->validate($data)) {
+            throw new ClientException('Invalid JWT format', ClientException::INVALID_USER_JWT_FORMAT_ERROR);
+        }
+
+        $signer = new Sha256();
+        $publicKey = new Key($this->getRSAPublicKey());
+
+        try {
+            return $token->verify($signer, $publicKey);
+        } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
+            throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
+        } catch (Throwable $t) { // other exceptions result in an invalid token / signature
+            throw new ClientException('Invalid JWT signature', ClientException::INVALID_USER_JWT_SIGNATURE_ERROR);
+        }
     }
 
     /**
