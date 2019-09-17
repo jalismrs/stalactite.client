@@ -133,16 +133,16 @@ abstract class AbstractClient
         try {
             $response = $this->getHttpClient()->request($method, $url, $options);
         } catch (Throwable $t) {
-            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR);
+            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR, $t);
         }
 
         $this->lastResponse = $response;
 
         $data = new JsonData();
         try {
-            $data->setData($response->getContent());
+            $data->setData($response->getContent(false));
         } catch (Throwable $t) {
-            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR);
+            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR, $t);
         }
 
         if (!$schema->validate($data)) {
