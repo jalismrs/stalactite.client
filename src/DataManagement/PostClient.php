@@ -196,7 +196,7 @@ class PostClient extends AbstractClient
         $schema->setSchema([
             'success' => ['type' => JsonRule::BOOLEAN_TYPE],
             'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::USER]
+            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::MINIMAL_USER]
         ]);
 
         $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users', [
