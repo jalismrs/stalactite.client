@@ -71,21 +71,22 @@ class JwtValidationTest extends TestCase
         $publicKey = self::getTestPublicKey();
 
         $time = time();
-        $builder = new Builder();
 
-        $validToken = (string)$builder->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $invalidJwt = 'a' . $builder->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $wrongFormatToken = (string)$builder->issuedBy('wrong issuer')->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $expiredToken = (string)$builder->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time - 2000)->expiresAt($time - 1000)->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $invalidUserTypeToken = (string)$builder->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'invalid type')->getToken($signer, $privateKey);
+        $validToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
+        $invalidJwt = 'a' . (new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
+        $wrongIssuerToken = (string)(new Builder())->issuedBy('wrong issuer')->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
+        $expiredToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time - 2000)->expiresAt($time - 1000)->withClaim('type', 'user')->getToken($signer, $privateKey);
+        $invalidUserTypeToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'invalid type')->getToken($signer, $privateKey);
+        $invalidStructureJwt_missingTypeClaim = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->getToken($signer, $privateKey);
 
         return [
             [$validToken, $publicKey, false, 0],
-            [$validToken, 'invalid private key', true, ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR],
-            [$invalidJwt, $publicKey, true, ClientException::INVALID_USER_JWT_ERROR],
-            [$wrongFormatToken, $publicKey, true, ClientException::INVALID_USER_JWT_FORMAT_ERROR],
-            [$expiredToken, $publicKey, true, ClientException::EXPIRED_USER_JWT_ERROR],
-            [$invalidUserTypeToken, $publicKey, true, ClientException::INVALID_JWT_USER_TYPE_ERROR]
+            [$validToken, 'invalid public key', true, ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR],
+            [$invalidJwt, $publicKey, true, ClientException::INVALID_JWT_STRING_ERROR],
+            [$wrongIssuerToken, $publicKey, true, ClientException::INVALID_JWT_ISSUER_ERROR],
+            [$expiredToken, $publicKey, true, ClientException::EXPIRED_JWT_ERROR],
+            [$invalidUserTypeToken, $publicKey, true, ClientException::INVALID_JWT_USER_TYPE_ERROR],
+            [$invalidStructureJwt_missingTypeClaim, $publicKey, true, ClientException::INVALID_JWT_STRUCTURE_ERROR]
         ];
     }
 }
