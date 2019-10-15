@@ -37,17 +37,17 @@ class ClientException extends Exception
     /**
      * Invalid user JWT string used
      */
-    public const INVALID_USER_JWT_ERROR = 11;
+    public const INVALID_JWT_STRING_ERROR = 11;
 
     /**
-     * Valid user JWT but wrong format (missing or wrong fields)
+     * Invalid JWT issuer
      */
-    public const INVALID_USER_JWT_FORMAT_ERROR = 12;
+    public const INVALID_JWT_ISSUER_ERROR = 12;
 
     /**
      * Expired user JWT
      */
-    public const EXPIRED_USER_JWT_ERROR = 13;
+    public const EXPIRED_JWT_ERROR = 13;
 
     /**
      * Wrong user type set for the JWT
@@ -57,5 +57,10 @@ class ClientException extends Exception
     /**
      * Invalid user JWT signature
      */
-    public const INVALID_USER_JWT_SIGNATURE_ERROR = 15;
+    public const INVALID_JWT_SIGNATURE_ERROR = 15;
+
+    /**
+     * Invalid JWT structure (missing fields)
+     */
+    public const INVALID_JWT_STRUCTURE_ERROR = 16;
 }
