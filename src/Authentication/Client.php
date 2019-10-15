@@ -54,20 +54,19 @@ class Client extends AbstractClient
         try {
             $token = $this->getTokenFromString($jwt);
         } catch (Throwable $t) {
-            throw new ClientException('Invalid user JWT', ClientException::INVALID_USER_JWT_ERROR, $t);
+            throw new ClientException('Invalid user JWT', ClientException::INVALID_JWT_STRING_ERROR, $t);
         }
 
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
-        $data->has('iss');
-        $data->has('aud');
-        $data->has('type');
-        $data->has('sub');
-        $data->has('iat');
-        $data->has('exp');
+
+        if (!$token->hasClaim('iss') || !$token->hasClaim('aud') || !$token->hasClaim('type') ||
+            !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
+            throw new ClientException('Invalid JWT structure', ClientException::INVALID_JWT_STRUCTURE_ERROR);
+        }
 
         if ($token->isExpired()) {
-            throw new ClientException('Expired JWT', ClientException::EXPIRED_USER_JWT_ERROR);
+            throw new ClientException('Expired JWT', ClientException::EXPIRED_JWT_ERROR);
         }
 
         if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
@@ -75,7 +74,7 @@ class Client extends AbstractClient
         }
 
         if (!$token->validate($data)) {
-            throw new ClientException('Invalid JWT format', ClientException::INVALID_USER_JWT_FORMAT_ERROR);
+            throw new ClientException('Invalid JWT issuer', ClientException::INVALID_JWT_ISSUER_ERROR);
         }
 
         $signer = new Sha256();
@@ -86,7 +85,7 @@ class Client extends AbstractClient
         } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
             throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
         } catch (Throwable $t) { // other exceptions result in an invalid token / signature
-            throw new ClientException('Invalid JWT signature', ClientException::INVALID_USER_JWT_SIGNATURE_ERROR);
+            throw new ClientException('Invalid JWT signature', ClientException::INVALID_JWT_SIGNATURE_ERROR);
         }
     }
 
