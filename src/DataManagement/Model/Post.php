@@ -6,37 +6,17 @@ use jalismrs\Stalactite\Client\AbstractModel;
 
 class Post extends AbstractModel
 {
-    private const ADMIN_PRIVILEGE = 'admin';
-
-    /** @var null|string $privilege */
-    private $privilege;
-
     /** @var null|string $name */
     private $name;
 
     /** @var null|string $shortName */
     private $shortName;
 
-    /** @var null|int $rank */
-    private $rank;
+    /** @var bool $access */
+    private $access = false;
 
-    /**
-     * @return string|null
-     */
-    public function getPrivilege(): ?string
-    {
-        return $this->privilege;
-    }
-
-    /**
-     * @param string|null $privilege
-     * @return Post
-     */
-    public function setPrivilege(?string $privilege): Post
-    {
-        $this->privilege = $privilege;
-        return $this;
-    }
+    /** @var bool $admin */
+    private $admin = false;
 
     /**
      * @return string|null
@@ -75,29 +55,39 @@ class Post extends AbstractModel
     }
 
     /**
-     * @return int|null
+     * @return bool
      */
-    public function getRank(): ?int
+    public function allowAccess(): bool
     {
-        return $this->rank;
+        return $this->access;
     }
 
     /**
-     * @param int|null $rank
+     * @param bool $access
      * @return Post
      */
-    public function setRank(?int $rank): Post
+    public function setAccess(bool $access): Post
     {
-        $this->rank = $rank;
+        $this->access = $access;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function hasAdminPrivilege(): bool
+    public function isAdmin(): bool
     {
-        return $this->privilege === self::ADMIN_PRIVILEGE;
+        return $this->admin;
+    }
+
+    /**
+     * @param bool $admin
+     * @return Post
+     */
+    public function setAdmin(bool $admin): Post
+    {
+        $this->admin = $admin;
+        return $this;
     }
 
     /**
@@ -109,8 +99,8 @@ class Post extends AbstractModel
             'uid' => $this->uid,
             'name' => $this->name,
             'shortName' => $this->shortName,
-            'privilege' => $this->privilege,
-            'rank' => $this->rank
+            'admin' => $this->admin,
+            'access' => $this->access
         ];
     }
 }
