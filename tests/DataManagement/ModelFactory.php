@@ -24,7 +24,7 @@ abstract class ModelFactory
             ->setGender('male')
             ->setEmail('goodMorning@hello.hi')
             ->setGoogleId('0123456789')
-            ->setPrivilege('user')
+            ->setAdmin(false)
             ->setBirthday('2000-01-01')
             ->addPost(self::getTestablePost())
             ->addLead(self::getTestablePost())
