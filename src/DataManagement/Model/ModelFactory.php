@@ -95,9 +95,9 @@ abstract class ModelFactory
     {
         $post = new Post();
         $post->setName($data['name'] ?? null)
-            ->setPrivilege($data['privilege'] ?? null)
+            ->setAdmin($data['admin'] ?? false)
+            ->setAccess($data['access'] ?? false)
             ->setShortName($data['shortName'] ?? null)
-            ->setRank($data['rank'] ?? null)
             ->setUid($data['uid'] ?? null);
 
         return $post;
