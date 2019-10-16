@@ -28,7 +28,7 @@ class CertificationGraduationClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certifications' => [ModelFactory::getTestableCertificationGraduation()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
@@ -56,7 +56,7 @@ class CertificationGraduationClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certifications' => ModelFactory::getTestableCertificationGraduation()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
@@ -77,7 +77,7 @@ class CertificationGraduationClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
@@ -103,7 +103,7 @@ class CertificationGraduationClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
@@ -141,7 +141,7 @@ class CertificationGraduationClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');
@@ -167,7 +167,7 @@ class CertificationGraduationClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new CertificationGraduationClient('http://fakeHost');

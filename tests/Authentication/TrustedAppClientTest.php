@@ -27,7 +27,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApps' => [ModelFactory::getTestableTrustedApp()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -56,7 +56,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApps' => 'wrong response type'
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -78,7 +78,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApp' => ModelFactory::getTestableTrustedApp()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -106,7 +106,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApps' => 'wrong response type'
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -129,7 +129,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApp' => array_merge($ta->asArray(), ['resetToken' => $ta->getResetToken()])
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -157,7 +157,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApp' => []
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -178,7 +178,7 @@ class TrustedAppClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -204,7 +204,7 @@ class TrustedAppClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -225,7 +225,7 @@ class TrustedAppClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -253,7 +253,7 @@ class TrustedAppClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -277,7 +277,7 @@ class TrustedAppClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'trustedApp' => ModelFactory::getTestableTrustedApp()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');
@@ -304,7 +304,7 @@ class TrustedAppClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockClient = new Client('http://fakeClient');

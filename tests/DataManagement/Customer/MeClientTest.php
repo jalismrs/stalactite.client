@@ -28,7 +28,7 @@ class MeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'me' => ModelFactory::getTestableCustomer()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new MeClient('http://fakeClient');
@@ -56,7 +56,7 @@ class MeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'me' => [] // invalid customer
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new MeClient('http://fakeClient');

@@ -28,7 +28,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'posts' => [ModelFactory::getTestablePost()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -56,7 +56,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'posts' => ModelFactory::getTestablePost()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -78,7 +78,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'post' => ModelFactory::getTestablePost()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -106,7 +106,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'post' => [] // invalid post
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -128,7 +128,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'users' => [ModelFactory::getTestableUser()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -156,7 +156,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'users' => null // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -178,7 +178,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'post' => ModelFactory::getTestablePost()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -206,7 +206,7 @@ class PostClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'post' => [] // invalid post
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -227,7 +227,7 @@ class PostClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -253,7 +253,7 @@ class PostClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -274,7 +274,7 @@ class PostClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');
@@ -300,7 +300,7 @@ class PostClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PostClient('http://fakeClient');

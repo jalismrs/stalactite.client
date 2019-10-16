@@ -34,8 +34,8 @@ class LoginTest extends TestCase
         ];
 
         $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode($response)),
-            new MockResponse(json_encode($response2))
+            new MockResponse(json_encode($response, JSON_THROW_ON_ERROR)),
+            new MockResponse(json_encode($response2, JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new Client('http://fakeHost');
@@ -108,7 +108,7 @@ class LoginTest extends TestCase
         ];
 
         $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode($invalidResponse))
+            new MockResponse(json_encode($invalidResponse, JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new Client('http://fakeHost');

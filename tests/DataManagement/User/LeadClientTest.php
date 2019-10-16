@@ -28,7 +28,7 @@ class LeadClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'leads' => [ModelFactory::getTestablePost()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -56,7 +56,7 @@ class LeadClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'leads' => ModelFactory::getTestablePost()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -77,7 +77,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -103,7 +103,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -127,7 +127,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -148,7 +148,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -174,7 +174,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
@@ -198,7 +198,7 @@ class LeadClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new LeadClient('http://fakeClient');
