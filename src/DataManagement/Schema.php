@@ -54,7 +54,7 @@ abstract class Schema
         'googleId' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
         'location' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
         'office' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-        'privilege' => ['type' => JsonRule::STRING_TYPE, 'enum' => ['user', 'admin', 'superadmin']],
+        'admin' => ['type' => JsonRule::BOOLEAN_TYPE],
         'birthday' => ['type' => JsonRule::STRING_TYPE, 'date-format' => 'Y-m-d', 'null' => true]
     ];
 
@@ -67,7 +67,7 @@ abstract class Schema
         'googleId' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
         'location' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
         'office' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-        'privilege' => ['type' => JsonRule::STRING_TYPE, 'enum' => ['user', 'admin', 'superadmin']],
+        'admin' => ['type' => JsonRule::BOOLEAN_TYPE],
         'birthday' => ['type' => JsonRule::STRING_TYPE, 'date-format' => 'Y-m-d', 'null' => true],
         'posts' => ['type' => JsonRule::LIST_TYPE, 'schema' => self::POST],
         'leads' => ['type' => JsonRule::LIST_TYPE, 'schema' => self::POST],
