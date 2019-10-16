@@ -27,7 +27,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneTypes' => [ModelFactory::getTestablePhoneType()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -55,7 +55,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneTypes' => ModelFactory::getTestablePhoneType()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -77,7 +77,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneType' => ModelFactory::getTestablePhoneType()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -105,7 +105,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneType' => [] // invalid phone type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -127,7 +127,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneType' => ModelFactory::getTestablePhoneType()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -155,7 +155,7 @@ class PhoneTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'phoneType' => [] // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -176,7 +176,7 @@ class PhoneTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -202,7 +202,7 @@ class PhoneTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -223,7 +223,7 @@ class PhoneTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');
@@ -249,7 +249,7 @@ class PhoneTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new PhoneTypeClient('http://fakeClient');

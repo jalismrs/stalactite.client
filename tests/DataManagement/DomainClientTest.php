@@ -27,7 +27,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => [ModelFactory::getTestableDomain()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -55,7 +55,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => ModelFactory::getTestableDomain()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -77,7 +77,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domain' => ModelFactory::getTestableDomain()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -105,7 +105,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domain' => [] // invalid domain
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -127,7 +127,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => [ModelFactory::getTestableDomain()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -155,7 +155,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => ModelFactory::getTestableDomain()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -177,7 +177,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => [ModelFactory::getTestableDomain()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -207,7 +207,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domains' => ModelFactory::getTestableDomain()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -231,7 +231,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domain' => ModelFactory::getTestableDomain()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -259,7 +259,7 @@ class DomainClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'domain' => [] // invalid certification type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -280,7 +280,7 @@ class DomainClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -306,7 +306,7 @@ class DomainClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -327,7 +327,7 @@ class DomainClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');
@@ -353,7 +353,7 @@ class DomainClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false /// invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new DomainClient('http://fakeClient');

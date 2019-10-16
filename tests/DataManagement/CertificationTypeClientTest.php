@@ -27,7 +27,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationTypes' => [ModelFactory::getTestableCertificationType()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -55,7 +55,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationTypes' => ModelFactory::getTestableCertificationType()->asArray() // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -77,7 +77,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationType' => ModelFactory::getTestableCertificationType()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -105,7 +105,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationType' => [] // invalid certification type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -127,7 +127,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationType' => ModelFactory::getTestableCertificationType()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -155,7 +155,7 @@ class CertificationTypeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'certificationType' => [] // invalid certification type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -176,7 +176,7 @@ class CertificationTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -202,7 +202,7 @@ class CertificationTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -223,7 +223,7 @@ class CertificationTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');
@@ -249,7 +249,7 @@ class CertificationTypeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false /// invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new CertificationTypeClient('http://fakeClient');

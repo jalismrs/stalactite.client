@@ -10,10 +10,10 @@ abstract class ModelFactory
     {
         $trustedApp = new TrustedApp();
         $trustedApp->setName('fake name')
-            ->setUid('azertyuiop')
             ->setGoogleOAuthClientId('qsdfghjklm')
             ->setAuthToken('aqwzsxedcrfv')
-            ->setResetToken('tgbyhnujikol');
+            ->setResetToken('tgbyhnujikol')
+            ->setUid('azertyuiop');
 
         return $trustedApp;
     }

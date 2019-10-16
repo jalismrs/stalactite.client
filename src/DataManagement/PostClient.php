@@ -93,10 +93,10 @@ class PostClient extends AbstractClient
     public function create(Post $post, string $jwt): Response
     {
         $body = [
-            'privilege' => $post->getPrivilege(),
             'name' => $post->getName(),
             'shortName' => $post->getShortName(),
-            'rank' => $post->getRank()
+            'admin' => $post->isAdmin(),
+            'access' => $post->allowAccess()
         ];
 
         $schema = new JsonSchema();
@@ -131,10 +131,10 @@ class PostClient extends AbstractClient
     public function update(Post $post, string $jwt): Response
     {
         $body = [
-            'privilege' => $post->getPrivilege(),
             'name' => $post->getName(),
             'shortName' => $post->getShortName(),
-            'rank' => $post->getRank()
+            'admin' => $post->isAdmin(),
+            'access' => $post->allowAccess()
         ];
 
         $schema = new JsonSchema();

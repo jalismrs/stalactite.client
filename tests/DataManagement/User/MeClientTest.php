@@ -28,7 +28,7 @@ class MeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'me' => ModelFactory::getTestableUser()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -56,7 +56,7 @@ class MeClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'me' => [ModelFactory::getTestableUser()->asArray()] // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -77,7 +77,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -103,7 +103,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -124,7 +124,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -150,7 +150,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -174,7 +174,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -197,7 +197,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
@@ -223,7 +223,7 @@ class MeClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => false // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         );
 
         $mockAPIClient = new MeClient('http://fakeHost');
