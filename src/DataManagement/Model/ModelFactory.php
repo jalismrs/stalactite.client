@@ -20,7 +20,7 @@ abstract class ModelFactory
             ->setLastName($data['lastName'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
             ->setEmail($data['email'] ?? null)
-            ->setPrivilege($data['privilege'] ?? null)
+            ->setAdmin($data['admin'] ?? false)
             ->setBirthday($data['birthday'] ?? null)
             ->setOffice($data['office'] ?? null)
             ->setLocation($data['location'] ?? null)
