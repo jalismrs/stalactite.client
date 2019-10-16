@@ -28,7 +28,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'users' => [ModelFactory::getTestableUser()->asArray()]
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
@@ -56,7 +56,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'users' => null // invalid type
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
@@ -78,7 +78,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'user' => ModelFactory::getTestableUser()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
@@ -106,7 +106,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'user' => [] // invalid user
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
@@ -128,7 +128,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'user' => ModelFactory::getTestableUser()->asArray()
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
@@ -156,7 +156,7 @@ class UserClientTest extends TestCase
                 'success' => true,
                 'error' => null,
                 'user' => [] // invalid user
-            ]))
+            ], JSON_THROW_ON_ERROR))
         ]);
 
         $mockAPIClient = new UserClient('http://fakeClient');
