@@ -42,8 +42,8 @@ abstract class ModelFactory
     {
         $post = new Post();
         $post->setName('azerty')
-            ->setRank(1)
-            ->setPrivilege('user')
+            ->setAdmin(false)
+            ->setAccess(false)
             ->setShortName('aze')
             ->setUid('azertyuiop');
 
