@@ -2,6 +2,7 @@
 
 namespace jalismrs\Stalactite\Client\Test\AccessManagement;
 
+use jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance;
 use jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
 use jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelation;
 use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
@@ -32,5 +33,17 @@ abstract class ModelFactory
             ->setUid('azertyuiop');
 
         return $dur;
+    }
+
+    /**
+     * @return AccessClearance
+     */
+    public static function getTestableAccessClearance(): AccessClearance
+    {
+        $ac = new AccessClearance();
+        $ac->setAccess(false)
+            ->setAccessType(AccessClearance::NO_ACCESS);
+
+        return $ac;
     }
 }

@@ -33,4 +33,13 @@ abstract class ModelFactory
 
         return $dcr;
     }
+
+    public static function createAccessClearance(array $data): AccessClearance
+    {
+        $ac = new AccessClearance();
+        $ac->setAccess($data['accessGranted'] ?? false)
+            ->setAccessType($data['accessType'] ?? AccessClearance::NO_ACCESS);
+
+        return $ac;
+    }
 }
