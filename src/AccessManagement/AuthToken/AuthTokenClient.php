@@ -20,6 +20,9 @@ class AuthTokenClient extends AbstractClient
     /** @var DomainClient $domainClient */
     private $domainClient;
 
+    /** @var UserClient $userClient */
+    private $userClient;
+
     /**
      * @param string $apiAuthToken
      * @param string|null $userAgent
@@ -55,5 +58,18 @@ class AuthTokenClient extends AbstractClient
         }
 
         return $this->domainClient;
+    }
+
+    /**
+     * @return UserClient
+     */
+    public function users(): UserClient
+    {
+        if (!($this->userClient instanceof UserClient)) {
+            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
+            $this->userClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->userClient;
     }
 }
