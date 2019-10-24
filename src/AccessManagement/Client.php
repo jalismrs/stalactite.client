@@ -9,6 +9,22 @@ class Client extends AbstractClient
 {
     public const API_URL_PREFIX = '/access';
 
+    /** @var CustomerClient $customerClient */
+    private $customerClient;
+
+    /**
+     * @return CustomerClient
+     */
+    public function customers(): CustomerClient
+    {
+        if (!($this->customerClient instanceof CustomerClient)) {
+            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+            $this->customerClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->customerClient;
+    }
+
     /**
      * @return AuthTokenClient
      */
