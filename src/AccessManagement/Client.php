@@ -11,6 +11,9 @@ class Client extends AbstractClient
 {
     public const API_URL_PREFIX = '/access';
 
+    /** @var DomainClient $domainClient */
+    private $domainClient;
+
     /** @var UserClient $userClient */
     private $userClient;
 
@@ -21,6 +24,18 @@ class Client extends AbstractClient
     private $authTokenClient;
 
     /**
+     * @return DomainClient
+     */
+    public function domains(): DomainClient
+    {
+        if (!($this->domainClient instanceof DomainClient)) {
+            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+            $this->domainClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->domainClient;
+    }
+
     /**
      * @return UserClient
      */
