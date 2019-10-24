@@ -86,4 +86,52 @@ class DomainClientTest extends TestCase
 
         $mockAPIClient->getRelations(DataManagementTestModelFactory::getTestableDomain(), 'fake user jwt');
     }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testAddUserRelation(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'relation' => ModelFactory::getTestableDomainUserRelation()->asArray()
+            ], JSON_THROW_ON_ERROR))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $response = $mockAPIClient->addUserRelation(DataManagementTestModelFactory::getTestableDomain(), DataManagementTestModelFactory::getTestableUser(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(DomainUserRelation::class, $response->getData()['relation']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnInvalidResponseAddUserRelation(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'relation' => [] // wrong type
+            ], JSON_THROW_ON_ERROR))
+        ]);
+
+        $mockAPIClient = new DomainClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $mockAPIClient->addUserRelation(DataManagementTestModelFactory::getTestableDomain(), DataManagementTestModelFactory::getTestableUser(), 'fake user jwt');
+    }
 }

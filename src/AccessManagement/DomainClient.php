@@ -10,6 +10,7 @@ use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
+use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use jalismrs\Stalactite\Client\Response;
 
@@ -63,6 +64,37 @@ class DomainClient extends AbstractClient
                 'users' => $userRelations,
                 'customers' => $customerRelations
             ]
+        ]);
+
+        return $response;
+    }
+
+    /**
+     * @param Domain $domain
+     * @param User $user
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function addUserRelation(Domain $domain, User $user, string $jwt): Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema([
+            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
+            'relation' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN_USER_RELATION]
+        ]);
+
+        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users', [
+            'headers' => ['X-API-TOKEN' => $jwt],
+            'json' => ['user' => $user->getUid()]
+        ], $schema);
+
+        $response = new Response();
+        $response->setSuccess($r['success'])->setError($r['error'])->setData([
+            'relation' => $r['relation'] ? ModelFactory::createDomainUserRelation($r['relation']) : null
         ]);
 
         return $response;
