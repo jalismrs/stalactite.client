@@ -13,8 +13,9 @@ class AuthTokenClient extends AbstractClient
 {
     public const API_URL_PREFIX = Client::API_URL_PREFIX . '/auth-token';
 
-    /** @var int Short time access token */
     private const JWT_DURATION = 60;
+
+    public const JWT_AUDIENCE = 'data.microservice';
 
     /** @var UserClient $userClient */
     private $userClient;
@@ -40,7 +41,7 @@ class AuthTokenClient extends AbstractClient
         $signer = new Sha256();
 
         $builder = (new Builder())
-            ->permittedFor('data.microservice')
+            ->permittedFor(self::JWT_AUDIENCE)
             ->issuedAt($time)
             ->expiresAt($time + self::JWT_DURATION)
             ->withClaim('challenge', $challenge);
