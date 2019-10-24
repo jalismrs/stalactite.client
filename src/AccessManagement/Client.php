@@ -20,6 +20,9 @@ class Client extends AbstractClient
     /** @var CustomerClient $customerClient */
     private $customerClient;
 
+    /** @var RelationClient $relationClient */
+    private $relationClient;
+
     /** @var AuthTokenClient $authTokenClient */
     private $authTokenClient;
 
@@ -60,6 +63,19 @@ class Client extends AbstractClient
         }
 
         return $this->customerClient;
+    }
+
+    /**
+     * @return RelationClient
+     */
+    public function relations(): RelationClient
+    {
+        if (!($this->relationClient instanceof RelationClient)) {
+            $this->relationClient = new RelationClient($this->apiHost, $this->userAgent);
+            $this->relationClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->relationClient;
     }
 
     /**
