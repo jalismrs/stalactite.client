@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\Test\Authentication;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\Authentication\Client;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class TrustedAppClientTest extends TestCase
 {
     /**
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws ClientException
@@ -42,7 +40,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -67,7 +64,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -92,7 +88,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -117,7 +112,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -143,7 +137,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -168,7 +161,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -191,7 +183,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -215,7 +206,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -240,7 +230,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -266,7 +255,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -291,7 +279,6 @@ class TrustedAppClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

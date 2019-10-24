@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\Authentication;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
@@ -94,7 +93,6 @@ class Client extends AbstractClient
      * @param string $userGoogleJwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

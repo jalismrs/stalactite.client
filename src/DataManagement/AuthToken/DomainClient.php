@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\DataManagement\AuthToken;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
@@ -21,7 +20,6 @@ class DomainClient extends AbstractClient
      * @param string $apiAuthToken
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -59,7 +57,6 @@ class DomainClient extends AbstractClient
      * @param string $apiAuthToken
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -100,7 +97,6 @@ class DomainClient extends AbstractClient
      * @param string $apiAuthToken
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -138,7 +134,6 @@ class DomainClient extends AbstractClient
      * @param string $apiAuthToken
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

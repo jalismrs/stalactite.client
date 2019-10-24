@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\Test\DataManagement\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
@@ -17,7 +16,6 @@ class PhoneLineClientTest extends TestCase
 {
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -42,7 +40,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -67,7 +64,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -90,7 +86,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -114,7 +109,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -131,7 +125,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -154,7 +147,6 @@ class PhoneLineClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

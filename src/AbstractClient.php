@@ -3,7 +3,6 @@
 namespace jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
@@ -124,7 +123,6 @@ abstract class AbstractClient
      * @param JsonSchema $schema
      * @return array
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * Method to contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
      */

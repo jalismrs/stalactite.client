@@ -12,11 +12,11 @@ class Post extends AbstractModel
     /** @var null|string $shortName */
     private $shortName;
 
-    /** @var bool $access */
-    private $access = false;
+    /** @var bool $allowAccess */
+    private $allowAccess = false;
 
-    /** @var bool $admin */
-    private $admin = false;
+    /** @var bool $adminAccess */
+    private $adminAccess = false;
 
     /**
      * @return string|null
@@ -59,34 +59,34 @@ class Post extends AbstractModel
      */
     public function allowAccess(): bool
     {
-        return $this->access;
+        return $this->allowAccess;
     }
 
     /**
-     * @param bool $access
+     * @param bool $allowAccess
      * @return Post
      */
-    public function setAccess(bool $access): Post
+    public function setAccess(bool $allowAccess): Post
     {
-        $this->access = $access;
+        $this->allowAccess = $allowAccess;
         return $this;
     }
 
     /**
      * @return bool
      */
-    public function isAdmin(): bool
+    public function hasAdminAccess(): bool
     {
-        return $this->admin;
+        return $this->adminAccess;
     }
 
     /**
-     * @param bool $admin
+     * @param bool $adminAccess
      * @return Post
      */
-    public function setAdmin(bool $admin): Post
+    public function setAdminAccess(bool $adminAccess): Post
     {
-        $this->admin = $admin;
+        $this->adminAccess = $adminAccess;
         return $this;
     }
 
@@ -99,8 +99,8 @@ class Post extends AbstractModel
             'uid' => $this->uid,
             'name' => $this->name,
             'shortName' => $this->shortName,
-            'admin' => $this->admin,
-            'access' => $this->access
+            'adminAccess' => $this->adminAccess,
+            'allowAccess' => $this->allowAccess
         ];
     }
 }

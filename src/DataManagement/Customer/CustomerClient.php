@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\DataManagement\Customer;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
@@ -39,7 +38,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -74,7 +72,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -105,7 +102,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -139,7 +135,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -176,7 +171,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -210,7 +204,6 @@ class CustomerClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

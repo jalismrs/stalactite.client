@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\Test\DataManagement;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
@@ -16,7 +15,6 @@ class CertificationTypeClientTest extends TestCase
 {
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -41,7 +39,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -66,7 +63,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -91,7 +87,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -116,7 +111,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -141,7 +135,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -166,7 +159,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -189,7 +181,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -213,7 +204,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -236,7 +226,6 @@ class CertificationTypeClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
