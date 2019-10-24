@@ -5,6 +5,7 @@ namespace jalismrs\Stalactite\Client\Test\AccessManagement\Customer;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
+use jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance;
 use jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
 use jalismrs\Stalactite\Client\ClientException;
 use jalismrs\Stalactite\Client\Test\AccessManagement\ModelFactory;
@@ -22,7 +23,7 @@ class CustomerClientTest extends TestCase
      */
     public function testGetRelations(): void
     {
-        $relation = ModelFactory::getTestableDomainUserRelation();
+        $relation = ModelFactory::getTestableDomainCustomerRelation();
         $relationAsArray = $relation->asArray();
         unset($relationAsArray['customer']);
 
@@ -57,7 +58,7 @@ class CustomerClientTest extends TestCase
             new MockResponse(json_encode([
                 'success' => true,
                 'error' => null,
-                'relations' => ModelFactory::getTestableDomainUserRelation()->asArray() // invalid
+                'relations' => ModelFactory::getTestableDomainCustomerRelation()->asArray() // invalid
             ], JSON_THROW_ON_ERROR))
         ]);
 
@@ -65,5 +66,53 @@ class CustomerClientTest extends TestCase
         $mockAPIClient->setHttpClient($mockHttpClient);
 
         $mockAPIClient->getRelations(DataManagementTestModelFactory::getTestableCustomer(), 'fake user jwt');
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testGetAccessClearance(): void
+    {
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'clearance' => ModelFactory::getTestableAccessClearance()->asArray()
+            ], JSON_THROW_ON_ERROR))
+        ]);
+
+        $mockAPIClient = new CustomerClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $response = $mockAPIClient->getAccessClearance(DataManagementTestModelFactory::getTestableCustomer(), DataManagementTestModelFactory::getTestableDomain(), 'fake user jwt');
+        $this->assertTrue($response->success());
+        $this->assertNull($response->getError());
+        $this->assertInstanceOf(AccessClearance::class, $response->getData()['clearance']);
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidResponseGetAccessClearance(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+
+        $mockHttpClient = new MockHttpClient([
+            new MockResponse(json_encode([
+                'success' => true,
+                'error' => null,
+                'clearance' => [] // wrong type
+            ], JSON_THROW_ON_ERROR))
+        ]);
+
+        $mockAPIClient = new CustomerClient('http://fakeClient');
+        $mockAPIClient->setHttpClient($mockHttpClient);
+
+        $mockAPIClient->getAccessClearance(DataManagementTestModelFactory::getTestableCustomer(), DataManagementTestModelFactory::getTestableDomain(), 'fake user jwt');
     }
 }
