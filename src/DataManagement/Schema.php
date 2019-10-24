@@ -10,8 +10,8 @@ abstract class Schema
         'uid' => ['type' => JsonRule::STRING_TYPE],
         'name' => ['type' => JsonRule::STRING_TYPE],
         'shortName' => ['type' => JsonRule::STRING_TYPE],
-        'admin' => ['type' => JsonRule::BOOLEAN_TYPE],
-        'access' => ['type' => JsonRule::BOOLEAN_TYPE]
+        'adminAccess' => ['type' => JsonRule::BOOLEAN_TYPE],
+        'allowAccess' => ['type' => JsonRule::BOOLEAN_TYPE]
     ];
 
     public const CERTIFICATION_TYPE = [
