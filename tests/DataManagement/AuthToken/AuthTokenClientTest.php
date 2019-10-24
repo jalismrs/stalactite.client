@@ -19,10 +19,10 @@ class AuthTokenClientTest extends TestCase
         $token = AuthTokenClient::generateJwt($apiToken, 'client.test');
 
         $validation = new ValidationData();
-        $validation->setAudience('data.microservice');
-        $validation->has('challenge');
+        $validation->setAudience(AuthTokenClient::JWT_AUDIENCE);
 
         $this->assertFalse($token->isExpired());
+        $this->assertTrue($token->hasClaim('challenge'));
         $this->assertTrue($token->validate($validation));
 
         $challenge = $token->getClaim('challenge');
