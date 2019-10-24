@@ -7,44 +7,25 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\Client;
 use jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\AccessManagement\Schema;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
 use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
 use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use jalismrs\Stalactite\Client\Response;
 
-class CustomerClient extends AbstractClient
+class MeClient extends AbstractClient
 {
-    public const API_URL_PREFIX = Client::API_URL_PREFIX . '/customers';
-
-    /** @var MeClient $meClient */
-    private $meClient;
+    public const API_URL_PREFIX = CustomerClient::API_URL_PREFIX . '/me';
 
     /**
-     * @return MeClient
-     */
-    public function me(): MeClient
-    {
-        if (!($this->meClient instanceof MeClient)) {
-            $this->meClient = new MeClient($this->apiHost, $this->userAgent);
-            $this->meClient->setHttpClient($this->getHttpClient());
-        }
-
-        return $this->meClient;
-    }
-
-    /**
-     * @param Customer $customer
      * @param string $jwt
      * @return Response
+     * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
      */
-    public function getRelations(Customer $customer, string $jwt): Response
+    public function getRelations(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -56,13 +37,13 @@ class CustomerClient extends AbstractClient
             ]]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid() . '/relations', [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/relations', [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
         $relations = [];
         foreach ($r['relations'] as $relation) {
-            $relations[] = ModelFactory::createDomainCustomerRelation($relation)->setCustomer($customer);
+            $relations[] = ModelFactory::createDomainCustomerRelation($relation);
         }
 
         $response = new Response();
@@ -74,7 +55,6 @@ class CustomerClient extends AbstractClient
     }
 
     /**
-     * @param Customer $customer
      * @param Domain $domain
      * @param string $jwt
      * @return Response
@@ -82,7 +62,7 @@ class CustomerClient extends AbstractClient
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getAccessClearance(Customer $customer, Domain $domain, string $jwt): Response
+    public function getAccessClearance(Domain $domain, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema([
@@ -91,7 +71,7 @@ class CustomerClient extends AbstractClient
             'clearance' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Schema::ACCESS_CLEARANCE]
         ]);
 
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid() . '/access/' . $domain->getUid(), [
+        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/access/' . $domain->getUid(), [
             'headers' => ['X-API-TOKEN' => $jwt]
         ], $schema);
 
