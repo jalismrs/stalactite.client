@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\DataManagement;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
@@ -21,7 +20,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -56,7 +54,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -86,7 +83,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -95,7 +91,7 @@ class PostClient extends AbstractClient
         $body = [
             'name' => $post->getName(),
             'shortName' => $post->getShortName(),
-            'admin' => $post->isAdmin(),
+            'admin' => $post->hasAdminAccess(),
             'access' => $post->allowAccess()
         ];
 
@@ -124,7 +120,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -133,7 +128,7 @@ class PostClient extends AbstractClient
         $body = [
             'name' => $post->getName(),
             'shortName' => $post->getShortName(),
-            'admin' => $post->isAdmin(),
+            'admin' => $post->hasAdminAccess(),
             'access' => $post->allowAccess()
         ];
 
@@ -159,7 +154,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -186,7 +180,6 @@ class PostClient extends AbstractClient
      * @param string $jwt
      * @return Response
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */

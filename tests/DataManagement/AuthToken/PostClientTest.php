@@ -2,7 +2,6 @@
 
 namespace jalismrs\Stalactite\Client\Test\DataManagement\AuthToken;
 
-use hunomina\Validator\Json\Exception\InvalidDataException;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use jalismrs\Stalactite\Client\ClientException;
@@ -18,7 +17,6 @@ class PostClientTest extends TestCase
 {
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -43,7 +41,6 @@ class PostClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -68,7 +65,6 @@ class PostClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -93,7 +89,6 @@ class PostClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -118,7 +113,6 @@ class PostClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -143,7 +137,6 @@ class PostClientTest extends TestCase
 
     /**
      * @throws ClientException
-     * @throws InvalidDataException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
