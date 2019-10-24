@@ -1,15 +1,21 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\AccessManagement;
+namespace jalismrs\Stalactite\Client\AccessManagement\AuthToken;
 
 use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
-use jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
-use jalismrs\Stalactite\Client\AccessManagement\User\UserClient;
+use jalismrs\Stalactite\Client\AccessManagement\Client;
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Token;
 
-class Client extends AbstractClient
+class AuthTokenClient extends AbstractClient
 {
-    public const API_URL_PREFIX = '/access';
+    public const API_URL_PREFIX = Client::API_URL_PREFIX . '/auth-token';
+
+    private const JWT_DURATION = 60;
+
+    public const JWT_AUDIENCE = 'access.microservice';
 
     /** @var DomainClient $domainClient */
     private $domainClient;
@@ -20,11 +26,29 @@ class Client extends AbstractClient
     /** @var CustomerClient $customerClient */
     private $customerClient;
 
-    /** @var RelationClient $relationClient */
-    private $relationClient;
+    /**
+     * @param string $apiAuthToken
+     * @param string|null $userAgent
+     * @return Token
+     */
+    public static function generateJwt(string $apiAuthToken, ?string $userAgent): Token
+    {
+        $time = time();
+        $challenge = sha1($time);
+        $signer = new Sha256();
 
-    /** @var AuthTokenClient $authTokenClient */
-    private $authTokenClient;
+        $builder = (new Builder())
+            ->permittedFor(self::JWT_AUDIENCE)
+            ->issuedAt($time)
+            ->expiresAt($time + self::JWT_DURATION)
+            ->withClaim('challenge', $challenge);
+
+        if ($userAgent) {
+            $builder->issuedBy($userAgent);
+        }
+
+        return $builder->getToken($signer, new Key($challenge . $apiAuthToken));
+    }
 
     /**
      * @return DomainClient
@@ -63,31 +87,5 @@ class Client extends AbstractClient
         }
 
         return $this->customerClient;
-    }
-
-    /**
-     * @return RelationClient
-     */
-    public function relations(): RelationClient
-    {
-        if (!($this->relationClient instanceof RelationClient)) {
-            $this->relationClient = new RelationClient($this->apiHost, $this->userAgent);
-            $this->relationClient->setHttpClient($this->getHttpClient());
-        }
-
-        return $this->relationClient;
-    }
-
-    /**
-     * @return AuthTokenClient
-     */
-    public function authToken(): AuthTokenClient
-    {
-        if (!($this->authTokenClient instanceof AuthTokenClient)) {
-            $this->authTokenClient = new AuthTokenClient($this->apiHost, $this->userAgent);
-            $this->authTokenClient->setHttpClient($this->getHttpClient());
-        }
-
-        return $this->authTokenClient;
     }
 }

@@ -1,18 +1,14 @@
 <?php
 
-namespace jalismrs\Stalactite\Client\Test\DataManagement;
+namespace jalismrs\Stalactite\Client\Test\AccessManagement\AuthToken;
 
-use jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
+use jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 
 class AuthTokenClientTest extends TestCase
 {
-    /**
-     * Those are the ways the API checks the JWT
-     * Since the API token here is invalid, the forged JWT will be invalid for the API but should still has a valid format and signature
-     */
     public function testGenerateAuthTokenJwt(): void
     {
         $apiToken = 'fake api token';
