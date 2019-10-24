@@ -17,6 +17,9 @@ class AuthTokenClient extends AbstractClient
 
     public const JWT_AUDIENCE = 'access.microservice';
 
+    /** @var DomainClient $domainClient */
+    private $domainClient;
+
     /**
      * @param string $apiAuthToken
      * @param string|null $userAgent
@@ -39,5 +42,18 @@ class AuthTokenClient extends AbstractClient
         }
 
         return $builder->getToken($signer, new Key($challenge . $apiAuthToken));
+    }
+
+    /**
+     * @return DomainClient
+     */
+    public function domains(): DomainClient
+    {
+        if (!($this->domainClient instanceof DomainClient)) {
+            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+            $this->domainClient->setHttpClient($this->getHttpClient());
+        }
+
+        return $this->domainClient;
     }
 }
