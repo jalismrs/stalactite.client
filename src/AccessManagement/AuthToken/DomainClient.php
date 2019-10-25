@@ -8,7 +8,6 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use jalismrs\Stalactite\Client\AbstractClient;
 use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
 use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
 use jalismrs\Stalactite\Client\Response;
 
