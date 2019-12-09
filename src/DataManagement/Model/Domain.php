@@ -78,7 +78,7 @@ class Domain extends AbstractModel
     /**
      * @return bool
      */
-    public function getExternalAuth(): bool
+    public function hasExternalAuth(): bool
     {
         return $this->externalAuth;
     }

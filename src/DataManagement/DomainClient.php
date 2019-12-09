@@ -165,7 +165,7 @@ class DomainClient extends AbstractClient
         $body = [
             'name' => $domain->getName(),
             'type' => $domain->getType(),
-            'externalAuth' => $domain->getExternalAuth(),
+            'externalAuth' => $domain->hasExternalAuth(),
             'apiKey' => $domain->getApiKey(),
             'generationDate' => $domain->getGenerationDate()
         ];
@@ -203,7 +203,7 @@ class DomainClient extends AbstractClient
         $body = [
             'name' => $domain->getName(),
             'type' => $domain->getType(),
-            'externalAuth' => $domain->getExternalAuth(),
+            'externalAuth' => $domain->hasExternalAuth(),
             'apiKey' => $domain->getApiKey(),
             'generationDate' => $domain->getGenerationDate()
         ];
