@@ -38,7 +38,7 @@ class AuthTokenClient extends AbstractClient
     public static function generateJwt(string $apiAuthToken, ?string $userAgent): Token
     {
         $time = time();
-        $challenge = sha1($time);
+        $challenge = sha1((string)$time);
         $signer = new Sha256();
 
         $builder = (new Builder())
