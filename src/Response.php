@@ -39,7 +39,7 @@ class Response
      *
      * @return bool
      */
-    public function success(): bool
+    public function success() : bool
     {
         return $this->success;
     }
@@ -51,9 +51,10 @@ class Response
      *
      * @return \jalismrs\Stalactite\Client\Response
      */
-    public function setSuccess(bool $success): Response
+    public function setSuccess(bool $success) : Response
     {
         $this->success = $success;
+        
         return $this;
     }
     
@@ -62,7 +63,7 @@ class Response
      *
      * @return null|string
      */
-    public function getError(): ?string
+    public function getError() : ?string
     {
         return $this->error;
     }
@@ -74,9 +75,10 @@ class Response
      *
      * @return \jalismrs\Stalactite\Client\Response
      */
-    public function setError(?string $error): Response
+    public function setError(?string $error) : Response
     {
         $this->error = $error;
+        
         return $this;
     }
     
@@ -85,7 +87,7 @@ class Response
      *
      * @return array
      */
-    public function getData(): array
+    public function getData() : array
     {
         return $this->data;
     }
@@ -97,9 +99,10 @@ class Response
      *
      * @return \jalismrs\Stalactite\Client\Response
      */
-    public function setData(array $data): Response
+    public function setData(array $data) : Response
     {
         $this->data = $data;
+        
         return $this;
     }
 }

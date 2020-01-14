@@ -13,109 +13,161 @@ use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use jalismrs\Stalactite\Client\DataManagement\Schema;
 use jalismrs\Stalactite\Client\Response;
 
-class PostClient extends AbstractClient
+class PostClient extends
+    AbstractClient
 {
     public const API_URL_PREFIX = AuthTokenClient::API_URL_PREFIX . '/posts';
-
+    
     /**
      * @param string $apiAuthToken
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getAll(string $apiAuthToken): Response
+    public function getAll(string $apiAuthToken) : Response
     {
         $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
-
+        
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'posts' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::POST]
-        ]);
-
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX, [
-            'headers' => ['X-API-TOKEN' => (string)$jwt]
-        ], $schema);
-
+        $schema->setSchema(
+            [
+                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'   => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'posts'   => [
+                    'type'   => JsonRule::LIST_TYPE,
+                    'schema' => Schema::POST
+                ]
+            ]
+        );
+        
+        $r = $this->request(
+            'GET',
+            $this->apiHost . self::API_URL_PREFIX,
+            [
+                'headers' => ['X-API-TOKEN' => (string)$jwt]
+            ],
+            $schema
+        );
+        
         $posts = [];
         foreach ($r['posts'] as $post) {
             $posts[] = ModelFactory::createPost($post);
         }
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'posts' => $posts
-        ]);
-
-        return $response;
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'posts' => $posts
+                ]
+            );
     }
-
+    
     /**
      * @param string $uid
      * @param string $apiAuthToken
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $uid, string $apiAuthToken): Response
+    public function get(string $uid, string $apiAuthToken) : Response
     {
         $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
-
+        
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'post' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::POST]
-        ]);
-
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid, [
-            'headers' => ['X-API-TOKEN' => (string)$jwt]
-        ], $schema);
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'post' => $r['post'] ? ModelFactory::createPost($r['post']) : null
-        ]);
-
-        return $response;
+        $schema->setSchema(
+            [
+                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'   => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'post'    => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
+                    'schema' => Schema::POST
+                ]
+            ]
+        );
+        
+        $r = $this->request(
+            'GET',
+            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            [
+                'headers' => ['X-API-TOKEN' => (string)$jwt]
+            ],
+            $schema
+        );
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'post' => $r['post']
+                        ? ModelFactory::createPost($r['post'])
+                        : null
+                ]
+            );
     }
-
+    
     /**
      * @param string $uid
      * @param string $apiAuthToken
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getUsers(string $uid, string $apiAuthToken): Response
+    public function getUsers(string $uid, string $apiAuthToken) : Response
     {
         $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
-
+        
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => Schema::USER]
-        ]);
-
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users', [
-            'headers' => ['X-API-TOKEN' => (string)$jwt]
-        ], $schema);
-
+        $schema->setSchema(
+            [
+                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'   => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'users'   => [
+                    'type'   => JsonRule::LIST_TYPE,
+                    'schema' => Schema::USER
+                ]
+            ]
+        );
+        
+        $r = $this->request(
+            'GET',
+            $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users',
+            [
+                'headers' => ['X-API-TOKEN' => (string)$jwt]
+            ],
+            $schema
+        );
+        
         $users = [];
         foreach ($r['users'] as $user) {
             $users[] = ModelFactory::createUser($user);
         }
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'users' => $users
-        ]);
-
-        return $response;
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'users' => $users
+                ]
+            );
     }
 }

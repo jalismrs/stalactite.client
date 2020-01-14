@@ -43,8 +43,7 @@ abstract class AbstractClient
     public function __construct(
         string $apiHost,
         ?string $userAgent = null
-    )
-    {
+    ) {
         $this->apiHost   = $apiHost;
         $this->userAgent = $userAgent;
     }
@@ -173,8 +172,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array
-    {
+    ) : array {
         try {
             $response = $this
                 ->getHttpClient()

@@ -20,7 +20,7 @@ abstract class AbstractModel
      *
      * @return null|string
      */
-    public function getUid(): ?string
+    public function getUid() : ?string
     {
         return $this->uid;
     }
@@ -32,9 +32,10 @@ abstract class AbstractModel
      *
      * @return \jalismrs\Stalactite\Client\AbstractModel
      */
-    public function setUid(?string $uid): AbstractModel
+    public function setUid(?string $uid) : AbstractModel
     {
         $this->uid = $uid;
+        
         return $this;
     }
     
@@ -43,5 +44,5 @@ abstract class AbstractModel
      *
      * @return array
      */
-    abstract public function asArray(): array;
+    abstract public function asArray() : array;
 }

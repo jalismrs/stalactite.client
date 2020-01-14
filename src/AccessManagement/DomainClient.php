@@ -16,120 +16,189 @@ use jalismrs\Stalactite\Client\DataManagement\Model\User;
 use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use jalismrs\Stalactite\Client\Response;
 
-class DomainClient extends AbstractClient
+class DomainClient extends
+    AbstractClient
 {
     public const API_URL_PREFIX = Client::API_URL_PREFIX . '/domains';
-
+    
     /**
      * @param Domain $domain
      * @param string $jwt
+     *
      * @return Response
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws ClientException
      */
-    public function getRelations(Domain $domain, string $jwt): Response
+    public function getRelations(Domain $domain, string $jwt) : Response
     {
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'relations' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => [
-                'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => [
-                    'uid' => ['type' => JsonRule::STRING_TYPE],
-                    'user' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => DataManagementSchema::MINIMAL_USER]
-                ]],
-                'customers' => ['type' => JsonRule::LIST_TYPE, 'schema' => [
-                    'uid' => ['type' => JsonRule::STRING_TYPE],
-                    'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => DataManagementSchema::CUSTOMER]
-                ]]
-            ]]
-        ]);
-
-        $r = $this->request('GET', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations', [
-            'headers' => ['X-API-TOKEN' => $jwt]
-        ], $schema);
-
+        $schema->setSchema(
+            [
+                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'     => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'relations' => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'schema' => [
+                        'users'     => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => [
+                                'uid'  => ['type' => JsonRule::STRING_TYPE],
+                                'user' => [
+                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'schema' => DataManagementSchema::MINIMAL_USER
+                                ]
+                            ]
+                        ],
+                        'customers' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => [
+                                'uid'      => ['type' => JsonRule::STRING_TYPE],
+                                'customer' => [
+                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'schema' => DataManagementSchema::CUSTOMER
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        );
+        
+        $r = $this->request(
+            'GET',
+            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
+            [
+                'headers' => ['X-API-TOKEN' => $jwt]
+            ],
+            $schema
+        );
+        
         $userRelations = [];
         foreach ($r['relations']['users'] as $relation) {
-            $userRelations[] = ModelFactory::createDomainUserRelation($relation)->setDomain($domain);
+            $userRelations[] = ModelFactory::createDomainUserRelation($relation)
+                                           ->setDomain($domain);
         }
-
+        
         $customerRelations = [];
         foreach ($r['relations']['customers'] as $relation) {
-            $customerRelations[] = ModelFactory::createDomainCustomerRelation($relation)->setDomain($domain);
+            $customerRelations[] = ModelFactory::createDomainCustomerRelation($relation)
+                                               ->setDomain($domain);
         }
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'relations' => [
-                'users' => $userRelations,
-                'customers' => $customerRelations
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'relations' => [
+                        'users'     => $userRelations,
+                        'customers' => $customerRelations
+                    ]
+                ]
+            );
+    }
+    
+    /**
+     * @param Domain $domain
+     * @param User   $user
+     * @param string $jwt
+     *
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function addUserRelation(Domain $domain, User $user, string $jwt) : Response
+    {
+        $schema = new JsonSchema();
+        $schema->setSchema(
+            [
+                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'    => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'relation' => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
+                    'schema' => Schema::DOMAIN_USER_RELATION
+                ]
             ]
-        ]);
-
-        return $response;
+        );
+        
+        $r = $this->request(
+            'POST',
+            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users',
+            [
+                'headers' => ['X-API-TOKEN' => $jwt],
+                'json'    => ['user' => $user->getUid()]
+            ],
+            $schema
+        );
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'relation' => $r['relation']
+                        ? ModelFactory::createDomainUserRelation($r['relation'])
+                        : null
+                ]
+            );
     }
-
+    
     /**
-     * @param Domain $domain
-     * @param User $user
-     * @param string $jwt
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function addUserRelation(Domain $domain, User $user, string $jwt): Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'relation' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN_USER_RELATION]
-        ]);
-
-        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users', [
-            'headers' => ['X-API-TOKEN' => $jwt],
-            'json' => ['user' => $user->getUid()]
-        ], $schema);
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'relation' => $r['relation'] ? ModelFactory::createDomainUserRelation($r['relation']) : null
-        ]);
-
-        return $response;
-    }
-
-    /**
-     * @param Domain $domain
+     * @param Domain   $domain
      * @param Customer $customer
-     * @param string $jwt
+     * @param string   $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt): Response
+    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt) : Response
     {
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'relation' => ['type' => JsonRule::OBJECT_TYPE, 'null' => true, 'schema' => Schema::DOMAIN_CUSTOMER_RELATION]
-        ]);
-
-        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers', [
-            'headers' => ['X-API-TOKEN' => $jwt],
-            'json' => ['customer' => $customer->getUid()]
-        ], $schema);
-
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'relation' => $r['relation'] ? ModelFactory::createDomainCustomerRelation($r['relation']) : null
-        ]);
-
-        return $response;
+        $schema->setSchema(
+            [
+                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'error'    => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'relation' => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
+                    'schema' => Schema::DOMAIN_CUSTOMER_RELATION
+                ]
+            ]
+        );
+        
+        $r = $this->request(
+            'POST',
+            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers',
+            [
+                'headers' => ['X-API-TOKEN' => $jwt],
+                'json'    => ['customer' => $customer->getUid()]
+            ],
+            $schema
+        );
+        
+        return (new Response())
+            ->setSuccess($r['success'])
+            ->setError($r['error'])
+            ->setData(
+                [
+                    'relation' => $r['relation']
+                        ? ModelFactory::createDomainCustomerRelation($r['relation'])
+                        : null
+                ]
+            );
     }
 }
