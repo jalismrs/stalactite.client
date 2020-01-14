@@ -33,7 +33,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -41,7 +43,9 @@ class MeClient extends
                 'relations' => [
                     'type'   => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid'    => ['type' => JsonRule::STRING_TYPE],
+                        'uid'    => [
+                            'type' => JsonRule::STRING_TYPE
+                        ],
                         'domain' => [
                             'type'   => JsonRule::OBJECT_TYPE,
                             'schema' => DataManagementSchema::DOMAIN
@@ -54,7 +58,9 @@ class MeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/relations',
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -64,14 +70,13 @@ class MeClient extends
             $relations[] = ModelFactory::createDomainCustomerRelation($relation);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'relations' => $relations
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'relations' => $relations
+            ]
+        );
     }
     
     /**
@@ -88,7 +93,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -103,18 +110,19 @@ class MeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/access/' . $domain->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'clearance' => ModelFactory::createAccessClearance($r['clearance'])
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'clearance' => ModelFactory::createAccessClearance($r['clearance'])
+            ]
+        );
     }
 }

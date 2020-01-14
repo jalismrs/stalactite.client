@@ -35,7 +35,9 @@ class DomainClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -46,7 +48,9 @@ class DomainClient extends
                         'users'     => [
                             'type'   => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'  => ['type' => JsonRule::STRING_TYPE],
+                                'uid'  => [
+                                    'type' => JsonRule::STRING_TYPE
+                                ],
                                 'user' => [
                                     'type'   => JsonRule::OBJECT_TYPE,
                                     'schema' => DataManagementSchema::MINIMAL_USER
@@ -56,7 +60,9 @@ class DomainClient extends
                         'customers' => [
                             'type'   => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'      => ['type' => JsonRule::STRING_TYPE],
+                                'uid'      => [
+                                    'type' => JsonRule::STRING_TYPE
+                                ],
                                 'customer' => [
                                     'type'   => JsonRule::OBJECT_TYPE,
                                     'schema' => DataManagementSchema::CUSTOMER
@@ -71,7 +77,9 @@ class DomainClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -88,17 +96,16 @@ class DomainClient extends
                                                ->setDomain($domain);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'relations' => [
-                        'users'     => $userRelations,
-                        'customers' => $customerRelations
-                    ]
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'relations' => [
+                    'users'     => $userRelations,
+                    'customers' => $customerRelations
                 ]
-            );
+            ]
+        );
     }
     
     /**
@@ -116,7 +123,9 @@ class DomainClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'  => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -132,22 +141,25 @@ class DomainClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users',
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
-                'json'    => ['user' => $user->getUid()]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
+                'json'    => [
+                    'user' => $user->getUid()
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'relation' => $r['relation']
-                        ? ModelFactory::createDomainUserRelation($r['relation'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'relation' => $r['relation']
+                    ? ModelFactory::createDomainUserRelation($r['relation'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -165,7 +177,9 @@ class DomainClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'  => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -181,21 +195,24 @@ class DomainClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers',
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
-                'json'    => ['customer' => $customer->getUid()]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
+                'json'    => [
+                    'customer' => $customer->getUid()
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'relation' => $r['relation']
-                        ? ModelFactory::createDomainCustomerRelation($r['relation'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'relation' => $r['relation']
+                    ? ModelFactory::createDomainCustomerRelation($r['relation'])
+                    : null
+            ]
+        );
     }
 }

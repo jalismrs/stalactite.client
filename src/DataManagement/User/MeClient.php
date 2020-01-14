@@ -34,7 +34,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -50,21 +52,22 @@ class MeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'me' => $r['me']
-                        ? ModelFactory::createUser($r['me'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'me' => $r['me']
+                    ? ModelFactory::createUser($r['me'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -88,7 +91,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -99,15 +104,18 @@ class MeClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -136,7 +144,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -147,15 +157,18 @@ class MeClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/phone/lines',
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -172,7 +185,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -183,13 +198,16 @@ class MeClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/phone/lines/' . $phoneLine->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
 }

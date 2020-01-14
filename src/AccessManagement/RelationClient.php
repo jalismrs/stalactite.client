@@ -31,7 +31,9 @@ class RelationClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -42,13 +44,16 @@ class RelationClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domainRelation->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
 }

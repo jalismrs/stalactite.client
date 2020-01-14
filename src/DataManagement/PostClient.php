@@ -36,7 +36,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -51,7 +53,9 @@ class PostClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -61,14 +65,13 @@ class PostClient extends
             $posts[] = ModelFactory::createPost($post);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'posts' => $posts
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'posts' => $posts
+            ]
+        );
     }
     
     /**
@@ -88,7 +91,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -104,21 +109,22 @@ class PostClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'post' => $r['post']
-                        ? ModelFactory::createPost($r['post'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'post' => $r['post']
+                    ? ModelFactory::createPost($r['post'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -145,7 +151,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -161,22 +169,23 @@ class PostClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'post' => $r['post']
-                        ? ModelFactory::createPost($r['post'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'post' => $r['post']
+                    ? ModelFactory::createPost($r['post'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -203,7 +212,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -214,15 +225,18 @@ class PostClient extends
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $post->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -242,7 +256,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -253,14 +269,17 @@ class PostClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -280,7 +299,9 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -295,7 +316,9 @@ class PostClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users',
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -305,13 +328,12 @@ class PostClient extends
             $users[] = ModelFactory::createUser($user);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'users' => $users
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'users' => $users
+            ]
+        );
     }
 }

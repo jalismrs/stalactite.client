@@ -32,7 +32,9 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'     => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'     => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'       => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -43,10 +45,14 @@ class TrustedAppClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
-            ['headers' => ['X-API-TOKEN' => $jwt]],
+            [
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
+            ],
             $schema
         );
         
@@ -55,14 +61,13 @@ class TrustedAppClient extends
             $trustedApps[] = ModelFactory::createTrustedApp($trustedApp);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'trustedApps' => $trustedApps
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'trustedApps' => $trustedApps
+            ]
+        );
     }
     
     /**
@@ -79,7 +84,9 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'    => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -91,23 +98,24 @@ class TrustedAppClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+            ]
+        );
     }
     
     /**
@@ -124,7 +132,9 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -135,7 +145,9 @@ class TrustedAppClient extends
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => [
                     'name'                => $trustedApp->getName(),
                     'googleOAuthClientId' => $trustedApp->getGoogleOAuthClientId()
@@ -144,9 +156,10 @@ class TrustedAppClient extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -163,7 +176,9 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'    => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -173,16 +188,22 @@ class TrustedAppClient extends
                     'null'   => true,
                     'schema' => array_merge(
                         Schema::TRUSTED_APP,
-                        ['resetToken' => ['type' => JsonRule::STRING_TYPE]]
+                        [
+                            'resetToken' => [
+                                'type' => JsonRule::STRING_TYPE
+                            ]
+                        ]
                     )
                 ]
             ]
         );
-    
+        
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => [
                     'name'                => $trustedApp->getName(),
                     'googleOAuthClientId' => $trustedApp->getGoogleOAuthClientId()
@@ -191,14 +212,13 @@ class TrustedAppClient extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+            ]
+        );
     }
     
     /**
@@ -216,18 +236,22 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-    
+        
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => [
                     'resetToken' => $resetToken
                 ]
@@ -235,9 +259,10 @@ class TrustedAppClient extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -254,7 +279,9 @@ class TrustedAppClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'    => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -266,11 +293,13 @@ class TrustedAppClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid() . '/authToken/reset',
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => [
                     'resetToken' => $trustedApp->getResetToken()
                 ]
@@ -278,13 +307,12 @@ class TrustedAppClient extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+            ]
+        );
     }
 }

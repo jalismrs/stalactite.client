@@ -124,7 +124,9 @@ class Client extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -142,14 +144,13 @@ class Client extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'jwt' => $r['jwt']
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'jwt' => $r['jwt']
+            ]
+        );
     }
     
     /**

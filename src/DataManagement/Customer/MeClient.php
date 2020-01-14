@@ -31,7 +31,9 @@ class MeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -47,20 +49,21 @@ class MeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'me' => $r['me']
-                        ? ModelFactory::createCustomer($r['me'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'me' => $r['me']
+                    ? ModelFactory::createCustomer($r['me'])
+                    : null
+            ]
+        );
     }
 }

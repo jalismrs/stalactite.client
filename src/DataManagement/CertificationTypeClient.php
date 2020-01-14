@@ -31,7 +31,9 @@ class CertificationTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'            => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'            => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'              => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -46,7 +48,9 @@ class CertificationTypeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -56,14 +60,13 @@ class CertificationTypeClient extends
             $certificationTypes[] = ModelFactory::createCertificationType($certificationType);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'certificationTypes' => $certificationTypes
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'certificationTypes' => $certificationTypes
+            ]
+        );
     }
     
     /**
@@ -80,7 +83,9 @@ class CertificationTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'           => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'           => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'             => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -96,21 +101,22 @@ class CertificationTypeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'certificationType' => $r['certificationType']
-                        ? ModelFactory::createCertificationType($r['certificationType'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'certificationType' => $r['certificationType']
+                    ? ModelFactory::createCertificationType($r['certificationType'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -131,7 +137,9 @@ class CertificationTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'           => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'           => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'             => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -147,22 +155,23 @@ class CertificationTypeClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'certificationType' => $r['certificationType']
-                        ? ModelFactory::createCertificationType($r['certificationType'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'certificationType' => $r['certificationType']
+                    ? ModelFactory::createCertificationType($r['certificationType'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -181,7 +190,9 @@ class CertificationTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -192,15 +203,18 @@ class CertificationTypeClient extends
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -217,7 +231,9 @@ class CertificationTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -228,13 +244,16 @@ class CertificationTypeClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
 }

@@ -29,9 +29,19 @@ class Response
     
     /**
      * Response constructor.
+     *
+     * @param bool        $success
+     * @param null|string $error
+     * @param array|null  $data
      */
-    public function __construct()
-    {
+    public function __construct(
+        bool $success,
+        ?string $error,
+        array $data = null
+    ) {
+        $this->success = $success;
+        $this->error   = $error;
+        $this->data    = $data;
     }
     
     /**
@@ -45,20 +55,6 @@ class Response
     }
     
     /**
-     * setSuccess
-     *
-     * @param bool $success
-     *
-     * @return \jalismrs\Stalactite\Client\Response
-     */
-    public function setSuccess(bool $success) : Response
-    {
-        $this->success = $success;
-        
-        return $this;
-    }
-    
-    /**
      * getError
      *
      * @return null|string
@@ -69,20 +65,6 @@ class Response
     }
     
     /**
-     * setError
-     *
-     * @param null|string $error
-     *
-     * @return \jalismrs\Stalactite\Client\Response
-     */
-    public function setError(?string $error) : Response
-    {
-        $this->error = $error;
-        
-        return $this;
-    }
-    
-    /**
      * getData
      *
      * @return array
@@ -90,19 +72,5 @@ class Response
     public function getData() : array
     {
         return $this->data;
-    }
-    
-    /**
-     * setData
-     *
-     * @param array $data
-     *
-     * @return \jalismrs\Stalactite\Client\Response
-     */
-    public function setData(array $data) : Response
-    {
-        $this->data = $data;
-        
-        return $this;
     }
 }

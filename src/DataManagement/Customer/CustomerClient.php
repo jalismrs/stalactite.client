@@ -48,7 +48,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -63,7 +65,9 @@ class CustomerClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -73,14 +77,13 @@ class CustomerClient extends
             $customers[] = ModelFactory::createCustomer($customer);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'customers' => $customers
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'customers' => $customers
+            ]
+        );
     }
     
     /**
@@ -97,7 +100,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'  => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -113,21 +118,22 @@ class CustomerClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'customer' => $r['customer']
-                        ? ModelFactory::createCustomer($r['customer'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'customer' => $r['customer']
+                    ? ModelFactory::createCustomer($r['customer'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -145,7 +151,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'  => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -161,7 +169,9 @@ class CustomerClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'query'   => [
                     'email'    => $email,
                     'googleId' => $googleId
@@ -170,16 +180,15 @@ class CustomerClient extends
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'customer' => $r['customer']
-                        ? ModelFactory::createCustomer($r['customer'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'customer' => $r['customer']
+                    ? ModelFactory::createCustomer($r['customer'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -202,7 +211,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'  => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -218,22 +229,23 @@ class CustomerClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'customer' => $r['customer']
-                        ? ModelFactory::createCustomer($r['customer'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'customer' => $r['customer']
+                    ? ModelFactory::createCustomer($r['customer'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -256,7 +268,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -267,15 +281,18 @@ class CustomerClient extends
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -292,7 +309,9 @@ class CustomerClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -303,13 +322,16 @@ class CustomerClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
 }

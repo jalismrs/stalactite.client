@@ -39,7 +39,9 @@ class PhoneTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'    => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -54,7 +56,9 @@ class PhoneTypeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
@@ -64,14 +68,13 @@ class PhoneTypeClient extends
             $phoneTypes[] = ModelFactory::createPhoneType($phoneType);
         }
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'phoneTypes' => $phoneTypes
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'phoneTypes' => $phoneTypes
+            ]
+        );
     }
     
     /**
@@ -88,7 +91,9 @@ class PhoneTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -104,21 +109,22 @@ class PhoneTypeClient extends
         $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'phoneType' => $r['phoneType']
-                        ? ModelFactory::createPhoneType($r['phoneType'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'phoneType' => $r['phoneType']
+                    ? ModelFactory::createPhoneType($r['phoneType'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -139,7 +145,9 @@ class PhoneTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success'   => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -155,22 +163,23 @@ class PhoneTypeClient extends
         $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error'])
-            ->setData(
-                [
-                    'phoneType' => $r['phoneType']
-                        ? ModelFactory::createPhoneType($r['phoneType'])
-                        : null
-                ]
-            );
+        return new Response(
+            $r['success'],
+            $r['error'],
+            [
+                'phoneType' => $r['phoneType']
+                    ? ModelFactory::createPhoneType($r['phoneType'])
+                    : null
+            ]
+        );
     }
     
     /**
@@ -191,7 +200,9 @@ class PhoneTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -202,15 +213,18 @@ class PhoneTypeClient extends
         $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $phoneType->getUid(),
             [
-                'headers' => ['X-API-TOKEN' => $jwt],
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ],
                 'json'    => $body
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
     
     /**
@@ -227,7 +241,9 @@ class PhoneTypeClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => ['type' => JsonRule::BOOLEAN_TYPE],
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
@@ -238,13 +254,16 @@ class PhoneTypeClient extends
         $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
-                'headers' => ['X-API-TOKEN' => $jwt]
+                'headers' => [
+                    'X-API-TOKEN' => $jwt
+                ]
             ],
             $schema
         );
         
-        return (new Response())
-            ->setSuccess($r['success'])
-            ->setError($r['error']);
+        return (new Response(
+            $r['success'],
+            $r['error']
+        ));
     }
 }
