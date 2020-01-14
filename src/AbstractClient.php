@@ -4,78 +4,105 @@ declare(strict_types = 1);
 namespace jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
+/**
+ * AbstractClient
+ *
+ * @package jalismrs\Stalactite\Client
+ */
 abstract class AbstractClient
 {
-    /** @var string $apiHost */
+    /**
+     * @var string
+     */
     protected $apiHost;
-
-    /** @var string|null $userAgent */
-    protected $userAgent;
-
-    /** @var HttpClientInterface $httpClient */
+    /**
+     * @var HttpClientInterface
+     */
     protected $httpClient;
-
-    /** @var ResponseInterface|null $lastResponse */
+    /**
+     * @var null|ResponseInterface
+     */
     protected $lastResponse;
-
+    /**
+     * @var null|string
+     */
+    protected $userAgent;
+    
     /**
      * AbstractClient constructor.
-     * @param string $apiHost
-     * @param string|null $userAgent Can be used to identify the application using the client
+     *
+     * @param string      $apiHost
+     * @param null|string $userAgent
      */
-    public function __construct(string $apiHost, ?string $userAgent = null)
+    public function __construct(
+        string $apiHost,
+        ?string $userAgent = null
+    )
     {
-        $this->apiHost = $apiHost;
+        $this->apiHost   = $apiHost;
         $this->userAgent = $userAgent;
     }
-
+    
     /**
+     * getApiHost
+     *
      * @return string
      */
-    public function getApiHost(): string
+    public function getApiHost() : string
     {
         return $this->apiHost;
     }
-
+    
     /**
+     * setApiHost
+     *
      * @param string $apiHost
-     * @return AbstractClient
+     *
+     * @return \jalismrs\Stalactite\Client\AbstractClient
      */
-    public function setApiHost(string $apiHost): AbstractClient
+    public function setApiHost(string $apiHost) : AbstractClient
     {
         $this->apiHost = $apiHost;
+        
         return $this;
     }
-
+    
     /**
-     * @return string|null
+     * getUserAgent
+     *
+     * @return null|string
      */
-    public function getUserAgent(): ?string
+    public function getUserAgent() : ?string
     {
         return $this->userAgent;
     }
-
+    
     /**
-     * @param string|null $userAgent
-     * @return AbstractClient
+     * setUserAgent
+     *
+     * @param null|string $userAgent
+     *
+     * @return \jalismrs\Stalactite\Client\AbstractClient
      */
-    public function setUserAgent(?string $userAgent): AbstractClient
+    public function setUserAgent(?string $userAgent) : AbstractClient
     {
         $this->userAgent = $userAgent;
+        
         return $this;
     }
-
+    
     /**
-     * @return HttpClientInterface
+     * getHttpClient
+     *
+     * @return \Symfony\Contracts\HttpClient\HttpClientInterface
      */
-    public function getHttpClient(): HttpClientInterface
+    public function getHttpClient() : HttpClientInterface
     {
         if (!($this->httpClient instanceof HttpClientInterface)) {
             if ($this->userAgent) {
@@ -84,70 +111,102 @@ abstract class AbstractClient
                 $this->httpClient = HttpClient::create();
             }
         }
-
+        
         return $this->httpClient;
     }
-
+    
     /**
-     * @param HttpClientInterface $httpClient
-     * @return AbstractClient
-     * Allow mock
+     * setHttpClient
+     *
+     * @param \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient
+     *
+     * @return $this
      */
-    public function setHttpClient(HttpClientInterface $httpClient): AbstractClient
+    public function setHttpClient(HttpClientInterface $httpClient) : self
     {
         $this->httpClient = $httpClient;
+        
         return $this;
     }
-
+    
     /**
-     * @return ResponseInterface|null
+     * getLastResponse
+     *
+     * @return null|\Symfony\Contracts\HttpClient\ResponseInterface
      */
-    public function getLastResponse(): ?ResponseInterface
+    public function getLastResponse() : ?ResponseInterface
     {
         return $this->lastResponse;
     }
-
+    
     /**
-     * @param ResponseInterface|null $lastResponse
-     * @return AbstractClient
+     * setLastResponse
+     *
+     * @param null|\Symfony\Contracts\HttpClient\ResponseInterface $lastResponse
+     *
+     * @return \jalismrs\Stalactite\Client\AbstractClient
      */
-    public function setLastResponse(?ResponseInterface $lastResponse): AbstractClient
+    public function setLastResponse(?ResponseInterface $lastResponse) : AbstractClient
     {
         $this->lastResponse = $lastResponse;
+        
         return $this;
     }
-
+    
     /**
-     * @param string $method
-     * @param string $url
-     * @param array $options
-     * @param JsonSchema $schema
+     * request
+     *
+     * contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
+     *
+     * @param string                                     $method
+     * @param string                                     $url
+     * @param array                                      $options
+     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     *
      * @return array
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * Method to contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
+     *
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \jalismrs\Stalactite\Client\ClientException
      */
-    protected function request(string $method, string $url, array $options, JsonSchema $schema): array
+    final protected function request(
+        string $method,
+        string $url,
+        array $options,
+        JsonSchema $schema
+    ) : array
     {
         try {
-            $response = $this->getHttpClient()->request($method, $url, $options);
-        } catch (Throwable $t) {
-            throw new ClientException('Error while contacting Stalactite API', ClientException::CLIENT_TRANSPORT_ERROR, $t);
+            $response = $this
+                ->getHttpClient()
+                ->request($method, $url, $options);
+        } catch (Throwable $throwable) {
+            throw new ClientException(
+                'Error while contacting Stalactite API',
+                ClientException::CLIENT_TRANSPORT_ERROR,
+                $throwable
+            );
         }
-
+        
         $this->lastResponse = $response;
-
+        
         $data = new JsonData();
         try {
             $data->setData($response->getContent(false));
-        } catch (Throwable $t) {
-            throw new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_API_RESPONSE_ERROR, $t);
+        } catch (Throwable $throwable) {
+            throw new ClientException(
+                'Invalid json response from Stalactite API',
+                ClientException::INVALID_API_RESPONSE_ERROR,
+                $throwable
+            );
         }
-
+        
         if (!$schema->validate($data)) {
-            throw new ClientException('Invalid response from Stalactite API: ' . $schema->getLastError(), ClientException::INVALID_API_RESPONSE_ERROR);
+            throw new ClientException(
+                'Invalid response from Stalactite API: ' . $schema->getLastError(),
+                ClientException::INVALID_API_RESPONSE_ERROR
+            );
         }
-
+        
         return $data->getData() ?? [];
     }
 }

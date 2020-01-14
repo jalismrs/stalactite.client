@@ -4,71 +4,98 @@ declare(strict_types = 1);
 namespace jalismrs\Stalactite\Client;
 
 /**
- * Class Response
- * @package jalismrs\Stalactite\Client
+ * Response
+ *
  * Wrapper class for API responses
+ *
+ * @package jalismrs\Stalactite\Client
  */
 class Response
 {
-    /** @var bool $success */
-    private $success;
-
-    /** @var null|string $error */
-    private $error;
-
     /**
-     * @var array $data
-     * $data should contain all the response data except the success and error field
+     * should contain all the response data except the success and error field
+     *
+     * @var array
      */
     private $data;
-
     /**
+     * @var null|string
+     */
+    private $error;
+    /**
+     * @var bool
+     */
+    private $success;
+    
+    /**
+     * Response constructor.
+     */
+    public function __construct()
+    {
+    }
+    
+    /**
+     * success
+     *
      * @return bool
      */
     public function success(): bool
     {
         return $this->success;
     }
-
+    
     /**
+     * setSuccess
+     *
      * @param bool $success
-     * @return Response
+     *
+     * @return \jalismrs\Stalactite\Client\Response
      */
     public function setSuccess(bool $success): Response
     {
         $this->success = $success;
         return $this;
     }
-
+    
     /**
-     * @return string|null
+     * getError
+     *
+     * @return null|string
      */
     public function getError(): ?string
     {
         return $this->error;
     }
-
+    
     /**
-     * @param string|null $error
-     * @return Response
+     * setError
+     *
+     * @param null|string $error
+     *
+     * @return \jalismrs\Stalactite\Client\Response
      */
     public function setError(?string $error): Response
     {
         $this->error = $error;
         return $this;
     }
-
+    
     /**
+     * getData
+     *
      * @return array
      */
     public function getData(): array
     {
         return $this->data;
     }
-
+    
     /**
+     * setData
+     *
      * @param array $data
-     * @return Response
+     *
+     * @return \jalismrs\Stalactite\Client\Response
      */
     public function setData(array $data): Response
     {
