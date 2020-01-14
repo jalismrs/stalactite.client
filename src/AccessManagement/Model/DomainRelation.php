@@ -27,10 +27,4 @@ abstract class DomainRelation extends AbstractModel
         $this->domain = $domain;
         return $this;
     }
-
-    /**
-     * @return array
-     * Return the object as an array
-     */
-    abstract public function asArray(): array;
 }
