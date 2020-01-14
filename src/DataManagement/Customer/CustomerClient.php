@@ -30,7 +30,6 @@ class CustomerClient extends
     {
         if (!($this->meClient instanceof MeClient)) {
             $this->meClient = new MeClient($this->apiHost, $this->userAgent);
-            $this->meClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->meClient;
@@ -60,9 +59,8 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -111,9 +109,9 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET', $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+    
+        $r = $this->requestGet(
+            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
             ],
@@ -159,9 +157,8 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -217,9 +214,8 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -267,9 +263,8 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'PUT',
+    
+        $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -304,9 +299,8 @@ class CustomerClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

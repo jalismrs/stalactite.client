@@ -45,9 +45,8 @@ class LeadClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -104,9 +103,8 @@ class LeadClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -154,9 +152,8 @@ class LeadClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],

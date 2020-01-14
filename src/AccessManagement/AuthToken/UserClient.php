@@ -40,9 +40,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid() . '/relations',
             [
                 'headers' => ['X-API-TOKEN' => (string)$jwt]

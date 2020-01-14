@@ -21,11 +21,10 @@ class Client extends
         static $authClient = null;
         
         if (null === $authClient) {
-            $authClient = (new Authentication\Client(
+            $authClient = new Authentication\Client(
                 $this->apiHost,
                 $this->userAgent
-            ))
-                ->setHttpClient($this->getHttpClient());
+            );
         }
         
         return $authClient;
@@ -41,11 +40,10 @@ class Client extends
         static $dataManagementClient = null;
         
         if (null === $dataManagementClient) {
-            $dataManagementClient = (new DataManagement\Client(
+            $dataManagementClient = new DataManagement\Client(
                 $this->apiHost,
                 $this->userAgent
-            ))
-                ->setHttpClient($this->getHttpClient());
+            );
         }
         
         return $dataManagementClient;
@@ -61,11 +59,10 @@ class Client extends
         static $accessManagementClient = null;
         
         if (null === $accessManagementClient) {
-            $accessManagementClient = (new AccessManagement\Client(
+            $accessManagementClient = new AccessManagement\Client(
                 $this->apiHost,
                 $this->userAgent
-            ))
-                ->setHttpClient($this->getHttpClient());
+            );
         }
         
         return $accessManagementClient;

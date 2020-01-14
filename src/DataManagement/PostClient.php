@@ -47,9 +47,8 @@ class PostClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -101,9 +100,8 @@ class PostClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -159,9 +157,8 @@ class PostClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -214,8 +211,7 @@ class PostClient extends
             ]
         );
         
-        $r = $this->request(
-            'PUT',
+        $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $post->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -253,9 +249,8 @@ class PostClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -296,9 +291,8 @@ class PostClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users',
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

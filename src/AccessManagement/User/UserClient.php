@@ -32,7 +32,6 @@ class UserClient extends
     {
         if (!($this->meClient instanceof MeClient)) {
             $this->meClient = new MeClient($this->apiHost, $this->userAgent);
-            $this->meClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->meClient;
@@ -69,9 +68,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid() . '/relations',
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -121,9 +119,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid() . '/access/' . $domain->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

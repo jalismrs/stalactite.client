@@ -7,7 +7,6 @@ use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
 /**
@@ -22,17 +21,14 @@ abstract class AbstractClient
      */
     protected $apiHost;
     /**
-     * @var HttpClientInterface
-     */
-    protected $httpClient;
-    /**
-     * @var null|ResponseInterface
-     */
-    protected $lastResponse;
-    /**
      * @var null|string
      */
     protected $userAgent;
+    
+    /**
+     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
+     */
+    private $httpClient;
     
     /**
      * AbstractClient constructor.
@@ -46,54 +42,16 @@ abstract class AbstractClient
     ) {
         $this->apiHost   = $apiHost;
         $this->userAgent = $userAgent;
-    }
-    
-    /**
-     * getApiHost
-     *
-     * @return string
-     */
-    public function getApiHost() : string
-    {
-        return $this->apiHost;
-    }
-    
-    /**
-     * setApiHost
-     *
-     * @param string $apiHost
-     *
-     * @return \jalismrs\Stalactite\Client\AbstractClient
-     */
-    public function setApiHost(string $apiHost) : AbstractClient
-    {
-        $this->apiHost = $apiHost;
         
-        return $this;
-    }
-    
-    /**
-     * getUserAgent
-     *
-     * @return null|string
-     */
-    public function getUserAgent() : ?string
-    {
-        return $this->userAgent;
-    }
-    
-    /**
-     * setUserAgent
-     *
-     * @param null|string $userAgent
-     *
-     * @return \jalismrs\Stalactite\Client\AbstractClient
-     */
-    public function setUserAgent(?string $userAgent) : AbstractClient
-    {
-        $this->userAgent = $userAgent;
-        
-        return $this;
+        $this->httpClient = null !== $userAgent
+            ? HttpClient::create(
+                [
+                    'headers' => [
+                        'User-Agent' => $this->userAgent,
+                    ],
+                ]
+            )
+            : HttpClient::create();
     }
     
     /**
@@ -103,14 +61,6 @@ abstract class AbstractClient
      */
     public function getHttpClient() : HttpClientInterface
     {
-        if (!($this->httpClient instanceof HttpClientInterface)) {
-            if ($this->userAgent) {
-                $this->httpClient = HttpClient::create(['headers' => ['User-Agent' => $this->userAgent]]);
-            } else {
-                $this->httpClient = HttpClient::create();
-            }
-        }
-        
         return $this->httpClient;
     }
     
@@ -121,35 +71,112 @@ abstract class AbstractClient
      *
      * @return $this
      */
-    public function setHttpClient(HttpClientInterface $httpClient) : self
-    {
+    public function setHttpClient(
+        HttpClientInterface $httpClient
+    ) : self {
         $this->httpClient = $httpClient;
         
         return $this;
     }
     
     /**
-     * getLastResponse
+     * requestDelete
      *
-     * @return null|\Symfony\Contracts\HttpClient\ResponseInterface
+     * @param string                                     $url
+     * @param array                                      $options
+     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \jalismrs\Stalactite\Client\ClientException
      */
-    public function getLastResponse() : ?ResponseInterface
-    {
-        return $this->lastResponse;
+    final protected function requestDelete(
+        string $url,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'DELETE',
+            $url,
+            $options,
+            $schema
+        );
     }
     
     /**
-     * setLastResponse
+     * requestGet
      *
-     * @param null|\Symfony\Contracts\HttpClient\ResponseInterface $lastResponse
+     * @param string                                     $url
+     * @param array                                      $options
+     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
      *
-     * @return \jalismrs\Stalactite\Client\AbstractClient
+     * @return array
+     *
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \jalismrs\Stalactite\Client\ClientException
      */
-    public function setLastResponse(?ResponseInterface $lastResponse) : AbstractClient
-    {
-        $this->lastResponse = $lastResponse;
-        
-        return $this;
+    final protected function requestGet(
+        string $url,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'GET',
+            $url,
+            $options,
+            $schema
+        );
+    }
+    
+    /**
+     * requestPost
+     *
+     * @param string                                     $url
+     * @param array                                      $options
+     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \jalismrs\Stalactite\Client\ClientException
+     */
+    final protected function requestPost(
+        string $url,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'POST',
+            $url,
+            $options,
+            $schema
+        );
+    }
+    
+    /**
+     * requestPut
+     *
+     * @param string                                     $url
+     * @param array                                      $options
+     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \jalismrs\Stalactite\Client\ClientException
+     */
+    final protected function requestPut(
+        string $url,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'PUT',
+            $url,
+            $options,
+            $schema
+        );
     }
     
     /**
@@ -176,7 +203,11 @@ abstract class AbstractClient
         try {
             $response = $this
                 ->getHttpClient()
-                ->request($method, $url, $options);
+                ->request(
+                    $method,
+                    $url,
+                    $options
+                );
         } catch (Throwable $throwable) {
             throw new ClientException(
                 'Error while contacting Stalactite API',
@@ -184,8 +215,6 @@ abstract class AbstractClient
                 $throwable
             );
         }
-        
-        $this->lastResponse = $response;
         
         $data = new JsonData();
         try {

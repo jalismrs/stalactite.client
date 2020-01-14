@@ -43,9 +43,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

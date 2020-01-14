@@ -42,7 +42,6 @@ class UserClient extends
     {
         if (!($this->meClient instanceof MeClient)) {
             $this->meClient = new MeClient($this->apiHost, $this->userAgent);
-            $this->meClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->meClient;
@@ -55,7 +54,6 @@ class UserClient extends
     {
         if (!($this->postClient instanceof PostClient)) {
             $this->postClient = new PostClient($this->apiHost, $this->userAgent);
-            $this->postClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->postClient;
@@ -68,7 +66,6 @@ class UserClient extends
     {
         if (!($this->leadClient instanceof LeadClient)) {
             $this->leadClient = new LeadClient($this->apiHost, $this->userAgent);
-            $this->leadClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->leadClient;
@@ -81,7 +78,6 @@ class UserClient extends
     {
         if (!($this->certificationClient instanceof CertificationGraduationClient)) {
             $this->certificationClient = new CertificationGraduationClient($this->apiHost, $this->userAgent);
-            $this->certificationClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->certificationClient;
@@ -94,7 +90,6 @@ class UserClient extends
     {
         if (!($this->phoneClient instanceof PhoneLineClient)) {
             $this->phoneClient = new PhoneLineClient($this->apiHost, $this->userAgent);
-            $this->phoneClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->phoneClient;
@@ -124,9 +119,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -175,9 +169,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -224,9 +217,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -286,9 +278,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -333,9 +324,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'PUT',
+    
+        $r = $this->requestPut(
             $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -370,9 +360,8 @@ class UserClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

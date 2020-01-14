@@ -41,11 +41,19 @@ class Client extends
     public function getRSAPublicKey() : string
     {
         try {
-            return $this->getHttpClient()
-                        ->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey')
-                        ->getContent();
-        } catch (Throwable $t) {
-            throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
+            return $this
+                ->getHttpClient()
+                ->request(
+                    'GET',
+                    $this->apiHost . self::API_URL_PREFIX . '/publicKey'
+                )
+                ->getContent();
+        } catch (Throwable $throwable) {
+            throw new ClientException(
+                'Error while fetching Stalactite API RSA public key',
+                ClientException::CLIENT_TRANSPORT_ERROR,
+                $throwable
+            );
         }
     }
     
@@ -128,8 +136,7 @@ class Client extends
             ]
         );
         
-        $r = $this->request(
-            'POST',
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/login',
             ['json' => $data],
             $schema
@@ -152,7 +159,6 @@ class Client extends
     {
         if (!($this->trustedAppClient instanceof TrustedAppClient)) {
             $this->trustedAppClient = new TrustedAppClient($this->apiHost, $this->userAgent);
-            $this->trustedAppClient->setHttpClient($this->getHttpClient());
         }
         
         return $this->trustedAppClient;

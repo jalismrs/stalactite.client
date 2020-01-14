@@ -50,9 +50,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/relations',
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -100,9 +99,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/access/' . $domain->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

@@ -40,7 +40,6 @@ class Client extends AbstractClient
     {
         if (!($this->userClient instanceof UserClient)) {
             $this->userClient = new UserClient($this->apiHost, $this->userAgent);
-            $this->userClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->userClient;
@@ -53,7 +52,6 @@ class Client extends AbstractClient
     {
         if (!($this->customerClient instanceof CustomerClient)) {
             $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
-            $this->customerClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->customerClient;
@@ -66,7 +64,6 @@ class Client extends AbstractClient
     {
         if (!($this->domainClient instanceof DomainClient)) {
             $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
-            $this->domainClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->domainClient;
@@ -79,7 +76,6 @@ class Client extends AbstractClient
     {
         if (!($this->postClient instanceof PostClient)) {
             $this->postClient = new PostClient($this->apiHost, $this->userAgent);
-            $this->postClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->postClient;
@@ -92,7 +88,6 @@ class Client extends AbstractClient
     {
         if (!($this->certificationTypeClient instanceof CertificationTypeClient)) {
             $this->certificationTypeClient = new CertificationTypeClient($this->apiHost, $this->userAgent);
-            $this->certificationTypeClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->certificationTypeClient;
@@ -105,7 +100,6 @@ class Client extends AbstractClient
     {
         if (!($this->phoneTypeClient instanceof PhoneTypeClient)) {
             $this->phoneTypeClient = new PhoneTypeClient($this->apiHost, $this->userAgent);
-            $this->phoneTypeClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->phoneTypeClient;
@@ -115,7 +109,6 @@ class Client extends AbstractClient
     {
         if (!($this->authTokenClient instanceof AuthTokenClient)) {
             $this->authTokenClient = new AuthTokenClient($this->apiHost, $this->userAgent);
-            $this->authTokenClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->authTokenClient;

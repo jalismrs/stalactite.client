@@ -46,9 +46,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -96,9 +95,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX,
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -145,9 +143,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/phone/lines',
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -182,9 +179,8 @@ class MeClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'DELETE',
+    
+        $r = $this->requestDelete(
             $this->apiHost . self::API_URL_PREFIX . '/phone/lines/' . $phoneLine->getUid(),
             [
                 'headers' => ['X-API-TOKEN' => $jwt]

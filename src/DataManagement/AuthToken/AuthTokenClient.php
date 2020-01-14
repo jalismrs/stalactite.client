@@ -61,7 +61,6 @@ class AuthTokenClient extends AbstractClient
     {
         if (!($this->userClient instanceof UserClient)) {
             $this->userClient = new UserClient($this->apiHost, $this->userAgent);
-            $this->userClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->userClient;
@@ -74,7 +73,6 @@ class AuthTokenClient extends AbstractClient
     {
         if (!($this->customerClient instanceof CustomerClient)) {
             $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
-            $this->customerClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->customerClient;
@@ -87,7 +85,6 @@ class AuthTokenClient extends AbstractClient
     {
         if (!($this->domainClient instanceof DomainClient)) {
             $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
-            $this->domainClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->domainClient;
@@ -100,7 +97,6 @@ class AuthTokenClient extends AbstractClient
     {
         if (!($this->postClient instanceof PostClient)) {
             $this->postClient = new PostClient($this->apiHost, $this->userAgent);
-            $this->postClient->setHttpClient($this->getHttpClient());
         }
 
         return $this->postClient;

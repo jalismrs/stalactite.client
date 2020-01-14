@@ -67,9 +67,8 @@ class DomainClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'GET',
+    
+        $r = $this->requestGet(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
             [
                 'headers' => ['X-API-TOKEN' => $jwt]
@@ -129,9 +128,8 @@ class DomainClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users',
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
@@ -179,9 +177,8 @@ class DomainClient extends
                 ]
             ]
         );
-        
-        $r = $this->request(
-            'POST',
+    
+        $r = $this->requestPost(
             $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers',
             [
                 'headers' => ['X-API-TOKEN' => $jwt],
