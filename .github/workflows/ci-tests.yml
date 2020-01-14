@@ -15,7 +15,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
-          php-version: '7.1'
+          php-version: '7.3'
           extensions: mbstring
 
       - name: Install composer
