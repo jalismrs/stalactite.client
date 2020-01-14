@@ -1,0 +1,28 @@
+name: ci-tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  runUnitTests:
+    runs-on: [ubuntu-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: '7.3'
+          extensions: mbstring
+
+      - name: Install composer
+        run: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://composer.github.io/installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && php composer-setup.php && php -r "unlink('composer-setup.php');"
+
+      - name: Fetch dependencies
+        run: php composer.phar install && rm composer.phar
+
+      - name: Run tests
+        run: php vendor/bin/phpunit tests/

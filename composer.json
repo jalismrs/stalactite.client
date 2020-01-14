@@ -11,6 +11,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
+    "php": "^7.3",
     "symfony/http-client": "^4.3",
     "lcobucci/jwt": "^3.3",
     "hunomina/json-data-validator": "^1.10",
