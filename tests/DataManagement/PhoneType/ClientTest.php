@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement;
+namespace Jalismrs\Stalactite\Test\DataManagement\PhoneType;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -11,13 +11,14 @@ use Jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 
 /**
- * PhoneTypeClientTest
+ * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement
+ * @package Jalismrs\Stalactite\Test\DataManagement\PhoneType
  */
-class PhoneTypeClientTest extends
+class ClientTest extends
     TestCase
 {
     /**

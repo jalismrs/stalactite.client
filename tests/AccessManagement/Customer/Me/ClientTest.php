@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Customer;
+namespace Jalismrs\Stalactite\Test\AccessManagement\Customer\Me;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Customer\MeClient;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\ClientException;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\Customer
  */
-class CustomerClientTest extends
+class ClientTest extends
     TestCase
 {
     /**
@@ -55,17 +55,15 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new MeClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $response = $mockAPIClient->getRelations(
-            DataManagementTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
-        
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
@@ -101,14 +99,13 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new MeClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $mockAPIClient->getRelations(
-            DataManagementTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
     }
@@ -143,14 +140,13 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new MeClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $response = $mockAPIClient->getAccessClearance(
-            DataManagementTestModelFactory::getTestableCustomer(),
             DataManagementTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
@@ -188,14 +184,13 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new MeClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $mockAPIClient->getAccessClearance(
-            DataManagementTestModelFactory::getTestableCustomer(),
             DataManagementTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );

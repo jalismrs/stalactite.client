@@ -9,11 +9,11 @@ use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AuthTokenClientTest
+ * ClientTest
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
  */
-class AuthTokenClientTest extends
+class ClientTest extends
     TestCase
 {
     /**

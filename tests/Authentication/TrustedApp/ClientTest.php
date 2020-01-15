@@ -1,27 +1,28 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement;
+namespace Jalismrs\Stalactite\Test\Authentication\TrustedApp;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\Authentication\TrustedAppClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\CertificationTypeClient;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
+use Jalismrs\Stalactite\Test\Authentication\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * CertificationTypeClientTest
+ * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement
+ * @package Jalismrs\Stalactite\Test\Authentication\TrustedApp
  */
-class CertificationTypeClientTest extends
+class ClientTest extends
     TestCase
 {
     /**
-     * testGetAll
+     * testGetAllTrustedApps
      *
      * @return void
      *
@@ -31,17 +32,17 @@ class CertificationTypeClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGetAll() : void
+    public function testGetAllTrustedApps() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'            => true,
-                            'error'              => null,
-                            'certificationTypes' => [
-                                ModelFactory::getTestableCertificationType()
+                            'success'     => true,
+                            'error'       => null,
+                            'trustedApps' => [
+                                ModelFactory::getTestableTrustedApp()
                                             ->asArray()
                             ]
                         ],
@@ -51,20 +52,21 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->getAll(
+        $response = $mockClient->getAll(
             'fake user jwt'
         );
+        
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            CertificationType::class,
-            $response->getData()['certificationTypes']
+            TrustedApp::class,
+            $response->getData()['trustedApps']
         );
     }
     
@@ -73,7 +75,7 @@ class CertificationTypeClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll() : void
+    public function testInvalidResponseFromApiWhileGettingTrustedApps() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -83,11 +85,9 @@ class CertificationTypeClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'            => true,
-                            'error'              => null,
-                            'certificationTypes' => ModelFactory::getTestableCertificationType()
-                                                                ->asArray()
-                            // invalid type
+                            'success'     => true,
+                            'error'       => null,
+                            'trustedApps' => 'wrong response type'
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -95,19 +95,19 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->getAll(
+        $mockClient->getAll(
             'fake user jwt'
         );
     }
     
     /**
-     * testGet
+     * testGetTrustedApp
      *
      * @return void
      *
@@ -118,17 +118,17 @@ class CertificationTypeClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGet() : void
+    public function testGetTrustedApp() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'           => true,
-                            'error'             => null,
-                            'certificationType' => ModelFactory::getTestableCertificationType()
-                                                               ->asArray()
+                            'success'    => true,
+                            'error'      => null,
+                            'trustedApp' => ModelFactory::getTestableTrustedApp()
+                                                        ->asArray()
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -136,22 +136,22 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->get(
-            ModelFactory::getTestableCertificationType()
+        $response = $mockClient->get(
+            ModelFactory::getTestableTrustedApp()
                         ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CertificationType::class,
-            $response->getData()['certificationType']
+            TrustedApp::class,
+            $response->getData()['trustedApp']
         );
     }
     
@@ -160,7 +160,7 @@ class CertificationTypeClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGet() : void
+    public function testInvalidResponseFromApiWhileGettingTrustedApp() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -170,10 +170,9 @@ class CertificationTypeClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'           => true,
-                            'error'             => null,
-                            'certificationType' => []
-                            // invalid certification type
+                            'success'     => true,
+                            'error'       => null,
+                            'trustedApps' => 'wrong response type'
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -181,21 +180,21 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->get(
-            ModelFactory::getTestableCertificationType()
+        $mockClient->get(
+            ModelFactory::getTestableTrustedApp()
                         ->getUid(),
             'fake user jwt'
         );
     }
     
     /**
-     * testCreate
+     * testCreateTrustedApp
      *
      * @return void
      *
@@ -206,17 +205,17 @@ class CertificationTypeClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testCreate() : void
+    public function testCreateTrustedApp() : void
     {
+        $ta             = ModelFactory::getTestableTrustedApp();
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'           => true,
-                            'error'             => null,
-                            'certificationType' => ModelFactory::getTestableCertificationType()
-                                                               ->asArray()
+                            'success'    => true,
+                            'error'      => null,
+                            'trustedApp' => array_merge($ta->asArray(), ['resetToken' => $ta->getResetToken()])
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -224,21 +223,21 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->create(
-            ModelFactory::getTestableCertificationType(),
+        $response = $mockClient->create(
+            ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CertificationType::class,
-            $response->getData()['certificationType']
+            TrustedApp::class,
+            $response->getData()['trustedApp']
         );
     }
     
@@ -247,7 +246,7 @@ class CertificationTypeClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseCreate() : void
+    public function testThrowOnCreateTrustedApp() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -257,10 +256,9 @@ class CertificationTypeClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'           => true,
-                            'error'             => null,
-                            'certificationType' => []
-                            // invalid certification type
+                            'success'    => true,
+                            'error'      => null,
+                            'trustedApp' => []
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -268,20 +266,20 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->create(
-            ModelFactory::getTestableCertificationType(),
+        $mockClient->create(
+            ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
     }
     
     /**
-     * testUpdate
+     * testUpdateTrustedApp
      *
      * @return void
      *
@@ -291,7 +289,7 @@ class CertificationTypeClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testUpdate() : void
+    public function testUpdateTrustedApp() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -307,14 +305,14 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->update(
-            ModelFactory::getTestableCertificationType(),
+        $response = $mockClient->update(
+            ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -326,7 +324,7 @@ class CertificationTypeClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseUpdate() : void
+    public function testThrowOnUpdateTrustedApp() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -338,7 +336,6 @@ class CertificationTypeClientTest extends
                         [
                             'success' => true,
                             'error'   => false
-                            // invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -346,20 +343,20 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->update(
-            ModelFactory::getTestableCertificationType(),
+        $mockClient->update(
+            ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
     }
     
     /**
-     * testDelete
+     * testDeleteTrustedApp
      *
      * @return void
      *
@@ -369,7 +366,7 @@ class CertificationTypeClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testDelete() : void
+    public function testDeleteTrustedApp() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -385,15 +382,17 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->delete(
-            ModelFactory::getTestableCertificationType()
-                        ->getUid(),
+        $ta = ModelFactory::getTestableTrustedApp();
+        
+        $response = $mockClient->delete(
+            $ta->getUid(),
+            $ta->getResetToken(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -405,7 +404,7 @@ class CertificationTypeClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseDelete() : void
+    public function testThrowOnDeleteTrustedApp() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -417,7 +416,6 @@ class CertificationTypeClientTest extends
                         [
                             'success' => true,
                             'error'   => false
-                            /// invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -425,15 +423,101 @@ class CertificationTypeClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockClient = new TrustedAppClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->delete(
-            ModelFactory::getTestableCertificationType()
-                        ->getUid(),
+        $ta = ModelFactory::getTestableTrustedApp();
+        
+        $mockClient->delete(
+            $ta->getUid(),
+            $ta->getResetToken(),
+            'fake user jwt'
+        );
+    }
+    
+    /**
+     * testResetTrustedAppAuthToken
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     */
+    public function testResetTrustedAppAuthToken() : void
+    {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'    => true,
+                            'error'      => null,
+                            'trustedApp' => ModelFactory::getTestableTrustedApp()
+                                                        ->asArray()
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockClient = new TrustedAppClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $response = $mockClient->resetAuthToken(
+            ModelFactory::getTestableTrustedApp(),
+            'fake user jwt'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertInstanceOf(
+            TrustedApp::class,
+            $response->getData()['trustedApp']
+        );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnResetTrustedAppAuthToken() : void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => false
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockClient = new TrustedAppClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $mockClient->resetAuthToken(
+            ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
     }

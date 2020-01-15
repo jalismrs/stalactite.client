@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement;
+namespace Jalismrs\Stalactite\Test\AccessManagement\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -9,17 +9,18 @@ use Jalismrs\Stalactite\Client\AccessManagement\DomainClient;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * DomainClientTest
+ * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement
+ * @package Jalismrs\Stalactite\Test\AccessManagement\Domain
  */
-class DomainClientTest extends
+class ClientTest extends
     TestCase
 {
     /**

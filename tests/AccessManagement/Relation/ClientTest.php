@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken;
+namespace Jalismrs\Stalactite\Test\AccessManagement\Relation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\CustomerClient;
+use Jalismrs\Stalactite\Client\AccessManagement\RelationClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -15,13 +15,13 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
+ * @package Jalismrs\Stalactite\Test\AccessManagement\Relation
  */
-class CustomerClientTest extends
+class ClientTest extends
     TestCase
 {
     /**
-     * testDeleteRelationByCustomer
+     * testDeleteRelation
      *
      * @return void
      *
@@ -31,7 +31,7 @@ class CustomerClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testDeleteRelationByCustomer() : void
+    public function testDeleteRelation() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -47,18 +47,18 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new RelationClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->deleteRelationsByCustomer(
-            ModelFactory::getTestableCustomer(),
-            'fake API auth token'
+        $response = $mockAPIClient->deleteRelation(
+            ModelFactory::getTestableDomainUserRelation(),
+            'fake user jwt'
         );
-        self::assertTrue($response->success());
-        self::assertNull($response->getError());
+        static::assertTrue($response->success());
+        static::assertNull($response->getError());
     }
     
     /**
@@ -66,7 +66,7 @@ class CustomerClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseDeleteRelationByDomain() : void
+    public function testThrowExceptionOnInvalidResponseDeleteRelation() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -86,15 +86,15 @@ class CustomerClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new RelationClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->deleteRelationsByCustomer(
-            ModelFactory::getTestableCustomer(),
-            'fake API auth token'
+        $mockAPIClient->deleteRelation(
+            ModelFactory::getTestableDomainUserRelation(),
+            'fake user jwt'
         );
     }
 }

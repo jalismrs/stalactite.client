@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement;
+namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken;
 
 use Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -9,11 +9,11 @@ use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AuthTokenClientTest
+ * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement
+ * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken
  */
-class AuthTokenClientTest extends
+class ClientTest extends
     TestCase
 {
     /**

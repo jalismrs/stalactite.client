@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\AccessManagement\User;
+namespace Jalismrs\Stalactite\Client\AccessManagement\User\Me;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -16,14 +16,14 @@ use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
- * Client
+ * MeClient
  *
- * @package Jalismrs\Stalactite\Client\AccessManagement\User
+ * @package Jalismrs\Stalactite\Client\AccessManagement\User\Me
  */
 class MeClient extends
     AbstractClient
 {
-    public const API_URL_PREFIX = UserClient::API_URL_PREFIX . '/me';
+    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\AccessManagement\User\UserClient::API_URL_PREFIX . '/me';
     
     /**
      * @param string $jwt

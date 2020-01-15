@@ -1,27 +1,28 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\Authentication;
+namespace Jalismrs\Stalactite\Test\DataManagement\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedAppClient;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\DomainClient;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Domain;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 
 /**
- * TrustedAppClientTest
+ * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication
+ * @package Jalismrs\Stalactite\Test\DataManagement\Domain
  */
-class TrustedAppClientTest extends
+class ClientTest extends
     TestCase
 {
     /**
-     * testGetAllTrustedApps
+     * testGetAll
      *
      * @return void
      *
@@ -31,17 +32,17 @@ class TrustedAppClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGetAllTrustedApps() : void
+    public function testGetAll() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'     => true,
-                            'error'       => null,
-                            'trustedApps' => [
-                                ModelFactory::getTestableTrustedApp()
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => [
+                                ModelFactory::getTestableDomain()
                                             ->asArray()
                             ]
                         ],
@@ -51,21 +52,20 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockClient->getAll(
+        $response = $mockAPIClient->getAll(
             'fake user jwt'
         );
-        
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            TrustedApp::class,
-            $response->getData()['trustedApps']
+            Domain::class,
+            $response->getData()['domains']
         );
     }
     
@@ -74,7 +74,7 @@ class TrustedAppClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testInvalidResponseFromApiWhileGettingTrustedApps() : void
+    public function testThrowExceptionOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -84,9 +84,11 @@ class TrustedAppClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'     => true,
-                            'error'       => null,
-                            'trustedApps' => 'wrong response type'
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => ModelFactory::getTestableDomain()
+                                                     ->asArray()
+                            // invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -94,19 +96,19 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockClient->getAll(
+        $mockAPIClient->getAll(
             'fake user jwt'
         );
     }
     
     /**
-     * testGetTrustedApp
+     * testGet
      *
      * @return void
      *
@@ -117,17 +119,17 @@ class TrustedAppClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGetTrustedApp() : void
+    public function testGet() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'    => true,
-                            'error'      => null,
-                            'trustedApp' => ModelFactory::getTestableTrustedApp()
-                                                        ->asArray()
+                            'success' => true,
+                            'error'   => null,
+                            'domain'  => ModelFactory::getTestableDomain()
+                                                     ->asArray()
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -135,22 +137,22 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockClient->get(
-            ModelFactory::getTestableTrustedApp()
+        $response = $mockAPIClient->get(
+            ModelFactory::getTestableDomain()
                         ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedApp::class,
-            $response->getData()['trustedApp']
+            Domain::class,
+            $response->getData()['domain']
         );
     }
     
@@ -159,7 +161,7 @@ class TrustedAppClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testInvalidResponseFromApiWhileGettingTrustedApp() : void
+    public function testThrowOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -169,9 +171,10 @@ class TrustedAppClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'     => true,
-                            'error'       => null,
-                            'trustedApps' => 'wrong response type'
+                            'success' => true,
+                            'error'   => null,
+                            'domain'  => []
+                            // invalid domain
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -179,21 +182,205 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockClient->get(
-            ModelFactory::getTestableTrustedApp()
+        $mockAPIClient->get(
+            ModelFactory::getTestableDomain()
                         ->getUid(),
             'fake user jwt'
         );
     }
     
     /**
-     * testCreateTrustedApp
+     * testGetByName
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     */
+    public function testGetByName() : void
+    {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => [
+                                ModelFactory::getTestableDomain()
+                                            ->asArray()
+                            ]
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new DomainClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $response = $mockAPIClient->getByName(
+            ModelFactory::getTestableDomain()
+                        ->getName(),
+            'fake user jwt'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertContainsOnlyInstancesOf(
+            Domain::class,
+            $response->getData()['domains']
+        );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnInvalidResponseGetByName() : void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => ModelFactory::getTestableDomain()
+                                                     ->asArray()
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new DomainClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $mockAPIClient->getByName(
+            ModelFactory::getTestableDomain()
+                        ->getName(),
+            'fake user jwt'
+        );
+    }
+    
+    /**
+     * testGetByNameAndApiKey
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     */
+    public function testGetByNameAndApiKey() : void
+    {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => [
+                                ModelFactory::getTestableDomain()
+                                            ->asArray()
+                            ]
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new DomainClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $d = ModelFactory::getTestableDomain();
+        
+        $response = $mockAPIClient->getByNameAndApiKey(
+            $d->getName(),
+            $d->getApiKey(),
+            'fake user jwt'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertContainsOnlyInstancesOf(
+            Domain::class,
+            $response->getData()['domains']
+        );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowOnInvalidResponseGetByNameAndApiKey() : void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'domains' => ModelFactory::getTestableDomain()
+                                                     ->asArray()
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new DomainClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $d = ModelFactory::getTestableDomain();
+        
+        $mockAPIClient->getByNameAndApiKey(
+            $d->getName(),
+            $d->getApiKey(),
+            'fake user jwt'
+        );
+    }
+    
+    /**
+     * testCreate
      *
      * @return void
      *
@@ -204,17 +391,17 @@ class TrustedAppClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testCreateTrustedApp() : void
+    public function testCreate() : void
     {
-        $ta             = ModelFactory::getTestableTrustedApp();
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success'    => true,
-                            'error'      => null,
-                            'trustedApp' => array_merge($ta->asArray(), ['resetToken' => $ta->getResetToken()])
+                            'success' => true,
+                            'error'   => null,
+                            'domain'  => ModelFactory::getTestableDomain()
+                                                     ->asArray()
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -222,21 +409,21 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockClient->create(
-            ModelFactory::getTestableTrustedApp(),
+        $response = $mockAPIClient->create(
+            ModelFactory::getTestableDomain(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedApp::class,
-            $response->getData()['trustedApp']
+            Domain::class,
+            $response->getData()['domain']
         );
     }
     
@@ -245,7 +432,7 @@ class TrustedAppClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnCreateTrustedApp() : void
+    public function testThrowOnInvalidResponseCreate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -255,9 +442,10 @@ class TrustedAppClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success'    => true,
-                            'error'      => null,
-                            'trustedApp' => []
+                            'success' => true,
+                            'error'   => null,
+                            'domain'  => []
+                            // invalid certification type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -265,20 +453,20 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockClient->create(
-            ModelFactory::getTestableTrustedApp(),
+        $mockAPIClient->create(
+            ModelFactory::getTestableDomain(),
             'fake user jwt'
         );
     }
     
     /**
-     * testUpdateTrustedApp
+     * testUpdate
      *
      * @return void
      *
@@ -288,7 +476,7 @@ class TrustedAppClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testUpdateTrustedApp() : void
+    public function testUpdate() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -304,14 +492,14 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockClient->update(
-            ModelFactory::getTestableTrustedApp(),
+        $response = $mockAPIClient->update(
+            ModelFactory::getTestableDomain(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -323,7 +511,7 @@ class TrustedAppClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnUpdateTrustedApp() : void
+    public function testThrowOnInvalidResponseUpdate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -335,6 +523,7 @@ class TrustedAppClientTest extends
                         [
                             'success' => true,
                             'error'   => false
+                            // invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -342,20 +531,20 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockClient->update(
-            ModelFactory::getTestableTrustedApp(),
+        $mockAPIClient->update(
+            ModelFactory::getTestableDomain(),
             'fake user jwt'
         );
     }
     
     /**
-     * testDeleteTrustedApp
+     * testDelete
      *
      * @return void
      *
@@ -365,7 +554,7 @@ class TrustedAppClientTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testDeleteTrustedApp() : void
+    public function testDelete() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -381,17 +570,15 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $ta = ModelFactory::getTestableTrustedApp();
-        
-        $response = $mockClient->delete(
-            $ta->getUid(),
-            $ta->getResetToken(),
+        $response = $mockAPIClient->delete(
+            ModelFactory::getTestableDomain()
+                        ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -403,7 +590,7 @@ class TrustedAppClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnDeleteTrustedApp() : void
+    public function testThrowOnInvalidResponseDelete() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -415,6 +602,7 @@ class TrustedAppClientTest extends
                         [
                             'success' => true,
                             'error'   => false
+                            /// invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -422,101 +610,15 @@ class TrustedAppClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockAPIClient = new DomainClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $ta = ModelFactory::getTestableTrustedApp();
-        
-        $mockClient->delete(
-            $ta->getUid(),
-            $ta->getResetToken(),
-            'fake user jwt'
-        );
-    }
-    
-    /**
-     * testResetTrustedAppAuthToken
-     *
-     * @return void
-     *
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     */
-    public function testResetTrustedAppAuthToken() : void
-    {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'    => true,
-                            'error'      => null,
-                            'trustedApp' => ModelFactory::getTestableTrustedApp()
-                                                        ->asArray()
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
-        $mockClient = new TrustedAppClient(
-            'http://fakeClient',
-            null,
-            $mockHttpClient
-        );
-        
-        $response = $mockClient->resetAuthToken(
-            ModelFactory::getTestableTrustedApp(),
-            'fake user jwt'
-        );
-        self::assertTrue($response->success());
-        self::assertNull($response->getError());
-        self::assertInstanceOf(
-            TrustedApp::class,
-            $response->getData()['trustedApp']
-        );
-    }
-    
-    /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testThrowOnResetTrustedAppAuthToken() : void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => false
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
-        $mockClient = new TrustedAppClient(
-            'http://fakeClient',
-            null,
-            $mockHttpClient
-        );
-        
-        $mockClient->resetAuthToken(
-            ModelFactory::getTestableTrustedApp(),
+        $mockAPIClient->delete(
+            ModelFactory::getTestableDomain()
+                        ->getUid(),
             'fake user jwt'
         );
     }

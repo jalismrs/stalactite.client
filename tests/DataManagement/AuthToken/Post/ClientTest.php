@@ -1,12 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken;
+namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken\Post;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\UserClient;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\PostClient;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Post;
 use Jalismrs\Stalactite\Client\DataManagement\Model\User;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,9 +17,9 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken
+ * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\Post
  */
-class UserClientTest extends
+class ClientTest extends
     TestCase
 {
     /**
@@ -41,8 +42,8 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'users'   => [
-                                ModelFactory::getTestableUser()
+                            'posts'   => [
+                                ModelFactory::getTestablePost()
                                             ->asArray()
                             ]
                         ],
@@ -52,20 +53,20 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $response = $mockAPIClient->getAll(
-            'fake user jwt'
+            'fake API auth token'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            User::class,
-            $response->getData()['users']
+            Post::class,
+            $response->getData()['posts']
         );
     }
     
@@ -74,7 +75,7 @@ class UserClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGetAll() : void
+    public function testThrowExceptionOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -86,7 +87,8 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'users'   => null
+                            'posts'   => ModelFactory::getTestablePost()
+                                                     ->asArray()
                             // invalid type
                         ],
                         JSON_THROW_ON_ERROR
@@ -95,14 +97,14 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $mockAPIClient->getAll(
-            'fake user jwt'
+            'fake API auth token'
         );
     }
     
@@ -127,7 +129,7 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'user'    => ModelFactory::getTestableUser()
+                            'post'    => ModelFactory::getTestablePost()
                                                      ->asArray()
                         ],
                         JSON_THROW_ON_ERROR
@@ -136,21 +138,22 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $response = $mockAPIClient->get(
-            'fake user uid',
-            'fake user jwt'
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
-            $response->getData()['user']
+            Post::class,
+            $response->getData()['post']
         );
     }
     
@@ -159,7 +162,7 @@ class UserClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGet() : void
+    public function testThrowExceptionOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -171,8 +174,8 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'user'    => []
-                            // invalid user
+                            'post'    => []
+                            // invalid Post
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -180,31 +183,31 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
         $mockAPIClient->get(
-            'fake user uid',
-            'fake user jwt'
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
         );
     }
     
     /**
-     * testGetByEmailAndGoogleId
+     * testGetUsers
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGetByEmailAndGoogleId() : void
+    public function testGetUsers() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -213,8 +216,10 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'user'    => ModelFactory::getTestableUser()
-                                                     ->asArray()
+                            'users'   => [
+                                ModelFactory::getTestableUser()
+                                            ->asArray()
+                            ]
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -222,22 +227,22 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->getByEmailAndGoogleId(
-            'goodmorning@hello.hi',
-            '0123456789',
-            'fake user jwt'
+        $response = $mockAPIClient->getUsers(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
-        self::assertInstanceOf(
+        self::assertContainsOnlyInstancesOf(
             User::class,
-            $response->getData()['user']
+            $response->getData()['users']
         );
     }
     
@@ -246,7 +251,7 @@ class UserClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId() : void
+    public function testThrowExceptionOnInvalidResponseGetUsers() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -258,8 +263,8 @@ class UserClientTest extends
                         [
                             'success' => true,
                             'error'   => null,
-                            'user'    => []
-                            // invalid user
+                            'users'   => null
+                            // invalid type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -267,16 +272,16 @@ class UserClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new PostClient(
             'http://fakeClient',
             null,
             $mockHttpClient
         );
         
-        $mockAPIClient->getByEmailAndGoogleId(
-            'goodmorning@hello.hi',
-            '0123456789',
-            'fake user jwt'
+        $mockAPIClient->getUsers(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
         );
     }
 }
