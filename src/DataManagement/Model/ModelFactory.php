@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\Model;
+namespace Jalismrs\Stalactite\Client\DataManagement\Model;
 
 /**
  * Class ModelFactory
- * @package jalismrs\Stalactite\Client\DataManagement\Model
+ * @package Jalismrs\Stalactite\Client\DataManagement\Model
  * Factory to instantiate models from arrays
  */
 abstract class ModelFactory

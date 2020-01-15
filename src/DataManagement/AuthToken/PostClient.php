@@ -1,18 +1,23 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\AuthToken;
+namespace Jalismrs\Stalactite\Client\DataManagement\AuthToken;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\AuthToken
+ */
 class PostClient extends
     AbstractClient
 {
@@ -26,9 +31,13 @@ class PostClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getAll(string $apiAuthToken) : Response
-    {
-        $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
+    public function getAll(
+        string $apiAuthToken
+    ) : Response {
+        $jwt = AuthTokenClient::generateJwt(
+            $apiAuthToken,
+            $this->userAgent
+        );
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -46,9 +55,9 @@ class PostClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -80,9 +89,14 @@ class PostClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $uid, string $apiAuthToken) : Response
-    {
-        $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
+    public function get(
+        string $uid,
+        string $apiAuthToken
+    ) : Response {
+        $jwt = AuthTokenClient::generateJwt(
+            $apiAuthToken,
+            $this->userAgent
+        );
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -101,9 +115,9 @@ class PostClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -132,9 +146,14 @@ class PostClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getUsers(string $uid, string $apiAuthToken) : Response
-    {
-        $jwt = AuthTokenClient::generateJwt($apiAuthToken, $this->userAgent);
+    public function getUsers(
+        string $uid,
+        string $apiAuthToken
+    ) : Response {
+        $jwt = AuthTokenClient::generateJwt(
+            $apiAuthToken,
+            $this->userAgent
+        );
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -152,9 +171,9 @@ class PostClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users',
+            $this->host . self::API_URL_PREFIX . '/' . $uid . '/users',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
 use RuntimeException;
 
 /**
  * ClientException
  *
- * @package jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Client
  */
 class ClientException extends
     RuntimeException

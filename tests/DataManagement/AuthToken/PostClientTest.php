@@ -1,162 +1,287 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Test\DataManagement\AuthToken;
+namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\AuthToken\PostClient;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\PostClient;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class PostClientTest extends TestCase
+/**
+ * ClientTest
+ *
+ * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken
+ */
+class PostClientTest extends
+    TestCase
 {
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testGetAll
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGetAll(): void
+    public function testGetAll() : void
     {
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'posts' => [ModelFactory::getTestablePost()->asArray()]
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $response = $mockAPIClient->getAll('fake API auth token');
-        $this->assertTrue($response->success());
-        $this->assertNull($response->getError());
-        $this->assertContainsOnlyInstancesOf(Post::class, $response->getData()['posts']);
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'posts'   => [
+                                ModelFactory::getTestablePost()
+                                            ->asArray()
+                            ]
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $response = $mockAPIClient->getAll(
+            'fake API auth token'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertContainsOnlyInstancesOf(
+            Post::class,
+            $response->getData()['posts']
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll(): void
+    public function testThrowExceptionOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'posts' => ModelFactory::getTestablePost()->asArray() // invalid type
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->getAll('fake API auth token');
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'posts'   => ModelFactory::getTestablePost()
+                                                     ->asArray()
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $mockAPIClient->getAll(
+            'fake API auth token'
+        );
     }
-
+    
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testGet
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testGet(): void
+    public function testGet() : void
     {
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'post' => ModelFactory::getTestablePost()->asArray()
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $response = $mockAPIClient->get(ModelFactory::getTestablePost()->getUid(), 'fake API auth token');
-        $this->assertTrue($response->success());
-        $this->assertNull($response->getError());
-        $this->assertInstanceOf(Post::class, $response->getData()['post']);
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'post'    => ModelFactory::getTestablePost()
+                                                     ->asArray()
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $response = $mockAPIClient->get(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertInstanceOf(
+            Post::class,
+            $response->getData()['post']
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGet(): void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'post' => [] // invalid post
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->get(ModelFactory::getTestablePost()->getUid(), 'fake API auth token');
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testGetUsers(): void
-    {
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'users' => [ModelFactory::getTestableUser()->asArray()]
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $response = $mockAPIClient->getUsers(ModelFactory::getTestablePost()->getUid(), 'fake API auth token');
-        $this->assertTrue($response->success());
-        $this->assertNull($response->getError());
-        $this->assertContainsOnlyInstancesOf(User::class, $response->getData()['users']);
-    }
-
-    /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testThrowExceptionOnInvalidResponseGetUsers(): void
+    public function testThrowExceptionOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode([
-                'success' => true,
-                'error' => null,
-                'users' => null // invalid type
-            ], JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new PostClient('http://fakeClient');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->getUsers(ModelFactory::getTestablePost()->getUid(), 'fake API auth token');
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'post'    => []
+                            // invalid Post
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $mockAPIClient->get(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
+        );
+    }
+    
+    /**
+     * testGetUsers
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     */
+    public function testGetUsers() : void
+    {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'users'   => [
+                                ModelFactory::getTestableUser()
+                                            ->asArray()
+                            ]
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $response = $mockAPIClient->getUsers(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
+        );
+        self::assertTrue($response->success());
+        self::assertNull($response->getError());
+        self::assertContainsOnlyInstancesOf(
+            User::class,
+            $response->getData()['users']
+        );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     */
+    public function testThrowExceptionOnInvalidResponseGetUsers() : void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null,
+                            'users'   => null
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
+        $mockAPIClient = new PostClient(
+            'http://fakeClient',
+            null,
+            $mockHttpClient
+        );
+        
+        $mockAPIClient->getUsers(
+            ModelFactory::getTestablePost()
+                        ->getUid(),
+            'fake API auth token'
+        );
     }
 }

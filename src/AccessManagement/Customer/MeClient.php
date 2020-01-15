@@ -1,20 +1,25 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement\Customer;
+namespace Jalismrs\Stalactite\Client\AccessManagement\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\AccessManagement\Schema;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
-use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\AccessManagement\Schema;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Domain;
+use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
+use Jalismrs\Stalactite\Client\Response;
 
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement\Customer
+ */
 class MeClient extends
     AbstractClient
 {
@@ -28,8 +33,9 @@ class MeClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getRelations(string $jwt) : Response
-    {
+    public function getRelations(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -54,9 +60,9 @@ class MeClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/relations',
+            $this->host . self::API_URL_PREFIX . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -106,9 +112,9 @@ class MeClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/access/' . $domain->getUid(),
+            $this->host . self::API_URL_PREFIX . '/access/' . $domain->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

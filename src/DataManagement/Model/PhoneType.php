@@ -1,40 +1,48 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\Model;
+namespace Jalismrs\Stalactite\Client\DataManagement\Model;
 
-use jalismrs\Stalactite\Client\AbstractModel;
+use Jalismrs\Stalactite\Client\AbstractModel;
 
-class PhoneType extends AbstractModel
+/**
+ * PhoneType
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\Model
+ */
+class PhoneType extends
+    AbstractModel
 {
     /** @var null|string $name */
     private $name;
-
+    
     /**
      * @return string|null
      */
-    public function getName(): ?string
+    public function getName() : ?string
     {
         return $this->name;
     }
-
+    
     /**
      * @param string|null $name
+     *
      * @return PhoneType
      */
-    public function setName(?string $name): PhoneType
+    public function setName(?string $name) : PhoneType
     {
         $this->name = $name;
+        
         return $this;
     }
-
+    
     /**
      * @return array
      */
-    public function asArray(): array
+    public function asArray() : array
     {
         return [
-            'uid' => $this->uid,
+            'uid'  => $this->uid,
             'name' => $this->name
         ];
     }

@@ -10,7 +10,7 @@ PHP client for the Stalactite API
 # Install
 
 ```bash
-composer require jalismrs/stalactite-api.client
+composer require Jalismrs/stalactite-api.client
 ```
 
 # Before release

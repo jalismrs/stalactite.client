@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
 /**
  * Response
  *
  * Wrapper class for API responses
  *
- * @package jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Client
  */
 class Response
 {

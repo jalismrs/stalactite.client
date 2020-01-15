@@ -1,10 +1,15 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Authentication;
+namespace Jalismrs\Stalactite\Client\Authentication;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 
+/**
+ * Schema
+ *
+ * @package Jalismrs\Stalactite\Client\Authentication
+ */
 abstract class Schema
 {
     public const TRUSTED_APP = [

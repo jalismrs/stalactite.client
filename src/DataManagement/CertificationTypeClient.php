@@ -1,18 +1,23 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement;
+namespace Jalismrs\Stalactite\Client\DataManagement;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Response;
 
+/**
+ * CertificationTypeClient
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement
+ */
 class CertificationTypeClient extends
     AbstractClient
 {
@@ -46,7 +51,7 @@ class CertificationTypeClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -99,7 +104,7 @@ class CertificationTypeClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -153,7 +158,7 @@ class CertificationTypeClient extends
         );
     
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -201,7 +206,7 @@ class CertificationTypeClient extends
         );
     
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $certificationType->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $certificationType->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -242,7 +247,7 @@ class CertificationTypeClient extends
         );
     
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

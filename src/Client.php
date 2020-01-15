@@ -1,70 +1,74 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
 /**
  * Client
  *
- * @package jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Client
  */
 class Client extends
     AbstractClient
 {
+    
     /**
-     * auth
+     * access
      *
-     * @return \jalismrs\Stalactite\Client\Authentication\Client
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
      */
-    public function auth() : Authentication\Client
+    public function accessManagement() : AccessManagement\Client
     {
-        static $authClient = null;
+        static $client = null;
         
-        if (null === $authClient) {
-            $authClient = new Authentication\Client(
-                $this->apiHost,
-                $this->userAgent
+        if (null === $client) {
+            $client = new AccessManagement\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
             );
         }
         
-        return $authClient;
+        return $client;
+    }
+    
+    /**
+     * authentification
+     *
+     * @return \Jalismrs\Stalactite\Client\Authentication\Client
+     */
+    public function authentification() : Authentication\Client
+    {
+        static $client = null;
+    
+        if (null === $client) {
+            $client = new Authentication\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
     }
     
     /**
      * data
      *
-     * @return \jalismrs\Stalactite\Client\DataManagement\Client
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Client
      */
-    public function data() : DataManagement\Client
+    public function dataManagement() : DataManagement\Client
     {
-        static $dataManagementClient = null;
-        
-        if (null === $dataManagementClient) {
-            $dataManagementClient = new DataManagement\Client(
-                $this->apiHost,
-                $this->userAgent
-            );
-        }
-        
-        return $dataManagementClient;
-    }
+        static $client = null;
     
-    /**
-     * access
-     *
-     * @return \jalismrs\Stalactite\Client\AccessManagement\Client
-     */
-    public function access() : AccessManagement\Client
-    {
-        static $accessManagementClient = null;
-        
-        if (null === $accessManagementClient) {
-            $accessManagementClient = new AccessManagement\Client(
-                $this->apiHost,
-                $this->userAgent
+        if (null === $client) {
+            $client = new DataManagement\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
             );
         }
         
-        return $accessManagementClient;
+        return $client;
     }
 }

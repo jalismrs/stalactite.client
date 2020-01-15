@@ -1,15 +1,20 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement\AuthToken;
+namespace Jalismrs\Stalactite\Client\AccessManagement\AuthToken;
 
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\Client;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Client;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 
+/**
+ * AuthTokenClient
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement\AuthToken
+ */
 class AuthTokenClient extends
     AbstractClient
 {
@@ -18,15 +23,6 @@ class AuthTokenClient extends
     private const JWT_DURATION = 60;
     
     public const JWT_AUDIENCE = 'access.microservice';
-    
-    /** @var DomainClient $domainClient */
-    private $domainClient;
-    
-    /** @var UserClient $userClient */
-    private $userClient;
-    
-    /** @var CustomerClient $customerClient */
-    private $customerClient;
     
     /**
      * @param string      $apiAuthToken
@@ -56,38 +52,62 @@ class AuthTokenClient extends
     }
     
     /**
-     * @return DomainClient
+     * domains
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\DomainClient
      */
     public function domains() : DomainClient
     {
-        if (!($this->domainClient instanceof DomainClient)) {
-            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new DomainClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->domainClient;
+        return $client;
     }
     
     /**
-     * @return UserClient
+     * users
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\UserClient
      */
     public function users() : UserClient
     {
-        if (!($this->userClient instanceof UserClient)) {
-            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new UserClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->userClient;
+        return $client;
     }
     
     /**
-     * @return CustomerClient
+     * customers
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\CustomerClient
      */
     public function customers() : CustomerClient
     {
-        if (!($this->customerClient instanceof CustomerClient)) {
-            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new CustomerClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->customerClient;
+        return $client;
     }
 }

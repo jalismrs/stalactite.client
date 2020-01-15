@@ -1,116 +1,158 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement;
+namespace Jalismrs\Stalactite\Client\DataManagement;
 
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
-use jalismrs\Stalactite\Client\DataManagement\Customer\CustomerClient;
-use jalismrs\Stalactite\Client\DataManagement\User\UserClient;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
 
-class Client extends AbstractClient
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement
+ */
+class Client extends
+    AbstractClient
 {
     public const API_URL_PREFIX = '/data';
-
-    /** @var UserClient $userClient */
-    private $userClient;
-
-    /** @var CustomerClient $customerClient */
-    private $customerClient;
-
-    /** @var DomainClient $domainClient */
-    private $domainClient;
-
-    /** @var PostClient $postClient */
-    private $postClient;
-
-    /** @var CertificationTypeClient $certificationTypeClient */
-    private $certificationTypeClient;
-
-    /** @var PhoneTypeClient $phoneTypeClient */
-    private $phoneTypeClient;
-
-    /** @var AuthTokenClient $authTokenClient */
-    private $authTokenClient;
-
+    
     /**
-     * @return UserClient
+     * user
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Client
      */
-    public function users(): UserClient
+    public function user() : User\Client
     {
-        if (!($this->userClient instanceof UserClient)) {
-            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new User\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->userClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return CustomerClient
+     * customer
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Client
      */
-    public function customers(): CustomerClient
+    public function customer() : Customer\Client
     {
-        if (!($this->customerClient instanceof CustomerClient)) {
-            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Customer\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->customerClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return DomainClient
+     * domain
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\DomainClient
      */
-    public function domains(): DomainClient
+    public function domain() : DomainClient
     {
-        if (!($this->domainClient instanceof DomainClient)) {
-            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new DomainClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->domainClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return PostClient
+     * post
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\PostClient
      */
-    public function posts(): PostClient
+    public function post() : PostClient
     {
-        if (!($this->postClient instanceof PostClient)) {
-            $this->postClient = new PostClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new PostClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->postClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return CertificationTypeClient
+     * certificationType
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationTypeClient
      */
-    public function certificationTypes(): CertificationTypeClient
+    public function certificationType() : CertificationTypeClient
     {
-        if (!($this->certificationTypeClient instanceof CertificationTypeClient)) {
-            $this->certificationTypeClient = new CertificationTypeClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new CertificationTypeClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->certificationTypeClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return PhoneTypeClient
+     * phoneType
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient
      */
-    public function phoneTypes(): PhoneTypeClient
+    public function phoneType() : PhoneTypeClient
     {
-        if (!($this->phoneTypeClient instanceof PhoneTypeClient)) {
-            $this->phoneTypeClient = new PhoneTypeClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new PhoneTypeClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->phoneTypeClient;
+        
+        return $client;
     }
-
-    public function authToken(): AuthTokenClient
+    
+    /**
+     * authToken
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient
+     */
+    public function authToken() : AuthTokenClient
     {
-        if (!($this->authTokenClient instanceof AuthTokenClient)) {
-            $this->authTokenClient = new AuthTokenClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new AuthTokenClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->authTokenClient;
+        
+        return $client;
     }
 }

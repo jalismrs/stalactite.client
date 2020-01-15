@@ -1,19 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Authentication;
+namespace Jalismrs\Stalactite\Client\Authentication;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
-use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Response;
 use function array_merge;
 
+/**
+ * TrustedAppClient
+ *
+ * @package Jalismrs\Stalactite\Client\Authentication
+ */
 class TrustedAppClient extends
     AbstractClient
 {
@@ -47,7 +52,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -100,7 +105,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -143,7 +148,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $trustedApp->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -199,7 +204,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -247,7 +252,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -295,7 +300,7 @@ class TrustedAppClient extends
         );
         
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $trustedApp->getUid() . '/authToken/reset',
+            $this->host . self::API_URL_PREFIX . '/' . $trustedApp->getUid() . '/authToken/reset',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

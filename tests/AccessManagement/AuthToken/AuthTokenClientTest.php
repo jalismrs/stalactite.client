@@ -1,30 +1,46 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Test\AccessManagement\AuthToken;
+namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken;
 
-use jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
+use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 
-class AuthTokenClientTest extends TestCase
+/**
+ * AuthTokenClientTest
+ *
+ * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
+ */
+class AuthTokenClientTest extends
+    TestCase
 {
-    public function testGenerateAuthTokenJwt(): void
+    /**
+     * testGenerateAuthTokenJwt
+     *
+     * @return void
+     *
+     * @throws \BadMethodCallException
+     * @throws \OutOfBoundsException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testGenerateAuthTokenJwt() : void
     {
         $apiToken = 'fake api token';
-        $token = AuthTokenClient::generateJwt($apiToken, 'client.test');
-
+        $token    = AuthTokenClient::generateJwt($apiToken, 'client.test');
+        
         $validation = new ValidationData();
         $validation->setAudience(AuthTokenClient::JWT_AUDIENCE);
-
-        $this->assertFalse($token->isExpired());
-        $this->assertTrue($token->hasClaim('challenge'));
-        $this->assertTrue($token->validate($validation));
-
+        
+        self::assertFalse($token->isExpired());
+        self::assertTrue($token->hasClaim('challenge'));
+        self::assertTrue($token->validate($validation));
+        
         $challenge = $token->getClaim('challenge');
-        $signer = new Sha256();
-
-        $this->assertTrue($token->verify($signer, $challenge . $apiToken));
+        $signer    = new Sha256();
+        
+        self::assertTrue($token->verify($signer, $challenge . $apiToken));
     }
 }

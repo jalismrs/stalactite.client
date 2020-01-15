@@ -1,8 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement\Model;
+namespace Jalismrs\Stalactite\Client\AccessManagement\Model;
 
+/**
+ * AccessClearance
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement\Model
+ */
 class AccessClearance
 {
     public const NO_ACCESS = null;
@@ -14,11 +19,20 @@ class AccessClearance
 
     /** @var string|null $accessType */
     private $accessType;
-
-    public function __construct(bool $hasAccess = false, ?string $accessType = self::NO_ACCESS)
+    
+    /**
+     * AccessClearance constructor.
+     *
+     * @param bool        $hasAccess
+     * @param string|null $accessType
+     */
+    public function __construct(
+        bool $hasAccess = false,
+        string $accessType = null
+    )
     {
         $this->access = $hasAccess;
-        $this->accessType = $accessType;
+        $this->accessType = $accessType ?? self::NO_ACCESS;
     }
 
     /**

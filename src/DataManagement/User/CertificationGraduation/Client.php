@@ -1,24 +1,31 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\User;
+namespace Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
-class PostClient extends
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation
+ */
+class Client extends
     AbstractClient
 {
-    public const API_URL_PREFIX = '/posts';
+    private const API_PARENT_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\User\Client::API_URL_PREFIX;
+    public const API_URL_PREFIX = '/certifications';
     
     /**
      * @param User   $user
@@ -34,22 +41,22 @@ class PostClient extends
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'        => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error'          => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts'   => [
+                'certifications' => [
                     'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::POST
+                    'schema' => Schema::CERTIFICATION_GRADUATION
                 ]
             ]
         );
     
         $r = $this->requestGet(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -58,43 +65,50 @@ class PostClient extends
             $schema
         );
         
-        $posts = [];
-        foreach ($r['posts'] as $post) {
-            $posts[] = ModelFactory::createPost($post);
+        $certifications = [];
+        foreach ($r['certifications'] as $certification) {
+            $certifications[] = ModelFactory::createCertificationGraduation($certification);
         }
         
         return new Response(
             $r['success'],
             $r['error'],
             [
-                'posts' => $posts
+                'certifications' => $certifications
             ]
         );
     }
     
     /**
-     * @param User   $user
-     * @param array  $posts
-     * @param string $jwt
+     * @param User                    $user
+     * @param CertificationGraduation $certificationGraduation
+     * @param string                  $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addPosts(User $user, array $posts, string $jwt) : Response
+    public function addCertification(
+        User $user,
+        CertificationGraduation $certificationGraduation,
+        string $jwt
+    ) : Response
     {
-        $body = ['posts' => []];
-        
-        foreach ($posts as $post) {
-            if (!($post instanceof Post)) {
-                throw new ClientException('$posts array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-            }
-            
-            if ($post->getUid() !== null) {
-                $body['posts'][] = $post->getUid();
-            }
+        if (!$certificationGraduation->getType() instanceof CertificationType) {
+            throw new ClientException(
+                'Certification Graduation type must be a Certification Type',
+                ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
+            );
         }
+        
+        $body = [
+            'date' => $certificationGraduation->getDate(),
+            'type' => [
+                'uid' => $certificationGraduation->getType()
+                                                 ->getUid()
+            ]
+        ];
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -105,12 +119,12 @@ class PostClient extends
                 'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
-                ]
+                ],
             ]
         );
     
         $r = $this->requestPost(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -127,29 +141,21 @@ class PostClient extends
     }
     
     /**
-     * @param User   $user
-     * @param array  $posts
-     * @param string $jwt
+     * @param User                    $user
+     * @param CertificationGraduation $certificationGraduation
+     * @param string                  $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function removePosts(User $user, array $posts, string $jwt) : Response
+    public function removeCertification(
+        User $user,
+        CertificationGraduation $certificationGraduation,
+        string $jwt
+    ) : Response
     {
-        $body = ['posts' => []];
-        
-        foreach ($posts as $post) {
-            if (!($post instanceof Post)) {
-                throw new ClientException('$posts array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-            }
-            
-            if ($post->getUid() !== null) {
-                $body['posts'][] = $post->getUid();
-            }
-        }
-        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -164,12 +170,11 @@ class PostClient extends
         );
     
         $r = $this->requestDelete(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $certificationGraduation->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
-                ],
-                'json'    => $body
+                ]
             ],
             $schema
         );

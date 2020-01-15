@@ -1,38 +1,47 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\Customer;
+namespace Jalismrs\Stalactite\Client\DataManagement\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Client;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
-class CustomerClient extends
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\Customer
+ */
+class Client extends
     AbstractClient
 {
-    public const API_URL_PREFIX = Client::API_URL_PREFIX . '/customers';
-    
-    /** @var MeClient $meClient */
-    private $meClient;
+    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/customers';
     
     /**
-     * @return MeClient
+     * me
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Me\Client
      */
-    public function me() : MeClient
+    public function me() : Me\Client
     {
-        if (!($this->meClient instanceof MeClient)) {
-            $this->meClient = new MeClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Me\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->meClient;
+        return $client;
     }
     
     /**
@@ -61,9 +70,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -114,9 +123,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -165,9 +174,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -225,9 +234,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -277,9 +286,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $customer->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $customer->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -318,9 +327,9 @@ class CustomerClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

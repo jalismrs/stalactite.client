@@ -1,21 +1,26 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement;
+namespace Jalismrs\Stalactite\Client\AccessManagement;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
-use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Domain;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
+use Jalismrs\Stalactite\Client\Response;
 
+/**
+ * DomainClient
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement
+ */
 class DomainClient extends
     AbstractClient
 {
@@ -75,7 +80,7 @@ class DomainClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
+            $this->host . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -118,7 +123,11 @@ class DomainClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addUserRelation(Domain $domain, User $user, string $jwt) : Response
+    public function addUserRelation(
+        Domain $domain,
+        User $user,
+        string $jwt
+    ) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -139,7 +148,7 @@ class DomainClient extends
         );
     
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users',
+            $this->host . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/users',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -172,7 +181,11 @@ class DomainClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt) : Response
+    public function addCustomerRelation(
+        Domain $domain,
+        Customer $customer,
+        string $jwt
+    ) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -193,7 +206,7 @@ class DomainClient extends
         );
     
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers',
+            $this->host . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

@@ -1,24 +1,30 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\User;
+namespace Jalismrs\Stalactite\Client\DataManagement\User\Post;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
-class LeadClient extends
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\User\Post
+ */
+class Client extends
     AbstractClient
 {
-    public const API_URL_PREFIX = '/leads';
+    public const API_URL_PREFIX = '/posts';
+    private const API_PARENT_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\User\Client::API_URL_PREFIX;
     
     /**
      * @param User   $user
@@ -41,15 +47,15 @@ class LeadClient extends
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'leads'   => [
+                'posts'   => [
                     'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -58,23 +64,23 @@ class LeadClient extends
             $schema
         );
         
-        $leads = [];
-        foreach ($r['leads'] as $lead) {
-            $leads[] = ModelFactory::createPost($lead);
+        $posts = [];
+        foreach ($r['posts'] as $post) {
+            $posts[] = ModelFactory::createPost($post);
         }
         
         return new Response(
             $r['success'],
             $r['error'],
             [
-                'leads' => $leads
+                'posts' => $posts
             ]
         );
     }
     
     /**
      * @param User   $user
-     * @param array  $leads
+     * @param array  $posts
      * @param string $jwt
      *
      * @return Response
@@ -82,17 +88,20 @@ class LeadClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addLeads(User $user, array $leads, string $jwt) : Response
+    public function addPosts(User $user, array $posts, string $jwt) : Response
     {
-        $body = ['leads' => []];
+        $body = ['posts' => []];
         
-        foreach ($leads as $lead) {
-            if (!($lead instanceof Post)) {
-                throw new ClientException('$leads array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
+        foreach ($posts as $post) {
+            if (!$post instanceof Post) {
+                throw new ClientException(
+                    '$posts array parameter must be a Post model array',
+                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
+                );
             }
             
-            if ($lead->getUid() !== null) {
-                $body['leads'][] = $lead->getUid();
+            if (null !== $post->getUid()) {
+                $body['posts'][] = $post->getUid();
             }
         }
         
@@ -108,9 +117,9 @@ class LeadClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPost(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -128,7 +137,7 @@ class LeadClient extends
     
     /**
      * @param User   $user
-     * @param array  $leads
+     * @param array  $posts
      * @param string $jwt
      *
      * @return Response
@@ -136,17 +145,20 @@ class LeadClient extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function removeLeads(User $user, array $leads, string $jwt) : Response
+    public function removePosts(User $user, array $posts, string $jwt) : Response
     {
-        $body = ['leads' => []];
+        $body = ['posts' => []];
         
-        foreach ($leads as $lead) {
-            if (!($lead instanceof Post)) {
-                throw new ClientException('$leads array parameter must be a Post model array', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
+        foreach ($posts as $post) {
+            if (!$post instanceof Post) {
+                throw new ClientException(
+                    '$posts array parameter must be a Post model array',
+                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
+                );
             }
             
-            if ($lead->getUid() !== null) {
-                $body['posts'][] = $lead->getUid();
+            if (null !== $post->getUid()) {
+                $body['posts'][] = $post->getUid();
             }
         }
         
@@ -162,9 +174,9 @@ class LeadClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestDelete(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

@@ -1,98 +1,127 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\User;
+namespace Jalismrs\Stalactite\Client\DataManagement\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Client;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
-class UserClient extends
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\User
+ */
+class Client extends
     AbstractClient
 {
-    public const API_URL_PREFIX = Client::API_URL_PREFIX . '/users';
-    
-    /** @var MeClient $meClient */
-    private $meClient;
-    
-    /** @var PostClient $postClient */
-    private $postClient;
-    
-    /** @var LeadClient $leadClient */
-    private $leadClient;
-    
-    /** @var CertificationGraduationClient $certificationClient */
-    private $certificationClient;
-    
-    /** @var PhoneLineClient $phoneClient */
-    private $phoneClient;
+    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/users';
     
     /**
-     * @return MeClient
+     * me
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Me\Client
      */
-    public function me() : MeClient
+    public function me() : Me\Client
     {
-        if (!($this->meClient instanceof MeClient)) {
-            $this->meClient = new MeClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Me\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->meClient;
+        return $client;
     }
     
     /**
-     * @return PostClient
+     * post
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Post\Client
      */
-    public function posts() : PostClient
+    public function post() : Post\Client
     {
-        if (!($this->postClient instanceof PostClient)) {
-            $this->postClient = new PostClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Post\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->postClient;
+        return $client;
     }
     
     /**
-     * @return LeadClient
+     * lead
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client
      */
-    public function leads() : LeadClient
+    public function lead() : Lead\Client
     {
-        if (!($this->leadClient instanceof LeadClient)) {
-            $this->leadClient = new LeadClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Lead\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->leadClient;
+        return $client;
     }
     
     /**
-     * @return CertificationGraduationClient
+     * certificationGraduation
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client
      */
-    public function certifications() : CertificationGraduationClient
+    public function certificationGraduation() : CertificationGraduation\Client
     {
-        if (!($this->certificationClient instanceof CertificationGraduationClient)) {
-            $this->certificationClient = new CertificationGraduationClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new CertificationGraduation\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->certificationClient;
+        return $client;
     }
     
     /**
-     * @return PhoneLineClient
+     * phoneLine
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client
      */
-    public function phones() : PhoneLineClient
+    public function phoneLine() : PhoneLine\Client
     {
-        if (!($this->phoneClient instanceof PhoneLineClient)) {
-            $this->phoneClient = new PhoneLineClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new PhoneLine\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
         
-        return $this->phoneClient;
+        return $client;
     }
     
     /**
@@ -121,9 +150,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -174,9 +203,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -225,9 +254,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -289,9 +318,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -338,9 +367,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $user->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $user->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -379,9 +408,9 @@ class UserClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

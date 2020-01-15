@@ -1,15 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Authentication\Model;
+namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
 /**
  * Class ModelFactory
- * @package jalismrs\Stalactite\Client\Authentication\Model
+ * @package Jalismrs\Stalactite\Client\Authentication\Model
  * Factory to instantiate models from arrays
  */
 abstract class ModelFactory
 {
+    /**
+     * createTrustedApp
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp
+     */
     public static function createTrustedApp(array $data): TrustedApp
     {
         $ta = new TrustedApp();

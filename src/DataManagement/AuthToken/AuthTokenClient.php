@@ -1,104 +1,137 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\AuthToken;
+namespace Jalismrs\Stalactite\Client\DataManagement\AuthToken;
 
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\DataManagement\Client;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\DataManagement\Client;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 
-class AuthTokenClient extends AbstractClient
+/**
+ * AuthTokenClient
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\AuthToken
+ */
+class AuthTokenClient extends
+    AbstractClient
 {
     public const API_URL_PREFIX = Client::API_URL_PREFIX . '/auth-token';
-
+    
     private const JWT_DURATION = 60;
-
+    
     public const JWT_AUDIENCE = 'data.microservice';
-
-    /** @var UserClient $userClient */
-    private $userClient;
-
-    /** @var DomainClient $domainClient */
-    private $domainClient;
-
-    /** @var PostClient $postClient */
-    private $postClient;
-
-    /** @var CustomerClient $customerClient */
-    private $customerClient;
-
+    
     /**
-     * @param string $apiAuthToken
-     * @param string|null $userAgent
-     * @return Token
+     * generateJwt
+     *
+     * @static
+     *
+     * @param string      $apiAuthToken
+     * @param null|string $userAgent
+     *
+     * @return \Lcobucci\JWT\Token
      */
-    public static function generateJwt(string $apiAuthToken, ?string $userAgent): Token
-    {
-        $time = time();
+    public static function generateJwt(
+        string $apiAuthToken,
+        ?string $userAgent
+    ) : Token {
+        $time      = time();
         $challenge = sha1((string)$time);
-        $signer = new Sha256();
-
+        $signer    = new Sha256();
+        
         $builder = (new Builder())
             ->permittedFor(self::JWT_AUDIENCE)
             ->issuedAt($time)
             ->expiresAt($time + self::JWT_DURATION)
             ->withClaim('challenge', $challenge);
-
+        
         if ($userAgent) {
             $builder->issuedBy($userAgent);
         }
-
+        
         return $builder->getToken($signer, new Key($challenge . $apiAuthToken));
     }
-
+    
     /**
-     * @return UserClient
+     * users
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\UserClient
      */
-    public function users(): UserClient
+    public function users() : UserClient
     {
-        if (!($this->userClient instanceof UserClient)) {
-            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new UserClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->userClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return CustomerClient
+     * customers
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\CustomerClient
      */
-    public function customers(): CustomerClient
+    public function customers() : CustomerClient
     {
-        if (!($this->customerClient instanceof CustomerClient)) {
-            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new CustomerClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->customerClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return DomainClient
+     * domains
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\DomainClient
      */
-    public function domains(): DomainClient
+    public function domains() : DomainClient
     {
-        if (!($this->domainClient instanceof DomainClient)) {
-            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new DomainClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->domainClient;
+        
+        return $client;
     }
-
+    
     /**
-     * @return PostClient
+     * posts
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\PostClient
      */
-    public function posts(): PostClient
+    public function posts() : PostClient
     {
-        if (!($this->postClient instanceof PostClient)) {
-            $this->postClient = new PostClient($this->apiHost, $this->userAgent);
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new PostClient(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->postClient;
+        
+        return $client;
     }
 }

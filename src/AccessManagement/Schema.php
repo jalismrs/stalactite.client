@@ -1,11 +1,16 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement;
+namespace Jalismrs\Stalactite\Client\AccessManagement;
 
 use hunomina\Validator\Json\Rule\JsonRule;
-use jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
+use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 
+/**
+ * Schema
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement
+ */
 abstract class Schema
 {
     public const ACCESS_CLEARANCE = [

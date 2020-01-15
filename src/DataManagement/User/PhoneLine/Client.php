@@ -1,24 +1,31 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement\User;
+namespace Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
-use jalismrs\Stalactite\Client\DataManagement\Schema;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
+use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\Response;
 
-class PhoneLineClient extends
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine
+ */
+class Client extends
     AbstractClient
 {
+    private const API_PARENT_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\User\Client::API_URL_PREFIX;
+    
     public const API_URL_PREFIX = '/phone/lines';
     
     /**
@@ -48,9 +55,9 @@ class PhoneLineClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestGet(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -85,8 +92,11 @@ class PhoneLineClient extends
      */
     public function addPhoneLine(User $user, PhoneLine $phoneLine, string $jwt) : Response
     {
-        if (!($phoneLine->getType() instanceof PhoneType)) {
-            throw new ClientException('Phone Line type must be a Phone Type', ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
+        if (!$phoneLine->getType() instanceof PhoneType) {
+            throw new ClientException(
+                'Phone Line type must be a Phone Type',
+                ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
+            );
         }
         
         $body = [
@@ -109,9 +119,9 @@ class PhoneLineClient extends
                 ],
             ]
         );
-    
+        
         $r = $this->requestPost(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -151,9 +161,9 @@ class PhoneLineClient extends
                 ]
             ]
         );
-    
+        
         $r = $this->requestDelete(
-            $this->apiHost . UserClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $phoneLine->getUid(),
+            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $phoneLine->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

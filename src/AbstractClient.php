@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Schema\JsonSchema;
@@ -12,46 +12,60 @@ use Throwable;
 /**
  * AbstractClient
  *
- * @package jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Client
  */
 abstract class AbstractClient
 {
     /**
      * @var string
      */
-    protected $apiHost;
+    protected $host;
+    /**
+     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
+     */
+    protected $httpClient;
     /**
      * @var null|string
      */
     protected $userAgent;
     
     /**
-     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
-     */
-    private $httpClient;
-    
-    /**
      * AbstractClient constructor.
      *
-     * @param string      $apiHost
-     * @param null|string $userAgent
+     * @param string                                                 $host
+     * @param string|null                                            $userAgent
+     * @param \Symfony\Contracts\HttpClient\HttpClientInterface|null $httpClient
      */
     public function __construct(
-        string $apiHost,
-        ?string $userAgent = null
+        string $host,
+        string $userAgent = null,
+        HttpClientInterface $httpClient = null
     ) {
-        $this->apiHost   = $apiHost;
+        $this->host      = $host;
         $this->userAgent = $userAgent;
         
-        $this->httpClient = null !== $userAgent
-            ? HttpClient::create(
-                [
-                    'headers' => [
-                        'User-Agent' => $this->userAgent,
-                    ],
-                ]
-            )
-            : HttpClient::create();
+        $this->httpClient = $httpClient;
+        if (null === $this->httpClient) {
+            $this->httpClient = null !== $userAgent
+                ? HttpClient::create(
+                    [
+                        'headers' => [
+                            'User-Agent' => $this->userAgent,
+                        ],
+                    ]
+                )
+                : HttpClient::create();
+        }
+    }
+    
+    /**
+     * getHost
+     *
+     * @return string
+     */
+    public function getHost() : string
+    {
+        return $this->host;
     }
     
     /**
@@ -65,18 +79,13 @@ abstract class AbstractClient
     }
     
     /**
-     * setHttpClient
+     * getUserAgent
      *
-     * @param \Symfony\Contracts\HttpClient\HttpClientInterface $httpClient
-     *
-     * @return $this
+     * @return null|string
      */
-    public function setHttpClient(
-        HttpClientInterface $httpClient
-    ) : self {
-        $this->httpClient = $httpClient;
-        
-        return $this;
+    public function getUserAgent() : ?string
+    {
+        return $this->userAgent;
     }
     
     /**
@@ -89,7 +98,7 @@ abstract class AbstractClient
      * @return array
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     final protected function requestDelete(
         string $url,
@@ -114,7 +123,7 @@ abstract class AbstractClient
      * @return array
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     final protected function requestGet(
         string $url,
@@ -139,7 +148,7 @@ abstract class AbstractClient
      * @return array
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     final protected function requestPost(
         string $url,
@@ -164,7 +173,7 @@ abstract class AbstractClient
      * @return array
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     final protected function requestPut(
         string $url,
@@ -192,7 +201,7 @@ abstract class AbstractClient
      * @return array
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     final protected function request(
         string $method,
@@ -202,7 +211,7 @@ abstract class AbstractClient
     ) : array {
         try {
             $response = $this
-                ->getHttpClient()
+                ->httpClient
                 ->request(
                     $method,
                     $url,
@@ -234,6 +243,14 @@ abstract class AbstractClient
             );
         }
         
-        return $data->getData() ?? [];
+        $response = $data->getData();
+        if (null === $response) {
+            throw new ClientException(
+                'Invalid response from Stalactite API: response is null',
+                ClientException::INVALID_API_RESPONSE_ERROR
+            );
+        }
+        
+        return $response;
     }
 }

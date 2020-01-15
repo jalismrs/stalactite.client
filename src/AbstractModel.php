@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
 /**
  * AbstractModel
  *
- * @package jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Client
  */
 abstract class AbstractModel
 {
@@ -30,7 +30,7 @@ abstract class AbstractModel
      *
      * @param null|string $uid
      *
-     * @return \jalismrs\Stalactite\Client\AbstractModel
+     * @return \Jalismrs\Stalactite\Client\AbstractModel
      */
     public function setUid(?string $uid) : AbstractModel
     {

@@ -1,17 +1,22 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement;
+namespace Jalismrs\Stalactite\Client\AccessManagement;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelation;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelation;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Response;
 
+/**
+ * RelationClient
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement
+ */
 class RelationClient extends
     AbstractClient
 {
@@ -42,7 +47,7 @@ class RelationClient extends
         );
     
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $domainRelation->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $domainRelation->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

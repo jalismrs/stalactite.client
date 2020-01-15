@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement;
+namespace Jalismrs\Stalactite\Client\DataManagement;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 
 /**
  * Schema
  *
- * @package jalismrs\Stalactite\Client\DataManagement
+ * @package Jalismrs\Stalactite\Client\DataManagement
  */
 abstract class Schema
 {

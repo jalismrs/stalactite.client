@@ -1,19 +1,19 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\DataManagement;
+namespace Jalismrs\Stalactite\Client\DataManagement;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use Jalismrs\Stalactite\Client\Response;
 
 /**
- * PostClient
+ * Client
  *
- * @package jalismrs\Stalactite\Client\DataManagement
+ * @package Jalismrs\Stalactite\Client\DataManagement
  */
 class PostClient extends
     AbstractClient
@@ -25,11 +25,11 @@ class PostClient extends
      *
      * @param string $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function getAll(string $jwt) : Response
     {
@@ -51,7 +51,7 @@ class PostClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -80,11 +80,11 @@ class PostClient extends
      * @param string $uid
      * @param string $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function get(string $uid, string $jwt) : Response
     {
@@ -107,7 +107,7 @@ class PostClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -130,14 +130,14 @@ class PostClient extends
     /**
      * create
      *
-     * @param \jalismrs\Stalactite\Client\DataManagement\Model\Post $post
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\Post $post
      * @param string                                                $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function create(Post $post, string $jwt) : Response
     {
@@ -167,7 +167,7 @@ class PostClient extends
         );
     
         $r = $this->requestPost(
-            $this->apiHost . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -191,14 +191,14 @@ class PostClient extends
     /**
      * update
      *
-     * @param \jalismrs\Stalactite\Client\DataManagement\Model\Post $post
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\Post $post
      * @param string                                                $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function update(Post $post, string $jwt) : Response
     {
@@ -223,7 +223,7 @@ class PostClient extends
         );
         
         $r = $this->requestPut(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $post->getUid(),
+            $this->host . self::API_URL_PREFIX . '/' . $post->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -245,11 +245,11 @@ class PostClient extends
      * @param string $uid
      * @param string $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function delete(string $uid, string $jwt) : Response
     {
@@ -267,7 +267,7 @@ class PostClient extends
         );
     
         $r = $this->requestDelete(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PREFIX . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -288,11 +288,11 @@ class PostClient extends
      * @param string $uid
      * @param string $jwt
      *
-     * @return \jalismrs\Stalactite\Client\Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \jalismrs\Stalactite\Client\ClientException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function getUsers(string $uid, string $jwt) : Response
     {
@@ -314,7 +314,7 @@ class PostClient extends
         );
     
         $r = $this->requestGet(
-            $this->apiHost . self::API_URL_PREFIX . '/' . $uid . '/users',
+            $this->host . self::API_URL_PREFIX . '/' . $uid . '/users',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

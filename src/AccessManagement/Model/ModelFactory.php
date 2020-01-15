@@ -1,46 +1,79 @@
 <?php
 declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement\Model;
+namespace Jalismrs\Stalactite\Client\AccessManagement\Model;
 
-use jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory as DataManagementModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory as DataManagementModelFactory;
 
+/**
+ * ModelFactory
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement\Model
+ */
 abstract class ModelFactory
 {
     /**
      * @param array $data
+     *
      * @return DomainUserRelation
      */
-    public static function createDomainUserRelation(array $data): DomainUserRelation
+    public static function createDomainUserRelation(array $data) : DomainUserRelation
     {
         $dur = new DomainUserRelation();
-        $dur->setUser(isset($data['user']) ? DataManagementModelFactory::createUser($data['user']) : null)
-            ->setDomain(isset($data['domain']) ? DataManagementModelFactory::createDomain($data['domain']) : null)
+        $dur->setUser(
+            isset($data['user'])
+                ? DataManagementModelFactory::createUser($data['user'])
+                : null
+        )
+            ->setDomain(
+                isset($data['domain'])
+                    ? DataManagementModelFactory::createDomain($data['domain'])
+                    : null
+            )
             ->setUid($data['uid'] ?? null);
-
+        
         return $dur;
     }
-
+    
     /**
      * @param array $data
+     *
      * @return DomainCustomerRelation
      */
-    public static function createDomainCustomerRelation(array $data): DomainCustomerRelation
+    public static function createDomainCustomerRelation(array $data) : DomainCustomerRelation
     {
         $dcr = new DomainCustomerRelation();
-        $dcr->setCustomer(isset($data['customer']) ? DataManagementModelFactory::createCustomer($data['customer']) : null)
-            ->setDomain(isset($data['domain']) ? DataManagementModelFactory::createDomain($data['domain']) : null)
+        $dcr
+            ->setCustomer(
+                isset($data['customer'])
+                    ? DataManagementModelFactory::createCustomer($data['customer'])
+                    : null
+            )
+            ->setDomain(
+                isset($data['domain'])
+                    ? DataManagementModelFactory::createDomain($data['domain'])
+                    : null
+            )
             ->setUid($data['uid'] ?? null);
-
+        
         return $dcr;
     }
-
-    public static function createAccessClearance(array $data): AccessClearance
+    
+    /**
+     * createAccessClearance
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance
+     */
+    public static function createAccessClearance(array $data) : AccessClearance
     {
         $ac = new AccessClearance();
         $ac->setAccess($data['accessGranted'] ?? false)
-            ->setAccessType($data['accessType'] ?? AccessClearance::NO_ACCESS);
-
+           ->setAccessType($data['accessType'] ?? AccessClearance::NO_ACCESS);
+        
         return $ac;
     }
 }
