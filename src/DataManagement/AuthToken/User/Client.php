@@ -23,7 +23,7 @@ use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client as ParentClient;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/users';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/users';
     
     /**
      * @param string $apiAuthToken
@@ -59,7 +59,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -121,7 +121,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -182,7 +182,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

@@ -25,7 +25,7 @@ use Jalismrs\Stalactite\Client\Response;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/users';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/users';
     
     /*
      * -------------------------------------------------------------------------
@@ -94,7 +94,7 @@ class Client extends
         );
     
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/' . $user->getUid() . '/relations',
+            $this->host . self::API_URL_PART . '/' . $user->getUid() . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -148,7 +148,7 @@ class Client extends
         );
     
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/' . $user->getUid() . '/access/' . $domain->getUid(),
+            $this->host . self::API_URL_PART . '/' . $user->getUid() . '/access/' . $domain->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

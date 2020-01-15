@@ -22,7 +22,7 @@ use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client as ParentClient
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/domains';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/domains';
     
     /**
      * @param DomainModel $domain
@@ -54,7 +54,7 @@ class Client extends
         );
     
         $r = $this->requestDelete(
-            $this->host . self::API_URL_PREFIX . '/' . $domain->getUid() . '/relations',
+            $this->host . self::API_URL_PART . '/' . $domain->getUid() . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

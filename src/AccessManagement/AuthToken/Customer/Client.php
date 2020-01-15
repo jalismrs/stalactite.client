@@ -22,7 +22,7 @@ use Jalismrs\Stalactite\Client\Response;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/customers';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/customers';
     
     /**
      * @param CustomerModel $customer
@@ -56,7 +56,7 @@ class Client extends
         );
         
         $r = $this->requestDelete(
-            $this->host . self::API_URL_PREFIX . '/' . $customer->getUid() . '/relations',
+            $this->host . self::API_URL_PART . '/' . $customer->getUid() . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

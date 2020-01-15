@@ -23,7 +23,7 @@ use \Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/customers';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/customers';
     
     /*
      * -------------------------------------------------------------------------
@@ -83,7 +83,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -136,7 +136,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -187,7 +187,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -247,7 +247,7 @@ class Client extends
         );
         
         $r = $this->requestPost(
-            $this->host . self::API_URL_PREFIX,
+            $this->host . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -299,7 +299,7 @@ class Client extends
         );
         
         $r = $this->requestPut(
-            $this->host . self::API_URL_PREFIX . '/' . $customer->getUid(),
+            $this->host . self::API_URL_PART . '/' . $customer->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -340,7 +340,7 @@ class Client extends
         );
         
         $r = $this->requestDelete(
-            $this->host . self::API_URL_PREFIX . '/' . $uid,
+            $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

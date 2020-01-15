@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/auth-token';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/auth-token';
     
     /*
      * -------------------------------------------------------------------------

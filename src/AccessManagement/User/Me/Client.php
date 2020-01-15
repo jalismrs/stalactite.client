@@ -24,7 +24,7 @@ use Jalismrs\Stalactite\Client\AccessManagement\User\Client as ParentClient;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/me';
+    public const API_URL_PART = ParentClient::API_URL_PART . '/me';
     
     /**
      * @param string $jwt
@@ -62,7 +62,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/relations',
+            $this->host . self::API_URL_PART . '/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -114,7 +114,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . self::API_URL_PREFIX . '/access/' . $domain->getUid(),
+            $this->host . self::API_URL_PART . '/access/' . $domain->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

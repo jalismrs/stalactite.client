@@ -20,8 +20,8 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class JwtValidationTest extends
     TestCase
 {
-    private const TEST_RSA_PUBLIC_KEY  = __DIR__ . '/keys/public.pem';
     private const TEST_RSA_PRIVATE_KEY = __DIR__ . '/keys/private.pem';
+    private const TEST_RSA_PUBLIC_KEY  = __DIR__ . '/keys/public.pem';
     
     /**
      * getTestPublicKey

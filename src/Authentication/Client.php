@@ -28,7 +28,7 @@ use function in_array;
 class Client extends
     ClientAbstract
 {
-    public const  API_URL_PREFIX       = '/auth';
+    public const  API_URL_PART       = '/auth';
     
     public const JWT_ISSUER = 'stalactite.auth-api';
     
@@ -83,7 +83,7 @@ class Client extends
                 ->httpClient
                 ->request(
                     'GET',
-                    $this->host . self::API_URL_PREFIX . '/publicKey'
+                    $this->host . self::API_URL_PART . '/publicKey'
                 )
                 ->getContent();
         } catch (Throwable $throwable) {
@@ -208,7 +208,7 @@ class Client extends
         );
         
         $r = $this->requestPost(
-            $this->host . self::API_URL_PREFIX . '/login',
+            $this->host . self::API_URL_PART . '/login',
             ['json' => $data],
             $schema
         );

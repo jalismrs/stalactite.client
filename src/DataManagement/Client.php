@@ -13,7 +13,7 @@ use Jalismrs\Stalactite\Client\ClientAbstract;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = '/data';
+    public const API_URL_PART = '/data';
     
     /*
      * -------------------------------------------------------------------------

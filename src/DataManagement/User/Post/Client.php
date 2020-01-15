@@ -24,7 +24,7 @@ use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = '/posts';
+    public const API_URL_PART = '/posts';
     
     /**
      * @param UserModel $user
@@ -55,7 +55,7 @@ class Client extends
         );
         
         $r = $this->requestGet(
-            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -119,7 +119,7 @@ class Client extends
         );
         
         $r = $this->requestPost(
-            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -176,7 +176,7 @@ class Client extends
         );
         
         $r = $this->requestDelete(
-            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
