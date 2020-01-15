@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\AccessManagement\User\Client as ParentClient;
 
 /**
  * Client
@@ -23,7 +24,7 @@ use Jalismrs\Stalactite\Client\Response;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\AccessManagement\User\Client::API_URL_PREFIX . '/me';
+    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/me';
     
     /**
      * @param string $jwt

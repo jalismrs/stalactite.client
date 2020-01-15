@@ -27,20 +27,6 @@ abstract class Schema
         ]
     ];
     
-    public const DOMAIN_USER_RELATION = [
-        'uid'    => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'domain' => [
-            'type'   => JsonRule::OBJECT_TYPE,
-            'schema' => DataManagementSchema::DOMAIN
-        ],
-        'user'   => [
-            'type'   => JsonRule::OBJECT_TYPE,
-            'schema' => DataManagementSchema::MINIMAL_USER
-        ]
-    ];
-    
     public const DOMAIN_CUSTOMER_RELATION = [
         'uid'      => [
             'type' => JsonRule::STRING_TYPE
@@ -52,6 +38,20 @@ abstract class Schema
         'customer' => [
             'type'   => JsonRule::OBJECT_TYPE,
             'schema' => DataManagementSchema::CUSTOMER
+        ]
+    ];
+    
+    public const DOMAIN_USER_RELATION = [
+        'uid'    => [
+            'type' => JsonRule::STRING_TYPE
+        ],
+        'domain' => [
+            'type'   => JsonRule::OBJECT_TYPE,
+            'schema' => DataManagementSchema::DOMAIN
+        ],
+        'user'   => [
+            'type'   => JsonRule::OBJECT_TYPE,
+            'schema' => DataManagementSchema::MINIMAL_USER
         ]
     ];
 }

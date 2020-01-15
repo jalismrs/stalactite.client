@@ -10,9 +10,9 @@ namespace Jalismrs\Stalactite\Client\AccessManagement\Model;
  */
 class AccessClearanceModel
 {
+    public const ADMIN_ACCESS = 'admin';
     public const NO_ACCESS = null;
     public const USER_ACCESS = 'user';
-    public const ADMIN_ACCESS = 'admin';
 
     /** @var bool $access */
     private $access;

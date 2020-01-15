@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 
 /**
  * Client
@@ -22,7 +23,7 @@ use Jalismrs\Stalactite\Client\Response;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/users';
+    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/users';
     
     /*
      * -------------------------------------------------------------------------

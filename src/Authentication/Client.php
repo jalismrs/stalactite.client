@@ -28,9 +28,10 @@ use function in_array;
 class Client extends
     ClientAbstract
 {
+    public const  API_URL_PREFIX       = '/auth';
+    
     public const JWT_ISSUER = 'stalactite.auth-api';
     
-    public const  API_URL_PREFIX       = '/auth';
     private const AUTHORIZED_JWT_TYPES = [
         'user',
         'customer'
