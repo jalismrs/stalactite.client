@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Customer\Me\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\Customer\Me
+ * @package Jalismrs\Stalactite\Test\DataManagement\CustomerModel\Me
  */
 class ClientTest extends
     TestCase
@@ -63,7 +63,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            Customer::class,
+            CustomerModel::class,
             $response->getData()['me']
         );
     }

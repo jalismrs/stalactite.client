@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
+ * @package Jalismrs\Stalactite\Test\DataManagement\UserModel\PhoneLineModel
  */
 class ClientTest extends
     TestCase
@@ -65,7 +65,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            PhoneLine::class,
+            PhoneLineModel::class,
             $response->getData()['phoneLines']
         );
     }

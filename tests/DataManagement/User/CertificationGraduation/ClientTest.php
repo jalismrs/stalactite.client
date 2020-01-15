@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation
+ * @package Jalismrs\Stalactite\Test\DataManagement\UserModel\CertificationGraduationModel
  */
 class ClientTest extends
     TestCase
@@ -65,7 +65,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            CertificationGraduation::class,
+            CertificationGraduationModel::class,
             $response->getData()['certifications']
         );
     }

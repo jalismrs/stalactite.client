@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Test\Authentication;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 
 /**
  * ModelFactory
@@ -16,11 +16,11 @@ abstract class ModelFactory
      * getTestableTrustedApp
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp
+     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel
      */
-    public static function getTestableTrustedApp() : TrustedApp
+    public static function getTestableTrustedApp() : TrustedAppModel
     {
-        $model = new TrustedApp();
+        $model = new TrustedAppModel();
         $model
             ->setName('fake name')
             ->setGoogleOAuthClientId('qsdfghjklm')

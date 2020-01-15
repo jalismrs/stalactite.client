@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Test\DataManagement\PhoneType;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
-use Jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -16,7 +16,7 @@ use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\PhoneType
+ * @package Jalismrs\Stalactite\Test\DataManagement\PhoneTypeModel
  */
 class ClientTest extends
     TestCase
@@ -52,7 +52,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -64,7 +64,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            PhoneType::class,
+            PhoneTypeModel::class,
             $response->getData()['phoneTypes']
         );
     }
@@ -96,7 +96,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -137,7 +137,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -151,7 +151,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            PhoneType::class,
+            PhoneTypeModel::class,
             $response->getData()['phoneType']
         );
     }
@@ -182,7 +182,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -225,7 +225,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -238,7 +238,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            PhoneType::class,
+            PhoneTypeModel::class,
             $response->getData()['phoneType']
         );
     }
@@ -269,7 +269,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -308,7 +308,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -347,7 +347,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -386,7 +386,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -432,7 +432,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new PhoneTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

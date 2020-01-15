@@ -7,21 +7,22 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\DataManagement\Customer\Me
+ * @package Jalismrs\Stalactite\Client\DataManagement\CustomerModel\Me
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
-    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Customer\Client::API_URL_PREFIX . '/me';
+    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/me';
     
     /**
      * @param string $jwt

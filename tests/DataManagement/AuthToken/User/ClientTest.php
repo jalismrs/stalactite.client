@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\UserClient;
-use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\User\Client;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\User
+ * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\UserModel
  */
 class ClientTest extends
     TestCase
@@ -52,7 +52,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -64,7 +64,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            User::class,
+            UserModel::class,
             $response->getData()['users']
         );
     }
@@ -95,7 +95,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -136,7 +136,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -149,7 +149,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
+            UserModel::class,
             $response->getData()['user']
         );
     }
@@ -180,7 +180,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -222,7 +222,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -236,7 +236,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
+            UserModel::class,
             $response->getData()['user']
         );
     }
@@ -267,7 +267,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new UserClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

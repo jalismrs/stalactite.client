@@ -7,20 +7,20 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\DataManagement\User
+ * @package Jalismrs\Stalactite\Client\DataManagement\UserModel
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
     public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/users';
     
@@ -281,15 +281,15 @@ class Client extends
     }
     
     /**
-     * @param User   $user
-     * @param string $jwt
+     * @param UserModel $user
+     * @param string    $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function create(User $user, string $jwt) : Response
+    public function create(UserModel $user, string $jwt) : Response
     {
         $body = $user->asMinimalArray();
         
@@ -342,15 +342,15 @@ class Client extends
     }
     
     /**
-     * @param User   $user
-     * @param string $jwt
+     * @param UserModel $user
+     * @param string    $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(User $user, string $jwt) : Response
+    public function update(UserModel $user, string $jwt) : Response
     {
         $body = $user->asMinimalArray();
         unset($body['googleId'], $body['uid']);

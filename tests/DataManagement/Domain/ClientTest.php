@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Test\DataManagement\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\DomainClient;
-use Jalismrs\Stalactite\Client\DataManagement\Model\Domain;
+use Jalismrs\Stalactite\Client\DataManagement\Domain\Client;
+use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -16,7 +16,7 @@ use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\Domain
+ * @package Jalismrs\Stalactite\Test\DataManagement\DomainModel
  */
 class ClientTest extends
     TestCase
@@ -52,7 +52,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -64,7 +64,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            Domain::class,
+            DomainModel::class,
             $response->getData()['domains']
         );
     }
@@ -96,7 +96,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -137,7 +137,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -151,7 +151,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            Domain::class,
+            DomainModel::class,
             $response->getData()['domain']
         );
     }
@@ -182,7 +182,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -226,7 +226,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -240,7 +240,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            Domain::class,
+            DomainModel::class,
             $response->getData()['domains']
         );
     }
@@ -272,7 +272,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -316,7 +316,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -332,7 +332,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            Domain::class,
+            DomainModel::class,
             $response->getData()['domains']
         );
     }
@@ -364,7 +364,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -409,7 +409,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -422,7 +422,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            Domain::class,
+            DomainModel::class,
             $response->getData()['domain']
         );
     }
@@ -453,7 +453,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -492,7 +492,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -531,7 +531,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -570,7 +570,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -610,7 +610,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new DomainClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

@@ -7,22 +7,23 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\Customer;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use \Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\DataManagement\Customer
+ * @package Jalismrs\Stalactite\Client\DataManagement\CustomerModel
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
-    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/customers';
+    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/customers';
     
     /**
      * me
@@ -201,15 +202,15 @@ class Client extends
     }
     
     /**
-     * @param Customer $customer
-     * @param string   $jwt
+     * @param CustomerModel $customer
+     * @param string        $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function create(Customer $customer, string $jwt) : Response
+    public function create(CustomerModel $customer, string $jwt) : Response
     {
         $body = [
             'firstName' => $customer->getFirstName(),
@@ -258,15 +259,15 @@ class Client extends
     }
     
     /**
-     * @param Customer $customer
-     * @param string   $jwt
+     * @param CustomerModel $customer
+     * @param string        $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(Customer $customer, string $jwt) : Response
+    public function update(CustomerModel $customer, string $jwt) : Response
     {
         $body = [
             'firstName' => $customer->getFirstName(),

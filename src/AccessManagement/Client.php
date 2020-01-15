@@ -3,10 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\AccessManagement;
 
-use Jalismrs\Stalactite\Client\AbstractClient;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
-use Jalismrs\Stalactite\Client\AccessManagement\User\UserClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 
 /**
  * Client
@@ -14,21 +11,21 @@ use Jalismrs\Stalactite\Client\AccessManagement\User\UserClient;
  * @package Jalismrs\Stalactite\Client\AccessManagement
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
     public const API_URL_PREFIX = '/access';
     
     /**
-     * domains
+     * domain
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\DomainClient
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Domain\Client
      */
-    public function domains() : DomainClient
+    public function domain() : Domain\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new DomainClient(
+            $client = new Domain\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -39,16 +36,16 @@ class Client extends
     }
     
     /**
-     * users
+     * user
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\User\UserClient
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Client
      */
-    public function users() : UserClient
+    public function user() : User\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new UserClient(
+            $client = new User\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -59,16 +56,16 @@ class Client extends
     }
     
     /**
-     * customers
+     * customer
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Customer\Client
      */
-    public function customers() : CustomerClient
+    public function customer() : Customer\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new CustomerClient(
+            $client = new Customer\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -79,16 +76,16 @@ class Client extends
     }
     
     /**
-     * relations
+     * relation
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\RelationClient
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Relation\Client
      */
-    public function relations() : RelationClient
+    public function relation() : Relation\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new RelationClient(
+            $client = new Relation\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -101,14 +98,14 @@ class Client extends
     /**
      * authToken
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client
      */
-    public function authToken() : AuthTokenClient
+    public function authToken() : AuthToken\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new AuthTokenClient(
+            $client = new AuthToken\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient

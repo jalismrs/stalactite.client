@@ -8,8 +8,8 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
-use Jalismrs\Stalactite\Client\AbstractClient;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
@@ -26,7 +26,7 @@ use function in_array;
  * @package Jalismrs\Stalactite\Client\Authentication
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
     
@@ -143,15 +143,15 @@ class Client extends
     }
     
     /**
-     * @param TrustedApp $trustedApp
-     * @param string     $userGoogleJwt
+     * @param TrustedAppModel $trustedApp
+     * @param string          $userGoogleJwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function login(TrustedApp $trustedApp, string $userGoogleJwt) : Response
+    public function login(TrustedAppModel $trustedApp, string $userGoogleJwt) : Response
     {
         $data = [
             'appName'       => $trustedApp->getName(),
@@ -192,16 +192,16 @@ class Client extends
     }
     
     /**
-     * trustedApps
+     * trustedApp
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\TrustedAppClient
+     * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
      */
-    public function trustedApps() : TrustedAppClient
+    public function trustedApp() : TrustedApp\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new TrustedAppClient(
+            $client = new TrustedApp\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient

@@ -5,8 +5,8 @@ namespace Jalismrs\Stalactite\Test\Authentication\TrustedApp;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedAppClient;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\Authentication\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication\TrustedApp
+ * @package Jalismrs\Stalactite\Test\Authentication\TrustedAppModel
  */
 class ClientTest extends
     TestCase
@@ -52,7 +52,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -65,7 +65,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            TrustedApp::class,
+            TrustedAppModel::class,
             $response->getData()['trustedApps']
         );
     }
@@ -95,7 +95,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -136,7 +136,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -150,7 +150,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedApp::class,
+            TrustedAppModel::class,
             $response->getData()['trustedApp']
         );
     }
@@ -180,7 +180,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -223,7 +223,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -236,7 +236,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedApp::class,
+            TrustedAppModel::class,
             $response->getData()['trustedApp']
         );
     }
@@ -266,7 +266,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -305,7 +305,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -343,7 +343,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -382,7 +382,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -423,7 +423,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -468,7 +468,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -481,7 +481,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedApp::class,
+            TrustedAppModel::class,
             $response->getData()['trustedApp']
         );
     }
@@ -510,7 +510,7 @@ class ClientTest extends
             ]
         );
         
-        $mockClient = new TrustedAppClient(
+        $mockClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

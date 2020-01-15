@@ -5,9 +5,9 @@ namespace Jalismrs\Stalactite\Test\AccessManagement\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\AccessManagement\Customer\Client;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Customer
+ * @package Jalismrs\Stalactite\Test\AccessManagement\CustomerModel
  */
 class ClientTest extends
     TestCase
@@ -55,7 +55,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -69,7 +69,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            DomainCustomerRelation::class,
+            DomainCustomerRelationModel::class,
             $response->getData()['relations']
         );
     }
@@ -101,7 +101,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -143,7 +143,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -157,7 +157,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            AccessClearance::class,
+            AccessClearanceModel::class,
             $response->getData()['clearance']
         );
     }
@@ -188,7 +188,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

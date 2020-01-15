@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Test\DataManagement\User\Lead;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\Post;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\Lead
+ * @package Jalismrs\Stalactite\Test\DataManagement\UserModel\Lead
  */
 class ClientTest extends
     TestCase
@@ -65,7 +65,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            Post::class,
+            PostModel::class,
             $response->getData()['leads']
         );
     }

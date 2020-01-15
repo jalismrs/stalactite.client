@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Test\AccessManagement\Relation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\RelationClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Relation\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -47,7 +47,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new RelationClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -86,7 +86,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new RelationClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

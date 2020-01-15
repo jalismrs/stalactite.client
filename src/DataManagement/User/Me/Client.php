@@ -7,24 +7,25 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
-use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\DataManagement\User\Me
+ * @package Jalismrs\Stalactite\Client\DataManagement\UserModel\Me
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
-    public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\User\Client::API_URL_PREFIX . '/me';
+    public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/me';
     
     /**
      * @param string $jwt
@@ -76,15 +77,15 @@ class Client extends
     }
     
     /**
-     * @param User   $user
-     * @param string $jwt
+     * @param UserModel $user
+     * @param string    $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function update(User $user, string $jwt) : Response
+    public function update(UserModel $user, string $jwt) : Response
     {
         $body = [
             'firstName' => $user->getFirstName(),
@@ -124,17 +125,17 @@ class Client extends
     }
     
     /**
-     * @param PhoneLine $phoneLine
-     * @param string    $jwt
+     * @param PhoneLineModel $phoneLine
+     * @param string         $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function addPhoneLine(PhoneLine $phoneLine, string $jwt) : Response
+    public function addPhoneLine(PhoneLineModel $phoneLine, string $jwt) : Response
     {
-        if (!$phoneLine->getType() instanceof PhoneType) {
+        if (!$phoneLine->getType() instanceof PhoneTypeModel) {
             throw new ClientException(
                 'Phone Line type must be a Phone Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
@@ -180,15 +181,15 @@ class Client extends
     }
     
     /**
-     * @param PhoneLine $phoneLine
-     * @param string    $jwt
+     * @param PhoneLineModel $phoneLine
+     * @param string         $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function removePhoneLine(PhoneLine $phoneLine, string $jwt) : Response
+    public function removePhoneLine(PhoneLineModel $phoneLine, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(

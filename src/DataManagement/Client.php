@@ -3,8 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\DataManagement;
 
-use Jalismrs\Stalactite\Client\AbstractClient;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 
 /**
  * Client
@@ -12,7 +11,7 @@ use Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
  * @package Jalismrs\Stalactite\Client\DataManagement
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
     public const API_URL_PREFIX = '/data';
     
@@ -59,14 +58,14 @@ class Client extends
     /**
      * domain
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\DomainClient
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Domain\Client
      */
-    public function domain() : DomainClient
+    public function domain() : Domain\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new DomainClient(
+            $client = new Domain\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -79,14 +78,14 @@ class Client extends
     /**
      * post
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\PostClient
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Post\Client
      */
-    public function post() : PostClient
+    public function post() : Post\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new PostClient(
+            $client = new Post\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -99,14 +98,14 @@ class Client extends
     /**
      * certificationType
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationTypeClient
+     * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client
      */
-    public function certificationType() : CertificationTypeClient
+    public function certificationType() : CertificationType\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new CertificationTypeClient(
+            $client = new CertificationType\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -119,14 +118,14 @@ class Client extends
     /**
      * phoneType
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneTypeClient
+     * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client
      */
-    public function phoneType() : PhoneTypeClient
+    public function phoneType() : PhoneType\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new PhoneTypeClient(
+            $client = new PhoneType\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -139,14 +138,14 @@ class Client extends
     /**
      * authToken
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient
+     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client
      */
-    public function authToken() : AuthTokenClient
+    public function authToken() : AuthToken\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new AuthTokenClient(
+            $client = new AuthToken\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient

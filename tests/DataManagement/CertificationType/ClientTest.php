@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Test\DataManagement\CertificationType;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\CertificationTypeClient;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
+use Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -16,7 +16,7 @@ use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\CertificationType
+ * @package Jalismrs\Stalactite\Test\DataManagement\CertificationTypeModel
  */
 class ClientTest extends
     TestCase
@@ -52,7 +52,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -64,7 +64,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            CertificationType::class,
+            CertificationTypeModel::class,
             $response->getData()['certificationTypes']
         );
     }
@@ -96,7 +96,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -137,7 +137,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -151,7 +151,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CertificationType::class,
+            CertificationTypeModel::class,
             $response->getData()['certificationType']
         );
     }
@@ -182,7 +182,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -225,7 +225,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -238,7 +238,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CertificationType::class,
+            CertificationTypeModel::class,
             $response->getData()['certificationType']
         );
     }
@@ -269,7 +269,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -308,7 +308,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -347,7 +347,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -386,7 +386,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -426,7 +426,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CertificationTypeClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

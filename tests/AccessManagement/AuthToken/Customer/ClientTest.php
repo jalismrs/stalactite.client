@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\CustomerClient;
+use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Customer\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken\Customer
+ * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken\CustomerModel
  */
 class ClientTest extends
     TestCase
@@ -47,7 +47,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient
@@ -86,7 +86,7 @@ class ClientTest extends
             ]
         );
         
-        $mockAPIClient = new CustomerClient(
+        $mockAPIClient = new Client(
             'http://fakeClient',
             null,
             $mockHttpClient

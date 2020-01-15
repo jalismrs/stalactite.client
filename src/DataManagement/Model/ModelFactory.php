@@ -12,11 +12,12 @@ abstract class ModelFactory
 {
     /**
      * @param array $data
-     * @return User
+     *
+     * @return UserModel
      */
-    public static function createUser(array $data): User
+    public static function createUser(array $data) : UserModel
     {
-        $user = new User();
+        $user = new UserModel();
         $user->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
@@ -57,11 +58,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return Domain
+     *
+     * @return DomainModel
      */
-    public static function createDomain(array $data): Domain
+    public static function createDomain(array $data) : DomainModel
     {
-        $domain = new Domain();
+        $domain = new DomainModel();
         $domain->setName($data['name'] ?? null)
             ->setGenerationDate($data['generationDate'] ?? null)
             ->setExternalAuth($data['externalAuth'] ?? false)
@@ -74,11 +76,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return Customer
+     *
+     * @return CustomerModel
      */
-    public static function createCustomer(array $data): Customer
+    public static function createCustomer(array $data) : CustomerModel
     {
-        $customer = new Customer();
+        $customer = new CustomerModel();
         $customer->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
             ->setLastName($data['lastName'] ?? null)
@@ -90,11 +93,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return Post
+     *
+     * @return PostModel
      */
-    public static function createPost(array $data): Post
+    public static function createPost(array $data) : PostModel
     {
-        $post = new Post();
+        $post = new PostModel();
         $post->setName($data['name'] ?? null)
             ->setAdminAccess($data['adminAccess'] ?? false)
             ->setAccess($data['allowAccess'] ?? false)
@@ -106,11 +110,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return CertificationType
+     *
+     * @return CertificationTypeModel
      */
-    public static function createCertificationType(array $data): CertificationType
+    public static function createCertificationType(array $data) : CertificationTypeModel
     {
-        $ct = new CertificationType();
+        $ct = new CertificationTypeModel();
         $ct->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
 
@@ -119,11 +124,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return CertificationGraduation
+     *
+     * @return CertificationGraduationModel
      */
-    public static function createCertificationGraduation(array $data): CertificationGraduation
+    public static function createCertificationGraduation(array $data) : CertificationGraduationModel
     {
-        $cg = new CertificationGraduation();
+        $cg = new CertificationGraduationModel();
         $cg->setType($data['type'] ? self::createCertificationType($data['type']) : null)
             ->setDate($data['date'] ?? null)
             ->setUid($data['uid'] ?? null);
@@ -133,11 +139,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return PhoneType
+     *
+     * @return PhoneTypeModel
      */
-    public static function createPhoneType(array $data): PhoneType
+    public static function createPhoneType(array $data) : PhoneTypeModel
     {
-        $pt = new PhoneType();
+        $pt = new PhoneTypeModel();
         $pt->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
 
@@ -146,11 +153,12 @@ abstract class ModelFactory
 
     /**
      * @param array $data
-     * @return PhoneLine
+     *
+     * @return PhoneLineModel
      */
-    public static function createPhoneLine(array $data): PhoneLine
+    public static function createPhoneLine(array $data) : PhoneLineModel
     {
-        $pl = new PhoneLine();
+        $pl = new PhoneLineModel();
         $pl->setType($data['type'] ? self::createPhoneType($data['type']) : null)
             ->setValue($data['value'] ?? null)
             ->setUid($data['uid'] ?? null);

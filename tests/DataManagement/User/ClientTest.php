@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Test\DataManagement\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User
+ * @package Jalismrs\Stalactite\Test\DataManagement\UserModel
  */
 class ClientTest extends
     TestCase
@@ -64,7 +64,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            User::class,
+            UserModel::class,
             $response->getData()['users']
         );
     }
@@ -150,7 +150,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
+            UserModel::class,
             $response->getData()['user']
         );
     }
@@ -240,7 +240,7 @@ class ClientTest extends
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
+            UserModel::class,
             $response->getData()['user']
         );
     }
@@ -322,13 +322,13 @@ class ClientTest extends
         );
         
         $response = $mockAPIClient->create(
-            new User(),
+            new UserModel(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            User::class,
+            UserModel::class,
             $response->getData()['user']
         );
     }
@@ -366,7 +366,7 @@ class ClientTest extends
         );
         
         $mockAPIClient->create(
-            new User(),
+            new UserModel(),
             'fake user jwt'
         );
     }
@@ -405,7 +405,7 @@ class ClientTest extends
         );
         
         $response = $mockAPIClient->update(
-            new User(),
+            new UserModel(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -444,7 +444,7 @@ class ClientTest extends
         );
         
         $mockAPIClient->update(
-            new User(),
+            new UserModel(),
             'fake user jwt'
         );
     }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken;
 
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
@@ -33,10 +33,10 @@ class ClientTest extends
     public function testGenerateAuthTokenJwt() : void
     {
         $apiToken = 'fake api token';
-        $token    = AuthTokenClient::generateJwt($apiToken, 'client.test');
+        $token    = Client::generateJwt($apiToken, 'client.test');
         
         $validation = new ValidationData();
-        $validation->setAudience(AuthTokenClient::JWT_AUDIENCE);
+        $validation->setAudience(Client::JWT_AUDIENCE);
         
         self::assertFalse($token->isExpired());
         self::assertTrue($token->hasClaim('challenge'));

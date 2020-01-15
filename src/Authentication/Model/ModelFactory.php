@@ -17,11 +17,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp
+     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel
      */
-    public static function createTrustedApp(array $data): TrustedApp
+    public static function createTrustedApp(array $data): TrustedAppModel
     {
-        $ta = new TrustedApp();
+        $ta = new TrustedAppModel();
         $ta->setName($data['name'] ?? null)
             ->setResetToken($data['resetToken'] ?? null)
             ->setAuthToken($data['authToken'] ?? null)

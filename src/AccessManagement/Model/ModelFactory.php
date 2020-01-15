@@ -15,11 +15,11 @@ abstract class ModelFactory
     /**
      * @param array $data
      *
-     * @return DomainUserRelation
+     * @return DomainUserRelationModel
      */
-    public static function createDomainUserRelation(array $data) : DomainUserRelation
+    public static function createDomainUserRelation(array $data) : DomainUserRelationModel
     {
-        $dur = new DomainUserRelation();
+        $dur = new DomainUserRelationModel();
         $dur->setUser(
             isset($data['user'])
                 ? DataManagementModelFactory::createUser($data['user'])
@@ -38,11 +38,11 @@ abstract class ModelFactory
     /**
      * @param array $data
      *
-     * @return DomainCustomerRelation
+     * @return DomainCustomerRelationModel
      */
-    public static function createDomainCustomerRelation(array $data) : DomainCustomerRelation
+    public static function createDomainCustomerRelation(array $data) : DomainCustomerRelationModel
     {
-        $dcr = new DomainCustomerRelation();
+        $dcr = new DomainCustomerRelationModel();
         $dcr
             ->setCustomer(
                 isset($data['customer'])
@@ -66,13 +66,13 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel
      */
-    public static function createAccessClearance(array $data) : AccessClearance
+    public static function createAccessClearance(array $data) : AccessClearanceModel
     {
-        $ac = new AccessClearance();
+        $ac = new AccessClearanceModel();
         $ac->setAccess($data['accessGranted'] ?? false)
-           ->setAccessType($data['accessType'] ?? AccessClearance::NO_ACCESS);
+           ->setAccessType($data['accessType'] ?? AccessClearanceModel::NO_ACCESS);
         
         return $ac;
     }

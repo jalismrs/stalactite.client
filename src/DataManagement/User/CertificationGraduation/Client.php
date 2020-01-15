@@ -7,36 +7,36 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\AbstractClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation
+ * @package Jalismrs\Stalactite\Client\DataManagement\UserModel\CertificationGraduationModel
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
-    private const API_PARENT_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\User\Client::API_URL_PREFIX;
     public const API_URL_PREFIX = '/certifications';
     
     /**
-     * @param User   $user
-     * @param string $jwt
+     * @param UserModel $user
+     * @param string    $jwt
      *
      * @return Response
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getAll(User $user, string $jwt) : Response
+    public function getAll(UserModel $user, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -56,7 +56,7 @@ class Client extends
         );
     
         $r = $this->requestGet(
-            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -80,9 +80,9 @@ class Client extends
     }
     
     /**
-     * @param User                    $user
-     * @param CertificationGraduation $certificationGraduation
-     * @param string                  $jwt
+     * @param UserModel                    $user
+     * @param CertificationGraduationModel $certificationGraduation
+     * @param string                       $jwt
      *
      * @return Response
      * @throws ClientException
@@ -90,12 +90,12 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addCertification(
-        User $user,
-        CertificationGraduation $certificationGraduation,
+        UserModel $user,
+        CertificationGraduationModel $certificationGraduation,
         string $jwt
     ) : Response
     {
-        if (!$certificationGraduation->getType() instanceof CertificationType) {
+        if (!$certificationGraduation->getType() instanceof CertificationTypeModel) {
             throw new ClientException(
                 'Certification Graduation type must be a Certification Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
@@ -124,7 +124,7 @@ class Client extends
         );
     
         $r = $this->requestPost(
-            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
+            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX,
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -141,9 +141,9 @@ class Client extends
     }
     
     /**
-     * @param User                    $user
-     * @param CertificationGraduation $certificationGraduation
-     * @param string                  $jwt
+     * @param UserModel                    $user
+     * @param CertificationGraduationModel $certificationGraduation
+     * @param string                       $jwt
      *
      * @return Response
      * @throws ClientException
@@ -151,8 +151,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function removeCertification(
-        User $user,
-        CertificationGraduation $certificationGraduation,
+        UserModel $user,
+        CertificationGraduationModel $certificationGraduation,
         string $jwt
     ) : Response
     {
@@ -170,7 +170,7 @@ class Client extends
         );
     
         $r = $this->requestDelete(
-            $this->host . self::API_PARENT_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $certificationGraduation->getUid(),
+            $this->host . ParentClient::API_URL_PREFIX . '/' . $user->getUid() . self::API_URL_PREFIX . '/' . $certificationGraduation->getUid(),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

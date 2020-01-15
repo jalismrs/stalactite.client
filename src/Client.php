@@ -9,7 +9,7 @@ namespace Jalismrs\Stalactite\Client;
  * @package Jalismrs\Stalactite\Client
  */
 class Client extends
-    AbstractClient
+    ClientAbstract
 {
     
     /**
