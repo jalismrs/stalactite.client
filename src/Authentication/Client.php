@@ -36,6 +36,36 @@ class Client extends
         'customer'
     ];
     
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    /**
+     * clientTrustedApp
+     *
+     * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
+     */
+    public function clientTrustedApp() : TrustedApp\Client
+    {
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new TrustedApp\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * API ---------------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
      * getRSAPublicKey
      *
@@ -189,26 +219,6 @@ class Client extends
                 'jwt' => $r['jwt']
             ]
         );
-    }
-    
-    /**
-     * trustedApp
-     *
-     * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
-     */
-    public function trustedApp() : TrustedApp\Client
-    {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new TrustedApp\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-        
-        return $client;
     }
     
     /**

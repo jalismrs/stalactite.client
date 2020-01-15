@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client;
+use Jalismrs\Stalactite\Test\ClientTestTrait;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -21,6 +22,138 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 class ClientTest extends
     TestCase
 {
+    use ClientTestTrait;
+    
+    /**
+     * testClientCertificationGraduation
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientCertificationGraduation() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientCertificationGraduation();
+        $client2 = $baseClient->clientCertificationGraduation();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientLead
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientLead() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientLead();
+        $client2 = $baseClient->clientLead();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientMe
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientMe() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientMe();
+        $client2 = $baseClient->clientMe();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientPhoneLine
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientPhoneLine() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientPhoneLine();
+        $client2 = $baseClient->clientPhoneLine();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientPost
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientPost() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientPost();
+        $client2 = $baseClient->clientPost();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
     /**
      * testGetAll
      *

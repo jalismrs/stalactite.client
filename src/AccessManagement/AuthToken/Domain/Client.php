@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
@@ -34,7 +35,7 @@ class Client extends
      */
     public function deleteRelationsByDomain(DomainModel $domain, string $apiAuthToken) : Response
     {
-        $jwt = ParentClient::generateJwt(
+        $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );

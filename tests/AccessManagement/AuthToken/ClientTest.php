@@ -4,9 +4,12 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken;
 
 use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client;
+use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\JwtFactory;
+use Jalismrs\Stalactite\Test\ClientTestTrait;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * ClientTest
@@ -16,6 +19,86 @@ use PHPUnit\Framework\TestCase;
 class ClientTest extends
     TestCase
 {
+    use ClientTestTrait;
+    
+    /**
+     * testClientCustomer
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientCustomer() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientCustomer();
+        $client2 = $baseClient->clientCustomer();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientDomain
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientDomain() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientDomain();
+        $client2 = $baseClient->clientDomain();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
+    /**
+     * testClientUser
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     */
+    public function testClientUser() : void
+    {
+        $baseClient = new Client(
+            'http://fakeClient',
+            null,
+            new MockHttpClient()
+        );
+        
+        $client1 = $baseClient->clientUser();
+        $client2 = $baseClient->clientUser();
+        
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
+    }
+    
     /**
      * testGenerateAuthTokenJwt
      *
@@ -29,10 +112,10 @@ class ClientTest extends
     public function testGenerateAuthTokenJwt() : void
     {
         $apiToken = 'fake api token';
-        $token    = Client::generateJwt($apiToken, 'client.test');
+        $token    = JwtFactory::generateJwt($apiToken, 'client.test');
         
         $validation = new ValidationData();
-        $validation->setAudience(Client::JWT_AUDIENCE);
+        $validation->setAudience(JwtFactory::JWT_AUDIENCE);
         
         self::assertFalse($token->isExpired());
         self::assertTrue($token->hasClaim('challenge'));

@@ -24,72 +24,17 @@ class Client extends
 {
     public const API_URL_PREFIX = \Jalismrs\Stalactite\Client\DataManagement\Client::API_URL_PREFIX . '/users';
     
-    /**
-     * me
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Me\Client
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
      */
-    public function me() : Me\Client
-    {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Me\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-        
-        return $client;
-    }
-    
     /**
-     * post
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Post\Client
-     */
-    public function post() : Post\Client
-    {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Post\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-        
-        return $client;
-    }
-    
-    /**
-     * lead
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client
-     */
-    public function lead() : Lead\Client
-    {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Lead\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-        
-        return $client;
-    }
-    
-    /**
-     * certificationGraduation
+     * clientCertificationGraduation
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client
      */
-    public function certificationGraduation() : CertificationGraduation\Client
+    public function clientCertificationGraduation() : CertificationGraduation\Client
     {
         static $client = null;
         
@@ -105,11 +50,51 @@ class Client extends
     }
     
     /**
-     * phoneLine
+     * clientLead
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client
+     */
+    public function clientLead() : Lead\Client
+    {
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Lead\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
+    }
+    
+    /**
+     * clientMe
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Me\Client
+     */
+    public function clientMe() : Me\Client
+    {
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Me\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
+    }
+    
+    /**
+     * clientPhoneLine
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client
      */
-    public function phoneLine() : PhoneLine\Client
+    public function clientPhoneLine() : PhoneLine\Client
     {
         static $client = null;
         
@@ -124,6 +109,31 @@ class Client extends
         return $client;
     }
     
+    /**
+     * clientPost
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Post\Client
+     */
+    public function clientPost() : Post\Client
+    {
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Post\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * API ---------------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
      * @param string $jwt
      *

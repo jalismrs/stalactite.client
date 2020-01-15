@@ -9,6 +9,7 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
@@ -35,7 +36,7 @@ class Client extends
     public function getAll(
         string $apiAuthToken
     ) : Response {
-        $jwt = ParentClient::generateJwt(
+        $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
@@ -96,7 +97,7 @@ class Client extends
         string $googleId,
         string $apiAuthToken
     ) : Response {
-        $jwt = ParentClient::generateJwt(
+        $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
@@ -157,7 +158,7 @@ class Client extends
         string $uid,
         string $apiAuthToken
     ) : Response {
-        $jwt = ParentClient::generateJwt(
+        $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );

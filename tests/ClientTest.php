@@ -15,15 +15,17 @@ use Symfony\Component\HttpClient\MockHttpClient;
 class ClientTest extends
     TestCase
 {
+    use ClientTestTrait;
+    
     /**
-     * testAccessManagement
+     * testClientAccessManagement
      *
      * @return void
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testAccessManagement() : void
+    public function testClientAccessManagement() : void
     {
         $baseClient = new Client(
             'http://fakeClient',
@@ -31,24 +33,25 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->accessManagement();
-        $client2 = $baseClient->accessManagement();
-        
-        self::assertSame($baseClient->getHost(), $client1->getHost());
-        self::assertSame($baseClient->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($baseClient->getUserAgent(), $client1->getUserAgent());
-        self::assertSame($client1, $client2);
+        $client1 = $baseClient->clientAccessManagement();
+        $client2 = $baseClient->clientAccessManagement();
+    
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
     }
     
     /**
-     * testAuth
+     * testClientAuthentification
      *
      * @return void
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testAuth() : void
+    public function testClientAuthentification() : void
     {
         $baseClient = new Client(
             'http://fakeClient',
@@ -56,24 +59,25 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->authentification();
-        $client2 = $baseClient->authentification();
-        
-        self::assertSame($baseClient->getHost(), $client1->getHost());
-        self::assertSame($baseClient->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($baseClient->getUserAgent(), $client1->getUserAgent());
-        self::assertSame($client1, $client2);
+        $client1 = $baseClient->clientAuthentification();
+        $client2 = $baseClient->clientAuthentification();
+    
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
     }
     
     /**
-     * testDataManagement
+     * testClientDataManagement
      *
      * @return void
      *
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testDataManagement() : void
+    public function testClientDataManagement() : void
     {
         $baseClient = new Client(
             'http://fakeClient',
@@ -81,12 +85,13 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->dataManagement();
-        $client2 = $baseClient->dataManagement();
-        
-        self::assertSame($baseClient->getHost(), $client1->getHost());
-        self::assertSame($baseClient->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($baseClient->getUserAgent(), $client1->getUserAgent());
-        self::assertSame($client1, $client2);
+        $client1 = $baseClient->clientDataManagement();
+        $client2 = $baseClient->clientDataManagement();
+    
+        self::checkClients(
+            $baseClient,
+            $client1,
+            $client2
+        );
     }
 }

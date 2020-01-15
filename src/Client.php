@@ -11,13 +11,17 @@ namespace Jalismrs\Stalactite\Client;
 class Client extends
     ClientAbstract
 {
-    
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
-     * access
+     * clientAccessManagement
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
      */
-    public function accessManagement() : AccessManagement\Client
+    public function clientAccessManagement() : AccessManagement\Client
     {
         static $client = null;
         
@@ -33,11 +37,11 @@ class Client extends
     }
     
     /**
-     * authentification
+     * clientAuthentification
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Client
      */
-    public function authentification() : Authentication\Client
+    public function clientAuthentification() : Authentication\Client
     {
         static $client = null;
     
@@ -53,11 +57,11 @@ class Client extends
     }
     
     /**
-     * data
+     * clientDataManagement
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Client
      */
-    public function dataManagement() : DataManagement\Client
+    public function clientDataManagement() : DataManagement\Client
     {
         static $client = null;
     

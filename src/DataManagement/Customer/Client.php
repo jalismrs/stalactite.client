@@ -25,12 +25,17 @@ class Client extends
 {
     public const API_URL_PREFIX = ParentClient::API_URL_PREFIX . '/customers';
     
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
-     * me
+     * clientMe
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Me\Client
      */
-    public function me() : Me\Client
+    public function clientMe() : Me\Client
     {
         static $client = null;
         
@@ -45,6 +50,11 @@ class Client extends
         return $client;
     }
     
+    /*
+     * -------------------------------------------------------------------------
+     * API ---------------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
      * @param string $jwt
      *

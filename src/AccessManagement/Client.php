@@ -15,17 +15,22 @@ class Client extends
 {
     public const API_URL_PREFIX = '/access';
     
-    /**
-     * domain
-     *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\Domain\Client
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
      */
-    public function domain() : Domain\Client
+    /**
+     * clientAuthToken
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client
+     */
+    public function clientAuthToken() : AuthToken\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new Domain\Client(
+            $client = new AuthToken\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -36,31 +41,11 @@ class Client extends
     }
     
     /**
-     * user
-     *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Client
-     */
-    public function user() : User\Client
-    {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new User\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-        
-        return $client;
-    }
-    
-    /**
-     * customer
+     * clientCustomer
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Customer\Client
      */
-    public function customer() : Customer\Client
+    public function clientCustomer() : Customer\Client
     {
         static $client = null;
         
@@ -76,11 +61,31 @@ class Client extends
     }
     
     /**
-     * relation
+     * clientDomain
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Domain\Client
+     */
+    public function clientDomain() : Domain\Client
+    {
+        static $client = null;
+        
+        if (null === $client) {
+            $client = new Domain\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $client;
+    }
+    
+    /**
+     * clientRelation
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Relation\Client
      */
-    public function relation() : Relation\Client
+    public function clientRelation() : Relation\Client
     {
         static $client = null;
         
@@ -96,16 +101,16 @@ class Client extends
     }
     
     /**
-     * authToken
+     * clientUser
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Client
      */
-    public function authToken() : AuthToken\Client
+    public function clientUser() : User\Client
     {
         static $client = null;
         
         if (null === $client) {
-            $client = new AuthToken\Client(
+            $client = new User\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
