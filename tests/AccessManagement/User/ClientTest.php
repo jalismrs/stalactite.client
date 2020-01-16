@@ -68,25 +68,23 @@ class ClientTest extends
         $relationAsArray = $relation->asArray();
         unset($relationAsArray['user']);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => [$relationAsArray]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => [$relationAsArray]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->getRelations(
@@ -111,27 +109,25 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => ModelFactory::getTestableDomainUserRelation()
-                                                       ->asArray()
-                            // invalid
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => ModelFactory::getTestableDomainUserRelation()
+                                                           ->asArray()
+                                // invalid
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->getRelations(
@@ -154,26 +150,24 @@ class ClientTest extends
      */
     public function testGetAccessClearance() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'clearance' => ModelFactory::getTestableAccessClearance()
-                                                       ->asArray()
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'clearance' => ModelFactory::getTestableAccessClearance()
+                                                           ->asArray()
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->getAccessClearance(
@@ -198,26 +192,24 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'clearance' => []
-                            // wrong type
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'clearance' => []
+                                // wrong type
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->getAccessClearance(
