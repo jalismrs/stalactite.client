@@ -1,45 +1,51 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken\User;
+namespace Jalismrs\Stalactite\Test\AccessManagement\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\User\Client;
+use Jalismrs\Stalactite\Client\AccessManagement\Domain\Client;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiGetTest
+ * ApiAddCustomerRelationTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken\User
+ * @package Jalismrs\Stalactite\Test\AccessManagement\Domain
  */
-class ClientTest extends
+class ApiAddCustomerRelationTest extends
     TestCase
 {
     /**
-     * testDeleteRelationByUser
+     * testAddCustomerRelation
      *
      * @return void
      *
+     * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testDeleteRelationByUser() : void
+    public function testAddCustomerRelation() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
-                            'success' => true,
-                            'error'   => null
+                            'success'  => true,
+                            'error'    => null,
+                            'relation' => ModelFactory::getTestableDomainCustomerRelation()
+                                                      ->asArray()
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -53,12 +59,14 @@ class ClientTest extends
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->deleteRelationsByUser(
-            ModelFactory::getTestableUser(),
-            'fake API auth token'
+        $response = $mockAPIClient->addCustomerRelation(
+            DataManagementTestModelFactory::getTestableDomain(),
+            DataManagementTestModelFactory::getTestableCustomer(),
+            'fake user jwt'
         );
-        self::assertTrue($response->success());
-        self::assertNull($response->getError());
+        static::assertTrue($response->success());
+        static::assertNull($response->getError());
+        static::assertInstanceOf(DomainCustomerRelationModel::class, $response->getData()['relation']);
     }
     
     /**
@@ -66,7 +74,7 @@ class ClientTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseDeleteRelationByUser() : void
+    public function testThrowExceptionOnInvalidResponseAddCustomerRelation() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -76,9 +84,10 @@ class ClientTest extends
                 new MockResponse(
                     json_encode(
                         [
-                            'success' => true,
-                            'error'   => false
-                            // invalid type
+                            'success'  => true,
+                            'error'    => null,
+                            'relation' => []
+                            // wrong type
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -92,9 +101,10 @@ class ClientTest extends
             $mockHttpClient
         );
         
-        $mockAPIClient->deleteRelationsByUser(
-            ModelFactory::getTestableUser(),
-            'fake API auth token'
+        $mockAPIClient->addCustomerRelation(
+            DataManagementTestModelFactory::getTestableDomain(),
+            DataManagementTestModelFactory::getTestableCustomer(),
+            'fake user jwt'
         );
     }
 }

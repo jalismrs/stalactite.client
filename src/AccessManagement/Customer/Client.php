@@ -17,7 +17,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use Jalismrs\Stalactite\Client\Response;
 
-/***
+/**
  * Client
  *
  * @package Jalismrs\Stalactite\Client\AccessManagement\CustomerModel

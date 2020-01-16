@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ClientTest
+ * ApiDeleteRelationsByCustomerTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken
  */

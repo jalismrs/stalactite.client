@@ -13,11 +13,11 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiGetTest
+ * ApiDeleteRelationTest
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\Relation
  */
-class ClientTest extends
+class ApiDeleteRelationTest extends
     TestCase
 {
     /**
