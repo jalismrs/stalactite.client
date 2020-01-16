@@ -68,16 +68,16 @@ class Client extends
             $schema
         );
         
-        $domains = [];
-        foreach ($response['domains'] as $domain) {
-            $domains[] = ModelFactory::createDomain($domain);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'domains' => $domains
+                'domains' => array_map(
+                    static function($domain) {
+                        return ModelFactory::createDomain($domain);
+                    },
+                    $response['domains']
+                )
             ]
         );
     }
@@ -133,16 +133,16 @@ class Client extends
             $schema
         );
         
-        $domains = [];
-        foreach ($response['domains'] as $domain) {
-            $domains[] = ModelFactory::createDomain($domain);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'domains' => $domains
+                'domains' => array_map(
+                    static function($domain) {
+                        return ModelFactory::createDomain($domain);
+                    },
+                    $response['domains']
+                )
             ]
         );
     }
@@ -195,16 +195,16 @@ class Client extends
             $schema
         );
         
-        $domains = [];
-        foreach ($response['domains'] as $domain) {
-            $domains[] = ModelFactory::createDomain($domain);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'domains' => $domains
+                'domains' => array_map(
+                    static function($domain) {
+                        return ModelFactory::createDomain($domain);
+                    },
+                    $response['domains']
+                )
             ]
         );
     }

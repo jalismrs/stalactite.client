@@ -63,16 +63,16 @@ class Client extends
             $schema
         );
         
-        $trustedApps = [];
-        foreach ($response['trustedApps'] as $trustedApp) {
-            $trustedApps[] = ModelFactory::createTrustedApp($trustedApp);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'trustedApps' => $trustedApps
+                'trustedApps' => array_map(
+                    static function($trustedApp) {
+                        return ModelFactory::createTrustedApp($trustedApp);
+                    },
+                    $response['trustedApps']
+                )
             ]
         );
     }

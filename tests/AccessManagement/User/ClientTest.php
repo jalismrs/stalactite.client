@@ -51,6 +51,7 @@ class ClientTest extends
             $client2
         );
     }
+    
     /**
      * testGetRelations
      *

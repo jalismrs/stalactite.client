@@ -91,25 +91,25 @@ class Client extends
             $schema
         );
         
-        $userRelations = [];
-        foreach ($response['relations']['users'] as $relation) {
-            $userRelations[] = ModelFactory::createDomainUserRelation($relation)
-                                           ->setDomain($domain);
-        }
-        
-        $customerRelations = [];
-        foreach ($response['relations']['customers'] as $relation) {
-            $customerRelations[] = ModelFactory::createDomainCustomerRelation($relation)
-                                               ->setDomain($domain);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => [
-                    'users'     => $userRelations,
-                    'customers' => $customerRelations
+                    'users'     => array_map(
+                        static function($relation) use ($domain) {
+                            return ModelFactory::createDomainUserRelation($relation)
+                                               ->setDomain($domain);
+                        },
+                        $response['relations']['users']
+                    ),
+                    'customers' => array_map(
+                        static function($relation) use ($domain) {
+                            return ModelFactory::createDomainCustomerRelation($relation)
+                                               ->setDomain($domain);
+                        },
+                        $response['relations']['customers']
+                    )
                 ]
             ]
         );

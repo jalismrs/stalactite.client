@@ -66,16 +66,16 @@ class Client extends
             $schema
         );
         
-        $phoneLines = [];
-        foreach ($response['phoneLines'] as $phoneLine) {
-            $phoneLines[] = ModelFactory::createPhoneLine($phoneLine);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'phoneLines' => $phoneLines
+                'phoneLines' => array_map(
+                    static function($phoneLine) {
+                        return ModelFactory::createPhoneLine($phoneLine);
+                    },
+                    $response['phoneLines']
+                )
             ]
         );
     }

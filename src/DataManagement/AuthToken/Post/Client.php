@@ -68,16 +68,16 @@ class Client extends
             $schema
         );
         
-        $posts = [];
-        foreach ($response['posts'] as $post) {
-            $posts[] = ModelFactory::createPost($post);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'posts' => $posts
+                'posts' => array_map(
+                    static function($post) {
+                        return ModelFactory::createPost($post);
+                    },
+                    $response['posts']
+                )
             ]
         );
     }
@@ -184,16 +184,16 @@ class Client extends
             $schema
         );
         
-        $users = [];
-        foreach ($response['users'] as $user) {
-            $users[] = ModelFactory::createUser($user);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'users' => $users
+                'users' => array_map(
+                    static function($user) {
+                        return ModelFactory::createUser($user);
+                    },
+                    $response['users']
+                )
             ]
         );
     }

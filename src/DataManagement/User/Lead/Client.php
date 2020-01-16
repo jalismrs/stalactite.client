@@ -64,16 +64,18 @@ class Client extends
             $schema
         );
         
-        $leads = [];
-        foreach ($response['leads'] as $lead) {
-            $leads[] = ModelFactory::createPost($lead);
-        }
+        // TODO: vérifier pouruqoi createLead n'est pas utilisé
         
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'leads' => $leads
+                'leads' => array_map(
+                    static function($lead) {
+                        return ModelFactory::createPost($lead);
+                    },
+                    $response['leads']
+                )
             ]
         );
     }

@@ -64,16 +64,16 @@ class Client extends
             $schema
         );
         
-        $posts = [];
-        foreach ($response['posts'] as $post) {
-            $posts[] = ModelFactory::createPost($post);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'posts' => $posts
+                'posts' => array_map(
+                    static function($post) {
+                        return ModelFactory::createPost($post);
+                    },
+                    $response['posts']
+                )
             ]
         );
     }

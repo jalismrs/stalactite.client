@@ -92,16 +92,16 @@ class Client extends
             $schema
         );
         
-        $customers = [];
-        foreach ($response['customers'] as $customer) {
-            $customers[] = ModelFactory::createCustomer($customer);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'customers' => $customers
+                'customers' => array_map(
+                    static function($customer) {
+                        return ModelFactory::createCustomer($customer);
+                    },
+                    $response['customers']
+                )
             ]
         );
     }

@@ -103,17 +103,17 @@ class Client extends
             $schema
         );
         
-        $relations = [];
-        foreach ($response['relations'] as $relation) {
-            $relations[] = ModelFactory::createDomainUserRelation($relation)
-                                       ->setUser($user);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'relations' => $relations
+                'relations' => array_map(
+                    static function($relation) use ($user) {
+                        return ModelFactory::createDomainUserRelation($relation)
+                                           ->setUser($user);
+                    },
+                    $response['relations']
+                )
             ]
         );
     }

@@ -65,16 +65,16 @@ class Client extends
             $schema
         );
         
-        $phoneTypes = [];
-        foreach ($response['phoneTypes'] as $phoneType) {
-            $phoneTypes[] = ModelFactory::createPhoneType($phoneType);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'phoneTypes' => $phoneTypes
+                'phoneTypes' => array_map(
+                    static function($phoneType) {
+                        return ModelFactory::createPhoneType($phoneType);
+                    },
+                    $response['phoneTypes']
+                )
             ]
         );
     }

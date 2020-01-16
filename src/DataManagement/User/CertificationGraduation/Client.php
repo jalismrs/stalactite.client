@@ -65,16 +65,16 @@ class Client extends
             $schema
         );
         
-        $certifications = [];
-        foreach ($response['certifications'] as $certification) {
-            $certifications[] = ModelFactory::createCertificationGraduation($certification);
-        }
-        
         return new Response(
             $response['success'],
             $response['error'],
             [
-                'certifications' => $certifications
+                'certifications' => array_map(
+                    static function($certification) {
+                        return ModelFactory::createCertificationGraduation($certification);
+                    },
+                    $response['certifications']
+                )
             ]
         );
     }
