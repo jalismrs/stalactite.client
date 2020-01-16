@@ -52,7 +52,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -63,13 +63,13 @@ class Client extends
         );
         
         $domains = [];
-        foreach ($r['domains'] as $domain) {
+        foreach ($response['domains'] as $domain) {
             $domains[] = ModelFactory::createDomain($domain);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'domains' => $domains
             ]
@@ -105,7 +105,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -116,11 +116,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'domain' => $r['domain']
-                    ? ModelFactory::createDomain($r['domain'])
+                'domain' => $response['domain']
+                    ? ModelFactory::createDomain($response['domain'])
                     : null
             ]
         );
@@ -154,7 +154,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -168,13 +168,13 @@ class Client extends
         );
         
         $domains = [];
-        foreach ($r['domains'] as $domain) {
+        foreach ($response['domains'] as $domain) {
             $domains[] = ModelFactory::createDomain($domain);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'domains' => $domains
             ]
@@ -210,7 +210,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -225,13 +225,13 @@ class Client extends
         );
         
         $domains = [];
-        foreach ($r['domains'] as $domain) {
+        foreach ($response['domains'] as $domain) {
             $domains[] = ModelFactory::createDomain($domain);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'domains' => $domains
             ]
@@ -275,7 +275,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPost(
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -287,11 +287,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'domain' => $r['domain']
-                    ? ModelFactory::createDomain($r['domain'])
+                'domain' => $response['domain']
+                    ? ModelFactory::createDomain($response['domain'])
                     : null
             ]
         );
@@ -329,7 +329,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPut(
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $domain->getUid(),
             [
                 'headers' => [
@@ -341,8 +341,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -370,7 +370,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestDelete(
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -381,8 +381,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

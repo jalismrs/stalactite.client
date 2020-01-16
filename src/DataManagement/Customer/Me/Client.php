@@ -52,7 +52,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -63,11 +63,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'me' => $r['me']
-                    ? ModelFactory::createCustomer($r['me'])
+                'me' => $response['me']
+                    ? ModelFactory::createCustomer($response['me'])
                     : null
             ]
         );

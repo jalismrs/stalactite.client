@@ -206,18 +206,20 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPost(
+    
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART . '/login',
-            ['json' => $data],
+            [
+                'json' => $data
+            ],
             $schema
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'jwt' => $r['jwt']
+                'jwt' => $response['jwt']
             ]
         );
     }

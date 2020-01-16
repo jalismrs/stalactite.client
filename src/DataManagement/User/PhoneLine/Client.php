@@ -55,8 +55,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
@@ -67,13 +67,13 @@ class Client extends
         );
         
         $phoneLines = [];
-        foreach ($r['phoneLines'] as $phoneLine) {
+        foreach ($response['phoneLines'] as $phoneLine) {
             $phoneLines[] = ModelFactory::createPhoneLine($phoneLine);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'phoneLines' => $phoneLines
             ]
@@ -119,8 +119,8 @@ class Client extends
                 ],
             ]
         );
-        
-        $r = $this->requestPost(
+    
+        $response = $this->requestPost(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
@@ -132,8 +132,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -161,8 +161,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestDelete(
+    
+        $response = $this->requestDelete(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART . '/' . $phoneLine->getUid(),
             [
                 'headers' => [
@@ -173,8 +173,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

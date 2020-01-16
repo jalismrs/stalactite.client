@@ -54,7 +54,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
@@ -65,13 +65,13 @@ class Client extends
         );
         
         $leads = [];
-        foreach ($r['leads'] as $lead) {
+        foreach ($response['leads'] as $lead) {
             $leads[] = ModelFactory::createPost($lead);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'leads' => $leads
             ]
@@ -118,7 +118,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPost(
+        $response = $this->requestPost(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
@@ -130,8 +130,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -175,7 +175,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestDelete(
+        $response = $this->requestDelete(
             $this->host . ParentClient::API_URL_PART . '/' . $user->getUid() . self::API_URL_PART,
             [
                 'headers' => [
@@ -187,8 +187,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

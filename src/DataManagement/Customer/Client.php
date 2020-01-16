@@ -81,8 +81,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -93,13 +93,13 @@ class Client extends
         );
         
         $customers = [];
-        foreach ($r['customers'] as $customer) {
+        foreach ($response['customers'] as $customer) {
             $customers[] = ModelFactory::createCustomer($customer);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'customers' => $customers
             ]
@@ -134,8 +134,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -146,11 +146,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'customer' => $r['customer']
-                    ? ModelFactory::createCustomer($r['customer'])
+                'customer' => $response['customer']
+                    ? ModelFactory::createCustomer($response['customer'])
                     : null
             ]
         );
@@ -185,8 +185,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -201,11 +201,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'customer' => $r['customer']
-                    ? ModelFactory::createCustomer($r['customer'])
+                'customer' => $response['customer']
+                    ? ModelFactory::createCustomer($response['customer'])
                     : null
             ]
         );
@@ -245,8 +245,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPost(
+    
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -258,11 +258,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'customer' => $r['customer']
-                    ? ModelFactory::createCustomer($r['customer'])
+                'customer' => $response['customer']
+                    ? ModelFactory::createCustomer($response['customer'])
                     : null
             ]
         );
@@ -297,8 +297,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPut(
+    
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $customer->getUid(),
             [
                 'headers' => [
@@ -310,8 +310,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -338,8 +338,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestDelete(
+    
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -350,8 +350,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

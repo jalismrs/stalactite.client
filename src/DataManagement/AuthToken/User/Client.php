@@ -57,8 +57,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -69,13 +69,13 @@ class Client extends
         );
         
         $users = [];
-        foreach ($r['users'] as $user) {
+        foreach ($response['users'] as $user) {
             $users[] = ModelFactory::createUser($user);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'users' => $users
             ]
@@ -119,8 +119,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -135,11 +135,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'user' => $r['user']
-                    ? ModelFactory::createUser($r['user'])
+                'user' => $response['user']
+                    ? ModelFactory::createUser($response['user'])
                     : null
             ]
         );
@@ -180,8 +180,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -192,11 +192,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'user' => $r['user']
-                    ? ModelFactory::createUser($r['user'])
+                'user' => $response['user']
+                    ? ModelFactory::createUser($response['user'])
                     : null
             ]
         );

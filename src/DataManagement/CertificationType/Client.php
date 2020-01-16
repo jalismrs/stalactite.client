@@ -51,8 +51,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -63,13 +63,13 @@ class Client extends
         );
         
         $certificationTypes = [];
-        foreach ($r['certificationTypes'] as $certificationType) {
+        foreach ($response['certificationTypes'] as $certificationType) {
             $certificationTypes[] = ModelFactory::createCertificationType($certificationType);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'certificationTypes' => $certificationTypes
             ]
@@ -104,8 +104,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -116,11 +116,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'certificationType' => $r['certificationType']
-                    ? ModelFactory::createCertificationType($r['certificationType'])
+                'certificationType' => $response['certificationType']
+                    ? ModelFactory::createCertificationType($response['certificationType'])
                     : null
             ]
         );
@@ -158,8 +158,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPost(
+    
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -171,11 +171,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'certificationType' => $r['certificationType']
-                    ? ModelFactory::createCertificationType($r['certificationType'])
+                'certificationType' => $response['certificationType']
+                    ? ModelFactory::createCertificationType($response['certificationType'])
                     : null
             ]
         );
@@ -206,8 +206,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPut(
+    
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $certificationType->getUid(),
             [
                 'headers' => [
@@ -219,8 +219,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -247,8 +247,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestDelete(
+    
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -259,8 +259,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

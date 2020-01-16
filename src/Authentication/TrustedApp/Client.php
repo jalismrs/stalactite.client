@@ -52,8 +52,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -64,13 +64,13 @@ class Client extends
         );
         
         $trustedApps = [];
-        foreach ($r['trustedApps'] as $trustedApp) {
+        foreach ($response['trustedApps'] as $trustedApp) {
             $trustedApps[] = ModelFactory::createTrustedApp($trustedApp);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'trustedApps' => $trustedApps
             ]
@@ -105,8 +105,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -117,10 +117,10 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
@@ -148,8 +148,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPut(
+    
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $trustedApp->getUid(),
             [
                 'headers' => [
@@ -164,8 +164,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -204,8 +204,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPost(
+    
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -220,10 +220,10 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
@@ -252,8 +252,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestDelete(
+    
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -267,8 +267,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -300,8 +300,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestPut(
+    
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $trustedApp->getUid() . '/authToken/reset',
             [
                 'headers' => [
@@ -315,10 +315,10 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedApp($r['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }

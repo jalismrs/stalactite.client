@@ -54,8 +54,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestDelete(
+    
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $customer->getUid() . '/relations',
             [
                 'headers' => [
@@ -66,8 +66,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

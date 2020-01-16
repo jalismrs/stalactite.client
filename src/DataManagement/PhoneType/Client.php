@@ -55,7 +55,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -66,13 +66,13 @@ class Client extends
         );
         
         $phoneTypes = [];
-        foreach ($r['phoneTypes'] as $phoneType) {
+        foreach ($response['phoneTypes'] as $phoneType) {
             $phoneTypes[] = ModelFactory::createPhoneType($phoneType);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'phoneTypes' => $phoneTypes
             ]
@@ -108,7 +108,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -119,11 +119,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'phoneType' => $r['phoneType']
-                    ? ModelFactory::createPhoneType($r['phoneType'])
+                'phoneType' => $response['phoneType']
+                    ? ModelFactory::createPhoneType($response['phoneType'])
                     : null
             ]
         );
@@ -162,7 +162,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPost(
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART,
             [
                 'headers' => [
@@ -174,11 +174,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'phoneType' => $r['phoneType']
-                    ? ModelFactory::createPhoneType($r['phoneType'])
+                'phoneType' => $response['phoneType']
+                    ? ModelFactory::createPhoneType($response['phoneType'])
                     : null
             ]
         );
@@ -212,7 +212,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPut(
+        $response = $this->requestPut(
             $this->host . self::API_URL_PART . '/' . $phoneType->getUid(),
             [
                 'headers' => [
@@ -224,8 +224,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
     
@@ -253,7 +253,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestDelete(
+        $response = $this->requestDelete(
             $this->host . self::API_URL_PART . '/' . $uid,
             [
                 'headers' => [
@@ -264,8 +264,8 @@ class Client extends
         );
         
         return (new Response(
-            $r['success'],
-            $r['error']
+            $response['success'],
+            $response['error']
         ));
     }
 }

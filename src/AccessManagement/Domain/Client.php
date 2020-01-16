@@ -81,7 +81,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestGet(
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $domain->getUid() . '/relations',
             [
                 'headers' => [
@@ -92,20 +92,20 @@ class Client extends
         );
         
         $userRelations = [];
-        foreach ($r['relations']['users'] as $relation) {
+        foreach ($response['relations']['users'] as $relation) {
             $userRelations[] = ModelFactory::createDomainUserRelation($relation)
                                            ->setDomain($domain);
         }
         
         $customerRelations = [];
-        foreach ($r['relations']['customers'] as $relation) {
+        foreach ($response['relations']['customers'] as $relation) {
             $customerRelations[] = ModelFactory::createDomainCustomerRelation($relation)
                                                ->setDomain($domain);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'relations' => [
                     'users'     => $userRelations,
@@ -149,7 +149,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPost(
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART . '/' . $domain->getUid() . '/relations/users',
             [
                 'headers' => [
@@ -163,11 +163,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'relation' => $r['relation']
-                    ? ModelFactory::createDomainUserRelation($r['relation'])
+                'relation' => $response['relation']
+                    ? ModelFactory::createDomainUserRelation($response['relation'])
                     : null
             ]
         );
@@ -207,7 +207,7 @@ class Client extends
             ]
         );
     
-        $r = $this->requestPost(
+        $response = $this->requestPost(
             $this->host . self::API_URL_PART . '/' . $domain->getUid() . '/relations/customers',
             [
                 'headers' => [
@@ -221,11 +221,11 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'relation' => $r['relation']
-                    ? ModelFactory::createDomainCustomerRelation($r['relation'])
+                'relation' => $response['relation']
+                    ? ModelFactory::createDomainCustomerRelation($response['relation'])
                     : null
             ]
         );

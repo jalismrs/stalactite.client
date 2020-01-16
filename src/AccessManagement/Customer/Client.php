@@ -94,8 +94,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $customer->getUid() . '/relations',
             [
                 'headers' => [
@@ -106,14 +106,14 @@ class Client extends
         );
         
         $relations = [];
-        foreach ($r['relations'] as $relation) {
+        foreach ($response['relations'] as $relation) {
             $relations[] = ModelFactory::createDomainCustomerRelation($relation)
                                        ->setCustomer($customer);
         }
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
                 'relations' => $relations
             ]
@@ -148,8 +148,8 @@ class Client extends
                 ]
             ]
         );
-        
-        $r = $this->requestGet(
+    
+        $response = $this->requestGet(
             $this->host . self::API_URL_PART . '/' . $customer->getUid() . '/access/' . $domain->getUid(),
             [
                 'headers' => [
@@ -160,10 +160,10 @@ class Client extends
         );
         
         return new Response(
-            $r['success'],
-            $r['error'],
+            $response['success'],
+            $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearance($r['clearance'])
+                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
             ]
         );
     }
