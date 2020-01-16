@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiAddPhoneLineTest
+ * ApiAddPostsTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\User\Post
  */

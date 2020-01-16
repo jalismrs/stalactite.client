@@ -94,11 +94,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -126,11 +126,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_STRING_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             'a' . (new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -158,11 +158,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_ISSUER_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy('wrong issuer')
@@ -190,11 +190,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::EXPIRED_JWT_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -222,11 +222,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_USER_TYPE_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -254,11 +254,11 @@ class JwtValidationTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_STRUCTURE_ERROR);
-    
+        
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
         $signer     = new Sha256();
         $time       = time();
-    
+        
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)

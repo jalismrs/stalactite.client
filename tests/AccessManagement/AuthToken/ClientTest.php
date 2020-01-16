@@ -4,15 +4,12 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken;
 
 use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Test\ClientTestTrait;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ApiGetTest
+ * ClientTest
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
  */

@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ApiGetTest
+ * ClientTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement
  */
@@ -36,7 +36,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientAuthToken();
         $client2 = $baseClient->getClientAuthToken();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -62,7 +62,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientCertificationType();
         $client2 = $baseClient->getClientCertificationType();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -88,7 +88,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientCustomer();
         $client2 = $baseClient->getClientCustomer();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -114,7 +114,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientDomain();
         $client2 = $baseClient->getClientDomain();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -140,7 +140,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientPhoneType();
         $client2 = $baseClient->getClientPhoneType();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -166,7 +166,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientPost();
         $client2 = $baseClient->getClientPost();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -192,7 +192,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientUser();
         $client2 = $baseClient->getClientUser();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,

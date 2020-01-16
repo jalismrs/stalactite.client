@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * GetByNameAndApiKeyTest
+ * ApiGetByNameAndApiKeyTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\Domain
  */
@@ -57,7 +57,7 @@ class ApiGetByNameAndApiKeyTest extends
             null,
             $mockHttpClient
         );
-    
+        
         $domainModel = ModelFactory::getTestableDomain();
         
         $response = $mockAPIClient->getByNameAndApiKey(
@@ -105,7 +105,7 @@ class ApiGetByNameAndApiKeyTest extends
             null,
             $mockHttpClient
         );
-    
+        
         $domainModel = ModelFactory::getTestableDomain();
         
         $mockAPIClient->getByNameAndApiKey(

@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Test\DataManagement\User\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\Me\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;

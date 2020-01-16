@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Test\AccessManagement\User\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\AccessManagement\User\Me\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;

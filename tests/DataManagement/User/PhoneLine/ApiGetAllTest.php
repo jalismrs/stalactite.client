@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetAllTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\Post
+ * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
  */
 class ApiGetAllTest extends
     TestCase

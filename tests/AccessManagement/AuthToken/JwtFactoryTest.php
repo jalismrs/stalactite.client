@@ -9,7 +9,7 @@ use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
 
 /**
- * ApiGetTest
+ * JwtFactoryTest
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
  */

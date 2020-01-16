@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ApiGetTest
+ * ClientTest
  *
  * @package Jalismrs\Stalactite\Test
  */
@@ -35,7 +35,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientAccessManagement();
         $client2 = $baseClient->getClientAccessManagement();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -61,7 +61,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientAuthentification();
         $client2 = $baseClient->getClientAuthentification();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,
@@ -87,7 +87,7 @@ class ClientTest extends
         
         $client1 = $baseClient->getClientDataManagement();
         $client2 = $baseClient->getClientDataManagement();
-    
+        
         self::checkClients(
             $baseClient,
             $client1,

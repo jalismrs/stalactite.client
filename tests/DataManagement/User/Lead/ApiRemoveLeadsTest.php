@@ -3,10 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Test\DataManagement\User\Lead;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;

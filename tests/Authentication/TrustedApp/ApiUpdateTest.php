@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Test\Authentication\TrustedApp;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Test\Authentication\ModelFactory;

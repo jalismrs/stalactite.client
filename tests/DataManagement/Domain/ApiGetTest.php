@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\Domain
  */
-class GetTest extends
+class ApiGetTest extends
     TestCase
 {
     /**

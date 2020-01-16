@@ -35,8 +35,8 @@ class ApiGetRelationsTest extends
      */
     public function testGetRelations() : void
     {
-        $domainCustomerRelation        = ModelFactory::getTestableDomainCustomerRelation()
-                                                     ->asArray();
+        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
+                                              ->asArray();
         unset($domainCustomerRelation['customer']);
         
         $mockHttpClient = new MockHttpClient(

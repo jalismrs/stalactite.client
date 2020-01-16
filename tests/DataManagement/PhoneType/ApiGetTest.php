@@ -8,10 +8,10 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 
 /**
  * ApiGetTest

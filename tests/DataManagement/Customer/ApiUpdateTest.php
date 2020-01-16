@@ -7,8 +7,6 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Customer\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
-use Jalismrs\Stalactite\Test\ClientTestTrait;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;

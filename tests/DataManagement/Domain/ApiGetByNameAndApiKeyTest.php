@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * GetByNameAndApiKeyTest
+ * ApiGetByNameAndApiKeyTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\Domain
  */

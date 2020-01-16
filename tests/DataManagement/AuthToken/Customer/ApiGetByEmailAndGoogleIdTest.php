@@ -56,7 +56,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             null,
             $mockHttpClient
         );
-    
+        
         $customerModel = ModelFactory::getTestableCustomer();
         
         $response = $mockAPIClient->getByEmailAndGoogleId(
@@ -102,7 +102,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             null,
             $mockHttpClient
         );
-    
+        
         $customerModel = ModelFactory::getTestableCustomer();
         
         $mockAPIClient->getByEmailAndGoogleId(

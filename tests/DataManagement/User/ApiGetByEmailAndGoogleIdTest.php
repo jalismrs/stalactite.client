@@ -102,7 +102,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             null,
             $mockHttpClient
         );
-    
+        
         $userModel = ModelFactory::getTestableUser();
         
         $mockAPIClient->getByEmailAndGoogleId(

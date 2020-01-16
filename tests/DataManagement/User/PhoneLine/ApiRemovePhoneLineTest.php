@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiRemovePhoneLineTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\Post
+ * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
  */
 class ApiRemovePhoneLineTest extends
     TestCase
@@ -47,7 +47,7 @@ class ApiRemovePhoneLineTest extends
             ]
         );
         
-        $mockAPIClient = new \Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client(
+        $mockAPIClient = new Client(
             'http://fakeHost',
             null,
             $mockHttpClient

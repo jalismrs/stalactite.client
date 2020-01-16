@@ -7,7 +7,6 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Post\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;

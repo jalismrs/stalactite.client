@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiGetTest
+ * ApiDeleteRelationsByDomainTest
  *
  * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken\Domain
  */
