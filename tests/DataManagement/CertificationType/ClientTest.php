@@ -34,26 +34,28 @@ class ClientTest extends
      */
     public function testGetAll() : void
     {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'            => true,
+                            'error'              => null,
+                            'certificationTypes' => [
+                                ModelFactory::getTestableCertificationType()
+                                            ->asArray()
+                            ]
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'            => true,
-                                'error'              => null,
-                                'certificationTypes' => [
-                                    ModelFactory::getTestableCertificationType()
-                                                ->asArray()
-                                ]
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $response = $mockAPIClient->getAll(
@@ -77,25 +79,27 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'            => true,
+                            'error'              => null,
+                            'certificationTypes' => ModelFactory::getTestableCertificationType()
+                                                                ->asArray()
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'            => true,
-                                'error'              => null,
-                                'certificationTypes' => ModelFactory::getTestableCertificationType()
-                                                                    ->asArray()
-                                // invalid type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->getAll(
@@ -117,24 +121,26 @@ class ClientTest extends
      */
     public function testGet() : void
     {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'           => true,
+                            'error'             => null,
+                            'certificationType' => ModelFactory::getTestableCertificationType()
+                                                               ->asArray()
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'           => true,
-                                'error'             => null,
-                                'certificationType' => ModelFactory::getTestableCertificationType()
-                                                                   ->asArray()
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $response = $mockAPIClient->get(
@@ -160,24 +166,26 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'           => true,
+                            'error'             => null,
+                            'certificationType' => []
+                            // invalid certification type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'           => true,
-                                'error'             => null,
-                                'certificationType' => []
-                                // invalid certification type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->get(
@@ -201,24 +209,26 @@ class ClientTest extends
      */
     public function testCreate() : void
     {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'           => true,
+                            'error'             => null,
+                            'certificationType' => ModelFactory::getTestableCertificationType()
+                                                               ->asArray()
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'           => true,
-                                'error'             => null,
-                                'certificationType' => ModelFactory::getTestableCertificationType()
-                                                                   ->asArray()
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $response = $mockAPIClient->create(
@@ -243,24 +253,26 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success'           => true,
+                            'error'             => null,
+                            'certificationType' => []
+                            // invalid certification type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success'           => true,
-                                'error'             => null,
-                                'certificationType' => []
-                                // invalid certification type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->create(
@@ -282,22 +294,24 @@ class ClientTest extends
      */
     public function testUpdate() : void
     {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => null
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $response = $mockAPIClient->update(
@@ -318,23 +332,25 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => false
+                            // invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => false
-                                // invalid type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->update(
@@ -356,22 +372,24 @@ class ClientTest extends
      */
     public function testDelete() : void
     {
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => null
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => null
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $response = $mockAPIClient->delete(
@@ -393,23 +411,25 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        [
+                            'success' => true,
+                            'error'   => false
+                            /// invalid type
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => false
-                                /// invalid type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->delete(

@@ -44,25 +44,27 @@ class LoginTest extends
             'jwt'     => null
         ];
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        $response,
+                        JSON_THROW_ON_ERROR
+                    )
+                ),
+                new MockResponse(
+                    json_encode(
+                        $response2,
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            $response,
-                            JSON_THROW_ON_ERROR
-                        )
-                    ),
-                    new MockResponse(
-                        json_encode(
-                            $response2,
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         // assert valid return and response content
@@ -111,14 +113,16 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse('invalid API response')
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse('invalid API response')
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->login(
@@ -143,19 +147,21 @@ class LoginTest extends
             'invalidField' => true
         ];
         
+        $mockHttpClient = new MockHttpClient(
+            [
+                new MockResponse(
+                    json_encode(
+                        $invalidResponse,
+                        JSON_THROW_ON_ERROR
+                    )
+                )
+            ]
+        );
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            $invalidResponse,
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
-            )
+            $mockHttpClient
         );
         
         $mockAPIClient->login(
