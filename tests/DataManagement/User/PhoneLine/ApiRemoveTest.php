@@ -13,15 +13,15 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiRemovePhoneLineTest
+ * ApiRemoveTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
  */
-class ApiRemovePhoneLineTest extends
+class ApiRemoveTest extends
     TestCase
 {
     /**
-     * testRemovePhoneLine
+     * testRemove
      *
      * @return void
      *
@@ -31,7 +31,7 @@ class ApiRemovePhoneLineTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testRemovePhoneLine() : void
+    public function testRemove() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -53,7 +53,7 @@ class ApiRemovePhoneLineTest extends
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->removePhoneLine(
+        $response = $mockAPIClient->remove(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'
@@ -67,7 +67,7 @@ class ApiRemovePhoneLineTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseRemovePhoneLine() : void
+    public function testThrowExceptionOnInvalidResponseRemove() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -93,7 +93,7 @@ class ApiRemovePhoneLineTest extends
             $mockHttpClient
         );
         
-        $mockAPIClient->removePhoneLine(
+        $mockAPIClient->remove(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'

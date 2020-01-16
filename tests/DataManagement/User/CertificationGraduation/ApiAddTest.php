@@ -1,28 +1,27 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine;
+namespace Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client;
+use Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client;
 use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiAddPhoneLineTest
+ * ApiAddTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
+ * @package Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation
  */
-class ApiAddPhoneLineTest extends
+class ApiAddTest extends
     TestCase
 {
-    
     /**
-     * testAddPhoneLine
+     * testAdd
      *
      * @return void
      *
@@ -32,7 +31,7 @@ class ApiAddPhoneLineTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testAddPhoneLine() : void
+    public function testAdd() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -54,9 +53,9 @@ class ApiAddPhoneLineTest extends
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->addPhoneLine(
+        $response = $mockAPIClient->add(
             ModelFactory::getTestableUser(),
-            ModelFactory::getTestablePhoneLine(),
+            ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -68,7 +67,7 @@ class ApiAddPhoneLineTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseAddPhoneLine() : void
+    public function testThrowExceptionOnInvalidResponseAdd() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -94,9 +93,9 @@ class ApiAddPhoneLineTest extends
             $mockHttpClient
         );
         
-        $mockAPIClient->addPhoneLine(
+        $mockAPIClient->add(
             ModelFactory::getTestableUser(),
-            ModelFactory::getTestablePhoneLine(),
+            ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
         );
     }
@@ -106,7 +105,7 @@ class ApiAddPhoneLineTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidPhoneTypeAddPhoneLine() : void
+    public function testThrowExceptionOnInvalidCertificationTypeAdd() : void
     {
         // TODO: voir pourquoi il n'y a pas de mockHttpClient
         $this->expectException(ClientException::class);
@@ -119,9 +118,9 @@ class ApiAddPhoneLineTest extends
         //$mockHttpClient
         );
         
-        $mockAPIClient->addPhoneLine(
+        $mockAPIClient->add(
             ModelFactory::getTestableUser(),
-            ModelFactory::getTestablePhoneLine()
+            ModelFactory::getTestableCertificationGraduation()
                         ->setType(null),
             'fake user jwt'
         );

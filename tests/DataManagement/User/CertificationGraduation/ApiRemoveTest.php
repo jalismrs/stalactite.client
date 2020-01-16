@@ -13,15 +13,15 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ApiAddCertificationTest
+ * ApiRemoveTest
  *
  * @package Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation
  */
-class ApiAddCertificationTest extends
+class ApiRemoveTest extends
     TestCase
 {
     /**
-     * testAddCertification
+     * testRemove
      *
      * @return void
      *
@@ -31,7 +31,7 @@ class ApiAddCertificationTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function testAddCertification() : void
+    public function testRemove() : void
     {
         $mockHttpClient = new MockHttpClient(
             [
@@ -53,7 +53,7 @@ class ApiAddCertificationTest extends
             $mockHttpClient
         );
         
-        $response = $mockAPIClient->addCertification(
+        $response = $mockAPIClient->remove(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
@@ -64,10 +64,10 @@ class ApiAddCertificationTest extends
     
     /**
      * @throws ClientException
-     * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidDataTypeException
      */
-    public function testThrowExceptionOnInvalidResponseAddCertification() : void
+    public function testThrowExceptionOnInvalidResponseRemove() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
@@ -93,35 +93,9 @@ class ApiAddCertificationTest extends
             $mockHttpClient
         );
         
-        $mockAPIClient->addCertification(
+        $mockAPIClient->remove(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
-            'fake user jwt'
-        );
-    }
-    
-    /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     */
-    public function testThrowExceptionOnInvalidCertificationTypeAddCertification() : void
-    {
-        // TODO: voir pourquoi il n'y a pas de mockHttpClient
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-        
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
-            null
-        //$mockHttpClient
-        );
-        
-        $mockAPIClient->addCertification(
-            ModelFactory::getTestableUser(),
-            ModelFactory::getTestableCertificationGraduation()
-                        ->setType(null),
             'fake user jwt'
         );
     }

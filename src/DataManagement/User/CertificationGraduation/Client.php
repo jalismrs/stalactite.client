@@ -80,16 +80,19 @@ class Client extends
     }
     
     /**
-     * @param UserModel                    $user
-     * @param CertificationGraduationModel $certificationGraduation
-     * @param string                       $jwt
+     * add
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $user
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduation
+     * @param string                                                                        $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function addCertification(
+    public function add(
         UserModel $user,
         CertificationGraduationModel $certificationGraduation,
         string $jwt
@@ -141,16 +144,19 @@ class Client extends
     }
     
     /**
-     * @param UserModel                    $user
-     * @param CertificationGraduationModel $certificationGraduation
-     * @param string                       $jwt
+     * remove
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $user
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduation
+     * @param string                                                                        $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function removeCertification(
+    public function remove(
         UserModel $user,
         CertificationGraduationModel $certificationGraduation,
         string $jwt

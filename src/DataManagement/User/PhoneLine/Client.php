@@ -81,16 +81,19 @@ class Client extends
     }
     
     /**
-     * @param UserModel      $user
-     * @param PhoneLineModel $phoneLine
-     * @param string         $jwt
+     * add
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel      $user
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel $phoneLine
+     * @param string                                                          $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function addPhoneLine(UserModel $user, PhoneLineModel $phoneLine, string $jwt) : Response
+    public function add(UserModel $user, PhoneLineModel $phoneLine, string $jwt) : Response
     {
         if (!$phoneLine->getType() instanceof PhoneTypeModel) {
             throw new ClientException(
@@ -138,16 +141,19 @@ class Client extends
     }
     
     /**
-     * @param UserModel      $user
-     * @param PhoneLineModel $phoneLine
-     * @param string         $jwt
+     * remove
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel      $user
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel $phoneLine
+     * @param string                                                          $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function removePhoneLine(UserModel $user, PhoneLineModel $phoneLine, string $jwt) : Response
+    public function remove(UserModel $user, PhoneLineModel $phoneLine, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
