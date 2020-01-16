@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\DataManagement\Model;
 
 use Jalismrs\Stalactite\Client\ModelAbstract;
+use function array_map;
+use function array_reduce;
 
 /**
  * UserModel
@@ -272,13 +274,15 @@ class UserModel extends
      */
     public function hasAdminPost() : bool
     {
-        foreach ($this->getPosts() as $post) {
-            if ($post->hasAdminPrivilege()) {
-                return true;
-            }
-        }
-        
-        return false;
+        return array_reduce(
+            $this->getPosts(),
+            static function(bool $carry, PostModel $post): bool {
+                return $carry
+                    ||
+                    $post->hasAdminAccess();
+            },
+            false,
+        );
     }
     
     /**
@@ -377,9 +381,11 @@ class UserModel extends
     }
     
     /**
-     * @param CertificationGraduationModel $certification
+     * addCertification
      *
-     * @return UserModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certification
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel
      */
     public function addCertification(CertificationGraduationModel $certification) : UserModel
     {
@@ -389,6 +395,8 @@ class UserModel extends
     }
     
     /**
+     * asMinimalArray
+     *
      * @return array
      */
     public function asMinimalArray() : array
@@ -408,6 +416,8 @@ class UserModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
@@ -422,48 +432,48 @@ class UserModel extends
     }
     
     /**
+     * getPostsAsArray
+     *
      * @return array
      */
     public function getPostsAsArray() : array
     {
-        $posts = [];
-        
-        /** @var PostModel $post */
-        foreach ($this->posts as $post) {
-            $posts[] = $post->asArray();
-        }
-        
-        return $posts;
+        return array_map(
+            static function(PostModel $postModel): array {
+                return $postModel->asArray();
+            },
+            $this->posts
+        );
     }
     
     /**
+     * getLeadsAsArray
+     *
      * @return array
      */
     public function getLeadsAsArray() : array
     {
-        $leads = [];
-        
-        /** @var PostModel $lead */
-        foreach ($this->leads as $lead) {
-            $leads[] = $lead->asArray();
-        }
-        
-        return $leads;
+        return array_map(
+            static function(PostModel $leadModel): array {
+                return $leadModel->asArray();
+            },
+            $this->leads
+        );
     }
     
     /**
+     * getPhoneLinesAsArray
+     *
      * @return array
      */
     public function getPhoneLinesAsArray() : array
     {
-        $phoneLines = [];
-        
-        /** @var PhoneLineModel $phoneLine */
-        foreach ($this->phoneLines as $phoneLine) {
-            $phoneLines[] = $phoneLine->asArray();
-        }
-        
-        return $phoneLines;
+        return array_map(
+            static function(PhoneLineModel $phoneLineModel): array {
+                return $phoneLineModel->asArray();
+            },
+            $this->phoneLines
+        );
     }
     
     /**
@@ -473,13 +483,11 @@ class UserModel extends
      */
     public function getCertificationsAsArray() : array
     {
-        $certifications = [];
-        
-        /** @var CertificationGraduationModel $certification */
-        foreach ($this->certifications as $certification) {
-            $certifications[] = $certification->asArray();
-        }
-        
-        return $certifications;
+        return array_map(
+            static function(CertificationGraduationModel $certificationGraduationModel): array {
+                return $certificationGraduationModel->asArray();
+            },
+            $this->certifications
+        );
     }
 }

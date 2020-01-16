@@ -16,6 +16,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use \Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use function array_map;
 
 /**
  * Client

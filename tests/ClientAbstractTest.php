@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Test;
 
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -16,14 +17,15 @@ class ClientAbstractTest extends
     TestCase
 {
     /**
-     * testGetHost
+     * testHost
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGetHost() : void
+    public function testHost() : void
     {
         $host   = 'http://fakeClient';
         $client = new Client(
@@ -34,14 +36,15 @@ class ClientAbstractTest extends
     }
     
     /**
-     * testGetUserAgent
+     * testUserAgent
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGetUserAgent() : void
+    public function testUserAgent() : void
     {
         $client = new Client(
             'http://fakeClient'
@@ -60,15 +63,15 @@ class ClientAbstractTest extends
     }
     
     /**
-     * testGetHttpClient
+     * testHttpClient
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\Exception
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGetHttpClient() : void
+    public function testHttpClient() : void
     {
         $mockHttpClient = new MockHttpClient();
         $client         = new Client(
@@ -78,5 +81,23 @@ class ClientAbstractTest extends
         );
         
         self::assertSame($mockHttpClient, $client->getHttpClient());
+    }
+    
+    /**
+     * testInvalidHttpClient
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function testInvalidHttpClient() : void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        
+        new Client(
+            'http://fakeClient',
+            null,
+            false
+        );
     }
 }

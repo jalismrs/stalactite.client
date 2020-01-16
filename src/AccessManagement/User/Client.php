@@ -16,6 +16,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use Jalismrs\Stalactite\Client\Response;
+use function array_map;
 
 /**
  * Client
@@ -34,9 +35,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientMe
+     * getClientMe
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Me\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientMe() : Me\Client
     {

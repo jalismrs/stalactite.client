@@ -25,11 +25,12 @@ class ApiAddLeadsTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testAddPosts() : void
     {
@@ -65,9 +66,14 @@ class ApiAddLeadsTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testThrowOnInvalidResponseAddPosts
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowOnInvalidResponseAddPosts() : void
     {
@@ -105,9 +111,14 @@ class ApiAddLeadsTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testThrowOnInvalidPostsParameterAddPosts
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowOnInvalidPostsParameterAddPosts() : void
     {

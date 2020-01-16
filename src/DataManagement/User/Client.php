@@ -10,10 +10,12 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
+use function array_map;
 
 /**
  * Client
@@ -36,9 +38,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientCertificationGraduation
+     * getClientCertificationGraduation
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientCertificationGraduation() : CertificationGraduation\Client
     {
@@ -54,9 +58,11 @@ class Client extends
     }
     
     /**
-     * clientLead
+     * getClientLead
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\Lead\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientLead() : Lead\Client
     {
@@ -72,9 +78,11 @@ class Client extends
     }
     
     /**
-     * clientMe
+     * getClientMe
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\Me\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientMe() : Me\Client
     {
@@ -90,9 +98,11 @@ class Client extends
     }
     
     /**
-     * clientPhoneLine
+     * getClientPhoneLine
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientPhoneLine() : PhoneLine\Client
     {
@@ -108,9 +118,11 @@ class Client extends
     }
     
     /**
-     * clientPost
+     * getClientPost
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\Post\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientPost() : Post\Client
     {
@@ -298,14 +310,22 @@ class Client extends
     public function create(UserModel $user, string $jwt) : Response
     {
         $body = $user->asMinimalArray();
+    
+        $body['posts'] = array_map(
+            static function(PostModel $postModel): ?string
+            {
+                return $postModel->getUid();
+            },
+            $user->getPosts()
+        );
         
-        foreach ($user->getPosts() as $post) {
-            $body['posts'] = $post->getUid();
-        }
-        
-        foreach ($user->getLeads() as $lead) {
-            $body['leads'] = $lead->getUid();
-        }
+        $body['leads'] = array_map(
+            static function(PostModel $leadModel): ?string
+            {
+                return $leadModel->getUid();
+            },
+            $user->getLeads()
+        );
         
         $schema = new JsonSchema();
         $schema->setSchema(

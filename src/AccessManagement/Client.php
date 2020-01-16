@@ -26,9 +26,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientAuthToken
+     * getClientAuthToken
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientAuthToken() : AuthToken\Client
     {
@@ -46,9 +48,11 @@ class Client extends
     }
     
     /**
-     * clientCustomer
+     * getClientCustomer
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Customer\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientCustomer() : Customer\Client
     {
@@ -64,9 +68,11 @@ class Client extends
     }
     
     /**
-     * clientDomain
+     * getClientDomain
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Domain\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientDomain() : Domain\Client
     {
@@ -82,9 +88,11 @@ class Client extends
     }
     
     /**
-     * clientRelation
+     * getClientRelation
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Relation\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientRelation() : Relation\Client
     {
@@ -100,9 +108,11 @@ class Client extends
     }
     
     /**
-     * clientUser
+     * getClientUser
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientUser() : User\Client
     {

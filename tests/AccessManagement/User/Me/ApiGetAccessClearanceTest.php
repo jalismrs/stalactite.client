@@ -27,12 +27,13 @@ class ApiGetAccessClearanceTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testGetAccessClearance() : void
     {
@@ -71,9 +72,14 @@ class ApiGetAccessClearanceTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testThrowExceptionOnInvalidResponseGetAccessClearance
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseGetAccessClearance() : void
     {

@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client as ParentClient;
+use function array_map;
 
 /**
  * Client

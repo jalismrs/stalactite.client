@@ -5,9 +5,15 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
+use function array_replace_recursive;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
 
 /**
  * ClientAbstract
@@ -32,29 +38,49 @@ abstract class ClientAbstract
     /**
      * ClientAbstract constructor.
      *
-     * @param string                                                 $host
-     * @param string|null                                            $userAgent
-     * @param \Symfony\Contracts\HttpClient\HttpClientInterface|null $httpClient
+     * @param string      $host
+     * @param string|null $userAgent
+     * @param null        $httpClient
+     *
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         string $host,
         string $userAgent = null,
-        HttpClientInterface $httpClient = null
+        $httpClient = null
     ) {
         $this->host      = $host;
         $this->userAgent = $userAgent;
         
-        $this->httpClient = $httpClient;
-        if (null === $this->httpClient) {
-            $this->httpClient = null !== $userAgent
-                ? HttpClient::create(
-                    [
-                        'headers' => [
-                            'UserModel-Agent' => $this->userAgent,
-                        ],
-                    ]
+        $httpClientOptions = null === $userAgent
+            ? []
+            : [
+                'headers' => [
+                    'User-Agent' => $userAgent,
+                ],
+            ];
+        
+        if (null === $httpClient) {
+            $this->httpClient = HttpClient::create(
+                $httpClientOptions
+            );
+        } elseif ($httpClient instanceof HttpClientInterface) {
+            $this->httpClient = $httpClient;
+        } elseif (is_array($httpClient)) {
+            $this->httpClient = HttpClient::create(
+                array_replace_recursive(
+                    $httpClientOptions,
+                    $httpClient
                 )
-                : HttpClient::create();
+            );
+        } else {
+            $given = is_object($httpClient)
+                ? get_class($httpClient)
+                : gettype($httpClient);
+            
+            throw new InvalidArgumentException(
+                "Argument '\$httpClient' must either be '\Symfony\Contracts\HttpClient\HttpClientInterface' or 'array' but '{$given}' was given"
+            );
         }
     }
     

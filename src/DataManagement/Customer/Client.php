@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use \Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
+use function array_map;
 
 /**
  * Client
@@ -32,9 +33,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientMe
+     * getClientMe
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Me\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientMe() : Me\Client
     {

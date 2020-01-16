@@ -24,11 +24,12 @@ class LoginTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testSchemaValidationOnLogin() : void
     {
@@ -87,9 +88,14 @@ class LoginTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testExceptionThrownOnInvalidAPIHost
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testExceptionThrownOnInvalidAPIHost() : void
     {
@@ -104,9 +110,14 @@ class LoginTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testExceptionThrownOnInvalidAPIResponse
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testExceptionThrownOnInvalidAPIResponse() : void
     {
@@ -132,9 +143,14 @@ class LoginTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidSchemaException
-     * @throws InvalidDataTypeException
+     * testExceptionThrownOnInvalidAPIResponseContent
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testExceptionThrownOnInvalidAPIResponseContent() : void
     {

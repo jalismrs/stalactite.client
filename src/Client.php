@@ -20,9 +20,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientAccessManagement
+     * getClientAccessManagement
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientAccessManagement() : AccessManagement\Client
     {
@@ -40,9 +42,11 @@ class Client extends
     }
     
     /**
-     * clientAuthentification
+     * getClientAuthentification
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientAuthentification() : Authentication\Client
     {
@@ -60,9 +64,11 @@ class Client extends
     }
     
     /**
-     * clientDataManagement
+     * getClientDataManagement
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientDataManagement() : DataManagement\Client
     {

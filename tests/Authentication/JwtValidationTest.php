@@ -39,6 +39,7 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testTransportExceptionThrownOnRSAPublicKeyFetching() : void
@@ -279,10 +280,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     private function checkToken(
         string $token,

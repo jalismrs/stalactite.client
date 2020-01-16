@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use function array_map;
 
 /**
  * Client
@@ -90,7 +91,9 @@ class Client extends
      */
     public function addPosts(UserModel $user, array $posts, string $jwt) : Response
     {
-        $body = ['posts' => []];
+        $body = [
+            'posts' => []
+        ];
         
         foreach ($posts as $post) {
             if (!$post instanceof PostModel) {
@@ -147,7 +150,9 @@ class Client extends
      */
     public function removePosts(UserModel $user, array $posts, string $jwt) : Response
     {
-        $body = ['posts' => []];
+        $body = [
+            'posts' => []
+        ];
         
         foreach ($posts as $post) {
             if (!$post instanceof PostModel) {

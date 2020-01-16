@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
+use function array_map;
 
 /**
  * Client

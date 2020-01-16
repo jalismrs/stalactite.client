@@ -25,11 +25,12 @@ class ApiRemovePostsTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testRemovePosts() : void
     {
@@ -65,9 +66,14 @@ class ApiRemovePostsTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testThrowOnInvalidResponseRemovePosts
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowOnInvalidResponseRemovePosts() : void
     {
@@ -105,9 +111,14 @@ class ApiRemovePostsTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testThrowOnInvalidPostsParameterRemovePosts
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts() : void
     {

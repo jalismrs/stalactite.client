@@ -30,9 +30,9 @@ abstract class ModelAbstract
      *
      * @param null|string $uid
      *
-     * @return \Jalismrs\Stalactite\Client\ModelAbstract
+     * @return $this
      */
-    public function setUid(?string $uid) : ModelAbstract
+    public function setUid(?string $uid) : self
     {
         $this->uid = $uid;
         

@@ -23,6 +23,7 @@ class ApiRemoveLeadsTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
@@ -67,6 +68,7 @@ class ApiRemoveLeadsTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
@@ -111,6 +113,7 @@ class ApiRemoveLeadsTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException

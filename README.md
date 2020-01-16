@@ -2,21 +2,17 @@
 
 PHP client for the Stalactite API
 
-# Requirements
+## Requirements
++ PHP >= 7.3
 
-- PHP >= 7.1
-- composer
-
-# Install
-
+## Install
 ```bash
 composer require Jalismrs/stalactite-api.client
 ```
 
-# Before release
-
-All tests must be ok. To start the tests, just use this command :
+## Before release
+All tests must be ok. To start the tests locally :
 
 ```bash
-php vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+vendor/bin/phpunit
 ```

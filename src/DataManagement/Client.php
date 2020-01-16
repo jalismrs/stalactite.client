@@ -28,9 +28,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * clientAuthToken
+     * getClientAuthToken
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientAuthToken() : AuthToken\Client
     {
@@ -46,9 +48,11 @@ class Client extends
     }
     
     /**
-     * clientCertificationType
+     * getClientCertificationType
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientCertificationType() : CertificationType\Client
     {
@@ -64,9 +68,11 @@ class Client extends
     }
     
     /**
-     * clientCustomer
+     * getClientCustomer
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientCustomer() : Customer\Client
     {
@@ -82,9 +88,11 @@ class Client extends
     }
     
     /**
-     * clientDomain
+     * getClientDomain
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Domain\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientDomain() : Domain\Client
     {
@@ -100,9 +108,11 @@ class Client extends
     }
     
     /**
-     * clientPhoneType
+     * getClientPhoneType
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientPhoneType() : PhoneType\Client
     {
@@ -118,9 +128,11 @@ class Client extends
     }
     
     /**
-     * clientPost
+     * getClientPost
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Post\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientPost() : Post\Client
     {
@@ -136,9 +148,11 @@ class Client extends
     }
     
     /**
-     * clientUser
+     * getClientUser
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\Client
+     *
+     * @throws \InvalidArgumentException
      */
     public function getClientUser() : User\Client
     {

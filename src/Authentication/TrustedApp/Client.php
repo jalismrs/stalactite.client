@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
+use function array_map;
 use function array_merge;
 
 /**
