@@ -207,15 +207,20 @@ class ClientTest extends
      */
     public function testCreateTrustedApp() : void
     {
-        $ta             = ModelFactory::getTestableTrustedApp();
-        $mockHttpClient = new MockHttpClient(
+        $trustedAppModel = ModelFactory::getTestableTrustedApp();
+        $mockHttpClient  = new MockHttpClient(
             [
                 new MockResponse(
                     json_encode(
                         [
                             'success'    => true,
                             'error'      => null,
-                            'trustedApp' => array_merge($ta->asArray(), ['resetToken' => $ta->getResetToken()])
+                            'trustedApp' => array_merge(
+                                $trustedAppModel->asArray(),
+                                [
+                                    'resetToken' => $trustedAppModel->getResetToken()
+                                ]
+                            )
                         ],
                         JSON_THROW_ON_ERROR
                     )
@@ -388,11 +393,11 @@ class ClientTest extends
             $mockHttpClient
         );
         
-        $ta = ModelFactory::getTestableTrustedApp();
+        $trustedAppModel = ModelFactory::getTestableTrustedApp();
         
         $response = $mockClient->delete(
-            $ta->getUid(),
-            $ta->getResetToken(),
+            $trustedAppModel->getUid(),
+            $trustedAppModel->getResetToken(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -429,11 +434,11 @@ class ClientTest extends
             $mockHttpClient
         );
         
-        $ta = ModelFactory::getTestableTrustedApp();
+        $trustedAppModel = ModelFactory::getTestableTrustedApp();
         
         $mockClient->delete(
-            $ta->getUid(),
-            $ta->getResetToken(),
+            $trustedAppModel->getUid(),
+            $trustedAppModel->getResetToken(),
             'fake user jwt'
         );
     }

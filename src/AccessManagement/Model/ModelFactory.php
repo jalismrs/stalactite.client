@@ -19,12 +19,13 @@ abstract class ModelFactory
      */
     public static function createDomainUserRelation(array $data) : DomainUserRelationModel
     {
-        $dur = new DomainUserRelationModel();
-        $dur->setUser(
-            isset($data['user'])
-                ? DataManagementModelFactory::createUser($data['user'])
-                : null
-        )
+        $model = new DomainUserRelationModel();
+        $model
+            ->setUser(
+                isset($data['user'])
+                    ? DataManagementModelFactory::createUser($data['user'])
+                    : null
+            )
             ->setDomain(
                 isset($data['domain'])
                     ? DataManagementModelFactory::createDomain($data['domain'])
@@ -32,7 +33,7 @@ abstract class ModelFactory
             )
             ->setUid($data['uid'] ?? null);
         
-        return $dur;
+        return $model;
     }
     
     /**
@@ -42,8 +43,8 @@ abstract class ModelFactory
      */
     public static function createDomainCustomerRelation(array $data) : DomainCustomerRelationModel
     {
-        $dcr = new DomainCustomerRelationModel();
-        $dcr
+        $model = new DomainCustomerRelationModel();
+        $model
             ->setCustomer(
                 isset($data['customer'])
                     ? DataManagementModelFactory::createCustomer($data['customer'])
@@ -56,7 +57,7 @@ abstract class ModelFactory
             )
             ->setUid($data['uid'] ?? null);
         
-        return $dcr;
+        return $model;
     }
     
     /**
@@ -70,10 +71,11 @@ abstract class ModelFactory
      */
     public static function createAccessClearance(array $data) : AccessClearanceModel
     {
-        $ac = new AccessClearanceModel();
-        $ac->setAccess($data['accessGranted'] ?? false)
-           ->setAccessType($data['accessType'] ?? AccessClearanceModel::NO_ACCESS);
+        $model = new AccessClearanceModel();
+        $model
+            ->setAccess($data['accessGranted'] ?? false)
+            ->setAccessType($data['accessType'] ?? AccessClearanceModel::NO_ACCESS);
         
-        return $ac;
+        return $model;
     }
 }

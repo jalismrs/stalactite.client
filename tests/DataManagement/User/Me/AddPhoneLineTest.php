@@ -130,11 +130,11 @@ class AddPhoneLineTest extends
             $mockHttpClient
         );
         
-        $phoneLine = ModelFactory::getTestablePhoneLine()
+        $phoneLineModel = ModelFactory::getTestablePhoneLine()
                                  ->setType(null);
         
         $mockAPIClient->addPhoneLine(
-            $phoneLine,
+            $phoneLineModel,
             'fake user jwt'
         );
     }

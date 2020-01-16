@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
 /**
  * Class ModelFactory
+ *
  * @package Jalismrs\Stalactite\Client\Authentication\Model
  * Factory to instantiate models from arrays
  */
@@ -19,15 +20,16 @@ abstract class ModelFactory
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel
      */
-    public static function createTrustedApp(array $data): TrustedAppModel
+    public static function createTrustedApp(array $data) : TrustedAppModel
     {
-        $ta = new TrustedAppModel();
-        $ta->setName($data['name'] ?? null)
+        $model = new TrustedAppModel();
+        $model
+            ->setName($data['name'] ?? null)
             ->setResetToken($data['resetToken'] ?? null)
             ->setAuthToken($data['authToken'] ?? null)
             ->setGoogleOAuthClientId($data['googleOAuthClientId'] ?? null)
             ->setUid($data['uid'] ?? null);
-
-        return $ta;
+        
+        return $model;
     }
 }

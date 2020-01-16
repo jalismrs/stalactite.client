@@ -37,13 +37,13 @@ class ClientTest extends
      */
     public function testGetRelations() : void
     {
-        $ur = ModelFactory::getTestableDomainUserRelation()
-                          ->asArray();
-        unset($ur['domain']);
+        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
+                                          ->asArray();
+        unset($domainUserRelation['domain']);
         
-        $cr = ModelFactory::getTestableDomainCustomerRelation()
-                          ->asArray();
-        unset($cr['domain']);
+        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
+                                              ->asArray();
+        unset($domainCustomerRelation['domain']);
         
         $mockHttpClient = new MockHttpClient(
             [
@@ -53,8 +53,12 @@ class ClientTest extends
                             'success'   => true,
                             'error'     => null,
                             'relations' => [
-                                'users'     => [$ur],
-                                'customers' => [$cr]
+                                'users'     => [
+                                    $domainUserRelation
+                                ],
+                                'customers' => [
+                                    $domainCustomerRelation
+                                ]
                             ]
                         ],
                         JSON_THROW_ON_ERROR
@@ -106,13 +110,13 @@ class ClientTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $ur = ModelFactory::getTestableDomainUserRelation()
+        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
                           ->asArray();
-        unset($ur['domain']);
+        unset($domainUserRelation['domain']);
         
-        $cr = ModelFactory::getTestableDomainCustomerRelation()
+        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
                           ->asArray();
-        unset($cr['domain']);
+        unset($domainCustomerRelation['domain']);
         
         $mockHttpClient = new MockHttpClient(
             [
@@ -122,8 +126,8 @@ class ClientTest extends
                             'success'   => true,
                             'error'     => null,
                             'relations' => [
-                                'users'     => $ur,
-                                'customers' => $cr
+                                'users'     => $domainUserRelation,
+                                'customers' => $domainCustomerRelation
                             ]
                         ],
                         JSON_THROW_ON_ERROR

@@ -57,11 +57,11 @@ class GetByEmailAndGoogleIdTest extends
             $mockHttpClient
         );
         
-        $u = ModelFactory::getTestableUser();
+        $userModel = ModelFactory::getTestableUser();
         
         $response = $mockAPIClient->getByEmailAndGoogleId(
-            $u->getEmail(),
-            $u->getGoogleId(),
+            $userModel->getEmail(),
+            $userModel->getGoogleId(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -102,12 +102,12 @@ class GetByEmailAndGoogleIdTest extends
             null,
             $mockHttpClient
         );
-        
-        $u = ModelFactory::getTestableUser();
+    
+        $userModel = ModelFactory::getTestableUser();
         
         $mockAPIClient->getByEmailAndGoogleId(
-            $u->getEmail(),
-            $u->getGoogleId(),
+            $userModel->getEmail(),
+            $userModel->getGoogleId(),
             'fake user jwt'
         );
     }

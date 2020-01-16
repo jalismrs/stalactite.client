@@ -65,9 +65,9 @@ class ClientTest extends
      */
     public function testGetRelations() : void
     {
-        $relation        = ModelFactory::getTestableDomainUserRelation();
-        $relationAsArray = $relation->asArray();
-        unset($relationAsArray['user']);
+        $domainUserRelation        = ModelFactory::getTestableDomainUserRelation()
+                                                 ->asArray();
+        unset($domainUserRelation['user']);
         
         $mockHttpClient = new MockHttpClient(
             [
@@ -76,7 +76,9 @@ class ClientTest extends
                         [
                             'success'   => true,
                             'error'     => null,
-                            'relations' => [$relationAsArray]
+                            'relations' => [
+                                $domainUserRelation
+                            ]
                         ],
                         JSON_THROW_ON_ERROR
                     )

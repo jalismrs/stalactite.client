@@ -322,11 +322,11 @@ class ClientTest extends
             $mockHttpClient
         );
         
-        $d = ModelFactory::getTestableDomain();
+        $domainModel = ModelFactory::getTestableDomain();
         
         $response = $mockAPIClient->getByNameAndApiKey(
-            $d->getName(),
-            $d->getApiKey(),
+            $domainModel->getName(),
+            $domainModel->getApiKey(),
             'fake user jwt'
         );
         self::assertTrue($response->success());
@@ -369,12 +369,12 @@ class ClientTest extends
             null,
             $mockHttpClient
         );
-        
-        $d = ModelFactory::getTestableDomain();
+    
+        $domainModel = ModelFactory::getTestableDomain();
         
         $mockAPIClient->getByNameAndApiKey(
-            $d->getName(),
-            $d->getApiKey(),
+            $domainModel->getName(),
+            $domainModel->getApiKey(),
             'fake user jwt'
         );
     }
