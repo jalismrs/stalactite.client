@@ -16,6 +16,10 @@ class Client extends
 {
     public const API_URL_PART = ParentClient::API_URL_PART . '/auth-token';
     
+    private $clientCustomer;
+    private $clientDomain;
+    private $clientPost;
+    private $clientUser;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -26,19 +30,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Customer\Client
      */
-    public function clientCustomer() : Customer\Client
+    public function getClientCustomer() : Customer\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Customer\Client(
+        if (null === $this->clientCustomer) {
+            $this->clientCustomer = new Customer\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientCustomer;
     }
     
     /**
@@ -46,19 +48,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Domain\Client
      */
-    public function clientDomain() : Domain\Client
+    public function getClientDomain() : Domain\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Domain\Client(
+        if (null === $this->clientDomain) {
+            $this->clientDomain = new Domain\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientDomain;
     }
     
     /**
@@ -66,19 +66,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Post\Client
      */
-    public function clientPost() : Post\Client
+    public function getClientPost() : Post\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Post\Client(
+        if (null === $this->clientPost) {
+            $this->clientPost = new Post\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientPost;
     }
     
     /**
@@ -86,18 +84,16 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\User\Client
      */
-    public function clientUser() : User\Client
+    public function getClientUser() : User\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new User\Client(
+        if (null === $this->clientUser) {
+            $this->clientUser = new User\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientUser;
     }
 }

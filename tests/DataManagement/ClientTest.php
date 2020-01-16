@@ -34,8 +34,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientAuthToken();
-        $client2 = $baseClient->clientAuthToken();
+        $client1 = $baseClient->getClientAuthToken();
+        $client2 = $baseClient->getClientAuthToken();
     
         self::checkClients(
             $baseClient,
@@ -60,8 +60,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientCertificationType();
-        $client2 = $baseClient->clientCertificationType();
+        $client1 = $baseClient->getClientCertificationType();
+        $client2 = $baseClient->getClientCertificationType();
     
         self::checkClients(
             $baseClient,
@@ -86,8 +86,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientCustomer();
-        $client2 = $baseClient->clientCustomer();
+        $client1 = $baseClient->getClientCustomer();
+        $client2 = $baseClient->getClientCustomer();
     
         self::checkClients(
             $baseClient,
@@ -112,8 +112,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientDomain();
-        $client2 = $baseClient->clientDomain();
+        $client1 = $baseClient->getClientDomain();
+        $client2 = $baseClient->getClientDomain();
     
         self::checkClients(
             $baseClient,
@@ -138,8 +138,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientPhoneType();
-        $client2 = $baseClient->clientPhoneType();
+        $client1 = $baseClient->getClientPhoneType();
+        $client2 = $baseClient->getClientPhoneType();
     
         self::checkClients(
             $baseClient,
@@ -164,8 +164,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientPost();
-        $client2 = $baseClient->clientPost();
+        $client1 = $baseClient->getClientPost();
+        $client2 = $baseClient->getClientPost();
     
         self::checkClients(
             $baseClient,
@@ -190,8 +190,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientUser();
-        $client2 = $baseClient->clientUser();
+        $client1 = $baseClient->getClientUser();
+        $client2 = $baseClient->getClientUser();
     
         self::checkClients(
             $baseClient,

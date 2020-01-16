@@ -34,8 +34,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientTrustedApp();
-        $client2 = $baseClient->clientTrustedApp();
+        $client1 = $baseClient->getClientTrustedApp();
+        $client2 = $baseClient->getClientTrustedApp();
     
         self::checkClients(
             $baseClient,

@@ -37,6 +37,7 @@ class Client extends
         'customer'
     ];
     
+    private $clientTrustedApp;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -47,19 +48,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
      */
-    public function clientTrustedApp() : TrustedApp\Client
+    public function getClientTrustedApp() : TrustedApp\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new TrustedApp\Client(
+        if (null === $this->clientTrustedApp) {
+            $this->clientTrustedApp = new TrustedApp\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientTrustedApp;
     }
     
     /*

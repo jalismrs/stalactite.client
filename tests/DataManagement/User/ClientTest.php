@@ -40,8 +40,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientCertificationGraduation();
-        $client2 = $baseClient->clientCertificationGraduation();
+        $client1 = $baseClient->getClientCertificationGraduation();
+        $client2 = $baseClient->getClientCertificationGraduation();
         
         self::checkClients(
             $baseClient,
@@ -66,8 +66,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientLead();
-        $client2 = $baseClient->clientLead();
+        $client1 = $baseClient->getClientLead();
+        $client2 = $baseClient->getClientLead();
         
         self::checkClients(
             $baseClient,
@@ -92,8 +92,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientMe();
-        $client2 = $baseClient->clientMe();
+        $client1 = $baseClient->getClientMe();
+        $client2 = $baseClient->getClientMe();
         
         self::checkClients(
             $baseClient,
@@ -118,8 +118,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientPhoneLine();
-        $client2 = $baseClient->clientPhoneLine();
+        $client1 = $baseClient->getClientPhoneLine();
+        $client2 = $baseClient->getClientPhoneLine();
         
         self::checkClients(
             $baseClient,
@@ -144,8 +144,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->clientPost();
-        $client2 = $baseClient->clientPost();
+        $client1 = $baseClient->getClientPost();
+        $client2 = $baseClient->getClientPost();
         
         self::checkClients(
             $baseClient,

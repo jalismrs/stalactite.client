@@ -11,6 +11,9 @@ namespace Jalismrs\Stalactite\Client;
 class Client extends
     ClientAbstract
 {
+    private $clientAccessManagement;
+    private $clientAuthentification;
+    private $clientDataManagement;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -21,19 +24,19 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
      */
-    public function clientAccessManagement() : AccessManagement\Client
+    public function getClientAccessManagement() : AccessManagement\Client
     {
         static $client = null;
         
-        if (null === $client) {
-            $client = new AccessManagement\Client(
+        if (null === $this->clientAccessManagement) {
+            $this->clientAccessManagement = new AccessManagement\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientAccessManagement;
     }
     
     /**
@@ -41,19 +44,19 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Client
      */
-    public function clientAuthentification() : Authentication\Client
+    public function getClientAuthentification() : Authentication\Client
     {
         static $client = null;
     
-        if (null === $client) {
-            $client = new Authentication\Client(
+        if (null === $this->clientAuthentification) {
+            $this->clientAuthentification = new Authentication\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientAuthentification;
     }
     
     /**
@@ -61,18 +64,18 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Client
      */
-    public function clientDataManagement() : DataManagement\Client
+    public function getClientDataManagement() : DataManagement\Client
     {
         static $client = null;
     
-        if (null === $client) {
-            $client = new DataManagement\Client(
+        if (null === $this->clientDataManagement) {
+            $this->clientDataManagement = new DataManagement\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientDataManagement;
     }
 }

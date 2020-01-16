@@ -15,6 +15,13 @@ class Client extends
 {
     public const API_URL_PART = '/data';
     
+    private $clientAuthToken;
+    private $clientCertificationType;
+    private $clientCustomer;
+    private $clientDomain;
+    private $clientPhoneType;
+    private $clientPost;
+    private $clientUser;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -25,19 +32,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client
      */
-    public function clientAuthToken() : AuthToken\Client
+    public function getClientAuthToken() : AuthToken\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new AuthToken\Client(
+        if (null === $this->clientAuthToken) {
+            $this->clientAuthToken = new AuthToken\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientAuthToken;
     }
     
     /**
@@ -45,19 +50,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client
      */
-    public function clientCertificationType() : CertificationType\Client
+    public function getClientCertificationType() : CertificationType\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new CertificationType\Client(
+        if (null === $this->clientCertificationType) {
+            $this->clientCertificationType = new CertificationType\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientCertificationType;
     }
     
     /**
@@ -65,19 +68,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Client
      */
-    public function clientCustomer() : Customer\Client
+    public function getClientCustomer() : Customer\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Customer\Client(
+        if (null === $this->clientCustomer) {
+            $this->clientCustomer = new Customer\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientCustomer;
     }
     
     /**
@@ -85,19 +86,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Domain\Client
      */
-    public function clientDomain() : Domain\Client
+    public function getClientDomain() : Domain\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Domain\Client(
+        if (null === $this->clientDomain) {
+            $this->clientDomain = new Domain\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientDomain;
     }
     
     /**
@@ -105,19 +104,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client
      */
-    public function clientPhoneType() : PhoneType\Client
+    public function getClientPhoneType() : PhoneType\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new PhoneType\Client(
+        if (null === $this->clientPhoneType) {
+            $this->clientPhoneType = new PhoneType\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientPhoneType;
     }
     
     /**
@@ -125,19 +122,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\Post\Client
      */
-    public function clientPost() : Post\Client
+    public function getClientPost() : Post\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new Post\Client(
+        if (null === $this->clientPost) {
+            $this->clientPost = new Post\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientPost;
     }
     
     /**
@@ -145,18 +140,16 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\DataManagement\User\Client
      */
-    public function clientUser() : User\Client
+    public function getClientUser() : User\Client
     {
-        static $client = null;
-        
-        if (null === $client) {
-            $client = new User\Client(
+        if (null === $this->clientUser) {
+            $this->clientUser = new User\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $client;
+        return $this->clientUser;
     }
 }

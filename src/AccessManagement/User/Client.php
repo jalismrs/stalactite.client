@@ -27,6 +27,7 @@ class Client extends
 {
     public const API_URL_PART = ParentClient::API_URL_PART . '/users';
     
+    private $clientMe;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -37,19 +38,17 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Me\Client
      */
-    public function clientMe() : Me\Client
+    public function getClientMe() : Me\Client
     {
-        static $client = null;
-    
-        if (null === $client) {
-            $client = new Me\Client(
+        if (null === $this->clientMe) {
+            $this->clientMe = new Me\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
     
-        return $client;
+        return $this->clientMe;
     }
     
     /*
