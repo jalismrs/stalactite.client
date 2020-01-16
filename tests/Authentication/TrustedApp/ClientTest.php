@@ -14,9 +14,9 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
- * ClientTest
+ * ApiGetTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication\TrustedAppModel
+ * @package Jalismrs\Stalactite\Test\Authentication\TrustedApp
  */
 class ClientTest extends
     TestCase

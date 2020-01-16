@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Test;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 
 /**
- * ClientTest
+ * ClientTestTrait
  *
  * @package Jalismrs\Stalactite\Test
  * @mixin \PHPUnit\Framework\TestCase

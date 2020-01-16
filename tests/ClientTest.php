@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ClientTest
+ * ApiGetTest
  *
  * @package Jalismrs\Stalactite\Test
  */
