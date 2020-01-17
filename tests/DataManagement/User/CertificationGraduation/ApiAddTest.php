@@ -59,7 +59,7 @@ class ApiAddTest extends
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
     

@@ -106,8 +106,9 @@ class TrustedAppModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
-     * Return the object as an array
      */
     public function asArray() : array
     {
@@ -115,7 +116,7 @@ class TrustedAppModel extends
             'uid'                 => $this->uid,
             'name'                => $this->name,
             'authToken'           => $this->authToken,
-            'googleOAuthClientId' => $this->googleOAuthClientId
+            'googleOAuthClientId' => $this->googleOAuthClientId,
         ];
     }
 }

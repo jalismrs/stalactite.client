@@ -45,11 +45,11 @@ class Response
     }
     
     /**
-     * success
+     * isSuccess
      *
      * @return bool
      */
-    public function success() : bool
+    public function isSuccess() : bool
     {
         return $this->success;
     }

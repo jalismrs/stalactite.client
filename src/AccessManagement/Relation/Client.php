@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelationModelAbstrac
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
+use function vsprintf;
 
 /**
  * Client
@@ -48,7 +49,14 @@ class Client extends
         );
     
         $response = $this->requestDelete(
-            $this->host . self::API_URL_PART . '/' . $domainRelation->getUid(),
+            vsprintf(
+                '%s%s/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $domainRelation->getUid(),
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

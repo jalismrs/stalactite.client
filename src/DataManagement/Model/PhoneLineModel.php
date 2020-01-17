@@ -60,6 +60,8 @@ class PhoneLineModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
@@ -67,10 +69,9 @@ class PhoneLineModel extends
         return [
             'uid'   => $this->uid,
             'value' => $this->value,
-            'type'  => $this->getType()
-                ? $this->getType()
-                       ->asArray()
-                : null
+            'type'  => null === $this->type
+                ? null
+                : $this->type->asArray(),
         ];
     }
 }

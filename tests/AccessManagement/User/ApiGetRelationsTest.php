@@ -67,7 +67,7 @@ class ApiGetRelationsTest extends
             DataManagementTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
             DomainUserRelationModel::class,

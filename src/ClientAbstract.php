@@ -229,7 +229,7 @@ abstract class ClientAbstract
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    final protected function request(
+    private function request(
         string $method,
         string $url,
         array $options,

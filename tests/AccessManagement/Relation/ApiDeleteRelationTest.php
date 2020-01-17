@@ -58,7 +58,7 @@ class ApiDeleteRelationTest extends
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'
         );
-        static::assertTrue($response->success());
+        static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
     }
     

@@ -60,16 +60,18 @@ class CertificationGraduationModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
     {
         return [
             'uid'  => $this->uid,
-            'type' => $this->type
-                ? $this->type->asArray()
-                : null,
-            'date' => $this->date
+            'type' => null === $this->type
+                ? null
+                : $this->type->asArray(),
+            'date' => $this->date,
         ];
     }
 }

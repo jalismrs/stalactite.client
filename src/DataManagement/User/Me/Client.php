@@ -14,8 +14,9 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
-use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use Jalismrs\Stalactite\Client\Response;
+use function vsprintf;
 
 /**
  * Client
@@ -54,9 +55,15 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -106,9 +113,15 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -162,9 +175,15 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
-            $this->host . self::API_URL_PART . '/phone/lines',
+            vsprintf(
+                '%s%s/phone/lines',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -203,9 +222,16 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
-            $this->host . self::API_URL_PART . '/phone/lines/' . $phoneLine->getUid(),
+            vsprintf(
+                '%s%s/phone/lines/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $phoneLine->getUid(),
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

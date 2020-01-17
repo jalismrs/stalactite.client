@@ -129,6 +129,8 @@ class DomainModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
@@ -139,7 +141,7 @@ class DomainModel extends
             'type'           => $this->type,
             'apiKey'         => $this->apiKey,
             'externalAuth'   => $this->externalAuth,
-            'generationDate' => $this->generationDate
+            'generationDate' => $this->generationDate,
         ];
     }
 }

@@ -15,47 +15,63 @@ use function array_reduce;
 class UserModel extends
     ModelAbstract
 {
-    /** @var null|string $email */
+    /**
+     * @var null|string
+     */
     private $email;
-    
-    /** @var null|string $googleId */
+    /**
+     * @var null|string
+     */
     private $googleId;
-    
-    /** @var null|string $birthday */
+    /**
+     * @var null|string
+     */
     private $birthday;
-    
-    /** @var null|string $lastName */
+    /**
+     * @var null|string
+     */
     private $lastName;
-    
-    /** @var null|string $firstName */
+    /**
+     * @var null|string
+     */
     private $firstName;
-    
-    /** @var null|string $gender */
+    /**
+     * @var null|string
+     */
     private $gender;
-    
-    /** @var boolean $admin */
+    /**
+     * @var bool
+     */
     private $admin = false;
-    
-    /** @var null|string $location */
+    /**
+     * @var null|string
+     */
     private $location;
-    
-    /** @var null|string $office */
+    /**
+     * @var null|string
+     */
     private $office;
-    
-    /** @var array|PostModel[] $posts */
+    /**
+     * @var array
+     */
     private $posts = [];
-    
-    /** @var array|PostModel[] $leads */
+    /**
+     * @var array
+     */
     private $leads = [];
-    
-    /** @var array|PhoneLineModel[] $phoneLines */
+    /**
+     * @var array
+     */
     private $phoneLines = [];
-    
-    /** @var array|CertificationTypeModel[] $certifications */
+    /**
+     * @var array
+     */
     private $certifications = [];
     
     /**
-     * @return string
+     * getEmail
+     *
+     * @return null|string
      */
     public function getEmail() : ?string
     {
@@ -63,11 +79,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $email
+     * setEmail
      *
-     * @return UserModel
+     * @param null|string $email
+     *
+     * @return $this
      */
-    public function setEmail(?string $email) : UserModel
+    public function setEmail(?string $email) : self
     {
         $this->email = $email;
         
@@ -75,7 +93,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getGoogleId
+     *
+     * @return null|string
      */
     public function getGoogleId() : ?string
     {
@@ -83,11 +103,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $googleId
+     * setGoogleId
      *
-     * @return UserModel
+     * @param null|string $googleId
+     *
+     * @return $this
      */
-    public function setGoogleId(?string $googleId) : UserModel
+    public function setGoogleId(?string $googleId) : self
     {
         $this->googleId = $googleId;
         
@@ -95,7 +117,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getBirthday
+     *
+     * @return null|string
      */
     public function getBirthday() : ?string
     {
@@ -103,11 +127,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $birthday
+     * setBirthday
      *
-     * @return UserModel
+     * @param null|string $birthday
+     *
+     * @return $this
      */
-    public function setBirthday(?string $birthday) : UserModel
+    public function setBirthday(?string $birthday) : self
     {
         $this->birthday = $birthday;
         
@@ -115,7 +141,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getLastName
+     *
+     * @return null|string
      */
     public function getLastName() : ?string
     {
@@ -123,11 +151,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $lastName
+     * setLastName
      *
-     * @return UserModel
+     * @param null|string $lastName
+     *
+     * @return $this
      */
-    public function setLastName(?string $lastName) : UserModel
+    public function setLastName(?string $lastName) : self
     {
         $this->lastName = $lastName;
         
@@ -135,7 +165,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getFirstName
+     *
+     * @return null|string
      */
     public function getFirstName() : ?string
     {
@@ -143,11 +175,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $firstName
+     * setFirstName
      *
-     * @return UserModel
+     * @param null|string $firstName
+     *
+     * @return $this
      */
-    public function setFirstName(?string $firstName) : UserModel
+    public function setFirstName(?string $firstName) : self
     {
         $this->firstName = $firstName;
         
@@ -155,7 +189,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getGender
+     *
+     * @return null|string
      */
     public function getGender() : ?string
     {
@@ -163,11 +199,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $gender
+     * setGender
      *
-     * @return UserModel
+     * @param null|string $gender
+     *
+     * @return $this
      */
-    public function setGender(?string $gender) : UserModel
+    public function setGender(?string $gender) : self
     {
         $this->gender = $gender;
         
@@ -175,7 +213,9 @@ class UserModel extends
     }
     
     /**
-     * @return bool|null
+     * isAdmin
+     *
+     * @return bool
      */
     public function isAdmin() : bool
     {
@@ -183,11 +223,13 @@ class UserModel extends
     }
     
     /**
-     * @param bool|null $admin
+     * setAdmin
      *
-     * @return UserModel
+     * @param bool $admin
+     *
+     * @return $this
      */
-    public function setAdmin(bool $admin) : UserModel
+    public function setAdmin(bool $admin) : self
     {
         $this->admin = $admin;
         
@@ -195,7 +237,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getLocation
+     *
+     * @return null|string
      */
     public function getLocation() : ?string
     {
@@ -203,11 +247,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $location
+     * setLocation
      *
-     * @return UserModel
+     * @param null|string $location
+     *
+     * @return $this
      */
-    public function setLocation(?string $location) : UserModel
+    public function setLocation(?string $location) : self
     {
         $this->location = $location;
         
@@ -215,7 +261,9 @@ class UserModel extends
     }
     
     /**
-     * @return string
+     * getOffice
+     *
+     * @return null|string
      */
     public function getOffice() : ?string
     {
@@ -223,11 +271,13 @@ class UserModel extends
     }
     
     /**
-     * @param string $office
+     * setOffice
      *
-     * @return UserModel
+     * @param null|string $office
+     *
+     * @return $this
      */
-    public function setOffice(?string $office) : UserModel
+    public function setOffice(?string $office) : self
     {
         $this->office = $office;
         
@@ -235,7 +285,9 @@ class UserModel extends
     }
     
     /**
-     * @return array|PostModel[]
+     * getPosts
+     *
+     * @return array
      */
     public function getPosts() : array
     {
@@ -243,11 +295,13 @@ class UserModel extends
     }
     
     /**
-     * @param array|PostModel[] $posts
+     * setPosts
      *
-     * @return UserModel
+     * @param array $posts
+     *
+     * @return $this
      */
-    public function setPosts(array $posts) : UserModel
+    public function setPosts(array $posts) : self
     {
         $this->posts = [];
         foreach ($posts as $post) {
@@ -258,11 +312,13 @@ class UserModel extends
     }
     
     /**
-     * @param PostModel $post
+     * addPost
      *
-     * @return UserModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $post
+     *
+     * @return $this
      */
-    public function addPost(PostModel $post) : UserModel
+    public function addPost(PostModel $post) : self
     {
         $this->posts[] = $post;
         
@@ -270,13 +326,15 @@ class UserModel extends
     }
     
     /**
+     * hasAdminPost
+     *
      * @return bool
      */
     public function hasAdminPost() : bool
     {
         return array_reduce(
             $this->getPosts(),
-            static function(bool $carry, PostModel $post): bool {
+            static function(bool $carry, PostModel $post) : bool {
                 return $carry
                     ||
                     $post->hasAdminAccess();
@@ -286,7 +344,9 @@ class UserModel extends
     }
     
     /**
-     * @return array|PostModel[]
+     * getLeads
+     *
+     * @return array
      */
     public function getLeads() : array
     {
@@ -294,11 +354,13 @@ class UserModel extends
     }
     
     /**
-     * @param array|PostModel[] $leads
+     * setLeads
      *
-     * @return UserModel
+     * @param array $leads
+     *
+     * @return $this
      */
-    public function setLeads(array $leads) : UserModel
+    public function setLeads(array $leads) : self
     {
         $this->leads = [];
         foreach ($leads as $lead) {
@@ -313,9 +375,9 @@ class UserModel extends
      *
      * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $lead
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel
+     * @return $this
      */
-    public function addLead(PostModel $lead) : UserModel
+    public function addLead(PostModel $lead) : self
     {
         $this->leads[] = $lead;
         
@@ -323,7 +385,9 @@ class UserModel extends
     }
     
     /**
-     * @return array|PhoneLineModel[]
+     * getPhoneLines
+     *
+     * @return array
      */
     public function getPhoneLines() : array
     {
@@ -331,11 +395,13 @@ class UserModel extends
     }
     
     /**
-     * @param array|PhoneLineModel[] $phoneLines
+     * setPhoneLines
      *
-     * @return UserModel
+     * @param array $phoneLines
+     *
+     * @return $this
      */
-    public function setPhoneLines(array $phoneLines) : UserModel
+    public function setPhoneLines(array $phoneLines) : self
     {
         $this->phoneLines = [];
         foreach ($phoneLines as $phoneLine) {
@@ -346,11 +412,13 @@ class UserModel extends
     }
     
     /**
-     * @param PhoneLineModel $phoneLine
+     * addPhoneLine
      *
-     * @return UserModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel $phoneLine
+     *
+     * @return $this
      */
-    public function addPhoneLine(PhoneLineModel $phoneLine) : UserModel
+    public function addPhoneLine(PhoneLineModel $phoneLine) : self
     {
         $this->phoneLines[] = $phoneLine;
         
@@ -358,7 +426,9 @@ class UserModel extends
     }
     
     /**
-     * @return array|CertificationTypeModel[]
+     * getCertifications
+     *
+     * @return array
      */
     public function getCertifications() : array
     {
@@ -366,11 +436,13 @@ class UserModel extends
     }
     
     /**
-     * @param array|CertificationTypeModel[] $certifications
+     * setCertifications
      *
-     * @return UserModel
+     * @param array $certifications
+     *
+     * @return $this
      */
-    public function setCertifications(array $certifications) : UserModel
+    public function setCertifications(array $certifications) : self
     {
         $this->certifications = [];
         foreach ($certifications as $certification) {
@@ -385,13 +457,51 @@ class UserModel extends
      *
      * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certification
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel
+     * @return $this
      */
-    public function addCertification(CertificationGraduationModel $certification) : UserModel
+    public function addCertification(CertificationGraduationModel $certification) : self
     {
         $this->certifications[] = $certification;
         
         return $this;
+    }
+    
+    /**
+     * asArray
+     *
+     * @return array
+     */
+    public function asArray() : array
+    {
+        return array_merge(
+            $this->asMinimalArray(),
+            [
+                'certifications' => array_map(
+                    static function(CertificationGraduationModel $certificationGraduationModel) : array {
+                        return $certificationGraduationModel->asArray();
+                    },
+                    $this->certifications
+                ),
+                'leads'          => array_map(
+                    static function(PostModel $leadModel) : array {
+                        return $leadModel->asArray();
+                    },
+                    $this->leads
+                ),
+                'phoneLines'     => array_map(
+                    static function(PhoneLineModel $phoneLineModel) : array {
+                        return $phoneLineModel->asArray();
+                    },
+                    $this->phoneLines
+                ),
+                'posts'          => array_map(
+                    static function(PostModel $postModel) : array {
+                        return $postModel->asArray();
+                    },
+                    $this->posts
+                ),
+            ],
+        );
     }
     
     /**
@@ -411,83 +521,7 @@ class UserModel extends
             'location'  => $this->location,
             'office'    => $this->office,
             'admin'     => $this->admin,
-            'birthday'  => $this->birthday
+            'birthday'  => $this->birthday,
         ];
-    }
-    
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray() : array
-    {
-        $user                   = $this->asMinimalArray();
-        $user['posts']          = $this->getPostsAsArray();
-        $user['leads']          = $this->getLeadsAsArray();
-        $user['phoneLines']     = $this->getPhoneLinesAsArray();
-        $user['certifications'] = $this->getCertificationsAsArray();
-        
-        return $user;
-    }
-    
-    /**
-     * getPostsAsArray
-     *
-     * @return array
-     */
-    public function getPostsAsArray() : array
-    {
-        return array_map(
-            static function(PostModel $postModel): array {
-                return $postModel->asArray();
-            },
-            $this->posts
-        );
-    }
-    
-    /**
-     * getLeadsAsArray
-     *
-     * @return array
-     */
-    public function getLeadsAsArray() : array
-    {
-        return array_map(
-            static function(PostModel $leadModel): array {
-                return $leadModel->asArray();
-            },
-            $this->leads
-        );
-    }
-    
-    /**
-     * getPhoneLinesAsArray
-     *
-     * @return array
-     */
-    public function getPhoneLinesAsArray() : array
-    {
-        return array_map(
-            static function(PhoneLineModel $phoneLineModel): array {
-                return $phoneLineModel->asArray();
-            },
-            $this->phoneLines
-        );
-    }
-    
-    /**
-     * getCertificationsAsArray
-     *
-     * @return array
-     */
-    public function getCertificationsAsArray() : array
-    {
-        return array_map(
-            static function(CertificationGraduationModel $certificationGraduationModel): array {
-                return $certificationGraduationModel->asArray();
-            },
-            $this->certifications
-        );
     }
 }

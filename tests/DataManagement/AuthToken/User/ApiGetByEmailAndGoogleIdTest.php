@@ -63,7 +63,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             '0123456789',
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
             UserModel::class,

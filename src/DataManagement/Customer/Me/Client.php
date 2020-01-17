@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use function vsprintf;
 
 /**
  * Client
@@ -53,7 +54,13 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

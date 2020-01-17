@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client as ParentClient;
 use function array_map;
+use function vsprintf;
 
 /**
  * Client
@@ -60,7 +61,13 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -120,7 +127,14 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART . '/' . $uid,
+            vsprintf(
+                '%s%s/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $uid,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -176,7 +190,14 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART . '/' . $uid . '/users',
+            vsprintf(
+                '%s%s/%s/users',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $uid,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

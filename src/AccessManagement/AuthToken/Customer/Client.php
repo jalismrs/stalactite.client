@@ -7,12 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client as ParentClient;
 use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\ClientAbstract;
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client as ParentClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\Response;
+use function vsprintf;
 
 /**
  * Client
@@ -54,9 +55,16 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
-            $this->host . self::API_URL_PART . '/' . $customer->getUid() . '/relations',
+            vsprintf(
+                '%s%s/%s/relations',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $customer->getUid(),
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt

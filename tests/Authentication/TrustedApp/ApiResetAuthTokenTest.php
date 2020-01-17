@@ -62,7 +62,7 @@ class ApiResetAuthTokenTest extends
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
             TrustedAppModel::class,

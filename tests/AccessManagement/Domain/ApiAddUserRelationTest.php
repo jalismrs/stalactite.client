@@ -64,7 +64,7 @@ class ApiAddUserRelationTest extends
             DataManagementTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
-        static::assertTrue($response->success());
+        static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainUserRelationModel::class, $response->getData()['relation']);
     }

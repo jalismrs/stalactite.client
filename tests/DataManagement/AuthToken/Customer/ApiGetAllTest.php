@@ -62,7 +62,7 @@ class ApiGetAllTest extends
         $response = $mockAPIClient->getAll(
             'fake API auth token'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
             CustomerModel::class,

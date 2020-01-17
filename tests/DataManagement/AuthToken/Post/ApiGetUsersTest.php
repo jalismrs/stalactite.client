@@ -64,7 +64,7 @@ class ApiGetUsersTest extends
                         ->getUid(),
             'fake API auth token'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
             UserModel::class,

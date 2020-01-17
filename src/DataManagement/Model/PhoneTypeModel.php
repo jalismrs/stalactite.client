@@ -37,13 +37,15 @@ class PhoneTypeModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
     {
         return [
             'uid'  => $this->uid,
-            'name' => $this->name
+            'name' => $this->name,
         ];
     }
 }

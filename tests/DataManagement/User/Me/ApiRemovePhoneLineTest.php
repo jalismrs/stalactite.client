@@ -58,7 +58,7 @@ class ApiRemovePhoneLineTest extends
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
     

@@ -106,8 +106,9 @@ class CustomerModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
-     * Return the object as an array
      */
     public function asArray() : array
     {
@@ -116,7 +117,7 @@ class CustomerModel extends
             'googleId'  => $this->googleId,
             'email'     => $this->email,
             'firstName' => $this->firstName,
-            'lastName'  => $this->lastName
+            'lastName'  => $this->lastName,
         ];
     }
 }

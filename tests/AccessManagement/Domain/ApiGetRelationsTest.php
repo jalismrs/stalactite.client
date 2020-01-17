@@ -78,7 +78,7 @@ class ApiGetRelationsTest extends
             DataManagementTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
-        static::assertTrue($response->success());
+        static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
         
         static::assertIsArray($response->getData()['relations']);

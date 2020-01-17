@@ -64,7 +64,7 @@ class ApiGetByNameTest extends
                         ->getName(),
             'fake API auth token'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
             DomainModel::class,

@@ -19,6 +19,7 @@ use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
 use Throwable;
 use function in_array;
+use function vsprintf;
 
 /**
  * Client
@@ -209,7 +210,13 @@ class Client extends
         );
     
         $response = $this->requestPost(
-            $this->host . self::API_URL_PART . '/login',
+            vsprintf(
+                '%s%s/login',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'json' => $data
             ],

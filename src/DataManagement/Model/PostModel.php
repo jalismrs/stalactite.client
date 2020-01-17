@@ -106,6 +106,8 @@ class PostModel extends
     }
     
     /**
+     * asArray
+     *
      * @return array
      */
     public function asArray() : array
@@ -115,7 +117,7 @@ class PostModel extends
             'name'        => $this->name,
             'shortName'   => $this->shortName,
             'adminAccess' => $this->adminAccess,
-            'allowAccess' => $this->allowAccess
+            'allowAccess' => $this->allowAccess,
         ];
     }
 }

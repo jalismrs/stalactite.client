@@ -16,6 +16,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function array_merge;
+use function vsprintf;
 
 /**
  * Client
@@ -55,7 +56,13 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -108,7 +115,14 @@ class Client extends
         );
     
         $response = $this->requestGet(
-            $this->host . self::API_URL_PART . '/' . $uid,
+            vsprintf(
+                '%s%s/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $uid,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -151,7 +165,14 @@ class Client extends
         );
     
         $response = $this->requestPut(
-            $this->host . self::API_URL_PART . '/' . $trustedApp->getUid(),
+            vsprintf(
+                '%s%s/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $trustedApp->getUid(),
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -207,7 +228,13 @@ class Client extends
         );
     
         $response = $this->requestPost(
-            $this->host . self::API_URL_PART,
+            vsprintf(
+                '%s%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -255,7 +282,14 @@ class Client extends
         );
     
         $response = $this->requestDelete(
-            $this->host . self::API_URL_PART . '/' . $uid,
+            vsprintf(
+                '%s%s/%s',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $uid,
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -303,7 +337,14 @@ class Client extends
         );
     
         $response = $this->requestPut(
-            $this->host . self::API_URL_PART . '/' . $trustedApp->getUid() . '/authToken/reset',
+            vsprintf(
+                '%s%s/%s/authToken/reset',
+                [
+                    $this->host,
+                    self::API_URL_PART,
+                    $trustedApp->getUid(),
+                ],
+            ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt

@@ -61,7 +61,7 @@ class ApiGetTest extends
         $response = $mockAPIClient->get(
             'fake user jwt'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
             CustomerModel::class,

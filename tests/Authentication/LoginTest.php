@@ -73,7 +73,7 @@ class LoginTest extends
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
-        self::assertTrue($response->success());
+        self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertIsString($response->getData()['jwt']);
         
@@ -82,7 +82,7 @@ class LoginTest extends
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
-        self::assertFalse($response->success());
+        self::assertFalse($response->isSuccess());
         self::assertNotNull($response->getError());
         self::assertNull($response->getData()['jwt']);
     }

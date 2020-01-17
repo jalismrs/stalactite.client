@@ -64,7 +64,7 @@ class ApiAddCustomerRelationTest extends
             DataManagementTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
-        static::assertTrue($response->success());
+        static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainCustomerRelationModel::class, $response->getData()['relation']);
     }
