@@ -34,26 +34,24 @@ class ApiCreateTest extends
      */
     public function testCreate() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'  => true,
-                            'error'    => null,
-                            'customer' => ModelFactory::getTestableCustomer()
-                                                      ->asArray()
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'  => true,
+                                'error'    => null,
+                                'customer' => ModelFactory::getTestableCustomer()
+                                                          ->asArray()
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->create(
@@ -83,26 +81,24 @@ class ApiCreateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'  => true,
-                            'error'    => null,
-                            'customer' => []
-                            // invalid customer
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'  => true,
+                                'error'    => null,
+                                'customer' => []
+                                // invalid customer
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->create(

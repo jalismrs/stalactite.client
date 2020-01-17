@@ -32,24 +32,22 @@ class ApiDeleteRelationTest extends
      */
     public function testDeleteRelation() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => null
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->deleteRelation(
@@ -75,25 +73,23 @@ class ApiDeleteRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => false
-                            // wrong type
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => false
+                                // wrong type
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->deleteRelation(

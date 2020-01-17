@@ -35,26 +35,24 @@ class ApiAddUserRelationTest extends
      */
     public function testAddUserRelation() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'  => true,
-                            'error'    => null,
-                            'relation' => ModelFactory::getTestableDomainUserRelation()
-                                                      ->asArray()
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'  => true,
+                                'error'    => null,
+                                'relation' => ModelFactory::getTestableDomainUserRelation()
+                                                          ->asArray()
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->addUserRelation(
@@ -82,26 +80,24 @@ class ApiAddUserRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'  => true,
-                            'error'    => null,
-                            'relation' => []
-                            // wrong type
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'  => true,
+                                'error'    => null,
+                                'relation' => []
+                                // wrong type
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->addUserRelation(

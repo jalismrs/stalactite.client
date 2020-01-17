@@ -32,24 +32,22 @@ class ApiDeleteTest extends
      */
     public function testDelete() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => null
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->delete(
@@ -76,25 +74,23 @@ class ApiDeleteTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => false
-                            // invalid type
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => false
+                                // invalid type
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->delete(

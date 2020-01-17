@@ -44,32 +44,30 @@ class ApiGetRelationsTest extends
                                               ->asArray();
         unset($domainCustomerRelation['domain']);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => [
-                                'users'     => [
-                                    $domainUserRelation
-                                ],
-                                'customers' => [
-                                    $domainCustomerRelation
-                                ]
-                            ]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => [
+                                    'users'     => [
+                                        $domainUserRelation
+                                    ],
+                                    'customers' => [
+                                        $domainCustomerRelation
+                                    ]
+                                ]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->getRelations(
@@ -122,28 +120,26 @@ class ApiGetRelationsTest extends
                                               ->asArray();
         unset($domainCustomerRelation['domain']);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => [
-                                'users'     => $domainUserRelation,
-                                'customers' => $domainCustomerRelation
-                            ]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => [
+                                    'users'     => $domainUserRelation,
+                                    'customers' => $domainCustomerRelation
+                                ]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->getRelations(

@@ -31,39 +31,33 @@ class LoginTest extends
      */
     public function testSchemaValidationOnLogin() : void
     {
-        $response = [
-            'success' => true,
-            'error'   => null,
-            'jwt'     => 'hello'
-        ];
-        
-        $response2 = [
-            'success' => false,
-            'error'   => 'An error occurred',
-            'jwt'     => null
-        ];
-        
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        $response,
-                        JSON_THROW_ON_ERROR
-                    )
-                ),
-                new MockResponse(
-                    json_encode(
-                        $response2,
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null,
+                                'jwt'     => 'hello'
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    ),
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => false,
+                                'error'   => 'An error occurred',
+                                'jwt'     => null
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         // assert valid return and response content
@@ -122,16 +116,14 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse('invalid API response')
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse('invalid API response')
+                ]
+            )
         );
         
         $mockAPIClient->login(
@@ -155,27 +147,23 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $invalidResponse = [
-            'success'      => false,
-            'error'        => 'An error occurred',
-            'invalidField' => true
-        ];
-        
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        $invalidResponse,
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'      => false,
+                                'error'        => 'An error occurred',
+                                'invalidField' => true
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->login(

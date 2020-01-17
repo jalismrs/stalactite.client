@@ -33,28 +33,26 @@ class ApiGetByNameAndApiKeyTest extends
      */
     public function testGetByNameAndApiKey() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => null,
-                            'domains' => [
-                                ModelFactory::getTestableDomain()
-                                            ->asArray()
-                            ]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null,
+                                'domains' => [
+                                    ModelFactory::getTestableDomain()
+                                                ->asArray()
+                                ]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $domainModel = ModelFactory::getTestableDomain();
@@ -87,27 +85,25 @@ class ApiGetByNameAndApiKeyTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error'   => null,
-                            'domains' => ModelFactory::getTestableDomain()
-                                                     ->asArray()
-                            // invalid type
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null,
+                                'domains' => ModelFactory::getTestableDomain()
+                                                         ->asArray()
+                                // invalid type
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $domainModel = ModelFactory::getTestableDomain();

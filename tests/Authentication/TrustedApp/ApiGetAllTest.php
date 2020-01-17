@@ -33,28 +33,26 @@ class ApiGetAllTest extends
      */
     public function testGetAll() : void
     {
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'     => true,
-                            'error'       => null,
-                            'trustedApps' => [
-                                ModelFactory::getTestableTrustedApp()
-                                            ->asArray()
-                            ]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'     => true,
+                                'error'       => null,
+                                'trustedApps' => [
+                                    ModelFactory::getTestableTrustedApp()
+                                                ->asArray()
+                                ]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockClient->getAll(
@@ -84,25 +82,23 @@ class ApiGetAllTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'     => true,
-                            'error'       => null,
-                            'trustedApps' => 'wrong response type'
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'     => true,
+                                'error'       => null,
+                                'trustedApps' => 'wrong response type'
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockClient->getAll(

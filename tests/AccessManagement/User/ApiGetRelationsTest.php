@@ -38,27 +38,25 @@ class ApiGetRelationsTest extends
                                           ->asArray();
         unset($domainUserRelation['user']);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => [
-                                $domainUserRelation
-                            ]
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => [
+                                    $domainUserRelation
+                                ]
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $response = $mockAPIClient->getRelations(
@@ -88,27 +86,25 @@ class ApiGetRelationsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success'   => true,
-                            'error'     => null,
-                            'relations' => ModelFactory::getTestableDomainUserRelation()
-                                                       ->asArray()
-                            // invalid
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                )
-            ]
-        );
-        
         $mockAPIClient = new Client(
             'http://fakeClient',
             null,
-            $mockHttpClient
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'   => true,
+                                'error'     => null,
+                                'relations' => ModelFactory::getTestableDomainUserRelation()
+                                                           ->asArray()
+                                // invalid
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
         );
         
         $mockAPIClient->getRelations(
