@@ -1,114 +1,174 @@
 <?php
+declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Test\Authentication;
+namespace Jalismrs\Stalactite\Test\Authentication;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use jalismrs\Stalactite\Client\Authentication\Client;
-use jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Authentication\Client;
+use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class LoginTest extends TestCase
+/**
+ * LoginTest
+ *
+ * @package Jalismrs\Stalactite\Test\Authentication
+ */
+class LoginTest extends
+    TestCase
 {
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testSchemaValidationOnLogin
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testSchemaValidationOnLogin(): void
+    public function testSchemaValidationOnLogin() : void
     {
-        $response = [
-            'success' => true,
-            'error' => null,
-            'jwt' => 'hello'
-        ];
-
-        $response2 = [
-            'success' => false,
-            'error' => 'An error occurred',
-            'jwt' => null
-        ];
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode($response, JSON_THROW_ON_ERROR)),
-            new MockResponse(json_encode($response2, JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
+        $mockAPIClient = new Client(
+            'http://fakeHost',
+            null,
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => true,
+                                'error'   => null,
+                                'jwt'     => 'hello'
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    ),
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success' => false,
+                                'error'   => 'An error occurred',
+                                'jwt'     => null
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
+        );
+        
         // assert valid return and response content
-        $response = $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
-        $this->assertTrue($response->success());
-        $this->assertNull($response->getError());
-        $this->assertIsString($response->getData()['jwt']);
-
+        $response = $mockAPIClient->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
+        self::assertTrue($response->isSuccess());
+        self::assertNull($response->getError());
+        self::assertIsString($response->getData()['jwt']);
+        
         // assert valid return and response content
-        $response = $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
-        $this->assertFalse($response->success());
-        $this->assertNotNull($response->getError());
-        $this->assertNull($response->getData()['jwt']);
+        $response = $mockAPIClient->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
+        self::assertFalse($response->isSuccess());
+        self::assertNotNull($response->getError());
+        self::assertNull($response->getData()['jwt']);
     }
-
+    
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testExceptionThrownOnInvalidAPIHost
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIHost(): void
+    public function testExceptionThrownOnInvalidAPIHost() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
-
+        
         $client = new Client('invalidHost');
-        $client->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
+        $client->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
     }
-
+    
     /**
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * testExceptionThrownOnInvalidAPIResponse
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIResponse(): void
+    public function testExceptionThrownOnInvalidAPIResponse() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse('invalid API response')
-        ]);
-
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
+        
+        $mockAPIClient = new Client(
+            'http://fakeHost',
+            null,
+            new MockHttpClient(
+                [
+                    new MockResponse('invalid API response')
+                ]
+            )
+        );
+        
+        $mockAPIClient->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
     }
-
+    
     /**
-     * @throws ClientException
-     * @throws InvalidSchemaException
-     * @throws InvalidDataTypeException
+     * testExceptionThrownOnInvalidAPIResponseContent
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIResponseContent(): void
+    public function testExceptionThrownOnInvalidAPIResponseContent() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-
-        $invalidResponse = [
-            'success' => false,
-            'error' => 'An error occurred',
-            'invalidField' => true
-        ];
-
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse(json_encode($invalidResponse, JSON_THROW_ON_ERROR))
-        ]);
-
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $mockAPIClient->login(ModelFactory::getTestableTrustedApp(), 'fakeUserGoogleToken');
+        
+        $mockAPIClient = new Client(
+            'http://fakeHost',
+            null,
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'      => false,
+                                'error'        => 'An error occurred',
+                                'invalidField' => true
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
+                    )
+                ]
+            )
+        );
+        
+        $mockAPIClient->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
     }
 }

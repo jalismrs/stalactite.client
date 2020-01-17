@@ -1,49 +1,58 @@
 <?php
+declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Test\AccessManagement;
+namespace Jalismrs\Stalactite\Test\AccessManagement;
 
-use jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearance;
-use jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelation;
-use jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelation;
-use jalismrs\Stalactite\Client\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
 
+/**
+ * ModelFactory
+ *
+ * @package Jalismrs\Stalactite\Test\AccessManagement
+ */
 abstract class ModelFactory
 {
     /**
-     * @return DomainUserRelation
+     * @return DomainUserRelationModel
      */
-    public static function getTestableDomainUserRelation(): DomainUserRelation
+    public static function getTestableDomainUserRelation() : DomainUserRelationModel
     {
-        $dur = new DomainUserRelation();
-        $dur->setUser(DataManagementTestModelFactory::getTestableUser())
+        $model = new DomainUserRelationModel();
+        $model
+            ->setUser(DataManagementTestModelFactory::getTestableUser())
             ->setDomain(DataManagementTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
-
-        return $dur;
+        
+        return $model;
     }
-
+    
     /**
-     * @return DomainCustomerRelation
+     * @return DomainCustomerRelationModel
      */
-    public static function getTestableDomainCustomerRelation(): DomainCustomerRelation
+    public static function getTestableDomainCustomerRelation() : DomainCustomerRelationModel
     {
-        $dur = new DomainCustomerRelation();
-        $dur->setCustomer(DataManagementTestModelFactory::getTestableCustomer())
+        $model = new DomainCustomerRelationModel();
+        $model
+            ->setCustomer(DataManagementTestModelFactory::getTestableCustomer())
             ->setDomain(DataManagementTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
-
-        return $dur;
+        
+        return $model;
     }
-
+    
     /**
-     * @return AccessClearance
+     * @return AccessClearanceModel
      */
-    public static function getTestableAccessClearance(): AccessClearance
+    public static function getTestableAccessClearance() : AccessClearanceModel
     {
-        $ac = new AccessClearance();
-        $ac->setAccess(false)
-            ->setAccessType(AccessClearance::NO_ACCESS);
-
-        return $ac;
+        $model = new AccessClearanceModel();
+        $model
+            ->setAccess(false)
+            ->setAccessType(AccessClearanceModel::NO_ACCESS);
+        
+        return $model;
     }
 }

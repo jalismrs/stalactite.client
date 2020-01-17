@@ -1,93 +1,129 @@
 <?php
+declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\AccessManagement;
+namespace Jalismrs\Stalactite\Client\AccessManagement;
 
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\AccessManagement\AuthToken\AuthTokenClient;
-use jalismrs\Stalactite\Client\AccessManagement\Customer\CustomerClient;
-use jalismrs\Stalactite\Client\AccessManagement\User\UserClient;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 
-class Client extends AbstractClient
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\AccessManagement
+ */
+class Client extends
+    ClientAbstract
 {
-    public const API_URL_PREFIX = '/access';
-
-    /** @var DomainClient $domainClient */
-    private $domainClient;
-
-    /** @var UserClient $userClient */
-    private $userClient;
-
-    /** @var CustomerClient $customerClient */
-    private $customerClient;
-
-    /** @var RelationClient $relationClient */
-    private $relationClient;
-
-    /** @var AuthTokenClient $authTokenClient */
-    private $authTokenClient;
-
-    /**
-     * @return DomainClient
+    public const API_URL_PART = '/access';
+    
+    private $clientAuthToken;
+    private $clientCustomer;
+    private $clientDomain;
+    private $clientRelation;
+    private $clientUser;
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
      */
-    public function domains(): DomainClient
+    /**
+     * getClientAuthToken
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\AuthToken\Client
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getClientAuthToken() : AuthToken\Client
     {
-        if (!($this->domainClient instanceof DomainClient)) {
-            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
-            $this->domainClient->setHttpClient($this->getHttpClient());
+        static $client = null;
+        
+        if (null === $this->clientAuthToken) {
+            $this->clientAuthToken = new AuthToken\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->domainClient;
+        
+        return $this->clientAuthToken;
     }
-
+    
     /**
-     * @return UserClient
+     * getClientCustomer
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Customer\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function users(): UserClient
+    public function getClientCustomer() : Customer\Client
     {
-        if (!($this->userClient instanceof UserClient)) {
-            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
-            $this->userClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientCustomer) {
+            $this->clientCustomer = new Customer\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->userClient;
+        
+        return $this->clientCustomer;
     }
-
+    
     /**
-     * @return CustomerClient
+     * getClientDomain
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Domain\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function customers(): CustomerClient
+    public function getClientDomain() : Domain\Client
     {
-        if (!($this->customerClient instanceof CustomerClient)) {
-            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
-            $this->customerClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientDomain) {
+            $this->clientDomain = new Domain\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->customerClient;
+        
+        return $this->clientDomain;
     }
-
+    
     /**
-     * @return RelationClient
+     * getClientRelation
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Relation\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function relations(): RelationClient
+    public function getClientRelation() : Relation\Client
     {
-        if (!($this->relationClient instanceof RelationClient)) {
-            $this->relationClient = new RelationClient($this->apiHost, $this->userAgent);
-            $this->relationClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientRelation) {
+            $this->clientRelation = new Relation\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->relationClient;
+        
+        return $this->clientRelation;
     }
-
+    
     /**
-     * @return AuthTokenClient
+     * getClientUser
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\User\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function authToken(): AuthTokenClient
+    public function getClientUser() : User\Client
     {
-        if (!($this->authTokenClient instanceof AuthTokenClient)) {
-            $this->authTokenClient = new AuthTokenClient($this->apiHost, $this->userAgent);
-            $this->authTokenClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientUser) {
+            $this->clientUser = new User\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->authTokenClient;
+        
+        return $this->clientUser;
     }
 }

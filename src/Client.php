@@ -1,54 +1,87 @@
 <?php
+declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
-class Client extends AbstractClient
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client
+ */
+class Client extends
+    ClientAbstract
 {
-    /** @var Authentication\Client $authClient */
-    private $authClient;
-
-    /** @var DataManagement\Client $dataManagementClient */
-    private $dataManagementClient;
-
-    /** @var AccessManagement\Client $accessManagementClient */
-    private $accessManagementClient;
-
-    /**
-     * @return Authentication\Client
+    private $clientAccessManagement;
+    private $clientAuthentification;
+    private $clientDataManagement;
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
      */
-    public function auth(): Authentication\Client
+    /**
+     * getClientAccessManagement
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function getClientAccessManagement() : AccessManagement\Client
     {
-        if (!($this->authClient instanceof Authentication\Client)) {
-            $this->authClient = new Authentication\Client($this->apiHost, $this->userAgent);
-            $this->authClient->setHttpClient($this->getHttpClient());
+        static $client = null;
+        
+        if (null === $this->clientAccessManagement) {
+            $this->clientAccessManagement = new AccessManagement\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->authClient;
+        
+        return $this->clientAccessManagement;
     }
-
+    
     /**
-     * @return DataManagement\Client
+     * getClientAuthentification
+     *
+     * @return \Jalismrs\Stalactite\Client\Authentication\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function data(): DataManagement\Client
+    public function getClientAuthentification() : Authentication\Client
     {
-        if (!($this->dataManagementClient instanceof DataManagement\Client)) {
-            $this->dataManagementClient = new DataManagement\Client($this->apiHost, $this->userAgent);
-            $this->dataManagementClient->setHttpClient($this->getHttpClient());
+        static $client = null;
+    
+        if (null === $this->clientAuthentification) {
+            $this->clientAuthentification = new Authentication\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->dataManagementClient;
+        
+        return $this->clientAuthentification;
     }
-
+    
     /**
-     * @return AccessManagement\Client
+     * getClientDataManagement
+     *
+     * @return \Jalismrs\Stalactite\Client\DataManagement\Client
+     *
+     * @throws \InvalidArgumentException
      */
-    public function access(): AccessManagement\Client
+    public function getClientDataManagement() : DataManagement\Client
     {
-        if (!($this->accessManagementClient instanceof AccessManagement\Client)) {
-            $this->accessManagementClient = new AccessManagement\Client($this->apiHost, $this->userAgent);
-            $this->accessManagementClient->setHttpClient($this->getHttpClient());
+        static $client = null;
+    
+        if (null === $this->clientDataManagement) {
+            $this->clientDataManagement = new DataManagement\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
-
-        return $this->accessManagementClient;
+        
+        return $this->clientDataManagement;
     }
 }

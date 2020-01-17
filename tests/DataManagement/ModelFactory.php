@@ -1,25 +1,32 @@
 <?php
+declare(strict_types = 1);
 
-namespace jalismrs\Stalactite\Client\Test\DataManagement;
+namespace Jalismrs\Stalactite\Test\DataManagement;
 
-use jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduation;
-use jalismrs\Stalactite\Client\DataManagement\Model\CertificationType;
-use jalismrs\Stalactite\Client\DataManagement\Model\Customer;
-use jalismrs\Stalactite\Client\DataManagement\Model\Domain;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneLine;
-use jalismrs\Stalactite\Client\DataManagement\Model\PhoneType;
-use jalismrs\Stalactite\Client\DataManagement\Model\Post;
-use jalismrs\Stalactite\Client\DataManagement\Model\User;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
+use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 
+/**
+ * ModelFactory
+ *
+ * @package Jalismrs\Stalactite\Test\DataManagement
+ */
 abstract class ModelFactory
 {
     /**
-     * @return User
+     * @return UserModel
      */
-    public static function getTestableUser(): User
+    public static function getTestableUser() : UserModel
     {
-        $user = new User();
-        $user->setFirstName('azerty')
+        $model = new UserModel();
+        $model
+            ->setFirstName('azerty')
             ->setLastName('uiop')
             ->setGender('male')
             ->setEmail('goodMorning@hello.hi')
@@ -31,97 +38,110 @@ abstract class ModelFactory
             ->addPhoneLine(self::getTestablePhoneLine())
             ->addCertification(self::getTestableCertificationGraduation())
             ->setUid('azertyuiop');
-
-        return $user;
+        
+        return $model;
     }
-
+    
     /**
-     * @return Post
+     * @return PostModel
      */
-    public static function getTestablePost(): Post
+    public static function getTestablePost() : PostModel
     {
-        $post = new Post();
-        $post->setName('azerty')
+        $model = new PostModel();
+        $model
+            ->setName('azerty')
             ->setAdminAccess(false)
             ->setAccess(false)
             ->setShortName('aze')
             ->setUid('azertyuiop');
-
-        return $post;
+        
+        return $model;
     }
-
+    
     /**
-     * @return Domain
+     * @return DomainModel
      */
-    public static function getTestableDomain(): Domain
+    public static function getTestableDomain() : DomainModel
     {
-        $domain = new Domain();
-        $domain->setName('azerty')
+        $model = new DomainModel();
+        $model
+            ->setName('azerty')
             ->setType('api')
             ->setApiKey('azertyuiopqsdfghjklmwxcvbn')
             ->setExternalAuth(false)
             ->setGenerationDate('2000-01-01')
             ->setUid('azertyuiop');
-
-        return $domain;
+        
+        return $model;
     }
-
+    
     /**
-     * @return Customer
+     * @return CustomerModel
      */
-    public static function getTestableCustomer(): Customer
+    public static function getTestableCustomer() : CustomerModel
     {
-        $customer = new Customer();
-        $customer->setEmail('goodmorning@hello.hi')
+        $model = new CustomerModel();
+        $model
+            ->setEmail('goodmorning@hello.hi')
             ->setFirstName('azerty')
             ->setLastName('uiop')
             ->setGoogleId('0123456789')
             ->setUid('azertyuiop');
-
-        return $customer;
+        
+        return $model;
     }
-
+    
     /**
-     * @return CertificationGraduation
+     * @return CertificationGraduationModel
      */
-    public static function getTestableCertificationGraduation(): CertificationGraduation
+    public static function getTestableCertificationGraduation() : CertificationGraduationModel
     {
-        $certificationGraduation = new CertificationGraduation();
-        $certificationGraduation->setDate('2000-01-01')->setType(self::getTestableCertificationType())->setUid('azertyuiop');
-
-        return $certificationGraduation;
+        $model = new CertificationGraduationModel();
+        $model
+            ->setDate('2000-01-01')
+            ->setType(self::getTestableCertificationType())
+            ->setUid('azertyuiop');
+        
+        return $model;
     }
-
+    
     /**
-     * @return PhoneLine
+     * @return PhoneLineModel
      */
-    public static function getTestablePhoneLine(): PhoneLine
+    public static function getTestablePhoneLine() : PhoneLineModel
     {
-        $phoneLine = new PhoneLine();
-        $phoneLine->setValue('0123456789')->setType(self::getTestablePhoneType())->setUid('azertyuiop');
-
-        return $phoneLine;
+        $model = new PhoneLineModel();
+        $model
+            ->setValue('0123456789')
+            ->setType(self::getTestablePhoneType())
+            ->setUid('azertyuiop');
+        
+        return $model;
     }
-
+    
     /**
-     * @return PhoneType
+     * @return PhoneTypeModel
      */
-    public static function getTestablePhoneType(): PhoneType
+    public static function getTestablePhoneType() : PhoneTypeModel
     {
-        $type = new PhoneType();
-        $type->setName('azerty')->setUid('azertyuiop');
-
-        return $type;
+        $model = new PhoneTypeModel();
+        $model
+            ->setName('azerty')
+            ->setUid('azertyuiop');
+        
+        return $model;
     }
-
+    
     /**
-     * @return CertificationType
+     * @return CertificationTypeModel
      */
-    public static function getTestableCertificationType(): CertificationType
+    public static function getTestableCertificationType() : CertificationTypeModel
     {
-        $type = new CertificationType();
-        $type->setName('azerty')->setUid('azertyuiop');
-
-        return $type;
+        $model = new CertificationTypeModel();
+        $model
+            ->setName('azerty')
+            ->setUid('azertyuiop');
+        
+        return $model;
     }
 }
