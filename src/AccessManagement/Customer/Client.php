@@ -3,15 +3,13 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\AccessManagement\Customer;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\AccessManagement\Schema;
-use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
@@ -61,16 +59,19 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * @param CustomerModel $customer
-     * @param string        $jwt
+     * getRelations
      *
-     * @return Response
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws ClientException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     * @param string                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function getRelations(
-        CustomerModel $customer,
+        CustomerModel $customerModel,
         string $jwt
     ) : Response {
         $schema = new JsonSchema();
@@ -97,14 +98,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/relations',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $customer->getUid(),
+                    $customerModel->getUid(),
                 ],
             ),
             [
@@ -120,9 +121,9 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function($relation) use ($customer) {
-                        return ModelFactory::createDomainCustomerRelation($relation)
-                                           ->setCustomer($customer);
+                    static function(array $relation) use ($customerModel): DomainCustomerRelationModel {
+                        return ModelFactory::createDomainCustomerRelationModel($relation)
+                                           ->setCustomer($customerModel);
                     },
                     $response['relations']
                 )
@@ -131,17 +132,23 @@ class Client extends
     }
     
     /**
-     * @param CustomerModel $customer
-     * @param DomainModel   $domain
-     * @param string        $jwt
+     * getAccessClearance
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel   $domainModel
+     * @param string                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAccessClearance(CustomerModel $customer, DomainModel $domain, string $jwt) : Response
-    {
+    public function getAccessClearance(
+        CustomerModel $customerModel,
+        DomainModel $domainModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -158,15 +165,15 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/access/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $customer->getUid(),
-                    $domain->getUid(),
+                    $customerModel->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
@@ -181,7 +188,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
+                'clearance' => ModelFactory::createAccessClearanceModel($response['clearance'])
             ]
         );
     }

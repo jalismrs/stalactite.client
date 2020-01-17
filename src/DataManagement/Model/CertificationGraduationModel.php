@@ -13,14 +13,19 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class CertificationGraduationModel extends
     ModelAbstract
 {
-    /** @var null|CertificationTypeModel $type */
+    /**
+     * @var null|\Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel
+     */
     private $type;
-    
-    /** @var null|string $date */
+    /**
+     * @var
+     */
     private $date;
     
     /**
-     * @return CertificationTypeModel|null
+     * getType
+     *
+     * @return null|\Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel
      */
     public function getType() : ?CertificationTypeModel
     {
@@ -28,19 +33,23 @@ class CertificationGraduationModel extends
     }
     
     /**
-     * @param CertificationTypeModel|null $type
+     * setType
      *
-     * @return CertificationGraduationModel
+     * @param null|\Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel $certificationTypeModel
+     *
+     * @return $this
      */
-    public function setType(?CertificationTypeModel $type) : CertificationGraduationModel
+    public function setType(?CertificationTypeModel $certificationTypeModel) : self
     {
-        $this->type = $type;
+        $this->type = $certificationTypeModel;
         
         return $this;
     }
     
     /**
-     * @return string|null
+     * getDate
+     *
+     * @return null|string
      */
     public function getDate() : ?string
     {
@@ -48,11 +57,13 @@ class CertificationGraduationModel extends
     }
     
     /**
-     * @param string|null $date
+     * setDate
      *
-     * @return CertificationGraduationModel
+     * @param null|string $date
+     *
+     * @return $this
      */
-    public function setDate(?string $date) : CertificationGraduationModel
+    public function setDate(?string $date) : self
     {
         $this->date = $date;
         

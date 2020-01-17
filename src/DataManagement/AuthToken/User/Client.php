@@ -82,7 +82,7 @@ class Client extends
             [
                 'users' => array_map(
                     static function($user) {
-                        return ModelFactory::createUser($user);
+                        return ModelFactory::createUserModel($user);
                     },
                     $response['users']
                 )
@@ -152,9 +152,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'user' => $response['user']
-                    ? ModelFactory::createUser($response['user'])
-                    : null
+                'user' => null === $response['user']
+                    ? null
+                    : ModelFactory::createUserModel($response['user']),
             ]
         );
     }
@@ -216,9 +216,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'user' => $response['user']
-                    ? ModelFactory::createUser($response['user'])
-                    : null
+                'user' => null === $response['user']
+                    ? null
+                    : ModelFactory::createUserModel($response['user']),
             ]
         );
     }

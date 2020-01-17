@@ -13,14 +13,19 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class PhoneLineModel extends
     ModelAbstract
 {
-    /** @var null|PhoneTypeModel $type */
+    /**
+     * @var null|\Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel
+     */
     private $type;
-    
-    /** @var null|string $value */
+    /**
+     * @var null|string
+     */
     private $value;
     
     /**
-     * @return PhoneTypeModel|null
+     * getType
+     *
+     * @return null|\Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel
      */
     public function getType() : ?PhoneTypeModel
     {
@@ -28,11 +33,13 @@ class PhoneLineModel extends
     }
     
     /**
-     * @param PhoneTypeModel|null $type
+     * setType
      *
-     * @return PhoneLineModel
+     * @param null|\Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel $type
+     *
+     * @return $this
      */
-    public function setType(?PhoneTypeModel $type) : PhoneLineModel
+    public function setType(?PhoneTypeModel $type) : self
     {
         $this->type = $type;
         
@@ -40,7 +47,9 @@ class PhoneLineModel extends
     }
     
     /**
-     * @return string|null
+     * getValue
+     *
+     * @return null|string
      */
     public function getValue() : ?string
     {
@@ -48,11 +57,13 @@ class PhoneLineModel extends
     }
     
     /**
-     * @param string|null $value
+     * setValue
      *
-     * @return PhoneLineModel
+     * @param null|string $value
+     *
+     * @return $this
      */
-    public function setValue(?string $value) : PhoneLineModel
+    public function setValue(?string $value) : self
     {
         $this->value = $value;
         

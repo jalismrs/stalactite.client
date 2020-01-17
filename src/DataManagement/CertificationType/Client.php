@@ -9,11 +9,11 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -53,7 +53,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -76,7 +76,7 @@ class Client extends
             [
                 'certificationTypes' => array_map(
                     static function($certificationType) {
-                        return ModelFactory::createCertificationType($certificationType);
+                        return ModelFactory::createCertificationTypeModel($certificationType);
                     },
                     $response['certificationTypes']
                 )
@@ -112,7 +112,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s',
@@ -134,28 +134,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'certificationType' => $response['certificationType']
-                    ? ModelFactory::createCertificationType($response['certificationType'])
-                    : null
+                'certificationType' => null === $response['certificationType']
+                    ? null
+                    : ModelFactory::createCertificationTypeModel($response['certificationType']),
             ]
         );
     }
     
     /**
-     * @param CertificationTypeModel $certificationType
-     * @param string                 $jwt
+     * create
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel $certificationTypeModel
+     * @param string                                                                  $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(CertificationTypeModel $certificationType, string $jwt) : Response
-    {
-        $body = [
-            'name' => $certificationType->getName()
-        ];
-        
+    public function create(
+        CertificationTypeModel $certificationTypeModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -173,7 +174,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s',
@@ -186,7 +187,9 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'name' => $certificationTypeModel->getName(),
+                ]
             ],
             $schema
         );
@@ -195,26 +198,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'certificationType' => $response['certificationType']
-                    ? ModelFactory::createCertificationType($response['certificationType'])
-                    : null
+                'certificationType' => null === $response['certificationType']
+                    ? null
+                    : ModelFactory::createCertificationTypeModel($response['certificationType']),
             ]
         );
     }
     
     /**
-     * @param CertificationTypeModel $certificationType
-     * @param string                 $jwt
+     * update
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel $certificationTypeModel
+     * @param string                                                                  $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(CertificationTypeModel $certificationType, string $jwt) : Response
-    {
-        $body = ['name' => $certificationType->getName()];
-        
+    public function update(
+        CertificationTypeModel $certificationTypeModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -227,21 +233,23 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPut(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $certificationType->getUid(),
+                    $certificationTypeModel->getUid(),
                 ],
             ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'name' => $certificationTypeModel->getName(),
+                ]
             ],
             $schema
         );
@@ -275,7 +283,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',

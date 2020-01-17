@@ -13,20 +13,27 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class CustomerModel extends
     ModelAbstract
 {
-    /** @var null|string $googleId */
+    /**
+     * @var null|string
+     */
     private $googleId;
-    
-    /** @var null|string $email */
+    /**
+     * @var null|string
+     */
     private $email;
-    
-    /** @var null|string $firstName */
+    /**
+     * @var null|string
+     */
     private $firstName;
-    
-    /** @var null|string $lastName */
+    /**
+     * @var null|string
+     */
     private $lastName;
     
     /**
-     * @return string|null
+     * getGoogleId
+     *
+     * @return null|string
      */
     public function getGoogleId() : ?string
     {
@@ -34,11 +41,13 @@ class CustomerModel extends
     }
     
     /**
-     * @param string|null $googleId
+     * setGoogleId
      *
-     * @return CustomerModel
+     * @param null|string $googleId
+     *
+     * @return $this
      */
-    public function setGoogleId(?string $googleId) : CustomerModel
+    public function setGoogleId(?string $googleId) : self
     {
         $this->googleId = $googleId;
         
@@ -46,7 +55,9 @@ class CustomerModel extends
     }
     
     /**
-     * @return string|null
+     * getEmail
+     *
+     * @return null|string
      */
     public function getEmail() : ?string
     {
@@ -54,11 +65,13 @@ class CustomerModel extends
     }
     
     /**
-     * @param string|null $email
+     * setEmail
      *
-     * @return CustomerModel
+     * @param null|string $email
+     *
+     * @return $this
      */
-    public function setEmail(?string $email) : CustomerModel
+    public function setEmail(?string $email) : self
     {
         $this->email = $email;
         
@@ -66,7 +79,9 @@ class CustomerModel extends
     }
     
     /**
-     * @return string|null
+     * getFirstName
+     *
+     * @return null|string
      */
     public function getFirstName() : ?string
     {
@@ -74,11 +89,13 @@ class CustomerModel extends
     }
     
     /**
-     * @param string|null $firstName
+     * setFirstName
      *
-     * @return CustomerModel
+     * @param null|string $firstName
+     *
+     * @return $this
      */
-    public function setFirstName(?string $firstName) : CustomerModel
+    public function setFirstName(?string $firstName) : self
     {
         $this->firstName = $firstName;
         
@@ -86,7 +103,9 @@ class CustomerModel extends
     }
     
     /**
-     * @return string|null
+     * getLastName
+     *
+     * @return null|string
      */
     public function getLastName() : ?string
     {
@@ -94,11 +113,13 @@ class CustomerModel extends
     }
     
     /**
-     * @param string|null $lastName
+     * setLastName
      *
-     * @return CustomerModel
+     * @param null|string $lastName
+     *
+     * @return $this
      */
-    public function setLastName(?string $lastName) : CustomerModel
+    public function setLastName(?string $lastName) : self
     {
         $this->lastName = $lastName;
         

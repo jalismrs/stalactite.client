@@ -9,11 +9,11 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -53,7 +53,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -76,7 +76,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function($domain) {
-                        return ModelFactory::createDomain($domain);
+                        return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
                 )
@@ -112,7 +112,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s',
@@ -134,9 +134,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'domain' => $response['domain']
-                    ? ModelFactory::createDomain($response['domain'])
-                    : null
+                'domain' => null === $response['domain']
+                    ? null
+                    : ModelFactory::createDomainModel($response['domain']),
             ]
         );
     }
@@ -168,7 +168,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -194,7 +194,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function($domain) {
-                        return ModelFactory::createDomain($domain);
+                        return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
                 )
@@ -230,7 +230,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -257,7 +257,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function($domain) {
-                        return ModelFactory::createDomain($domain);
+                        return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
                 )
@@ -266,24 +266,21 @@ class Client extends
     }
     
     /**
-     * @param DomainModel $domain
-     * @param string      $jwt
+     * create
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     * @param string                                                       $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(DomainModel $domain, string $jwt) : Response
-    {
-        $body = [
-            'name'           => $domain->getName(),
-            'type'           => $domain->getType(),
-            'externalAuth'   => $domain->hasExternalAuth(),
-            'apiKey'         => $domain->getApiKey(),
-            'generationDate' => $domain->getGenerationDate()
-        ];
-        
+    public function create(
+        DomainModel $domainModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -301,7 +298,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s',
@@ -314,7 +311,13 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'apiKey'         => $domainModel->getApiKey(),
+                    'externalAuth'   => $domainModel->hasExternalAuth(),
+                    'generationDate' => $domainModel->getGenerationDate(),
+                    'name'           => $domainModel->getName(),
+                    'type'           => $domainModel->getType(),
+                ]
             ],
             $schema
         );
@@ -323,32 +326,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'domain' => $response['domain']
-                    ? ModelFactory::createDomain($response['domain'])
-                    : null
+                'domain' => null === $response['domain']
+                    ? null
+                    : ModelFactory::createDomainModel($response['domain']),
             ]
         );
     }
     
     /**
-     * @param DomainModel $domain
-     * @param string      $jwt
+     * update
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     * @param string                                                       $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(DomainModel $domain, string $jwt) : Response
-    {
-        $body = [
-            'name'           => $domain->getName(),
-            'type'           => $domain->getType(),
-            'externalAuth'   => $domain->hasExternalAuth(),
-            'apiKey'         => $domain->getApiKey(),
-            'generationDate' => $domain->getGenerationDate()
-        ];
-        
+    public function update(
+        DomainModel $domainModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -361,21 +361,27 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPut(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $domain->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'apiKey'         => $domainModel->getApiKey(),
+                    'externalAuth'   => $domainModel->hasExternalAuth(),
+                    'generationDate' => $domainModel->getGenerationDate(),
+                    'name'           => $domainModel->getName(),
+                    'type'           => $domainModel->getType(),
+                ]
             ],
             $schema
         );
@@ -409,7 +415,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',

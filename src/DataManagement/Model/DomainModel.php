@@ -13,23 +13,31 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class DomainModel extends
     ModelAbstract
 {
-    /** @var null|string $name */
+    /**
+     * @var null|string
+     */
     private $name;
-    
-    /** @var null|string $type */
+    /**
+     * @var null|string
+     */
     private $type;
-    
-    /** @var null|string $apiKey */
+    /**
+     * @var null|string
+     */
     private $apiKey;
-    
-    /** @var bool $externalAuth */
+    /**
+     * @var bool null|string
+     */
     private $externalAuth = false;
-    
-    /** @var null|string $generationDate */
+    /**
+     * @var null|string
+     */
     private $generationDate;
     
     /**
-     * @return string|null
+     * getName
+     *
+     * @return null|string
      */
     public function getName() : ?string
     {
@@ -37,11 +45,13 @@ class DomainModel extends
     }
     
     /**
-     * @param string|null $name
+     * setName
      *
-     * @return DomainModel
+     * @param null|string $name
+     *
+     * @return $this
      */
-    public function setName(?string $name) : DomainModel
+    public function setName(?string $name) : self
     {
         $this->name = $name;
         
@@ -49,7 +59,9 @@ class DomainModel extends
     }
     
     /**
-     * @return string|null
+     * getType
+     *
+     * @return null|string
      */
     public function getType() : ?string
     {
@@ -57,11 +69,13 @@ class DomainModel extends
     }
     
     /**
-     * @param string|null $type
+     * setType
      *
-     * @return DomainModel
+     * @param null|string $type
+     *
+     * @return $this
      */
-    public function setType(?string $type) : DomainModel
+    public function setType(?string $type) : self
     {
         $this->type = $type;
         
@@ -69,7 +83,9 @@ class DomainModel extends
     }
     
     /**
-     * @return string|null
+     * getApiKey
+     *
+     * @return null|string
      */
     public function getApiKey() : ?string
     {
@@ -77,11 +93,13 @@ class DomainModel extends
     }
     
     /**
-     * @param string|null $apiKey
+     * setApiKey
      *
-     * @return DomainModel
+     * @param null|string $apiKey
+     *
+     * @return $this
      */
-    public function setApiKey(?string $apiKey) : DomainModel
+    public function setApiKey(?string $apiKey) : self
     {
         $this->apiKey = $apiKey;
         
@@ -89,6 +107,8 @@ class DomainModel extends
     }
     
     /**
+     * hasExternalAuth
+     *
      * @return bool
      */
     public function hasExternalAuth() : bool
@@ -97,11 +117,13 @@ class DomainModel extends
     }
     
     /**
+     * setExternalAuth
+     *
      * @param bool $externalAuth
      *
-     * @return DomainModel
+     * @return $this
      */
-    public function setExternalAuth(bool $externalAuth) : DomainModel
+    public function setExternalAuth(bool $externalAuth) : self
     {
         $this->externalAuth = $externalAuth;
         
@@ -109,7 +131,9 @@ class DomainModel extends
     }
     
     /**
-     * @return string|null
+     * getGenerationDate
+     *
+     * @return null|string
      */
     public function getGenerationDate() : ?string
     {
@@ -117,11 +141,13 @@ class DomainModel extends
     }
     
     /**
-     * @param string|null $generationDate
+     * setGenerationDate
      *
-     * @return DomainModel
+     * @param null|string $generationDate
+     *
+     * @return $this
      */
-    public function setGenerationDate(?string $generationDate) : DomainModel
+    public function setGenerationDate(?string $generationDate) : self
     {
         $this->generationDate = $generationDate;
         

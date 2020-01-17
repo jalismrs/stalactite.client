@@ -13,20 +13,27 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class TrustedAppModel extends
     ModelAbstract
 {
-    /** @var null|string $name */
+    /**
+     * @var null|string
+     */
     private $name;
-    
-    /** @var null|string $googleOAuthClientId */
+    /**
+     * @var null|string
+     */
     private $googleOAuthClientId;
-    
-    /** @var null|string $authToken */
+    /**
+     * @var null|string
+     */
     private $authToken;
-    
-    /** @var null|string $resetToken */
+    /**
+     * @var null|string
+     */
     private $resetToken;
     
     /**
-     * @return string
+     * getName
+     *
+     * @return null|string
      */
     public function getName() : ?string
     {
@@ -34,11 +41,13 @@ class TrustedAppModel extends
     }
     
     /**
-     * @param string $name
+     * setName
      *
-     * @return TrustedAppModel
+     * @param null|string $name
+     *
+     * @return $this
      */
-    public function setName(?string $name) : TrustedAppModel
+    public function setName(?string $name) : self
     {
         $this->name = $name;
         
@@ -46,7 +55,9 @@ class TrustedAppModel extends
     }
     
     /**
-     * @return string
+     * getGoogleOAuthClientId
+     *
+     * @return null|string
      */
     public function getGoogleOAuthClientId() : ?string
     {
@@ -54,11 +65,13 @@ class TrustedAppModel extends
     }
     
     /**
-     * @param string $googleOAuthClientId
+     * setGoogleOAuthClientId
      *
-     * @return TrustedAppModel
+     * @param null|string $googleOAuthClientId
+     *
+     * @return $this
      */
-    public function setGoogleOAuthClientId(?string $googleOAuthClientId) : TrustedAppModel
+    public function setGoogleOAuthClientId(?string $googleOAuthClientId) : self
     {
         $this->googleOAuthClientId = $googleOAuthClientId;
         
@@ -66,7 +79,9 @@ class TrustedAppModel extends
     }
     
     /**
-     * @return string
+     * getAuthToken
+     *
+     * @return null|string
      */
     public function getAuthToken() : ?string
     {
@@ -74,11 +89,13 @@ class TrustedAppModel extends
     }
     
     /**
-     * @param string $authToken
+     * setAuthToken
      *
-     * @return TrustedAppModel
+     * @param null|string $authToken
+     *
+     * @return $this
      */
-    public function setAuthToken(?string $authToken) : TrustedAppModel
+    public function setAuthToken(?string $authToken) : self
     {
         $this->authToken = $authToken;
         
@@ -86,7 +103,9 @@ class TrustedAppModel extends
     }
     
     /**
-     * @return string
+     * getResetToken
+     *
+     * @return null|string
      */
     public function getResetToken() : ?string
     {
@@ -94,11 +113,13 @@ class TrustedAppModel extends
     }
     
     /**
-     * @param string $resetToken
+     * setResetToken
      *
-     * @return TrustedAppModel
+     * @param null|string $resetToken
+     *
+     * @return $this
      */
-    public function setResetToken(?string $resetToken) : TrustedAppModel
+    public function setResetToken(?string $resetToken) : self
     {
         $this->resetToken = $resetToken;
         

@@ -9,11 +9,11 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use \Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -84,7 +84,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -107,7 +107,7 @@ class Client extends
             [
                 'customers' => array_map(
                     static function($customer) {
-                        return ModelFactory::createCustomer($customer);
+                        return ModelFactory::createCustomerModel($customer);
                     },
                     $response['customers']
                 )
@@ -143,7 +143,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s',
@@ -165,9 +165,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'customer' => $response['customer']
-                    ? ModelFactory::createCustomer($response['customer'])
-                    : null
+                'customer' => null === $response['customer']
+                    ? null
+                    : ModelFactory::createCustomerModel($response['customer']),
             ]
         );
     }
@@ -201,7 +201,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -226,30 +226,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'customer' => $response['customer']
-                    ? ModelFactory::createCustomer($response['customer'])
-                    : null
+                'customer' => null === $response['customer']
+                    ? null
+                    : ModelFactory::createCustomerModel($response['customer']),
             ]
         );
     }
     
     /**
-     * @param CustomerModel $customer
-     * @param string        $jwt
+     * create
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     * @param string                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(CustomerModel $customer, string $jwt) : Response
-    {
-        $body = [
-            'firstName' => $customer->getFirstName(),
-            'lastName'  => $customer->getLastName(),
-            'email'     => $customer->getEmail()
-        ];
-        
+    public function create(
+        CustomerModel $customerModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -267,7 +266,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s',
@@ -280,7 +279,11 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'email'     => $customerModel->getEmail(),
+                    'firstName' => $customerModel->getFirstName(),
+                    'lastName'  => $customerModel->getLastName(),
+                ]
             ],
             $schema
         );
@@ -289,30 +292,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'customer' => $response['customer']
-                    ? ModelFactory::createCustomer($response['customer'])
-                    : null
+                'customer' => null === $response['customer']
+                    ? null
+                    : ModelFactory::createCustomerModel($response['customer']),
             ]
         );
     }
     
     /**
-     * @param CustomerModel $customer
-     * @param string        $jwt
+     * update
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     * @param string                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(CustomerModel $customer, string $jwt) : Response
-    {
-        $body = [
-            'firstName' => $customer->getFirstName(),
-            'lastName'  => $customer->getLastName(),
-            'email'     => $customer->getEmail()
-        ];
-        
+    public function update(
+        CustomerModel $customerModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -325,21 +327,25 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPut(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $customer->getUid(),
+                    $customerModel->getUid(),
                 ],
             ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'email'     => $customerModel->getEmail(),
+                    'firstName' => $customerModel->getFirstName(),
+                    'lastName'  => $customerModel->getLastName(),
+                ]
             ],
             $schema
         );
@@ -373,7 +379,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',

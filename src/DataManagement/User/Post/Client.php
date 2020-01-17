@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\DataManagement\User\Post;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
@@ -13,8 +11,8 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
-use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function vsprintf;
 
@@ -29,16 +27,21 @@ class Client extends
     public const API_URL_PART = '/posts';
     
     /**
-     * @param UserModel $user
-     * @param string    $jwt
+     * getAll
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(UserModel $user, string $jwt) : Response
-    {
+    public function getAll(
+        UserModel $userModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -55,14 +58,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -80,7 +83,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function($post) {
-                        return ModelFactory::createPost($post);
+                        return ModelFactory::createPostModel($post);
                     },
                     $response['posts']
                 )
@@ -89,31 +92,37 @@ class Client extends
     }
     
     /**
-     * @param UserModel $user
-     * @param array     $posts
-     * @param string    $jwt
+     * addPosts
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param array                                                      $postModels
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function addPosts(UserModel $user, array $posts, string $jwt) : Response
-    {
+    public function addPosts(
+        UserModel $userModel,
+        array $postModels,
+        string $jwt
+    ) : Response {
         $body = [
             'posts' => []
         ];
         
-        foreach ($posts as $post) {
-            if (!$post instanceof PostModel) {
+        foreach ($postModels as $postModel) {
+            if (!$postModel instanceof PostModel) {
                 throw new ClientException(
                     '$posts array parameter must be a PostModel model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }
             
-            if (null !== $post->getUid()) {
-                $body['posts'][] = $post->getUid();
+            if (null !== $postModel->getUid()) {
+                $body['posts'][] = $postModel->getUid();
             }
         }
         
@@ -129,14 +138,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -144,7 +153,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => $body,
             ],
             $schema
         );
@@ -156,31 +165,37 @@ class Client extends
     }
     
     /**
-     * @param UserModel $user
-     * @param array     $posts
-     * @param string    $jwt
+     * removePosts
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param array                                                      $postModels
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function removePosts(UserModel $user, array $posts, string $jwt) : Response
-    {
+    public function removePosts(
+        UserModel $userModel,
+        array $postModels,
+        string $jwt
+    ) : Response {
         $body = [
             'posts' => []
         ];
         
-        foreach ($posts as $post) {
-            if (!$post instanceof PostModel) {
+        foreach ($postModels as $postModel) {
+            if (!$postModel instanceof PostModel) {
                 throw new ClientException(
                     '$posts array parameter must be a PostModel model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }
             
-            if (null !== $post->getUid()) {
-                $body['posts'][] = $post->getUid();
+            if (null !== $postModel->getUid()) {
+                $body['posts'][] = $postModel->getUid();
             }
         }
         
@@ -196,14 +211,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -211,7 +226,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => $body,
             ],
             $schema
         );

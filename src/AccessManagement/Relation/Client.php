@@ -3,15 +3,12 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\AccessManagement\Relation;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelationModelAbstract;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelationModelAbstract;
+use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\Response;
 use function vsprintf;
 
 /**
@@ -25,16 +22,21 @@ class Client extends
     public const API_URL_PART = ParentClient::API_URL_PART . '/relations';
     
     /**
-     * @param DomainRelationModelAbstract $domainRelation
-     * @param string                      $jwt
+     * deleteRelation
      *
-     * @return Response
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws ClientException
+     * @param \Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelationModelAbstract $domainRelationModel
+     * @param string                                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function deleteRelation(DomainRelationModelAbstract $domainRelation, string $jwt) : Response
-    {
+    public function deleteRelation(
+        DomainRelationModelAbstract $domainRelationModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -47,14 +49,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $domainRelation->getUid(),
+                    $domainRelationModel->getUid(),
                 ],
             ),
             [

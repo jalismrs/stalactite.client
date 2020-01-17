@@ -13,20 +13,27 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class PostModel extends
     ModelAbstract
 {
-    /** @var null|string $name */
+    /**
+     * @var null|string
+     */
     private $name;
-    
-    /** @var null|string $shortName */
+    /**
+     * @var null|string
+     */
     private $shortName;
-    
-    /** @var bool $allowAccess */
+    /**
+     * @var bool
+     */
     private $allowAccess = false;
-    
-    /** @var bool $adminAccess */
+    /**
+     * @var bool
+     */
     private $adminAccess = false;
     
     /**
-     * @return string|null
+     * getName
+     *
+     * @return null|string
      */
     public function getName() : ?string
     {
@@ -34,11 +41,13 @@ class PostModel extends
     }
     
     /**
-     * @param string|null $name
+     * setName
      *
-     * @return PostModel
+     * @param null|string $name
+     *
+     * @return $this
      */
-    public function setName(?string $name) : PostModel
+    public function setName(?string $name) : self
     {
         $this->name = $name;
         
@@ -46,7 +55,9 @@ class PostModel extends
     }
     
     /**
-     * @return string|null
+     * getShortName
+     *
+     * @return null|string
      */
     public function getShortName() : ?string
     {
@@ -54,11 +65,13 @@ class PostModel extends
     }
     
     /**
-     * @param string|null $shortName
+     * setShortName
      *
-     * @return PostModel
+     * @param null|string $shortName
+     *
+     * @return $this
      */
-    public function setShortName(?string $shortName) : PostModel
+    public function setShortName(?string $shortName) : self
     {
         $this->shortName = $shortName;
         
@@ -66,6 +79,8 @@ class PostModel extends
     }
     
     /**
+     * allowAccess
+     *
      * @return bool
      */
     public function allowAccess() : bool
@@ -74,11 +89,13 @@ class PostModel extends
     }
     
     /**
+     * setAccess
+     *
      * @param bool $allowAccess
      *
-     * @return PostModel
+     * @return $this
      */
-    public function setAccess(bool $allowAccess) : PostModel
+    public function setAccess(bool $allowAccess) : self
     {
         $this->allowAccess = $allowAccess;
         
@@ -86,6 +103,8 @@ class PostModel extends
     }
     
     /**
+     * hasAdminAccess
+     *
      * @return bool
      */
     public function hasAdminAccess() : bool
@@ -94,11 +113,13 @@ class PostModel extends
     }
     
     /**
+     * setAdminAccess
+     *
      * @param bool $adminAccess
      *
-     * @return PostModel
+     * @return $this
      */
-    public function setAdminAccess(bool $adminAccess) : PostModel
+    public function setAdminAccess(bool $adminAccess) : self
     {
         $this->adminAccess = $adminAccess;
         

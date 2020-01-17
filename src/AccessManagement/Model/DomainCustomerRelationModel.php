@@ -13,11 +13,15 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 class DomainCustomerRelationModel extends
     DomainRelationModelAbstract
 {
-    /** @var CustomerModel|null $customer */
+    /**
+     * @var null|CustomerModel
+     */
     private $customer;
     
     /**
-     * @return CustomerModel|null
+     * getCustomer
+     *
+     * @return null|\Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel
      */
     public function getCustomer() : ?CustomerModel
     {
@@ -25,13 +29,15 @@ class DomainCustomerRelationModel extends
     }
     
     /**
-     * @param CustomerModel|null $customer
+     * setCustomer
      *
-     * @return DomainCustomerRelationModel
+     * @param null|\Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     *
+     * @return $this
      */
-    public function setCustomer(?CustomerModel $customer) : DomainCustomerRelationModel
+    public function setCustomer(?CustomerModel $customerModel) : self
     {
-        $this->customer = $customer;
+        $this->customer = $customerModel;
         
         return $this;
     }

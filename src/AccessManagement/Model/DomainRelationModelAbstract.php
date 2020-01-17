@@ -26,13 +26,15 @@ abstract class DomainRelationModelAbstract extends
     }
     
     /**
-     * @param DomainModel|null $domain
+     * setDomain
      *
-     * @return DomainRelationModelAbstract
+     * @param null|\Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     *
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\DomainRelationModelAbstract
      */
-    public function setDomain(?DomainModel $domain) : DomainRelationModelAbstract
+    public function setDomain(?DomainModel $domainModel) : self
     {
-        $this->domain = $domain;
+        $this->domain = $domainModel;
         
         return $this;
     }

@@ -3,20 +3,19 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\AccessManagement\Domain;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\AccessManagement\Schema;
-use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -31,16 +30,21 @@ class Client extends
     public const API_URL_PART = ParentClient::API_URL_PART . '/domains';
     
     /**
-     * @param DomainModel $domain
-     * @param string      $jwt
+     * getRelations
      *
-     * @return Response
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws ClientException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     * @param string                                                       $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getRelations(DomainModel $domain, string $jwt) : Response
-    {
+    public function getRelations(
+        DomainModel $domainModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -82,14 +86,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/relations',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $domain->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
@@ -106,16 +110,20 @@ class Client extends
             [
                 'relations' => [
                     'users'     => array_map(
-                        static function($relation) use ($domain) {
-                            return ModelFactory::createDomainUserRelation($relation)
-                                               ->setDomain($domain);
+                        static function(array $relation) use ($domainModel): DomainUserRelationModel {
+                            $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
+                            $domainUserRelationModel->setDomain($domainModel);
+                            
+                            return $domainUserRelationModel;
                         },
                         $response['relations']['users']
                     ),
                     'customers' => array_map(
-                        static function($relation) use ($domain) {
-                            return ModelFactory::createDomainCustomerRelation($relation)
-                                               ->setDomain($domain);
+                        static function(array $relation) use ($domainModel): DomainCustomerRelationModel {
+                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelationModel($relation);
+                            $domainCustomerRelation->setDomain($domainModel);
+                            
+                            return $domainCustomerRelation;
                         },
                         $response['relations']['customers']
                     )
@@ -125,21 +133,23 @@ class Client extends
     }
     
     /**
-     * @param DomainModel $domain
-     * @param UserModel   $user
-     * @param string      $jwt
+     * addUserRelation
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel   $userModel
+     * @param string                                                       $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function addUserRelation(
-        DomainModel $domain,
-        UserModel $user,
+        DomainModel $domainModel,
+        UserModel $userModel,
         string $jwt
-    ) : Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -157,14 +167,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/%s/relations/users',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $domain->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
@@ -172,7 +182,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json'    => [
-                    'user' => $user->getUid()
+                    'user' => $userModel->getUid(),
                 ]
             ],
             $schema
@@ -182,29 +192,31 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'relation' => $response['relation']
-                    ? ModelFactory::createDomainUserRelation($response['relation'])
-                    : null
+                'relation' =>  null === $response['relation']
+                    ? null
+                    : ModelFactory::createDomainUserRelationModel($response['relation']),
             ]
         );
     }
     
     /**
-     * @param DomainModel   $domain
-     * @param CustomerModel $customer
-     * @param string        $jwt
+     * addCustomerRelation
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel   $domainModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel $customerModel
+     * @param string                                                         $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function addCustomerRelation(
-        DomainModel $domain,
-        CustomerModel $customer,
+        DomainModel $domainModel,
+        CustomerModel $customerModel,
         string $jwt
-    ) : Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -222,14 +234,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/%s/relations/customers',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $domain->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
@@ -237,7 +249,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json'    => [
-                    'customer' => $customer->getUid()
+                    'customer' => $customerModel->getUid(),
                 ]
             ],
             $schema
@@ -247,9 +259,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'relation' => $response['relation']
-                    ? ModelFactory::createDomainCustomerRelation($response['relation'])
-                    : null
+                'relation' => null === $response['relation']
+                    ? null
+                    : ModelFactory::createDomainCustomerRelationModel($response['relation']),
             ]
         );
     }

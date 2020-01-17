@@ -314,13 +314,13 @@ class UserModel extends
     /**
      * addPost
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $post
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $postModel
      *
      * @return $this
      */
-    public function addPost(PostModel $post) : self
+    public function addPost(PostModel $postModel) : self
     {
-        $this->posts[] = $post;
+        $this->posts[] = $postModel;
         
         return $this;
     }
@@ -334,10 +334,10 @@ class UserModel extends
     {
         return array_reduce(
             $this->getPosts(),
-            static function(bool $carry, PostModel $post) : bool {
+            static function(bool $carry, PostModel $postModel) : bool {
                 return $carry
                     ||
-                    $post->hasAdminAccess();
+                    $postModel->hasAdminAccess();
             },
             false,
         );
@@ -373,13 +373,13 @@ class UserModel extends
     /**
      * addLead
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $lead
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $leadModel
      *
      * @return $this
      */
-    public function addLead(PostModel $lead) : self
+    public function addLead(PostModel $leadModel) : self
     {
-        $this->leads[] = $lead;
+        $this->leads[] = $leadModel;
         
         return $this;
     }
@@ -414,13 +414,13 @@ class UserModel extends
     /**
      * addPhoneLine
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel $phoneLine
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel $phoneLineModel
      *
      * @return $this
      */
-    public function addPhoneLine(PhoneLineModel $phoneLine) : self
+    public function addPhoneLine(PhoneLineModel $phoneLineModel) : self
     {
-        $this->phoneLines[] = $phoneLine;
+        $this->phoneLines[] = $phoneLineModel;
         
         return $this;
     }
@@ -455,13 +455,13 @@ class UserModel extends
     /**
      * addCertification
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certification
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduationModel
      *
      * @return $this
      */
-    public function addCertification(CertificationGraduationModel $certification) : self
+    public function addCertification(CertificationGraduationModel $certificationGraduationModel) : self
     {
-        $this->certifications[] = $certification;
+        $this->certifications[] = $certificationGraduationModel;
         
         return $this;
     }

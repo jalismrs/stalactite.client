@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\DataManagement\User\Lead;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
@@ -13,8 +11,8 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
+use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Response;
-use \Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -29,16 +27,21 @@ class Client extends
     public const API_URL_PART = '/leads';
     
     /**
-     * @param UserModel $user
-     * @param string    $jwt
+     * getAll
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(UserModel $user, string $jwt) : Response
-    {
+    public function getAll(
+        UserModel $userModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -55,14 +58,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -82,7 +85,7 @@ class Client extends
             [
                 'leads' => array_map(
                     static function($lead) {
-                        return ModelFactory::createPost($lead);
+                        return ModelFactory::createPostModel($lead);
                     },
                     $response['leads']
                 )
@@ -91,31 +94,37 @@ class Client extends
     }
     
     /**
-     * @param UserModel $user
-     * @param array     $leads
-     * @param string    $jwt
+     * addLeads
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param array                                                      $leadModels
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function addLeads(UserModel $user, array $leads, string $jwt) : Response
-    {
+    public function addLeads(
+        UserModel $userModel,
+        array $leadModels,
+        string $jwt
+    ) : Response {
         $body = [
             'leads' => []
         ];
         
-        foreach ($leads as $lead) {
-            if (!$lead instanceof PostModel) {
+        foreach ($leadModels as $leadModel) {
+            if (!$leadModel instanceof PostModel) {
                 throw new ClientException(
                     '$leads array parameter must be a PostModel model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }
             
-            if (null !== $lead->getUid()) {
-                $body['leads'][] = $lead->getUid();
+            if (null !== $leadModel->getUid()) {
+                $body['leads'][] = $leadModel->getUid();
             }
         }
         
@@ -131,14 +140,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -146,7 +155,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => $body,
             ],
             $schema
         );
@@ -158,31 +167,37 @@ class Client extends
     }
     
     /**
-     * @param UserModel $user
-     * @param array     $leads
-     * @param string    $jwt
+     * removeLeads
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param array                                                      $leadModels
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function removeLeads(UserModel $user, array $leads, string $jwt) : Response
-    {
+    public function removeLeads(
+        UserModel $userModel,
+        array $leadModels,
+        string $jwt
+    ) : Response {
         $body = [
             'leads' => []
         ];
         
-        foreach ($leads as $lead) {
-            if (!$lead instanceof PostModel) {
+        foreach ($leadModels as $leadModel) {
+            if (!$leadModel instanceof PostModel) {
                 throw new ClientException(
                     '$leads array parameter must be a PostModel model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }
             
-            if (null !== $lead->getUid()) {
-                $body['posts'][] = $lead->getUid();
+            if (null !== $leadModel->getUid()) {
+                $body['posts'][] = $leadModel->getUid();
             }
         }
         
@@ -198,14 +213,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -213,7 +228,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => $body,
             ],
             $schema
         );

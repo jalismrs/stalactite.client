@@ -3,15 +3,13 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\AccessManagement\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\AccessManagement\Client as ParentClient;
+use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\AccessManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\AccessManagement\Schema;
-use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema as DataManagementSchema;
@@ -51,7 +49,7 @@ class Client extends
                 $this->httpClient
             );
         }
-    
+        
         return $this->clientMe;
     }
     
@@ -61,16 +59,21 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * @param UserModel $user
-     * @param string    $jwt
+     * getRelations
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getRelations(UserModel $user, string $jwt) : Response
-    {
+    public function getRelations(
+        UserModel $userModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -95,14 +98,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/relations',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                 ],
             ),
             [
@@ -118,9 +121,11 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function($relation) use ($user) {
-                        return ModelFactory::createDomainUserRelation($relation)
-                                           ->setUser($user);
+                    static function(array $relation) use ($userModel): DomainUserRelationModel {
+                        $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
+                        $domainUserRelationModel->setUser($userModel);
+                        
+                        return $domainUserRelationModel;
                     },
                     $response['relations']
                 )
@@ -129,17 +134,23 @@ class Client extends
     }
     
     /**
-     * @param UserModel   $user
-     * @param DomainModel $domain
-     * @param string      $jwt
+     * getAccessClearance
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel   $userModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel $domainModel
+     * @param string                                                       $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAccessClearance(UserModel $user, DomainModel $domain, string $jwt) : Response
-    {
+    public function getAccessClearance(
+        UserModel $userModel,
+        DomainModel $domainModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -156,15 +167,15 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/access/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $user->getUid(),
-                    $domain->getUid(),
+                    $userModel->getUid(),
+                    $domainModel->getUid(),
                 ],
             ),
             [
@@ -179,7 +190,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
+                'clearance' => ModelFactory::createAccessClearanceModel($response['clearance'])
             ]
         );
     }

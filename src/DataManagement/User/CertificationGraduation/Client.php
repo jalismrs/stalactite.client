@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
@@ -14,8 +12,8 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
-use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\DataManagement\User\Client as ParentClient;
+use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function vsprintf;
 
@@ -30,16 +28,21 @@ class Client extends
     public const API_URL_PART = '/certifications';
     
     /**
-     * @param UserModel $user
-     * @param string    $jwt
+     * getAll
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     * @param string                                                     $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(UserModel $user, string $jwt) : Response
-    {
+    public function getAll(
+        UserModel $userModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -56,14 +59,14 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -81,7 +84,7 @@ class Client extends
             [
                 'certifications' => array_map(
                     static function($certification) {
-                        return ModelFactory::createCertificationGraduation($certification);
+                        return ModelFactory::createCertificationGraduationModel($certification);
                     },
                     $response['certifications']
                 )
@@ -92,8 +95,8 @@ class Client extends
     /**
      * add
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $user
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduation
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $userModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduationModel
      * @param string                                                                        $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
@@ -103,25 +106,16 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function add(
-        UserModel $user,
-        CertificationGraduationModel $certificationGraduation,
+        UserModel $userModel,
+        CertificationGraduationModel $certificationGraduationModel,
         string $jwt
-    ) : Response
-    {
-        if (!$certificationGraduation->getType() instanceof CertificationTypeModel) {
+    ) : Response {
+        if (!$certificationGraduationModel->getType() instanceof CertificationTypeModel) {
             throw new ClientException(
                 'Certification Graduation type must be a Certification Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
             );
         }
-        
-        $body = [
-            'date' => $certificationGraduation->getDate(),
-            'type' => [
-                'uid' => $certificationGraduation->getType()
-                                                 ->getUid()
-            ]
-        ];
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -135,14 +129,14 @@ class Client extends
                 ],
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/%s%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
                 ],
             ),
@@ -150,7 +144,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'date' => $certificationGraduationModel->getDate(),
+                    'type' => [
+                        'uid' => $certificationGraduationModel
+                            ->getType()
+                            ->getUid(),
+                    ],
+                ]
             ],
             $schema
         );
@@ -164,8 +165,8 @@ class Client extends
     /**
      * remove
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $user
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduation
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel                    $userModel
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel $certificationGraduationModel
      * @param string                                                                        $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
@@ -175,11 +176,10 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function remove(
-        UserModel $user,
-        CertificationGraduationModel $certificationGraduation,
+        UserModel $userModel,
+        CertificationGraduationModel $certificationGraduationModel,
         string $jwt
-    ) : Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -192,16 +192,16 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s%s/%s',
                 [
                     $this->host,
                     ParentClient::API_URL_PART,
-                    $user->getUid(),
+                    $userModel->getUid(),
                     self::API_URL_PART,
-                    $certificationGraduation->getUid(),
+                    $certificationGraduationModel->getUid(),
                 ],
             ),
             [

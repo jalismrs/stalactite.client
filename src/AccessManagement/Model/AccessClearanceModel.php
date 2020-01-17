@@ -47,7 +47,7 @@ class AccessClearanceModel
      *
      * @return AccessClearanceModel
      */
-    public function setAccess(bool $access) : AccessClearanceModel
+    public function setAccess(bool $access) : self
     {
         $this->access = $access;
         
@@ -67,7 +67,7 @@ class AccessClearanceModel
      *
      * @return AccessClearanceModel
      */
-    public function setAccessType(?string $accessType) : AccessClearanceModel
+    public function setAccessType(?string $accessType) : self
     {
         $this->accessType = $accessType;
         

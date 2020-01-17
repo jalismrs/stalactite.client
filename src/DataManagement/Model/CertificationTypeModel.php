@@ -13,11 +13,15 @@ use Jalismrs\Stalactite\Client\ModelAbstract;
 class CertificationTypeModel extends
     ModelAbstract
 {
-    /** @var null|string $name */
+    /**
+     * @var null|string
+     */
     private $name;
     
     /**
-     * @return string|null
+     * getName
+     *
+     * @return null|string
      */
     public function getName() : ?string
     {
@@ -25,11 +29,13 @@ class CertificationTypeModel extends
     }
     
     /**
-     * @param string|null $name
+     * setName
      *
-     * @return CertificationTypeModel
+     * @param null|string $name
+     *
+     * @return $this
      */
-    public function setName(?string $name) : CertificationTypeModel
+    public function setName(?string $name) : self
     {
         $this->name = $name;
         

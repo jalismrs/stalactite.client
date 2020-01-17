@@ -13,22 +13,26 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory as DataManageme
 abstract class ModelFactory
 {
     /**
+     * createDomainUserRelationModel
+     *
+     * @static
+     *
      * @param array $data
      *
-     * @return DomainUserRelationModel
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel
      */
-    public static function createDomainUserRelation(array $data) : DomainUserRelationModel
+    public static function createDomainUserRelationModel(array $data) : DomainUserRelationModel
     {
         $model = new DomainUserRelationModel();
         $model
             ->setUser(
                 isset($data['user'])
-                    ? DataManagementModelFactory::createUser($data['user'])
+                    ? DataManagementModelFactory::createUserModel($data['user'])
                     : null
             )
             ->setDomain(
                 isset($data['domain'])
-                    ? DataManagementModelFactory::createDomain($data['domain'])
+                    ? DataManagementModelFactory::createDomainModel($data['domain'])
                     : null
             )
             ->setUid($data['uid'] ?? null);
@@ -37,22 +41,26 @@ abstract class ModelFactory
     }
     
     /**
+     * createDomainCustomerRelationModel
+     *
+     * @static
+     *
      * @param array $data
      *
-     * @return DomainCustomerRelationModel
+     * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel
      */
-    public static function createDomainCustomerRelation(array $data) : DomainCustomerRelationModel
+    public static function createDomainCustomerRelationModel(array $data) : DomainCustomerRelationModel
     {
         $model = new DomainCustomerRelationModel();
         $model
             ->setCustomer(
                 isset($data['customer'])
-                    ? DataManagementModelFactory::createCustomer($data['customer'])
+                    ? DataManagementModelFactory::createCustomerModel($data['customer'])
                     : null
             )
             ->setDomain(
                 isset($data['domain'])
-                    ? DataManagementModelFactory::createDomain($data['domain'])
+                    ? DataManagementModelFactory::createDomainModel($data['domain'])
                     : null
             )
             ->setUid($data['uid'] ?? null);
@@ -61,7 +69,7 @@ abstract class ModelFactory
     }
     
     /**
-     * createAccessClearance
+     * createAccessClearanceModel
      *
      * @static
      *
@@ -69,7 +77,7 @@ abstract class ModelFactory
      *
      * @return \Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel
      */
-    public static function createAccessClearance(array $data) : AccessClearanceModel
+    public static function createAccessClearanceModel(array $data) : AccessClearanceModel
     {
         $model = new AccessClearanceModel();
         $model

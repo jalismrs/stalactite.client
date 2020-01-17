@@ -13,11 +13,15 @@ use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
 class DomainUserRelationModel extends
     DomainRelationModelAbstract
 {
-    /** @var UserModel|null $user */
+    /**
+     * @var null|UserModel
+     */
     private $user;
     
     /**
-     * @return UserModel|null
+     * getUser
+     *
+     * @return null|\Jalismrs\Stalactite\Client\DataManagement\Model\UserModel
      */
     public function getUser() : ?UserModel
     {
@@ -25,13 +29,15 @@ class DomainUserRelationModel extends
     }
     
     /**
-     * @param UserModel|null $user
+     * setUser
      *
-     * @return DomainUserRelationModel
+     * @param null|\Jalismrs\Stalactite\Client\DataManagement\Model\UserModel $userModel
+     *
+     * @return $this
      */
-    public function setUser(?UserModel $user) : DomainUserRelationModel
+    public function setUser(?UserModel $userModel) : self
     {
-        $this->user = $user;
+        $this->user = $userModel;
         
         return $this;
     }

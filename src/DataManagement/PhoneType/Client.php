@@ -9,11 +9,11 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -56,7 +56,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -79,7 +79,7 @@ class Client extends
             [
                 'phoneTypes' => array_map(
                     static function($phoneType) {
-                        return ModelFactory::createPhoneType($phoneType);
+                        return ModelFactory::createPhoneTypeModel($phoneType);
                     },
                     $response['phoneTypes']
                 )
@@ -115,7 +115,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s',
@@ -137,28 +137,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'phoneType' => $response['phoneType']
-                    ? ModelFactory::createPhoneType($response['phoneType'])
-                    : null
+                'phoneType' => null === $response['phoneType']
+                    ? null
+                    : ModelFactory::createPhoneTypeModel($response['phoneType']),
             ]
         );
     }
     
     /**
-     * @param PhoneTypeModel $phoneType
-     * @param string         $jwt
+     * create
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel $phoneTypeModel
+     * @param string                                                          $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(PhoneTypeModel $phoneType, string $jwt) : Response
-    {
-        $body = [
-            'name' => $phoneType->getName()
-        ];
-        
+    public function create(
+        PhoneTypeModel $phoneTypeModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -176,7 +177,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s',
@@ -189,7 +190,9 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'name' => $phoneTypeModel->getName(),
+                ]
             ],
             $schema
         );
@@ -198,28 +201,29 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'phoneType' => $response['phoneType']
-                    ? ModelFactory::createPhoneType($response['phoneType'])
-                    : null
+                'phoneType' => null === $response['phoneType']
+                    ? null
+                    : ModelFactory::createPhoneTypeModel($response['phoneType']),
             ]
         );
     }
     
     /**
-     * @param PhoneTypeModel $phoneType
-     * @param string         $jwt
+     * update
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel $phoneTypeModel
+     * @param string                                                          $jwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(PhoneTypeModel $phoneType, string $jwt) : Response
-    {
-        $body = [
-            'name' => $phoneType->getName()
-        ];
-        
+    public function update(
+        PhoneTypeModel $phoneTypeModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -232,21 +236,23 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPut(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $phoneType->getUid(),
+                    $phoneTypeModel->getUid(),
                 ],
             ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'name' => $phoneTypeModel->getName(),
+                ]
             ],
             $schema
         );
@@ -280,7 +286,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',

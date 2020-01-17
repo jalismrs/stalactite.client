@@ -3,13 +3,11 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
-use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
+use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
@@ -29,7 +27,7 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const  API_URL_PART       = '/auth';
+    public const  API_URL_PART = '/auth';
     
     public const JWT_ISSUER = 'stalactite.auth-api';
     
@@ -176,22 +174,21 @@ class Client extends
     }
     
     /**
-     * @param TrustedAppModel $trustedApp
-     * @param string          $userGoogleJwt
+     * login
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @param \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel $trustedAppModel
+     * @param string                                                           $userGoogleJwt
+     *
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function login(TrustedAppModel $trustedApp, string $userGoogleJwt) : Response
-    {
-        $data = [
-            'appName'       => $trustedApp->getName(),
-            'appToken'      => $trustedApp->getAuthToken(),
-            'userGoogleJwt' => $userGoogleJwt
-        ];
-        
+    public function login(
+        TrustedAppModel $trustedAppModel,
+        string $userGoogleJwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -208,7 +205,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s/login',
@@ -218,7 +215,11 @@ class Client extends
                 ],
             ),
             [
-                'json' => $data
+                'json' => [
+                    'appName'       => $trustedAppModel->getName(),
+                    'appToken'      => $trustedAppModel->getAuthToken(),
+                    'userGoogleJwt' => $userGoogleJwt,
+                ]
             ],
             $schema
         );

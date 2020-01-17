@@ -6,11 +6,11 @@ namespace Jalismrs\Stalactite\Client\DataManagement\Post;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use Jalismrs\Stalactite\Client\DataManagement\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
 use Jalismrs\Stalactite\Client\DataManagement\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\DataManagement\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -53,7 +53,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s',
@@ -76,7 +76,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function($post) {
-                        return ModelFactory::createPost($post);
+                        return ModelFactory::createPostModel($post);
                     },
                     $response['posts']
                 )
@@ -115,7 +115,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s',
@@ -137,9 +137,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'post' => $response['post']
-                    ? ModelFactory::createPost($response['post'])
-                    : null
+                'post' => null === $response['post']
+                    ? null
+                    : ModelFactory::createPostModel($response['post']),
             ]
         );
     }
@@ -147,24 +147,19 @@ class Client extends
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $post
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $postModel
      * @param string                                                     $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function create(PostModel $post, string $jwt) : Response
-    {
-        $body = [
-            'name'      => $post->getName(),
-            'shortName' => $post->getShortName(),
-            'admin'     => $post->hasAdminAccess(),
-            'access'    => $post->allowAccess()
-        ];
-        
+    public function create(
+        PostModel $postModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -182,7 +177,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPost(
             vsprintf(
                 '%s%s',
@@ -195,7 +190,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'access'    => $postModel->allowAccess(),
+                    'admin'     => $postModel->hasAdminAccess(),
+                    'name'      => $postModel->getName(),
+                    'shortName' => $postModel->getShortName(),
+                ]
             ],
             $schema
         );
@@ -204,9 +204,9 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'post' => $response['post']
-                    ? ModelFactory::createPost($response['post'])
-                    : null
+                'post' => null === $response['post']
+                    ? null
+                    : ModelFactory::createPostModel($response['post']),
             ]
         );
     }
@@ -214,24 +214,19 @@ class Client extends
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $post
+     * @param \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel $postModel
      * @param string                                                     $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function update(PostModel $post, string $jwt) : Response
-    {
-        $body = [
-            'name'      => $post->getName(),
-            'shortName' => $post->getShortName(),
-            'admin'     => $post->hasAdminAccess(),
-            'access'    => $post->allowAccess()
-        ];
-        
+    public function update(
+        PostModel $postModel,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -244,21 +239,26 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestPut(
             vsprintf(
                 '%s%s/%s',
                 [
                     $this->host,
                     self::API_URL_PART,
-                    $post->getUid(),
+                    $postModel->getUid(),
                 ],
             ),
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body
+                'json'    => [
+                    'access'    => $postModel->allowAccess(),
+                    'admin'     => $postModel->hasAdminAccess(),
+                    'name'      => $postModel->getName(),
+                    'shortName' => $postModel->getShortName(),
+                ]
             ],
             $schema
         );
@@ -295,7 +295,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestDelete(
             vsprintf(
                 '%s%s/%s',
@@ -349,7 +349,7 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
                 '%s%s/%s/users',
@@ -373,7 +373,7 @@ class Client extends
             [
                 'users' => array_map(
                     static function($user) {
-                        return ModelFactory::createUser($user);
+                        return ModelFactory::createUserModel($user);
                     },
                     $response['users']
                 )
