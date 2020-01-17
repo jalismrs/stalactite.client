@@ -1,76 +1,77 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client;
+namespace jalismrs\Stalactite\Client;
 
 /**
- * Response
- *
+ * Class Response
+ * @package jalismrs\Stalactite\Client
  * Wrapper class for API responses
- *
- * @package Jalismrs\Stalactite\Client
  */
 class Response
 {
+    /** @var bool $success */
+    private $success;
+
+    /** @var null|string $error */
+    private $error;
+
     /**
-     * should contain all the response data except the success and error field
-     *
-     * @var array
+     * @var array $data
+     * $data should contain all the response data except the success and error field
      */
     private $data;
+
     /**
-     * @var null|string
-     */
-    private $error;
-    /**
-     * @var bool
-     */
-    private $success;
-    
-    /**
-     * Response constructor.
-     *
-     * @param bool        $success
-     * @param null|string $error
-     * @param array|null  $data
-     */
-    public function __construct(
-        bool $success,
-        ?string $error,
-        array $data = null
-    ) {
-        $this->success = $success;
-        $this->error   = $error;
-        $this->data    = $data;
-    }
-    
-    /**
-     * isSuccess
-     *
      * @return bool
      */
-    public function isSuccess() : bool
+    public function success(): bool
     {
         return $this->success;
     }
-    
+
     /**
-     * getError
-     *
-     * @return null|string
+     * @param bool $success
+     * @return Response
      */
-    public function getError() : ?string
+    public function setSuccess(bool $success): Response
+    {
+        $this->success = $success;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getError(): ?string
     {
         return $this->error;
     }
-    
+
     /**
-     * getData
-     *
+     * @param string|null $error
+     * @return Response
+     */
+    public function setError(?string $error): Response
+    {
+        $this->error = $error;
+        return $this;
+    }
+
+    /**
      * @return array
      */
-    public function getData() : array
+    public function getData(): array
     {
         return $this->data;
+    }
+
+    /**
+     * @param array $data
+     * @return Response
+     */
+    public function setData(array $data): Response
+    {
+        $this->data = $data;
+        return $this;
     }
 }

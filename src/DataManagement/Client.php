@@ -1,169 +1,122 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\DataManagement;
+namespace jalismrs\Stalactite\Client\DataManagement;
 
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use jalismrs\Stalactite\Client\AbstractClient;
+use jalismrs\Stalactite\Client\DataManagement\AuthToken\AuthTokenClient;
+use jalismrs\Stalactite\Client\DataManagement\Customer\CustomerClient;
+use jalismrs\Stalactite\Client\DataManagement\User\UserClient;
 
-/**
- * Client
- *
- * @package Jalismrs\Stalactite\Client\DataManagement
- */
-class Client extends
-    ClientAbstract
+class Client extends AbstractClient
 {
-    public const API_URL_PART = '/data';
-    
-    private $clientAuthToken;
-    private $clientCertificationType;
-    private $clientCustomer;
-    private $clientDomain;
-    private $clientPhoneType;
-    private $clientPost;
-    private $clientUser;
-    /*
-     * -------------------------------------------------------------------------
-     * Clients -----------------------------------------------------------------
-     * -------------------------------------------------------------------------
-     */
+    public const API_URL_PREFIX = '/data';
+
+    /** @var UserClient $userClient */
+    private $userClient;
+
+    /** @var CustomerClient $customerClient */
+    private $customerClient;
+
+    /** @var DomainClient $domainClient */
+    private $domainClient;
+
+    /** @var PostClient $postClient */
+    private $postClient;
+
+    /** @var CertificationTypeClient $certificationTypeClient */
+    private $certificationTypeClient;
+
+    /** @var PhoneTypeClient $phoneTypeClient */
+    private $phoneTypeClient;
+
+    /** @var AuthTokenClient $authTokenClient */
+    private $authTokenClient;
+
     /**
-     * getClientAuthToken
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return UserClient
      */
-    public function getClientAuthToken() : AuthToken\Client
+    public function users(): UserClient
     {
-        if (null === $this->clientAuthToken) {
-            $this->clientAuthToken = new AuthToken\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->userClient instanceof UserClient)) {
+            $this->userClient = new UserClient($this->apiHost, $this->userAgent);
+            $this->userClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientAuthToken;
+
+        return $this->userClient;
     }
-    
+
     /**
-     * getClientCertificationType
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return CustomerClient
      */
-    public function getClientCertificationType() : CertificationType\Client
+    public function customers(): CustomerClient
     {
-        if (null === $this->clientCertificationType) {
-            $this->clientCertificationType = new CertificationType\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->customerClient instanceof CustomerClient)) {
+            $this->customerClient = new CustomerClient($this->apiHost, $this->userAgent);
+            $this->customerClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientCertificationType;
+
+        return $this->customerClient;
     }
-    
+
     /**
-     * getClientCustomer
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Customer\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return DomainClient
      */
-    public function getClientCustomer() : Customer\Client
+    public function domains(): DomainClient
     {
-        if (null === $this->clientCustomer) {
-            $this->clientCustomer = new Customer\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->domainClient instanceof DomainClient)) {
+            $this->domainClient = new DomainClient($this->apiHost, $this->userAgent);
+            $this->domainClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientCustomer;
+
+        return $this->domainClient;
     }
-    
+
     /**
-     * getClientDomain
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Domain\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return PostClient
      */
-    public function getClientDomain() : Domain\Client
+    public function posts(): PostClient
     {
-        if (null === $this->clientDomain) {
-            $this->clientDomain = new Domain\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->postClient instanceof PostClient)) {
+            $this->postClient = new PostClient($this->apiHost, $this->userAgent);
+            $this->postClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientDomain;
+
+        return $this->postClient;
     }
-    
+
     /**
-     * getClientPhoneType
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\PhoneType\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return CertificationTypeClient
      */
-    public function getClientPhoneType() : PhoneType\Client
+    public function certificationTypes(): CertificationTypeClient
     {
-        if (null === $this->clientPhoneType) {
-            $this->clientPhoneType = new PhoneType\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->certificationTypeClient instanceof CertificationTypeClient)) {
+            $this->certificationTypeClient = new CertificationTypeClient($this->apiHost, $this->userAgent);
+            $this->certificationTypeClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientPhoneType;
+
+        return $this->certificationTypeClient;
     }
-    
+
     /**
-     * getClientPost
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Post\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return PhoneTypeClient
      */
-    public function getClientPost() : Post\Client
+    public function phoneTypes(): PhoneTypeClient
     {
-        if (null === $this->clientPost) {
-            $this->clientPost = new Post\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->phoneTypeClient instanceof PhoneTypeClient)) {
+            $this->phoneTypeClient = new PhoneTypeClient($this->apiHost, $this->userAgent);
+            $this->phoneTypeClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientPost;
+
+        return $this->phoneTypeClient;
     }
-    
-    /**
-     * getClientUser
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\User\Client
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function getClientUser() : User\Client
+
+    public function authToken(): AuthTokenClient
     {
-        if (null === $this->clientUser) {
-            $this->clientUser = new User\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+        if (!($this->authTokenClient instanceof AuthTokenClient)) {
+            $this->authTokenClient = new AuthTokenClient($this->apiHost, $this->userAgent);
+            $this->authTokenClient->setHttpClient($this->getHttpClient());
         }
-        
-        return $this->clientUser;
+
+        return $this->authTokenClient;
     }
 }
