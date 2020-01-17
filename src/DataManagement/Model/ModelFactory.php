@@ -1,217 +1,159 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\DataManagement\Model;
+namespace jalismrs\Stalactite\Client\DataManagement\Model;
 
 /**
  * Class ModelFactory
- *
- * @package Jalismrs\Stalactite\Client\DataManagement\Model
+ * @package jalismrs\Stalactite\Client\DataManagement\Model
  * Factory to instantiate models from arrays
  */
 abstract class ModelFactory
 {
     /**
-     * createUserModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\UserModel
+     * @return User
      */
-    public static function createUserModel(array $data) : UserModel
+    public static function createUser(array $data): User
     {
-        $model = new UserModel();
-        $model
+        $user = new User();
+        $user->setGoogleId($data['googleId'] ?? null)
+            ->setLastName($data['lastName'] ?? null)
+            ->setFirstName($data['firstName'] ?? null)
+            ->setEmail($data['email'] ?? null)
             ->setAdmin($data['admin'] ?? false)
             ->setBirthday($data['birthday'] ?? null)
-            ->setEmail($data['email'] ?? null)
-            ->setFirstName($data['firstName'] ?? null)
-            ->setGender($data['gender'] ?? null)
-            ->setGoogleId($data['googleId'] ?? null)
-            ->setLastName($data['lastName'] ?? null)
-            ->setLocation($data['location'] ?? null)
             ->setOffice($data['office'] ?? null)
+            ->setLocation($data['location'] ?? null)
+            ->setGender($data['gender'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         if (isset($data['phoneLines'])) {
             foreach ($data['phoneLines'] as $phoneLine) {
-                $model->addPhoneLine(self::createPhoneLineModel($phoneLine));
+                $user->addPhoneLine(self::createPhoneLine($phoneLine));
             }
         }
-        
+
         if (isset($data['certifications'])) {
             foreach ($data['certifications'] as $certification) {
-                $model->addCertification(self::createCertificationGraduationModel($certification));
+                $user->addCertification(self::createCertificationGraduation($certification));
             }
         }
-        
+
         if (isset($data['posts'])) {
             foreach ($data['posts'] as $post) {
-                $model->addPost(self::createPostModel($post));
+                $user->addPost(self::createPost($post));
             }
         }
-        
+
         if (isset($data['leads'])) {
             foreach ($data['leads'] as $lead) {
-                $model->addLead(self::createPostModel($lead));
+                $user->addLead(self::createPost($lead));
             }
         }
-        
-        return $model;
+
+        return $user;
     }
-    
+
     /**
-     * createDomainModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel
+     * @return Domain
      */
-    public static function createDomainModel(array $data) : DomainModel
+    public static function createDomain(array $data): Domain
     {
-        $model = new DomainModel();
-        $model
-            ->setApiKey($data['apiKey'] ?? null)
-            ->setExternalAuth($data['externalAuth'] ?? false)
+        $domain = new Domain();
+        $domain->setName($data['name'] ?? null)
             ->setGenerationDate($data['generationDate'] ?? null)
-            ->setName($data['name'] ?? null)
+            ->setExternalAuth($data['externalAuth'] ?? false)
+            ->setApiKey($data['apiKey'] ?? null)
             ->setType($data['type'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $domain;
     }
-    
+
     /**
-     * createCustomerModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel
+     * @return Customer
      */
-    public static function createCustomerModel(array $data) : CustomerModel
+    public static function createCustomer(array $data): Customer
     {
-        $model = new CustomerModel();
-        $model
-            ->setEmail($data['email'] ?? null)
+        $customer = new Customer();
+        $customer->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
-            ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
+            ->setGoogleId($data['googleId'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $customer;
     }
-    
+
     /**
-     * createPostModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\PostModel
+     * @return Post
      */
-    public static function createPostModel(array $data) : PostModel
+    public static function createPost(array $data): Post
     {
-        $model = new PostModel();
-        $model
-            ->setAccess($data['allowAccess'] ?? false)
+        $post = new Post();
+        $post->setName($data['name'] ?? null)
             ->setAdminAccess($data['adminAccess'] ?? false)
-            ->setName($data['name'] ?? null)
+            ->setAccess($data['allowAccess'] ?? false)
             ->setShortName($data['shortName'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $post;
     }
-    
+
     /**
-     * createCertificationTypeModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel
+     * @return CertificationType
      */
-    public static function createCertificationTypeModel(array $data) : CertificationTypeModel
+    public static function createCertificationType(array $data): CertificationType
     {
-        $model = new CertificationTypeModel();
-        $model
-            ->setName($data['name'] ?? null)
+        $ct = new CertificationType();
+        $ct->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $ct;
     }
-    
+
     /**
-     * createCertificationGraduationModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel
+     * @return CertificationGraduation
      */
-    public static function createCertificationGraduationModel(array $data) : CertificationGraduationModel
+    public static function createCertificationGraduation(array $data): CertificationGraduation
     {
-        $model = new CertificationGraduationModel();
-        $model
+        $cg = new CertificationGraduation();
+        $cg->setType($data['type'] ? self::createCertificationType($data['type']) : null)
             ->setDate($data['date'] ?? null)
-            ->setType(
-                null === $data['type']
-                    ? null
-                    : self::createCertificationTypeModel($data['type'])
-            )
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $cg;
     }
-    
+
     /**
-     * createPhoneTypeModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel
+     * @return PhoneType
      */
-    public static function createPhoneTypeModel(array $data) : PhoneTypeModel
+    public static function createPhoneType(array $data): PhoneType
     {
-        $model = new PhoneTypeModel();
-        $model
-            ->setName($data['name'] ?? null)
+        $pt = new PhoneType();
+        $pt->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $pt;
     }
-    
+
     /**
-     * createPhoneLineModel
-     *
-     * @static
-     *
      * @param array $data
-     *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel
+     * @return PhoneLine
      */
-    public static function createPhoneLineModel(array $data) : PhoneLineModel
+    public static function createPhoneLine(array $data): PhoneLine
     {
-        $model = new PhoneLineModel();
-        $model
-            ->setType(
-                null === $data['type']
-                    ? null
-                    : self::createPhoneTypeModel($data['type'])
-            )
+        $pl = new PhoneLine();
+        $pl->setType($data['type'] ? self::createPhoneType($data['type']) : null)
             ->setValue($data['value'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
-        return $model;
+
+        return $pl;
     }
 }
