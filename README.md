@@ -11,7 +11,7 @@ composer require Jalismrs/stalactite-api.client
 ```
 
 ## Before release
-All tests must be ok. To start the tests locally :
+All tests must pass. To run the tests locally :
 
 ```bash
 vendor/bin/phpunit
