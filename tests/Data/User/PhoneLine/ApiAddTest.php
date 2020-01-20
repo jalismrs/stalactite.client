@@ -50,7 +50,7 @@ class ApiAddTest extends
             )
         );
         
-        $response = $mockAPIClient->add(
+        $response = $mockAPIClient->addPhoneLine(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'
@@ -92,7 +92,7 @@ class ApiAddTest extends
             )
         );
         
-        $mockAPIClient->add(
+        $mockAPIClient->addPhoneLine(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'
@@ -119,7 +119,7 @@ class ApiAddTest extends
             new MockHttpClient()
         );
         
-        $mockAPIClient->add(
+        $mockAPIClient->addPhoneLine(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine()
                         ->setType(null),

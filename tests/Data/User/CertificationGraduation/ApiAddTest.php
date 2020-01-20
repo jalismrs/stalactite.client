@@ -49,7 +49,7 @@ class ApiAddTest extends
             )
         );
         
-        $response = $mockAPIClient->add(
+        $response = $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
@@ -91,7 +91,7 @@ class ApiAddTest extends
             )
         );
         
-        $mockAPIClient->add(
+        $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
@@ -118,7 +118,7 @@ class ApiAddTest extends
             new MockHttpClient()
         );
         
-        $mockAPIClient->add(
+        $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation()
                         ->setType(null),

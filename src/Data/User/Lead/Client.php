@@ -72,8 +72,6 @@ class Client extends
             $schema
         );
         
-        // TODO: vérifier pouruqoi createLead n'est pas utilisé
-        
         return new Response(
             $response['success'],
             $response['error'],

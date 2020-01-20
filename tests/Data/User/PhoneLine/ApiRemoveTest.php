@@ -49,7 +49,7 @@ class ApiRemoveTest extends
             )
         );
         
-        $response = $mockAPIClient->remove(
+        $response = $mockAPIClient->removePhoneLine(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'
@@ -91,7 +91,7 @@ class ApiRemoveTest extends
             )
         );
         
-        $mockAPIClient->remove(
+        $mockAPIClient->removePhoneLine(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestablePhoneLine(),
             'fake user jwt'

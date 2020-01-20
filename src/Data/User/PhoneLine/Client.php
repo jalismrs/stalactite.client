@@ -88,7 +88,7 @@ class Client extends
     }
     
     /**
-     * add
+     * addPhoneLine
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
@@ -100,7 +100,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function add(
+    public function addPhoneLine(
         UserModel $userModel,
         PhoneLineModel $phoneLineModel,
         string $jwt
@@ -156,7 +156,7 @@ class Client extends
     }
     
     /**
-     * remove
+     * removePhoneLine
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
@@ -168,7 +168,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function remove(
+    public function removePhoneLine(
         UserModel $userModel,
         PhoneLineModel $phoneLineModel,
         string $jwt

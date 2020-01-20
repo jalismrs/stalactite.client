@@ -49,7 +49,7 @@ class ApiRemoveTest extends
             )
         );
         
-        $response = $mockAPIClient->remove(
+        $response = $mockAPIClient->removeCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
@@ -91,7 +91,7 @@ class ApiRemoveTest extends
             )
         );
         
-        $mockAPIClient->remove(
+        $mockAPIClient->removeCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'

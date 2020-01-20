@@ -88,7 +88,7 @@ class Client extends
     }
     
     /**
-     * add
+     * addCertificationGraduation
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel                    $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel $certificationGraduationModel
@@ -100,7 +100,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function add(
+    public function addCertificationGraduation(
         UserModel $userModel,
         CertificationGraduationModel $certificationGraduationModel,
         string $jwt
@@ -156,7 +156,7 @@ class Client extends
     }
     
     /**
-     * remove
+     * removeCertificationGraduation
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel                    $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel $certificationGraduationModel
@@ -168,7 +168,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function remove(
+    public function removeCertificationGraduation(
         UserModel $userModel,
         CertificationGraduationModel $certificationGraduationModel,
         string $jwt
