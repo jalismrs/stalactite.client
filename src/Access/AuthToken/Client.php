@@ -25,8 +25,6 @@ class Client extends
      * customer
      *
      * @return \Jalismrs\Stalactite\Client\Access\AuthToken\Customer\Client
-     *
-     * @throws \InvalidArgumentException
      */
     public function customer() : Customer\Client
     {
@@ -47,8 +45,6 @@ class Client extends
      * domain
      *
      * @return \Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Client
-     *
-     * @throws \InvalidArgumentException
      */
     public function domain() : Domain\Client
     {
@@ -69,8 +65,6 @@ class Client extends
      * user
      *
      * @return \Jalismrs\Stalactite\Client\Access\AuthToken\User\Client
-     *
-     * @throws \InvalidArgumentException
      */
     public function user() : User\Client
     {

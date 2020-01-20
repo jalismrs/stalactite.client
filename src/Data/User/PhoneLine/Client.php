@@ -12,7 +12,6 @@ use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
 use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Data\User\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function vsprintf;
@@ -29,7 +28,7 @@ class Client extends
      * getAll
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -93,7 +92,7 @@ class Client extends
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                          $jwt
+     * @param string                                                $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -161,7 +160,7 @@ class Client extends
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                          $jwt
+     * @param string                                                $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *

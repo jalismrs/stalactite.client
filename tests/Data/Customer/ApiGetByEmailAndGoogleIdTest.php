@@ -25,6 +25,9 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @return void
      *
      * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
@@ -70,7 +73,6 @@ class ApiGetByEmailAndGoogleIdTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException

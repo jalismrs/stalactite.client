@@ -26,7 +26,6 @@ class ApiGetRelationsTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -102,7 +101,6 @@ class ApiGetRelationsTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException

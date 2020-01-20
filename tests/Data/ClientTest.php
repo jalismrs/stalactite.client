@@ -23,7 +23,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -50,7 +49,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -77,7 +75,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -104,7 +101,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -131,7 +127,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -158,7 +153,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -185,7 +179,6 @@ class ClientTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */

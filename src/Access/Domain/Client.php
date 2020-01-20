@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Access\Domain;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
@@ -31,7 +30,7 @@ class Client extends
      * getRelations
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                                       $jwt
+     * @param string                                             $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -134,7 +133,7 @@ class Client extends
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel   $userModel
-     * @param string                                                       $jwt
+     * @param string                                             $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -188,7 +187,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'relation' =>  null === $response['relation']
+                'relation' => null === $response['relation']
                     ? null
                     : ModelFactory::createDomainUserRelationModel($response['relation']),
             ]
@@ -200,7 +199,7 @@ class Client extends
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel   $domainModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param string                                                         $jwt
+     * @param string                                               $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *

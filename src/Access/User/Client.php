@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Access\User;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
@@ -58,7 +57,7 @@ class Client extends
      * getRelations
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -133,7 +132,7 @@ class Client extends
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel   $userModel
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                                       $jwt
+     * @param string                                             $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *

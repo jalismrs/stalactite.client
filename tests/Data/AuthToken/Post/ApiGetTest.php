@@ -24,7 +24,6 @@ class ApiGetTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException

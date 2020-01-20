@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Access\Relation;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainRelationModelAbstract;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\Response;
@@ -23,7 +22,7 @@ class Client extends
      * deleteRelation
      *
      * @param \Jalismrs\Stalactite\Client\Access\Model\DomainRelationModelAbstract $domainRelationModel
-     * @param string                                                                         $jwt
+     * @param string                                                               $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Test;
 
-use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -21,7 +20,6 @@ class ClientAbstractTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -40,7 +38,6 @@ class ClientAbstractTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
@@ -67,7 +64,6 @@ class ClientAbstractTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */

@@ -11,7 +11,6 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\PostModel;
 use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Data\User\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function vsprintf;
@@ -28,7 +27,7 @@ class Client extends
      * getAll
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -93,8 +92,8 @@ class Client extends
      * addLeads
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param array                                                      $leadModels
-     * @param string                                                     $jwt
+     * @param array                                            $leadModels
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -164,8 +163,8 @@ class Client extends
      * removeLeads
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param array                                                      $leadModels
-     * @param string                                                     $jwt
+     * @param array                                            $leadModels
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *

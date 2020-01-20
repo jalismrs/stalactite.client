@@ -56,7 +56,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -86,7 +85,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -119,7 +117,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -152,7 +149,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -185,7 +181,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -218,7 +213,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -251,7 +245,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
@@ -288,6 +281,8 @@ class JwtValidationTest extends
      *
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     private function checkToken(
         string $token,

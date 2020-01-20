@@ -10,7 +10,6 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\Access\User\Client as ParentClient;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
@@ -82,7 +81,7 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function(array $relation): DomainUserRelationModel {
+                    static function(array $relation) : DomainUserRelationModel {
                         return ModelFactory::createDomainUserRelationModel($relation);
                     },
                     $response['relations']
@@ -95,7 +94,7 @@ class Client extends
      * getAccessClearance
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                                       $jwt
+     * @param string                                             $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
