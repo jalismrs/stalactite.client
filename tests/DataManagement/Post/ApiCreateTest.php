@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\Post;
+namespace Test\Data\Post;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
-use Jalismrs\Stalactite\Client\DataManagement\Post\Client;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\Model\PostModel;
+use Jalismrs\Stalactite\Client\Data\Post\Client;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiCreateTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\Post
+ * @package Test\Data\Post
  */
 class ApiCreateTest extends
     TestCase
@@ -35,7 +35,7 @@ class ApiCreateTest extends
     public function testCreate() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -82,7 +82,7 @@ class ApiCreateTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

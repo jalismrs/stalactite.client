@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\User\Me;
+namespace Test\Data\User\Me;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\User\Me\Client;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\User\Me\Client;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddPhoneLineTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\Me
+ * @package Test\Data\User\Me
  */
 class ApiAddPhoneLineTest extends
     TestCase

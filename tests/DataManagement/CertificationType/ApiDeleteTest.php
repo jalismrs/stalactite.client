@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\CertificationType;
+namespace Test\Data\CertificationType;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\CertificationType\Client;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\CertificationType\Client;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\CertificationType
+ * @package Test\Data\CertificationType
  */
 class ApiDeleteTest extends
     TestCase
@@ -33,7 +33,7 @@ class ApiDeleteTest extends
     public function testDelete() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -75,7 +75,7 @@ class ApiDeleteTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

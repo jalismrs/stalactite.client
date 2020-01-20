@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\Authentication;
+namespace Test\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Client;
-use Jalismrs\Stalactite\Test\ClientTestTrait;
+use Test\ClientTestTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication
+ * @package Test\Authentication
  */
 class ClientTest extends
     TestCase
@@ -30,13 +30,13 @@ class ClientTest extends
     public function testClientTrustedApp() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientTrustedApp();
-        $client2 = $baseClient->getClientTrustedApp();
+        $client1 = $baseClient->trustedApp();
+        $client2 = $baseClient->trustedApp();
         
         self::checkClients(
             $baseClient,

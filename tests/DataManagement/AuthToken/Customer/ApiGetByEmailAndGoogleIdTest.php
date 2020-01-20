@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken\Customer;
+namespace Test\Data\AuthToken\Customer;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Customer\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Client;
+use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetByEmailAndGoogleIdTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\Customer
+ * @package Test\Data\AuthToken\Customer
  */
 class ApiGetByEmailAndGoogleIdTest extends
     TestCase
@@ -35,7 +35,7 @@ class ApiGetByEmailAndGoogleIdTest extends
     public function testGetByEmailAndGoogleId() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -85,7 +85,7 @@ class ApiGetByEmailAndGoogleIdTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

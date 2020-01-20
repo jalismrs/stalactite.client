@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation;
+namespace Test\Data\User\CertificationGraduation;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\User\CertificationGraduation\Client;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\User\CertificationGraduation\Client;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiRemoveTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\CertificationGraduation
+ * @package Test\Data\User\CertificationGraduation
  */
 class ApiRemoveTest extends
     TestCase

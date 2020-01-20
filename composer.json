@@ -12,7 +12,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Jalismrs\\Stalactite\\Test\\": "tests/"
+      "Test\\": "tests/"
     }
   },
   "description": "PHP Client for Stalactite API",

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken\Post;
+namespace Test\Data\AuthToken\Post;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Post\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\AuthToken\Post\Client;
+use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetUsersTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\Post
+ * @package Test\Data\AuthToken\Post
  */
 class ApiGetUsersTest extends
     TestCase
@@ -34,7 +34,7 @@ class ApiGetUsersTest extends
     public function testGetUsers() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -84,7 +84,7 @@ class ApiGetUsersTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

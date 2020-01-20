@@ -11,44 +11,40 @@ namespace Jalismrs\Stalactite\Client;
 class Client extends
     ClientAbstract
 {
-    private $clientAccessManagement;
+    private $clientAccess;
     private $clientAuthentification;
-    private $clientDataManagement;
+    private $clientData;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
     /**
-     * getClientAccessManagement
+     * access
      *
-     * @return \Jalismrs\Stalactite\Client\AccessManagement\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return \Jalismrs\Stalactite\Client\Access\Client
      */
-    public function getClientAccessManagement() : AccessManagement\Client
+    public function access() : Access\Client
     {
         static $client = null;
         
-        if (null === $this->clientAccessManagement) {
-            $this->clientAccessManagement = new AccessManagement\Client(
+        if (null === $this->clientAccess) {
+            $this->clientAccess = new Access\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $this->clientAccessManagement;
+        return $this->clientAccess;
     }
     
     /**
-     * getClientAuthentification
+     * authentification
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Client
-     *
-     * @throws \InvalidArgumentException
      */
-    public function getClientAuthentification() : Authentication\Client
+    public function authentification() : Authentication\Client
     {
         static $client = null;
     
@@ -64,24 +60,22 @@ class Client extends
     }
     
     /**
-     * getClientDataManagement
+     * data
      *
-     * @return \Jalismrs\Stalactite\Client\DataManagement\Client
-     *
-     * @throws \InvalidArgumentException
+     * @return \Jalismrs\Stalactite\Client\Data\Client
      */
-    public function getClientDataManagement() : DataManagement\Client
+    public function data() : Data\Client
     {
         static $client = null;
     
-        if (null === $this->clientDataManagement) {
-            $this->clientDataManagement = new DataManagement\Client(
+        if (null === $this->clientData) {
+            $this->clientData = new Data\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $this->clientDataManagement;
+        return $this->clientData;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\Authentication;
+namespace Test\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Client;
 use Jalismrs\Stalactite\Client\ClientException;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * JwtValidationTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication
+ * @package Test\Authentication
  */
 class JwtValidationTest extends
     TestCase
@@ -39,7 +39,6 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testTransportExceptionThrownOnRSAPublicKeyFetching() : void
@@ -57,10 +56,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testValidToken() : void
     {
@@ -86,10 +86,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testInvalidPublicKeyToken() : void
     {
@@ -118,10 +119,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testInvalidToken() : void
     {
@@ -150,10 +152,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testWrongIssuerToken() : void
     {
@@ -182,10 +185,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testExpiredToken() : void
     {
@@ -214,10 +218,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testInvalidUserTypeToken() : void
     {
@@ -246,10 +251,11 @@ class JwtValidationTest extends
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
     public function testInvalidJwtStructureMissingClaimToken() : void
     {
@@ -280,11 +286,8 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \InvalidArgumentException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     private function checkToken(
         string $token,

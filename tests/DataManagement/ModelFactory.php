@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement;
+namespace Test\Data;
 
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationGraduationModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CertificationTypeModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\CustomerModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneLineModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PhoneTypeModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\PostModel;
-use Jalismrs\Stalactite\Client\DataManagement\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
+use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\PostModel;
+use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 
 /**
  * ModelFactory
  *
- * @package Jalismrs\Stalactite\Test\DataManagement
+ * @package Test\Data
  */
 abstract class ModelFactory
 {

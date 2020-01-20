@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test;
+namespace Test;
 
 use Jalismrs\Stalactite\Client\ClientAbstract;
 
 /**
  * ClientTestTrait
  *
- * @package Jalismrs\Stalactite\Test
+ * @package Test
  * @mixin \PHPUnit\Framework\TestCase
  */
 trait ClientTestTrait

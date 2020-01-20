@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\AuthToken;
+namespace Test\Access\AuthToken;
 
-use Jalismrs\Stalactite\Client\AccessManagement\AuthToken\JwtFactory;
+use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\ValidationData;
 use PHPUnit\Framework\TestCase;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * JwtFactoryTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\AuthToken
+ * @package Test\Access\AuthToken
  */
 class JwtFactoryTest extends
     TestCase

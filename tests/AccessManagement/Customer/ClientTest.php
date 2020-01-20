@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Customer;
+namespace Test\Access\Customer;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\Client;
-use Jalismrs\Stalactite\Test\ClientTestTrait;
+use Jalismrs\Stalactite\Client\Access\Customer\Client;
+use Test\ClientTestTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Customer
+ * @package Test\Access\Customer
  */
 class ClientTest extends
     TestCase
@@ -30,13 +30,13 @@ class ClientTest extends
     public function testClientMe() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientMe();
-        $client2 = $baseClient->getClientMe();
+        $client1 = $baseClient->me();
+        $client2 = $baseClient->me();
         
         self::checkClients(
             $baseClient,

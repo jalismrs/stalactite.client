@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Customer\Me;
+namespace Test\Access\Customer\Me;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\Me\Client;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\Access\Customer\Me\Client;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
+use Test\Access\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetRelationsTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Customer\Me
+ * @package Test\Access\Customer\Me
  */
 class ApiGetRelationsTest extends
     TestCase
@@ -38,7 +38,7 @@ class ApiGetRelationsTest extends
         unset($domainCustomerRelation['customer']);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -85,7 +85,7 @@ class ApiGetRelationsTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

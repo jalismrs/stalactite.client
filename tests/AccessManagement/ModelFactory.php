@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement;
+namespace Test\Access;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearanceModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Test\Data\ModelFactory as DataTestModelFactory;
 
 /**
  * ModelFactory
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement
+ * @package Test\Access
  */
 abstract class ModelFactory
 {
@@ -22,8 +22,8 @@ abstract class ModelFactory
     {
         $model = new DomainUserRelationModel();
         $model
-            ->setUser(DataManagementTestModelFactory::getTestableUser())
-            ->setDomain(DataManagementTestModelFactory::getTestableDomain())
+            ->setUser(DataTestModelFactory::getTestableUser())
+            ->setDomain(DataTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
         
         return $model;
@@ -36,8 +36,8 @@ abstract class ModelFactory
     {
         $model = new DomainCustomerRelationModel();
         $model
-            ->setCustomer(DataManagementTestModelFactory::getTestableCustomer())
-            ->setDomain(DataManagementTestModelFactory::getTestableDomain())
+            ->setCustomer(DataTestModelFactory::getTestableCustomer())
+            ->setDomain(DataTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
         
         return $model;

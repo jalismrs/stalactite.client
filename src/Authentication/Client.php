@@ -43,13 +43,11 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
-     * getClientTrustedApp
+     * trustedApp
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
-     *
-     * @throws \InvalidArgumentException
      */
-    public function getClientTrustedApp() : TrustedApp\Client
+    public function trustedApp() : TrustedApp\Client
     {
         if (null === $this->clientTrustedApp) {
             $this->clientTrustedApp = new TrustedApp\Client(

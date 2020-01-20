@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine;
+namespace Test\Data\User\PhoneLine;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\User\PhoneLine\Client;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\User\PhoneLine\Client;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\User\PhoneLine
+ * @package Test\Data\User\PhoneLine
  */
 class ApiAddTest extends
     TestCase
@@ -113,15 +113,13 @@ class ApiAddTest extends
      */
     public function testThrowExceptionOnInvalidPhoneTypeAdd() : void
     {
-        // TODO: voir pourquoi il n'y a pas de mockHttpClient
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
         
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
-            null
-        //$mockHttpClient
+            new MockHttpClient()
         );
         
         $mockAPIClient->add(

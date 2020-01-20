@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Customer;
+namespace Test\Access\Customer;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\Client;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\Access\Customer\Client;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
+use Test\Access\ModelFactory;
+use Test\Data\ModelFactory as DataTestModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetRelationsTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Customer
+ * @package Test\Access\Customer
  */
 class ApiGetRelationsTest extends
     TestCase
@@ -39,7 +39,7 @@ class ApiGetRelationsTest extends
         unset($domainCustomerRelation['customer']);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -60,7 +60,7 @@ class ApiGetRelationsTest extends
         );
         
         $response = $mockAPIClient->getRelations(
-            DataManagementTestModelFactory::getTestableCustomer(),
+            DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
         
@@ -88,7 +88,7 @@ class ApiGetRelationsTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -109,7 +109,7 @@ class ApiGetRelationsTest extends
         );
         
         $mockAPIClient->getRelations(
-            DataManagementTestModelFactory::getTestableCustomer(),
+            DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
     }

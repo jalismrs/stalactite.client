@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Domain;
+namespace Test\Access\Domain;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Domain\Client;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Domain\Client;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
+use Test\Access\ModelFactory;
+use Test\Data\ModelFactory as DataTestModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddUserRelationTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Domain
+ * @package Test\Access\Domain
  */
 class ApiAddUserRelationTest extends
     TestCase
@@ -36,7 +36,7 @@ class ApiAddUserRelationTest extends
     public function testAddUserRelation() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -56,8 +56,8 @@ class ApiAddUserRelationTest extends
         );
         
         $response = $mockAPIClient->addUserRelation(
-            DataManagementTestModelFactory::getTestableDomain(),
-            DataManagementTestModelFactory::getTestableUser(),
+            DataTestModelFactory::getTestableDomain(),
+            DataTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
         static::assertTrue($response->isSuccess());
@@ -81,7 +81,7 @@ class ApiAddUserRelationTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -101,8 +101,8 @@ class ApiAddUserRelationTest extends
         );
         
         $mockAPIClient->addUserRelation(
-            DataManagementTestModelFactory::getTestableDomain(),
-            DataManagementTestModelFactory::getTestableUser(),
+            DataTestModelFactory::getTestableDomain(),
+            DataTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
     }

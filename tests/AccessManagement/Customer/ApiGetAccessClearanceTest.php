@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\AccessManagement\Customer;
+namespace Test\Access\Customer;
 
-use Jalismrs\Stalactite\Client\AccessManagement\Customer\Client;
-use Jalismrs\Stalactite\Client\AccessManagement\Model\AccessClearanceModel;
+use Jalismrs\Stalactite\Client\Access\Customer\Client;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearanceModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\AccessManagement\ModelFactory;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory as DataManagementTestModelFactory;
+use Test\Access\ModelFactory;
+use Test\Data\ModelFactory as DataTestModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetAccessClearanceTest
  *
- * @package Jalismrs\Stalactite\Test\AccessManagement\Customer
+ * @package Test\Access\Customer
  */
 class ApiGetAccessClearanceTest extends
     TestCase
@@ -36,7 +36,7 @@ class ApiGetAccessClearanceTest extends
     public function testGetAccessClearance() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -56,8 +56,8 @@ class ApiGetAccessClearanceTest extends
         );
         
         $response = $mockAPIClient->getAccessClearance(
-            DataManagementTestModelFactory::getTestableCustomer(),
-            DataManagementTestModelFactory::getTestableDomain(),
+            DataTestModelFactory::getTestableCustomer(),
+            DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -84,7 +84,7 @@ class ApiGetAccessClearanceTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -104,8 +104,8 @@ class ApiGetAccessClearanceTest extends
         );
         
         $mockAPIClient->getAccessClearance(
-            DataManagementTestModelFactory::getTestableCustomer(),
-            DataManagementTestModelFactory::getTestableDomain(),
+            DataTestModelFactory::getTestableCustomer(),
+            DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
     }

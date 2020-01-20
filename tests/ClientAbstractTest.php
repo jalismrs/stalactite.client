@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test;
+namespace Test;
 
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * ClientAbstractTest
  *
- * @package Jalismrs\Stalactite\Test
+ * @package Test
  */
 class ClientAbstractTest extends
     TestCase
@@ -27,7 +27,7 @@ class ClientAbstractTest extends
      */
     public function testHost() : void
     {
-        $host   = 'http://fakeClient';
+        $host   = 'http://fakeHost';
         $client = new Client(
             $host
         );
@@ -47,14 +47,14 @@ class ClientAbstractTest extends
     public function testUserAgent() : void
     {
         $client = new Client(
-            'http://fakeClient'
+            'http://fakeHost'
         );
         
         self::assertNull($client->getUserAgent());
         
         $userAgent = 'fake user agent';
         $client    = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             $userAgent
         );
         
@@ -75,7 +75,7 @@ class ClientAbstractTest extends
     {
         $mockHttpClient = new MockHttpClient();
         $client         = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             $mockHttpClient
         );
@@ -95,7 +95,7 @@ class ClientAbstractTest extends
         $this->expectException(InvalidArgumentException::class);
         
         new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             false
         );

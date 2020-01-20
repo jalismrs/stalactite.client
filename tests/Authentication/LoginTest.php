@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\Authentication;
+namespace Test\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Client;
 use Jalismrs\Stalactite\Client\ClientException;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * LoginTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication
+ * @package Test\Authentication
  */
 class LoginTest extends
     TestCase

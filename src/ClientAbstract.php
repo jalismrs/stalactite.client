@@ -38,49 +38,30 @@ abstract class ClientAbstract
     /**
      * ClientAbstract constructor.
      *
-     * @param string      $host
-     * @param string|null $userAgent
-     * @param null        $httpClient
-     *
-     * @throws \InvalidArgumentException
+     * @param string                                                 $host
+     * @param string|null                                            $userAgent
+     * @param \Symfony\Contracts\HttpClient\HttpClientInterface|null $httpClient
      */
     public function __construct(
         string $host,
         string $userAgent = null,
-        $httpClient = null
+        HttpClientInterface $httpClient = null
     ) {
         $this->host      = $host;
         $this->userAgent = $userAgent;
         
-        $httpClientOptions = null === $userAgent
-            ? []
-            : [
-                'headers' => [
-                    'User-Agent' => $userAgent,
-                ],
-            ];
-        
         if (null === $httpClient) {
             $this->httpClient = HttpClient::create(
-                $httpClientOptions
-            );
-        } elseif ($httpClient instanceof HttpClientInterface) {
-            $this->httpClient = $httpClient;
-        } elseif (is_array($httpClient)) {
-            $this->httpClient = HttpClient::create(
-                array_replace_recursive(
-                    $httpClientOptions,
-                    $httpClient
-                )
+                null === $userAgent
+                    ? []
+                    : [
+                    'headers' => [
+                        'User-Agent' => $userAgent,
+                    ],
+                ]
             );
         } else {
-            $given = is_object($httpClient)
-                ? get_class($httpClient)
-                : gettype($httpClient);
-            
-            throw new InvalidArgumentException(
-                "Argument '\$httpClient' must either be '\Symfony\Contracts\HttpClient\HttpClientInterface' or 'array' but '{$given}' was given"
-            );
+            $this->httpClient = $httpClient;
         }
     }
     

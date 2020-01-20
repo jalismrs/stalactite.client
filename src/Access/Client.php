@@ -1,0 +1,119 @@
+<?php
+declare(strict_types = 1);
+
+namespace Jalismrs\Stalactite\Client\Access;
+
+use Jalismrs\Stalactite\Client\ClientAbstract;
+
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\Access
+ */
+class Client extends
+    ClientAbstract
+{
+    public const API_URL_PART = '/access';
+    
+    private $clientAuthToken;
+    private $clientCustomer;
+    private $clientDomain;
+    private $clientRelation;
+    private $clientUser;
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    /**
+     * authToken
+     *
+     * @return \Jalismrs\Stalactite\Client\Access\AuthToken\Client
+     */
+    public function authToken() : AuthToken\Client
+    {
+        static $client = null;
+        
+        if (null === $this->clientAuthToken) {
+            $this->clientAuthToken = new AuthToken\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $this->clientAuthToken;
+    }
+    
+    /**
+     * customer
+     *
+     * @return \Jalismrs\Stalactite\Client\Access\Customer\Client
+     */
+    public function customer() : Customer\Client
+    {
+        if (null === $this->clientCustomer) {
+            $this->clientCustomer = new Customer\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $this->clientCustomer;
+    }
+    
+    /**
+     * domain
+     *
+     * @return \Jalismrs\Stalactite\Client\Access\Domain\Client
+     */
+    public function domain() : Domain\Client
+    {
+        if (null === $this->clientDomain) {
+            $this->clientDomain = new Domain\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $this->clientDomain;
+    }
+    
+    /**
+     * relation
+     *
+     * @return \Jalismrs\Stalactite\Client\Access\Relation\Client
+     */
+    public function relation() : Relation\Client
+    {
+        if (null === $this->clientRelation) {
+            $this->clientRelation = new Relation\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $this->clientRelation;
+    }
+    
+    /**
+     * user
+     *
+     * @return \Jalismrs\Stalactite\Client\Access\User\Client
+     */
+    public function user() : User\Client
+    {
+        if (null === $this->clientUser) {
+            $this->clientUser = new User\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+        
+        return $this->clientUser;
+    }
+}

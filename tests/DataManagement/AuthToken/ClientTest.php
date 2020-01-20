@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken;
+namespace Test\Data\AuthToken;
 
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Client;
-use Jalismrs\Stalactite\Test\ClientTestTrait;
+use Jalismrs\Stalactite\Client\Data\AuthToken\Client;
+use Test\ClientTestTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * ClientTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken
+ * @package Test\Data\AuthToken
  */
 class ClientTest extends
     TestCase
@@ -30,13 +30,13 @@ class ClientTest extends
     public function testClientCustomer() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientCustomer();
-        $client2 = $baseClient->getClientCustomer();
+        $client1 = $baseClient->customer();
+        $client2 = $baseClient->customer();
         
         self::checkClients(
             $baseClient,
@@ -57,13 +57,13 @@ class ClientTest extends
     public function testClientDomain() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientDomain();
-        $client2 = $baseClient->getClientDomain();
+        $client1 = $baseClient->domain();
+        $client2 = $baseClient->domain();
         
         self::checkClients(
             $baseClient,
@@ -84,13 +84,13 @@ class ClientTest extends
     public function testClientPost() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientPost();
-        $client2 = $baseClient->getClientPost();
+        $client1 = $baseClient->post();
+        $client2 = $baseClient->post();
         
         self::checkClients(
             $baseClient,
@@ -111,13 +111,13 @@ class ClientTest extends
     public function testClientUser() : void
     {
         $baseClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->getClientUser();
-        $client2 = $baseClient->getClientUser();
+        $client1 = $baseClient->user();
+        $client2 = $baseClient->user();
         
         self::checkClients(
             $baseClient,

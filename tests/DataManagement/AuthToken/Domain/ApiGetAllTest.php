@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\DataManagement\AuthToken\Domain;
+namespace Test\Data\AuthToken\Domain;
 
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\DataManagement\AuthToken\Domain\Client;
-use Jalismrs\Stalactite\Client\DataManagement\Model\DomainModel;
-use Jalismrs\Stalactite\Test\DataManagement\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Client;
+use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Test\Data\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiGetAllTest
  *
- * @package Jalismrs\Stalactite\Test\DataManagement\AuthToken\Domain
+ * @package Test\Data\AuthToken\Domain
  */
 class ApiGetAllTest extends
     TestCase
@@ -34,7 +34,7 @@ class ApiGetAllTest extends
     public function testGetAll() : void
     {
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -82,7 +82,7 @@ class ApiGetAllTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockAPIClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [

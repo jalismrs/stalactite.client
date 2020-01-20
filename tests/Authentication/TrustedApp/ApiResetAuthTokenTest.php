@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Test\Authentication\TrustedApp;
+namespace Test\Authentication\TrustedApp;
 
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Test\Authentication\ModelFactory;
+use Test\Authentication\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiResetAuthTokenTest
  *
- * @package Jalismrs\Stalactite\Test\Authentication\TrustedApp
+ * @package Test\Authentication\TrustedApp
  */
 class ApiResetAuthTokenTest extends
     TestCase
@@ -35,7 +35,7 @@ class ApiResetAuthTokenTest extends
     public function testResetAuthToken() : void
     {
         $mockClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
@@ -82,7 +82,7 @@ class ApiResetAuthTokenTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
         
         $mockClient = new Client(
-            'http://fakeClient',
+            'http://fakeHost',
             null,
             new MockHttpClient(
                 [
