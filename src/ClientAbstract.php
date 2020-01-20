@@ -5,15 +5,10 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use InvalidArgumentException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use function array_replace_recursive;
-use function get_class;
-use function gettype;
-use function is_array;
-use function is_object;
+use function array_merge_recursive;
 
 /**
  * ClientAbstract
@@ -52,13 +47,21 @@ abstract class ClientAbstract
         
         if (null === $httpClient) {
             $this->httpClient = HttpClient::create(
-                null === $userAgent
-                    ? []
-                    : [
-                    'headers' => [
-                        'User-Agent' => $userAgent,
+                array_merge_recursive(
+                    [
+                        'base_uri' => $host,
+                        'headers'  => [
+                            'Content-Type' => 'application/json',
+                        ],
                     ],
-                ]
+                    null === $userAgent
+                        ? []
+                        : [
+                        'headers' => [
+                            'User-Agent' => $userAgent,
+                        ],
+                    ]
+                )
             );
         } else {
             $this->httpClient = $httpClient;
