@@ -18,7 +18,7 @@ class ClientTest extends
     use ClientTestTrait;
     
     /**
-     * testClientAccess
+     * testAccess
      *
      * @return void
      *
@@ -26,7 +26,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientAccess() : void
+    public function testAccess() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -45,7 +45,7 @@ class ClientTest extends
     }
     
     /**
-     * testClientAuthentification
+     * testAuthentication
      *
      * @return void
      *
@@ -53,7 +53,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientAuthentification() : void
+    public function testAuthentication() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -61,8 +61,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->authentification();
-        $client2 = $baseClient->authentification();
+        $client1 = $baseClient->authentication();
+        $client2 = $baseClient->authentication();
         
         self::checkClients(
             $baseClient,
@@ -72,7 +72,7 @@ class ClientTest extends
     }
     
     /**
-     * testClientData
+     * testData
      *
      * @return void
      *
@@ -80,7 +80,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientData() : void
+    public function testData() : void
     {
         $baseClient = new Client(
             'http://fakeHost',

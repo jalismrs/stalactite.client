@@ -19,7 +19,7 @@ class ClientTest extends
     use ClientTestTrait;
     
     /**
-     * testClientCustomer
+     * testCustomer
      *
      * @return void
      *
@@ -27,7 +27,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientCustomer() : void
+    public function testCustomer() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -46,7 +46,7 @@ class ClientTest extends
     }
     
     /**
-     * testClientDomain
+     * testDomain
      *
      * @return void
      *
@@ -54,7 +54,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientDomain() : void
+    public function testDomain() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -73,7 +73,7 @@ class ClientTest extends
     }
     
     /**
-     * testClientUser
+     * testUser
      *
      * @return void
      *
@@ -81,7 +81,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientUser() : void
+    public function testUser() : void
     {
         $baseClient = new Client(
             'http://fakeHost',

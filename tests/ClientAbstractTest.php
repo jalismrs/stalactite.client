@@ -82,22 +82,4 @@ class ClientAbstractTest extends
         
         self::assertSame($mockHttpClient, $client->getHttpClient());
     }
-    
-    /**
-     * testInvalidHttpClient
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function testInvalidHttpClient() : void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        
-        new Client(
-            'http://fakeHost',
-            null,
-            false
-        );
-    }
 }

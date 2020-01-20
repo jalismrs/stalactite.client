@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Test\Data\User;
+namespace Test\Access;
 
-use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Access\Client;
 use Test\ClientTestTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * ClientTest
  *
- * @package Test\Data\User
+ * @package Test\Access
  */
 class ClientTest extends
     TestCase
@@ -19,14 +19,15 @@ class ClientTest extends
     use ClientTestTrait;
     
     /**
-     * testClientCertificationGraduation
+     * testAuthToken
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientCertificationGraduation() : void
+    public function testAuthToken() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -34,8 +35,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->certificationGraduation();
-        $client2 = $baseClient->certificationGraduation();
+        $client1 = $baseClient->authToken();
+        $client2 = $baseClient->authToken();
         
         self::checkClients(
             $baseClient,
@@ -45,14 +46,15 @@ class ClientTest extends
     }
     
     /**
-     * testClientLead
+     * testCustomer
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientLead() : void
+    public function testCustomer() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -60,8 +62,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->lead();
-        $client2 = $baseClient->lead();
+        $client1 = $baseClient->customer();
+        $client2 = $baseClient->customer();
         
         self::checkClients(
             $baseClient,
@@ -71,14 +73,15 @@ class ClientTest extends
     }
     
     /**
-     * testClientMe
+     * testDomain
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientMe() : void
+    public function testDomain() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -86,8 +89,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->me();
-        $client2 = $baseClient->me();
+        $client1 = $baseClient->domain();
+        $client2 = $baseClient->domain();
         
         self::checkClients(
             $baseClient,
@@ -97,14 +100,15 @@ class ClientTest extends
     }
     
     /**
-     * testClientPhoneLine
+     * testRelation
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientPhoneLine() : void
+    public function testRelation() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -112,8 +116,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->phoneLine();
-        $client2 = $baseClient->phoneLine();
+        $client1 = $baseClient->relation();
+        $client2 = $baseClient->relation();
         
         self::checkClients(
             $baseClient,
@@ -123,14 +127,15 @@ class ClientTest extends
     }
     
     /**
-     * testClientPost
+     * testUser
      *
      * @return void
      *
+     * @throws \InvalidArgumentException
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientPost() : void
+    public function testUser() : void
     {
         $baseClient = new Client(
             'http://fakeHost',
@@ -138,8 +143,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->post();
-        $client2 = $baseClient->post();
+        $client1 = $baseClient->user();
+        $client2 = $baseClient->user();
         
         self::checkClients(
             $baseClient,

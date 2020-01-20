@@ -19,7 +19,7 @@ class ClientTest extends
     use ClientTestTrait;
     
     /**
-     * testClientTrustedApp
+     * testTrustedApp
      *
      * @return void
      *
@@ -27,7 +27,7 @@ class ClientTest extends
      * @throws \PHPUnit\Framework\ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testClientTrustedApp() : void
+    public function testTrustedApp() : void
     {
         $baseClient = new Client(
             'http://fakeHost',

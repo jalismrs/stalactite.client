@@ -12,7 +12,7 @@ class Client extends
     ClientAbstract
 {
     private $clientAccess;
-    private $clientAuthentification;
+    private $clientAuthentication;
     private $clientData;
     /*
      * -------------------------------------------------------------------------
@@ -40,23 +40,23 @@ class Client extends
     }
     
     /**
-     * authentification
+     * authentication
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\Client
      */
-    public function authentification() : Authentication\Client
+    public function authentication() : Authentication\Client
     {
         static $client = null;
     
-        if (null === $this->clientAuthentification) {
-            $this->clientAuthentification = new Authentication\Client(
+        if (null === $this->clientAuthentication) {
+            $this->clientAuthentication = new Authentication\Client(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
             );
         }
         
-        return $this->clientAuthentification;
+        return $this->clientAuthentication;
     }
     
     /**
