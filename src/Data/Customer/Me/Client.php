@@ -30,8 +30,9 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $jwt) : Response
-    {
+    public function getMe(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -50,7 +51,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/customers/me',
                 [

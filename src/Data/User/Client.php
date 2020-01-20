@@ -41,7 +41,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\User\CertificationGraduation\Client
      */
-    public function certificationGraduation() : CertificationGraduation\Client
+    public function certificationGraduations() : CertificationGraduation\Client
     {
         if (null === $this->clientCertificationGraduation) {
             $this->clientCertificationGraduation = new CertificationGraduation\Client(
@@ -59,7 +59,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\User\Lead\Client
      */
-    public function lead() : Lead\Client
+    public function leads() : Lead\Client
     {
         if (null === $this->clientLead) {
             $this->clientLead = new Lead\Client(
@@ -95,7 +95,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\User\PhoneLine\Client
      */
-    public function phoneLine() : PhoneLine\Client
+    public function phoneLines() : PhoneLine\Client
     {
         if (null === $this->clientPhoneLine) {
             $this->clientPhoneLine = new PhoneLine\Client(
@@ -113,7 +113,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\User\Post\Client
      */
-    public function post() : Post\Client
+    public function posts() : Post\Client
     {
         if (null === $this->clientPost) {
             $this->clientPost = new Post\Client(
@@ -132,15 +132,19 @@ class Client extends
      * -------------------------------------------------------------------------
      */
     /**
+     * getAllUsers
+     *
      * @param string $jwt
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(string $jwt) : Response
-    {
+    public function getAllUsers(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -158,7 +162,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/users',
                 [
@@ -196,8 +200,10 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $uid, string $jwt) : Response
-    {
+    public function getUser(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -216,7 +222,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/users/%s',
                 [
@@ -273,7 +279,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/users',
                 [
@@ -315,7 +321,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(
+    public function createUser(
         UserModel $userModel,
         string $jwt
     ) : Response {
@@ -337,7 +343,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/users',
                 [
@@ -392,7 +398,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(
+    public function updateUser(
         UserModel $userModel,
         string $jwt
     ) : Response {
@@ -412,7 +418,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPut(
+        $response = $this->put(
             vsprintf(
                 '%s/data/users/%s',
                 [
@@ -444,7 +450,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(string $uid, string $jwt) : Response
+    public function deleteUser(string $uid, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -459,7 +465,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s',
                 [

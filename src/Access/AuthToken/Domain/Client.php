@@ -53,7 +53,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/access/auth-token/domains/%s/relations',
                 [

@@ -53,7 +53,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockAPIClient->create(
+        $response = $mockAPIClient->createUser(
             new UserModel(),
             'fake user jwt'
         );
@@ -99,7 +99,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockAPIClient->create(
+        $mockAPIClient->createUser(
             new UserModel(),
             'fake user jwt'
         );

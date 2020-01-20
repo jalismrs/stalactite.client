@@ -35,8 +35,9 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function getAll(string $jwt) : Response
-    {
+    public function getAllPhoneTypes(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -54,7 +55,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/phone/types',
                 [
@@ -92,8 +93,10 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $uid, string $jwt) : Response
-    {
+    public function getPhoneType(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -112,7 +115,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/phone/types/%s',
                 [
@@ -151,7 +154,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(
+    public function createPhoneType(
         PhoneTypeModel $phoneTypeModel,
         string $jwt
     ) : Response {
@@ -173,7 +176,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/phone/types',
                 [
@@ -214,7 +217,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(
+    public function updatePhoneType(
         PhoneTypeModel $phoneTypeModel,
         string $jwt
     ) : Response {
@@ -231,7 +234,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPut(
+        $response = $this->put(
             vsprintf(
                 '%s/data/phone/types/%s',
                 [
@@ -265,8 +268,10 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(string $uid, string $jwt) : Response
-    {
+    public function deletePhoneType(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -280,7 +285,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/data/phone/types/%s',
                 [

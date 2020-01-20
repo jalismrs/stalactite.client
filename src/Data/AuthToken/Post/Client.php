@@ -32,7 +32,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getAll(
+    public function getAllPosts(
         string $apiAuthToken
     ) : Response {
         $jwt = JwtFactory::generateJwt(
@@ -57,7 +57,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts',
                 [
@@ -95,7 +95,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(
+    public function getPost(
         string $uid,
         string $apiAuthToken
     ) : Response {
@@ -122,7 +122,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts/%s',
                 [
@@ -184,7 +184,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts/%s/users',
                 [

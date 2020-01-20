@@ -34,8 +34,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->certificationGraduation();
-        $client2 = $baseClient->certificationGraduation();
+        $client1 = $baseClient->certificationGraduations();
+        $client2 = $baseClient->certificationGraduations();
         
         self::checkClients(
             $baseClient,
@@ -60,8 +60,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->lead();
-        $client2 = $baseClient->lead();
+        $client1 = $baseClient->leads();
+        $client2 = $baseClient->leads();
         
         self::checkClients(
             $baseClient,
@@ -112,8 +112,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->phoneLine();
-        $client2 = $baseClient->phoneLine();
+        $client1 = $baseClient->phoneLines();
+        $client2 = $baseClient->phoneLines();
         
         self::checkClients(
             $baseClient,
@@ -138,8 +138,8 @@ class ClientTest extends
             new MockHttpClient()
         );
         
-        $client1 = $baseClient->post();
-        $client2 = $baseClient->post();
+        $client1 = $baseClient->posts();
+        $client2 = $baseClient->posts();
         
         self::checkClients(
             $baseClient,

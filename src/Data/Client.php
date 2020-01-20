@@ -30,7 +30,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Client
      */
-    public function authToken() : AuthToken\Client
+    public function authTokens() : AuthToken\Client
     {
         if (null === $this->clientAuthToken) {
             $this->clientAuthToken = new AuthToken\Client(
@@ -48,7 +48,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\CertificationType\Client
      */
-    public function certificationType() : CertificationType\Client
+    public function certificationTypes() : CertificationType\Client
     {
         if (null === $this->clientCertificationType) {
             $this->clientCertificationType = new CertificationType\Client(
@@ -66,7 +66,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\Customer\Client
      */
-    public function customer() : Customer\Client
+    public function customers() : Customer\Client
     {
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
@@ -84,7 +84,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\Domain\Client
      */
-    public function domain() : Domain\Client
+    public function domains() : Domain\Client
     {
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
@@ -102,7 +102,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\PhoneType\Client
      */
-    public function phoneType() : PhoneType\Client
+    public function phoneTypes() : PhoneType\Client
     {
         if (null === $this->clientPhoneType) {
             $this->clientPhoneType = new PhoneType\Client(
@@ -120,7 +120,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\Post\Client
      */
-    public function post() : Post\Client
+    public function posts() : Post\Client
     {
         if (null === $this->clientPost) {
             $this->clientPost = new Post\Client(
@@ -138,7 +138,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\User\Client
      */
-    public function user() : User\Client
+    public function users() : User\Client
     {
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(

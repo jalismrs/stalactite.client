@@ -51,7 +51,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $response = $mockAPIClient->delete(
+        $response = $mockAPIClient->deleteUser(
             ModelFactory::getTestableUser()
                         ->getUid(),
             'fake user jwt'
@@ -93,7 +93,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $mockAPIClient->delete(
+        $mockAPIClient->deleteUser(
             ModelFactory::getTestableUser()
                         ->getUid(),
             'fake user jwt'

@@ -49,7 +49,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $response = $mockAPIClient->delete(
+        $response = $mockAPIClient->deleteCertificationType(
             ModelFactory::getTestableCertificationType()
                         ->getUid(),
             'fake user jwt'
@@ -91,7 +91,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $mockAPIClient->delete(
+        $mockAPIClient->deleteCertificationType(
             ModelFactory::getTestableCertificationType()
                         ->getUid(),
             'fake user jwt'

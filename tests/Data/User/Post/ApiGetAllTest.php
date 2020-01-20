@@ -54,7 +54,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $response = $mockAPIClient->getAll(
+        $response = $mockAPIClient->getAllPosts(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );
@@ -101,7 +101,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $mockAPIClient->getAll(
+        $mockAPIClient->getAllPosts(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );

@@ -27,7 +27,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Client
      */
-    public function customer() : Customer\Client
+    public function customers() : Customer\Client
     {
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
@@ -45,7 +45,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Client
      */
-    public function domain() : Domain\Client
+    public function domains() : Domain\Client
     {
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
@@ -63,7 +63,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Post\Client
      */
-    public function post() : Post\Client
+    public function posts() : Post\Client
     {
         if (null === $this->clientPost) {
             $this->clientPost = new Post\Client(
@@ -81,7 +81,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Data\AuthToken\User\Client
      */
-    public function user() : User\Client
+    public function users() : User\Client
     {
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(

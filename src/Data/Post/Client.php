@@ -32,8 +32,9 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function getAll(string $jwt) : Response
-    {
+    public function getAllPosts(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -51,7 +52,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/posts',
                 [
@@ -81,19 +82,21 @@ class Client extends
     }
     
     /**
-     * get
+     * getPost
      *
      * @param string $uid
      * @param string $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function get(string $uid, string $jwt) : Response
-    {
+    public function getPost(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -112,7 +115,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/posts/%s',
                 [
@@ -151,7 +154,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(
+    public function createPost(
         PostModel $postModel,
         string $jwt
     ) : Response {
@@ -173,7 +176,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/posts',
                 [
@@ -217,7 +220,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(
+    public function updatePost(
         PostModel $postModel,
         string $jwt
     ) : Response {
@@ -234,7 +237,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPut(
+        $response = $this->put(
             vsprintf(
                 '%s/data/posts/%s',
                 [
@@ -274,8 +277,10 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    public function delete(string $uid, string $jwt) : Response
-    {
+    public function deletePost(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -289,7 +294,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/data/posts/%s',
                 [
@@ -342,7 +347,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/posts/%s/users',
                 [

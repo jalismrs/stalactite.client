@@ -54,7 +54,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $response = $mockAPIClient->getAll(
+        $response = $mockAPIClient->getAllCertificationGraduations(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );
@@ -101,7 +101,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $mockAPIClient->getAll(
+        $mockAPIClient->getAllCertificationGraduations(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );

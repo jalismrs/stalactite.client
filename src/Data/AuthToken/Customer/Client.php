@@ -25,14 +25,17 @@ class Client extends
     ClientAbstract
 {
     /**
+     * getAllCustomers
+     *
      * @param string $apiAuthToken
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(
+    public function getAllCustomers(
         string $apiAuthToken
     ) : Response {
         $jwt = JwtFactory::generateJwt(
@@ -57,7 +60,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers',
                 [
@@ -124,7 +127,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers',
                 [
@@ -163,7 +166,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(
+    public function getCustomer(
         string $uid,
         string $apiAuthToken
     ) : Response {
@@ -190,7 +193,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers/%s',
                 [

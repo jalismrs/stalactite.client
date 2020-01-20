@@ -51,7 +51,7 @@ class ApiDeleteTest extends
         
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
         
-        $response = $mockClient->delete(
+        $response = $mockClient->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),
             'fake user jwt'
@@ -94,7 +94,7 @@ class ApiDeleteTest extends
         
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
         
-        $mockClient->delete(
+        $mockClient->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),
             'fake user jwt'

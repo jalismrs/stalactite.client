@@ -49,7 +49,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $response = $mockAPIClient->delete(
+        $response = $mockAPIClient->deletePhoneType(
             ModelFactory::getTestablePhoneType()
                         ->getUid(),
             'fake user jwt'
@@ -93,7 +93,7 @@ class ApiDeleteTest extends
             )
         );
         
-        $response = $mockAPIClient->delete(
+        $response = $mockAPIClient->deletePhoneType(
             ModelFactory::getTestablePhoneType()
                         ->getUid(),
             'fake user jwt'

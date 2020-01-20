@@ -26,15 +26,19 @@ class Client extends
     ClientAbstract
 {
     /**
+     * getAllTrustedApps
+     *
      * @param string $jwt
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(string $jwt) : Response
-    {
+    public function getAllTrustedApps(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -52,7 +56,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/auth/trustedApps',
                 [
@@ -90,8 +94,10 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $uid, string $jwt) : Response
-    {
+    public function getTrustedApp(
+        string $uid,
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -110,7 +116,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
@@ -147,7 +153,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(
+    public function updateTrustedApp(
         TrustedAppModel $trustedAppModel,
         string $jwt
     ) : Response {
@@ -164,7 +170,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPut(
+        $response = $this->put(
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
@@ -202,7 +208,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function create(
+    public function createTrustedApp(
         TrustedAppModel $trustedAppModel,
         string $jwt
     ) : Response {
@@ -231,7 +237,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/auth/trustedApps',
                 [
@@ -269,7 +275,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function delete(
+    public function deleteTrustedApp(
         string $uid,
         string $resetToken,
         string $jwt
@@ -287,7 +293,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
@@ -346,7 +352,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPut(
+        $response = $this->put(
             vsprintf(
                 '%s/auth/trustedApps/%s/authToken/reset',
                 [

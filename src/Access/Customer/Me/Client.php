@@ -62,7 +62,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/access/customers/me/relations',
                 [
@@ -124,7 +124,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/access/customers/me/access/%s',
                 [

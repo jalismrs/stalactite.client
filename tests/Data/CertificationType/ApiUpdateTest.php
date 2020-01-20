@@ -49,7 +49,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $response = $mockAPIClient->update(
+        $response = $mockAPIClient->updateCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'
         );
@@ -90,7 +90,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $mockAPIClient->update(
+        $mockAPIClient->updateCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'
         );

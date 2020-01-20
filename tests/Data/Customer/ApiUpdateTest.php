@@ -49,7 +49,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $response = $mockAPIClient->update(
+        $response = $mockAPIClient->updateCustomer(
             ModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
@@ -90,7 +90,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $mockAPIClient->update(
+        $mockAPIClient->updateCustomer(
             ModelFactory::getTestableCustomer(),
             'fake user jwt'
         );

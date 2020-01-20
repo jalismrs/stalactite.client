@@ -33,8 +33,9 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(string $jwt) : Response
-    {
+    public function getMe(
+        string $jwt
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -53,7 +54,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/users/me',
                 [
@@ -91,7 +92,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function update(
+    public function updateMe(
         UserModel $userModel,
         string $jwt
     ) : Response {
@@ -108,7 +109,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/users/me',
                 [
@@ -171,7 +172,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/users/me/phone/lines',
                 [
@@ -229,7 +230,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/data/users/me/phone/lines/%s',
                 [

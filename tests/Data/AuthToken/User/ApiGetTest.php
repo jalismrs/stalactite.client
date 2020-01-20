@@ -53,7 +53,7 @@ class ApiGetTest extends
             )
         );
         
-        $response = $mockAPIClient->get(
+        $response = $mockAPIClient->getUser(
             'fake user uid',
             'fake user jwt'
         );
@@ -99,7 +99,7 @@ class ApiGetTest extends
             )
         );
         
-        $mockAPIClient->get(
+        $mockAPIClient->getUser(
             'fake user uid',
             'fake user jwt'
         );

@@ -53,7 +53,7 @@ class ApiGetTest extends
             )
         );
         
-        $response = $mockAPIClient->get(
+        $response = $mockAPIClient->getCustomer(
             ModelFactory::getTestableCustomer()
                         ->getUid(),
             'fake API auth token'
@@ -100,7 +100,7 @@ class ApiGetTest extends
             )
         );
         
-        $mockAPIClient->get(
+        $mockAPIClient->getCustomer(
             ModelFactory::getTestableCustomer()
                         ->getUid(),
             'fake API auth token'

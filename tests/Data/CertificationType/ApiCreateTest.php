@@ -53,7 +53,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockAPIClient->create(
+        $response = $mockAPIClient->createCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'
         );
@@ -99,7 +99,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockAPIClient->create(
+        $mockAPIClient->createCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'
         );

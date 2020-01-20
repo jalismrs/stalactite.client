@@ -99,7 +99,7 @@ abstract class ClientAbstract
     }
     
     /**
-     * requestDelete
+     * delete
      *
      * @param string                                     $url
      * @param array                                      $options
@@ -110,7 +110,7 @@ abstract class ClientAbstract
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    final protected function requestDelete(
+    final protected function delete(
         string $url,
         array $options,
         JsonSchema $schema
@@ -124,7 +124,7 @@ abstract class ClientAbstract
     }
     
     /**
-     * requestGet
+     * get
      *
      * @param string                                     $url
      * @param array                                      $options
@@ -135,7 +135,7 @@ abstract class ClientAbstract
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    final protected function requestGet(
+    final protected function get(
         string $url,
         array $options,
         JsonSchema $schema
@@ -149,7 +149,7 @@ abstract class ClientAbstract
     }
     
     /**
-     * requestPost
+     * post
      *
      * @param string                                     $url
      * @param array                                      $options
@@ -160,7 +160,7 @@ abstract class ClientAbstract
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    final protected function requestPost(
+    final protected function post(
         string $url,
         array $options,
         JsonSchema $schema
@@ -174,7 +174,7 @@ abstract class ClientAbstract
     }
     
     /**
-     * requestPut
+     * put
      *
      * @param string                                     $url
      * @param array                                      $options
@@ -185,7 +185,7 @@ abstract class ClientAbstract
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \Jalismrs\Stalactite\Client\ClientException
      */
-    final protected function requestPut(
+    final protected function put(
         string $url,
         array $options,
         JsonSchema $schema

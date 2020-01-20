@@ -54,7 +54,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $response = $mockAPIClient->getAll(
+        $response = $mockAPIClient->getAllPhoneTypes(
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -100,7 +100,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $mockAPIClient->getAll(
+        $mockAPIClient->getAllPhoneTypes(
             'fake user jwt'
         );
     }

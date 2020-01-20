@@ -53,7 +53,7 @@ class ApiGetTest extends
             )
         );
         
-        $response = $mockAPIClient->get(
+        $response = $mockAPIClient->getPost(
             ModelFactory::getTestablePost()
                         ->getUid(),
             'fake user jwt'
@@ -100,7 +100,7 @@ class ApiGetTest extends
             )
         );
         
-        $mockAPIClient->get(
+        $mockAPIClient->getPost(
             ModelFactory::getTestablePost()
                         ->getUid(),
             'fake user jwt'

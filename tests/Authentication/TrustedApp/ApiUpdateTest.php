@@ -49,7 +49,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $response = $mockClient->update(
+        $response = $mockClient->updateTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -89,7 +89,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $mockClient->update(
+        $mockClient->updateTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

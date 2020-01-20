@@ -49,7 +49,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $response = $mockAPIClient->update(
+        $response = $mockAPIClient->updatePhoneType(
             ModelFactory::getTestablePhoneType(),
             'fake user jwt'
         );
@@ -90,7 +90,7 @@ class ApiUpdateTest extends
             )
         );
         
-        $mockAPIClient->update(
+        $mockAPIClient->updatePhoneType(
             ModelFactory::getTestablePhoneType(),
             'fake user jwt'
         );

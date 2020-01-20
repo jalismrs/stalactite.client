@@ -53,7 +53,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockAPIClient->create(
+        $response = $mockAPIClient->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'
         );
@@ -99,7 +99,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockAPIClient->create(
+        $mockAPIClient->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'
         );

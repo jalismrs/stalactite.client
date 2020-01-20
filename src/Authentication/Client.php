@@ -45,7 +45,7 @@ class Client extends
      *
      * @return \Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client
      */
-    public function trustedApp() : TrustedApp\Client
+    public function trustedApps() : TrustedApp\Client
     {
         if (null === $this->clientTrustedApp) {
             $this->clientTrustedApp = new TrustedApp\Client(
@@ -207,7 +207,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/auth/login',
                 [

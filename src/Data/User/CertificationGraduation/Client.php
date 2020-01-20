@@ -36,7 +36,7 @@ class Client extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(
+    public function getAllCertificationGraduations(
         UserModel $userModel,
         string $jwt
     ) : Response {
@@ -57,7 +57,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/users/%s/certifications',
                 [
@@ -125,7 +125,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestPost(
+        $response = $this->post(
             vsprintf(
                 '%s/data/users/%s/certifications',
                 [
@@ -186,7 +186,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestDelete(
+        $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s/certifications/%s',
                 [

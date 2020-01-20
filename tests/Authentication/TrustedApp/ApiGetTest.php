@@ -53,7 +53,7 @@ class ApiGetTest extends
             )
         );
         
-        $response = $mockClient->get(
+        $response = $mockClient->getTrustedApp(
             ModelFactory::getTestableTrustedApp()
                         ->getUid(),
             'fake user jwt'
@@ -99,7 +99,7 @@ class ApiGetTest extends
             )
         );
         
-        $mockClient->get(
+        $mockClient->getTrustedApp(
             ModelFactory::getTestableTrustedApp()
                         ->getUid(),
             'fake user jwt'

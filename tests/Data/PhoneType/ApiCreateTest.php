@@ -53,7 +53,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockAPIClient->create(
+        $response = $mockAPIClient->createPhoneType(
             ModelFactory::getTestablePhoneType(),
             'fake user jwt'
         );
@@ -99,7 +99,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockAPIClient->create(
+        $mockAPIClient->createPhoneType(
             ModelFactory::getTestablePhoneType(),
             'fake user jwt'
         );

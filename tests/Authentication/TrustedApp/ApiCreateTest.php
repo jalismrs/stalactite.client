@@ -60,7 +60,7 @@ class ApiCreateTest extends
             $mockHttpClient
         );
         
-        $response = $mockClient->create(
+        $response = $mockClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -105,7 +105,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockClient->create(
+        $mockClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

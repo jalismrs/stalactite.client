@@ -26,8 +26,6 @@ class Client extends
      */
     public function access() : Access\Client
     {
-        static $client = null;
-        
         if (null === $this->clientAccess) {
             $this->clientAccess = new Access\Client(
                 $this->host,
@@ -46,8 +44,6 @@ class Client extends
      */
     public function authentication() : Authentication\Client
     {
-        static $client = null;
-    
         if (null === $this->clientAuthentication) {
             $this->clientAuthentication = new Authentication\Client(
                 $this->host,
@@ -66,8 +62,6 @@ class Client extends
      */
     public function data() : Data\Client
     {
-        static $client = null;
-    
         if (null === $this->clientData) {
             $this->clientData = new Data\Client(
                 $this->host,

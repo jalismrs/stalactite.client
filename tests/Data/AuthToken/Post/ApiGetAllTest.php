@@ -54,7 +54,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $response = $mockAPIClient->getAll(
+        $response = $mockAPIClient->getAllPosts(
             'fake API auth token'
         );
         self::assertTrue($response->isSuccess());
@@ -100,7 +100,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $mockAPIClient->getAll(
+        $mockAPIClient->getAllPosts(
             'fake API auth token'
         );
     }

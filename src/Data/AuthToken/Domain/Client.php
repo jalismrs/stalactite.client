@@ -25,14 +25,17 @@ class Client extends
     ClientAbstract
 {
     /**
+     * getAllDomains
+     *
      * @param string $apiAuthToken
      *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @return \Jalismrs\Stalactite\Client\Response
+     *
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function getAll(
+    public function getAllDomains(
         string $apiAuthToken
     ) : Response {
         $jwt = JwtFactory::generateJwt(
@@ -57,7 +60,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
                 [
@@ -123,7 +126,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
                 [
@@ -191,7 +194,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
                 [
@@ -232,7 +235,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function get(
+    public function getDomain(
         string $uid,
         string $apiAuthToken
     ) : Response {
@@ -259,7 +262,7 @@ class Client extends
             ]
         );
         
-        $response = $this->requestGet(
+        $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains/%s',
                 [

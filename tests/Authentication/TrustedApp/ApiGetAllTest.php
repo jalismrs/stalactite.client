@@ -54,7 +54,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $response = $mockClient->getAll(
+        $response = $mockClient->getAllTrustedApps(
             'fake user jwt'
         );
         
@@ -99,7 +99,7 @@ class ApiGetAllTest extends
             )
         );
         
-        $mockClient->getAll(
+        $mockClient->getAllTrustedApps(
             'fake user jwt'
         );
     }
