@@ -9,7 +9,6 @@ use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
@@ -25,8 +24,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/certification/types';
-    
     /**
      * @param string $jwt
      *
@@ -56,10 +53,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/data/certification/types',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -115,10 +111,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/certification/types/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -145,7 +140,7 @@ class Client extends
      * create
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel $certificationTypeModel
-     * @param string                                                                  $jwt
+     * @param string                                                        $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -177,10 +172,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s',
+                '%s/data/certification/types',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -209,7 +203,7 @@ class Client extends
      * update
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel $certificationTypeModel
-     * @param string                                                                  $jwt
+     * @param string                                                        $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -236,10 +230,9 @@ class Client extends
         
         $response = $this->requestPut(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/certification/types/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $certificationTypeModel->getUid(),
                 ],
             ),
@@ -286,10 +279,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/certification/types/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),

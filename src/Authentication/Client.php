@@ -27,8 +27,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const  API_URL_PART = '/auth';
-    
     public const JWT_ISSUER = 'stalactite.auth-api';
     
     private const AUTHORIZED_JWT_TYPES = [
@@ -81,7 +79,12 @@ class Client extends
                 ->httpClient
                 ->request(
                     'GET',
-                    $this->host . self::API_URL_PART . '/publicKey'
+                    vsprintf(
+                        '%s/auth/pulbicKey',
+                        [
+                            $this->host,
+                        ]
+                    )
                 )
                 ->getContent();
         } catch (Throwable $throwable) {
@@ -206,10 +209,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s/login',
+                '%s/auth/login',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [

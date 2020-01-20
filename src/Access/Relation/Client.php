@@ -19,8 +19,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/relations';
-    
     /**
      * deleteRelation
      *
@@ -52,10 +50,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s',
+                '%s/access/relations/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainRelationModel->getUid(),
                 ],
             ),

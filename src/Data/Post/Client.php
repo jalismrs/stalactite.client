@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Client\Data\Post;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
-use Jalismrs\Stalactite\Client\Data\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\PostModel;
 use Jalismrs\Stalactite\Client\Data\Schema;
@@ -22,8 +21,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/posts';
-    
     /**
      * getAll
      *
@@ -56,10 +53,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/data/posts',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -118,10 +114,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/posts/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -148,7 +143,7 @@ class Client extends
      * create
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\PostModel $postModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -180,10 +175,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s',
+                '%s/data/posts',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -215,7 +209,7 @@ class Client extends
      * update
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\PostModel $postModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -242,10 +236,9 @@ class Client extends
         
         $response = $this->requestPut(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/posts/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $postModel->getUid(),
                 ],
             ),
@@ -298,10 +291,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/posts/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -352,10 +344,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s/users',
+                '%s/data/posts/%s/users',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),

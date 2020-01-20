@@ -12,7 +12,6 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Data\User\Client as ParentClient;
 use function vsprintf;
 
 /**
@@ -23,8 +22,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/me';
-    
     /**
      * @param string $jwt
      *
@@ -52,13 +49,12 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/data/customers/me',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [

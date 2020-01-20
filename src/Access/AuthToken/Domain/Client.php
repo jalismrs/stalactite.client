@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Access\AuthToken\Domain;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\AuthToken\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
@@ -20,13 +19,11 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/domains';
-    
     /**
      * deleteRelationsByDomain
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                                       $apiAuthToken
+     * @param string                                             $apiAuthToken
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -58,10 +55,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s/relations',
+                '%s/access/auth-token/domains/%s/relations',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),

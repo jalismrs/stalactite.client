@@ -27,8 +27,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/domains';
-    
     /**
      * getRelations
      *
@@ -89,10 +87,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s/relations',
+                '%s/access/domains/%s/relations',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),
@@ -170,10 +167,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s/%s/relations/users',
+                '%s/access/domains/%s/relations/users',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),
@@ -237,10 +233,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s/%s/relations/customers',
+                '%s/access/domains/%s/relations/customers',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),

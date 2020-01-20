@@ -14,7 +14,6 @@ use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
 use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
 use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Data\User\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Response;
 use function vsprintf;
 
@@ -26,8 +25,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/me';
-    
     /**
      * @param string $jwt
      *
@@ -58,10 +55,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/data/users/me',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -87,7 +83,7 @@ class Client extends
      * update
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                                     $jwt
+     * @param string                                           $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -114,10 +110,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s',
+                '%s/data/users/me',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -144,7 +139,7 @@ class Client extends
      * addPhoneLine
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                          $jwt
+     * @param string                                                $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -178,10 +173,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s/phone/lines',
+                '%s/data/users/me/phone/lines',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -210,7 +204,7 @@ class Client extends
      * removePhoneLine
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                          $jwt
+     * @param string                                                $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -237,10 +231,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/phone/lines/%s',
+                '%s/data/users/me/phone/lines/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $phoneLineModel->getUid(),
                 ],
             ),

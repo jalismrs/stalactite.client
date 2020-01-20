@@ -24,8 +24,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = '/leads';
-    
     /**
      * getAll
      *
@@ -61,12 +59,10 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s%s',
+                '%s/data/users/%s/leads',
                 [
                     $this->host,
-                    ParentClient::API_URL_PART,
                     $userModel->getUid(),
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -143,12 +139,10 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s/%s%s',
+                '%s/data/users/%s/leads',
                 [
                     $this->host,
-                    ParentClient::API_URL_PART,
                     $userModel->getUid(),
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -216,12 +210,10 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s%s',
+                '%s/data/users/%s/leads',
                 [
                     $this->host,
-                    ParentClient::API_URL_PART,
                     $userModel->getUid(),
-                    self::API_URL_PART,
                 ],
             ),
             [

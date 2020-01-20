@@ -13,7 +13,6 @@ use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Data\AuthToken\Client as ParentClient;
 use function array_map;
 use function vsprintf;
 
@@ -25,8 +24,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/posts';
-    
     /**
      * @param string $apiAuthToken
      *
@@ -59,13 +56,12 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/data/auth-token/posts',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -125,13 +121,12 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s',
+                '%s/data/auth-token/posts/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -188,13 +183,12 @@ class Client extends
                 ]
             ]
         );
-    
+        
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s/users',
+                '%s/data/auth-token/posts/%s/users',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),

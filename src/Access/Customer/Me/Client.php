@@ -7,7 +7,6 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Customer\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
@@ -27,8 +26,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/me';
-    
     /**
      * @param string $jwt
      *
@@ -67,10 +64,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/relations',
+                '%s/access/customers/me/relations',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -86,7 +82,7 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function(array $relation): DomainCustomerRelationModel {
+                    static function(array $relation) : DomainCustomerRelationModel {
                         return ModelFactory::createDomainCustomerRelationModel($relation);
                     },
                     $response['relations']
@@ -99,7 +95,7 @@ class Client extends
      * getAccessClearance
      *
      * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                                       $jwt
+     * @param string                                             $jwt
      *
      * @return \Jalismrs\Stalactite\Client\Response
      *
@@ -130,10 +126,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/access/%s',
+                '%s/access/customers/me/access/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),

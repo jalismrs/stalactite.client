@@ -7,7 +7,6 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Authentication\Client as ParentClient;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
@@ -26,8 +25,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/trustedApps';
-    
     /**
      * @param string $jwt
      *
@@ -57,10 +54,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s',
+                '%s/auth/trustedApps',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -116,10 +112,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/%s',
+                '%s/auth/trustedApps/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -171,10 +166,9 @@ class Client extends
         
         $response = $this->requestPut(
             vsprintf(
-                '%s%s/%s',
+                '%s/auth/trustedApps/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $trustedAppModel->getUid(),
                 ],
             ),
@@ -239,10 +233,9 @@ class Client extends
         
         $response = $this->requestPost(
             vsprintf(
-                '%s%s',
+                '%s/auth/trustedApps',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -296,10 +289,9 @@ class Client extends
         
         $response = $this->requestDelete(
             vsprintf(
-                '%s%s/%s',
+                '%s/auth/trustedApps/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $uid,
                 ],
             ),
@@ -356,10 +348,9 @@ class Client extends
         
         $response = $this->requestPut(
             vsprintf(
-                '%s%s/%s/authToken/reset',
+                '%s/auth/trustedApps/%s/authToken/reset',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $trustedAppModel->getUid(),
                 ],
             ),

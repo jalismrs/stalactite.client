@@ -13,8 +13,6 @@ use Jalismrs\Stalactite\Client\ClientAbstract;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = '/data';
-    
     private $clientAuthToken;
     private $clientCertificationType;
     private $clientCustomer;

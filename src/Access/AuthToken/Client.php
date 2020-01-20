@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken;
 
-use Jalismrs\Stalactite\Client\Access\Client as ParentClient;
 use Jalismrs\Stalactite\Client\ClientAbstract;
 
 /**
@@ -14,8 +13,6 @@ use Jalismrs\Stalactite\Client\ClientAbstract;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/auth-token';
-    
     private $clientCustomer;
     private $clientDomain;
     private $clientUser;

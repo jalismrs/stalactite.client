@@ -27,8 +27,6 @@ use function vsprintf;
 class Client extends
     ClientAbstract
 {
-    public const API_URL_PART = ParentClient::API_URL_PART . '/me';
-    
     /**
      * @param string $jwt
      *
@@ -66,10 +64,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/relations',
+                '%s/access/users/me/relations',
                 [
                     $this->host,
-                    self::API_URL_PART,
                 ],
             ),
             [
@@ -129,10 +126,9 @@ class Client extends
         
         $response = $this->requestGet(
             vsprintf(
-                '%s%s/access/%s',
+                '%s/access/users/me/access/%s',
                 [
                     $this->host,
-                    self::API_URL_PART,
                     $domainModel->getUid(),
                 ],
             ),
