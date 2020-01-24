@@ -1,5 +1,5 @@
 {
-  "name": "Jalismrs/stalactite-api.client",
+  "name": "jalismrs/stalactite-api.client",
   "license": "proprietary",
   "description": "PHP Client for Stalactite API",
   "type": "library",
