@@ -41,12 +41,6 @@ abstract class ModelFactory
             }
         }
 
-        if (isset($data['certifications'])) {
-            foreach ($data['certifications'] as $certification) {
-                $model->addCertification(self::createCertificationGraduationModel($certification));
-            }
-        }
-
         if (isset($data['posts'])) {
             foreach ($data['posts'] as $post) {
                 $model->addPost(self::createPostModel($post));
@@ -124,49 +118,6 @@ abstract class ModelFactory
             ->setAdminAccess($data['adminAccess'] ?? false)
             ->setName($data['name'] ?? null)
             ->setShortName($data['shortName'] ?? null)
-            ->setUid($data['uid'] ?? null);
-
-        return $model;
-    }
-
-    /**
-     * createCertificationTypeModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return CertificationType
-     */
-    public static function createCertificationTypeModel(array $data): CertificationType
-    {
-        $model = new CertificationType();
-        $model
-            ->setName($data['name'] ?? null)
-            ->setUid($data['uid'] ?? null);
-
-        return $model;
-    }
-
-    /**
-     * createCertificationGraduationModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return CertificationGraduation
-     */
-    public static function createCertificationGraduationModel(array $data): CertificationGraduation
-    {
-        $model = new CertificationGraduation();
-        $model
-            ->setDate($data['date'] ?? null)
-            ->setType(
-                null === $data['type']
-                    ? null
-                    : self::createCertificationTypeModel($data['type'])
-            )
             ->setUid($data['uid'] ?? null);
 
         return $model;

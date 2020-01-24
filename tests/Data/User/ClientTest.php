@@ -21,32 +21,6 @@ class ClientTest extends
     use ClientTestTrait;
 
     /**
-     * testCertificationGraduation
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    public function testCertificationGraduation(): void
-    {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
-            new MockHttpClient()
-        );
-
-        $client1 = $baseClient->certificationGraduations();
-        $client2 = $baseClient->certificationGraduations();
-
-        self::checkClients(
-            $baseClient,
-            $client1,
-            $client2
-        );
-    }
-
-    /**
      * testLead
      *
      * @return void

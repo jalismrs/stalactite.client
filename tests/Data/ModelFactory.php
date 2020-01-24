@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data;
 
-use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduation;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationType;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\PhoneLine;
@@ -36,7 +34,6 @@ abstract class ModelFactory
             ->addPost(self::getTestablePost())
             ->addLead(self::getTestablePost())
             ->addPhoneLine(self::getTestablePhoneLine())
-            ->addCertification(self::getTestableCertificationGraduation())
             ->setUid('azertyuiop');
 
         return $model;
@@ -92,20 +89,6 @@ abstract class ModelFactory
     }
 
     /**
-     * @return CertificationGraduation
-     */
-    public static function getTestableCertificationGraduation(): CertificationGraduation
-    {
-        $model = new CertificationGraduation();
-        $model
-            ->setDate('2000-01-01')
-            ->setType(self::getTestableCertificationType())
-            ->setUid('azertyuiop');
-
-        return $model;
-    }
-
-    /**
      * @return PhoneLine
      */
     public static function getTestablePhoneLine(): PhoneLine
@@ -131,17 +114,6 @@ abstract class ModelFactory
 
         return $model;
     }
-
-    /**
-     * @return CertificationType
-     */
-    public static function getTestableCertificationType(): CertificationType
-    {
-        $model = new CertificationType();
-        $model
-            ->setName('azerty')
-            ->setUid('azertyuiop');
-
         return $model;
     }
 }

@@ -12,27 +12,6 @@ use hunomina\Validator\Json\Rule\JsonRule;
  */
 abstract class Schema
 {
-    public const CERTIFICATION_GRADUATION = [
-        'uid' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'date' => [
-            'type' => JsonRule::STRING_TYPE,
-            'date-format' => 'Y-m-d'
-        ],
-        'type' => [
-            'type' => JsonRule::OBJECT_TYPE,
-            'schema' => self::CERTIFICATION_TYPE
-        ]
-    ];
-    public const CERTIFICATION_TYPE = [
-        'uid' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'name' => [
-            'type' => JsonRule::STRING_TYPE
-        ]
-    ];
     public const CUSTOMER = [
         'uid' => [
             'type' => JsonRule::STRING_TYPE
@@ -198,10 +177,6 @@ abstract class Schema
         'leads' => [
             'type' => JsonRule::LIST_TYPE,
             'schema' => self::POST
-        ],
-        'certifications' => [
-            'type' => JsonRule::LIST_TYPE,
-            'schema' => self::CERTIFICATION_GRADUATION
         ],
         'phoneLines' => [
             'type' => JsonRule::LIST_TYPE,

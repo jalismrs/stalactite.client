@@ -14,7 +14,6 @@ class Client extends
     AbstractClient
 {
     private $clientAuthToken;
-    private $clientCertificationType;
     private $clientCustomer;
     private $clientDomain;
     private $clientPhoneType;
@@ -41,24 +40,6 @@ class Client extends
         }
 
         return $this->clientAuthToken;
-    }
-
-    /**
-     * certificationType
-     *
-     * @return CertificationType\Client
-     */
-    public function certificationTypes(): CertificationType\Client
-    {
-        if (null === $this->clientCertificationType) {
-            $this->clientCertificationType = new CertificationType\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-
-        return $this->clientCertificationType;
     }
 
     /**

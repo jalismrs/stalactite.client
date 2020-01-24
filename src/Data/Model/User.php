@@ -63,10 +63,6 @@ class User extends
      * @var array
      */
     private $phoneLines = [];
-    /**
-     * @var array
-     */
-    private $certifications = [];
 
     /**
      * getEmail
@@ -426,47 +422,6 @@ class User extends
     }
 
     /**
-     * getCertifications
-     *
-     * @return array
-     */
-    public function getCertifications(): array
-    {
-        return $this->certifications;
-    }
-
-    /**
-     * setCertifications
-     *
-     * @param array $certifications
-     *
-     * @return $this
-     */
-    public function setCertifications(array $certifications): self
-    {
-        $this->certifications = [];
-        foreach ($certifications as $certification) {
-            $this->addCertification($certification);
-        }
-
-        return $this;
-    }
-
-    /**
-     * addCertification
-     *
-     * @param CertificationGraduation $certificationGraduationModel
-     *
-     * @return $this
-     */
-    public function addCertification(CertificationGraduation $certificationGraduationModel): self
-    {
-        $this->certifications[] = $certificationGraduationModel;
-
-        return $this;
-    }
-
-    /**
      * asArray
      *
      * @return array
@@ -476,12 +431,6 @@ class User extends
         return array_merge(
             $this->asMinimalArray(),
             [
-                'certifications' => array_map(
-                    static function (CertificationGraduation $certificationGraduationModel): array {
-                        return $certificationGraduationModel->asArray();
-                    },
-                    $this->certifications
-                ),
                 'leads' => array_map(
                     static function (Post $leadModel): array {
                         return $leadModel->asArray();
