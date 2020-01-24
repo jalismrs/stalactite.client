@@ -89,7 +89,7 @@ class ApiCreateTest extends
     public function testThrowOnCreate(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $mockClient = new Client(
             'http://fakeHost',

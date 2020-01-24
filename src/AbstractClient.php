@@ -237,7 +237,7 @@ abstract class AbstractClient
         } catch (Throwable $throwable) {
             throw new ClientException(
                 'Error while contacting Stalactite API',
-                ClientException::CLIENT_TRANSPORT_ERROR,
+                ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
         }
@@ -248,7 +248,7 @@ abstract class AbstractClient
         } catch (Throwable $throwable) {
             throw new ClientException(
                 'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE_ERROR,
+                ClientException::INVALID_API_RESPONSE,
                 $throwable
             );
         }
@@ -256,7 +256,7 @@ abstract class AbstractClient
         if (!$schema->validate($data)) {
             throw new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
-                ClientException::INVALID_API_RESPONSE_ERROR
+                ClientException::INVALID_API_RESPONSE
             );
         }
 
@@ -264,7 +264,7 @@ abstract class AbstractClient
         if (null === $response) {
             throw new ClientException(
                 'Invalid response from Stalactite API: response is null',
-                ClientException::INVALID_API_RESPONSE_ERROR
+                ClientException::INVALID_API_RESPONSE
             );
         }
 

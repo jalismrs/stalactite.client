@@ -47,32 +47,6 @@ class ClientTest extends
     }
 
     /**
-     * testCertificationType
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    public function testCertificationType(): void
-    {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
-            new MockHttpClient()
-        );
-
-        $client1 = $baseClient->certificationTypes();
-        $client2 = $baseClient->certificationTypes();
-
-        self::checkClients(
-            $baseClient,
-            $client1,
-            $client2
-        );
-    }
-
-    /**
      * testCustomer
      *
      * @return void
@@ -116,32 +90,6 @@ class ClientTest extends
 
         $client1 = $baseClient->domains();
         $client2 = $baseClient->domains();
-
-        self::checkClients(
-            $baseClient,
-            $client1,
-            $client2
-        );
-    }
-
-    /**
-     * testPhoneType
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    public function testPhoneType(): void
-    {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
-            new MockHttpClient()
-        );
-
-        $client1 = $baseClient->phoneTypes();
-        $client2 = $baseClient->phoneTypes();
 
         self::checkClients(
             $baseClient,

@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
 use function array_map;
-use function array_reduce;
 
 /**
  * User
@@ -19,54 +18,36 @@ class User extends
      * @var null|string
      */
     private $email;
+
     /**
      * @var null|string
      */
     private $googleId;
-    /**
-     * @var null|string
-     */
-    private $birthday;
+
     /**
      * @var null|string
      */
     private $lastName;
+
     /**
      * @var null|string
      */
     private $firstName;
-    /**
-     * @var null|string
-     */
-    private $gender;
+
     /**
      * @var bool
      */
     private $admin = false;
-    /**
-     * @var null|string
-     */
-    private $location;
-    /**
-     * @var null|string
-     */
-    private $office;
+
     /**
      * @var array
      */
     private $posts = [];
+
     /**
      * @var array
      */
     private $leads = [];
-    /**
-     * @var array
-     */
-    private $phoneLines = [];
-    /**
-     * @var array
-     */
-    private $certifications = [];
 
     /**
      * getEmail
@@ -112,30 +93,6 @@ class User extends
     public function setGoogleId(?string $googleId): self
     {
         $this->googleId = $googleId;
-
-        return $this;
-    }
-
-    /**
-     * getBirthday
-     *
-     * @return null|string
-     */
-    public function getBirthday(): ?string
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * setBirthday
-     *
-     * @param null|string $birthday
-     *
-     * @return $this
-     */
-    public function setBirthday(?string $birthday): self
-    {
-        $this->birthday = $birthday;
 
         return $this;
     }
@@ -189,30 +146,6 @@ class User extends
     }
 
     /**
-     * getGender
-     *
-     * @return null|string
-     */
-    public function getGender(): ?string
-    {
-        return $this->gender;
-    }
-
-    /**
-     * setGender
-     *
-     * @param null|string $gender
-     *
-     * @return $this
-     */
-    public function setGender(?string $gender): self
-    {
-        $this->gender = $gender;
-
-        return $this;
-    }
-
-    /**
      * isAdmin
      *
      * @return bool
@@ -237,51 +170,20 @@ class User extends
     }
 
     /**
-     * getLocation
+     * hasAdminPost
      *
-     * @return null|string
+     * @return bool
      */
-    public function getLocation(): ?string
+    public function hasAdminPost(): bool
     {
-        return $this->location;
-    }
+        /** @var Post $post */
+        foreach ($this->posts as $post) {
+            if ($post->hasAdminAccess()) {
+                return true;
+            }
+        }
 
-    /**
-     * setLocation
-     *
-     * @param null|string $location
-     *
-     * @return $this
-     */
-    public function setLocation(?string $location): self
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
-     * getOffice
-     *
-     * @return null|string
-     */
-    public function getOffice(): ?string
-    {
-        return $this->office;
-    }
-
-    /**
-     * setOffice
-     *
-     * @param null|string $office
-     *
-     * @return $this
-     */
-    public function setOffice(?string $office): self
-    {
-        $this->office = $office;
-
-        return $this;
+        return false;
     }
 
     /**
@@ -326,24 +228,6 @@ class User extends
     }
 
     /**
-     * hasAdminPost
-     *
-     * @return bool
-     */
-    public function hasAdminPost(): bool
-    {
-        return array_reduce(
-            $this->getPosts(),
-            static function (bool $carry, Post $postModel): bool {
-                return $carry
-                    ||
-                    $postModel->hasAdminAccess();
-            },
-            false,
-        );
-    }
-
-    /**
      * getLeads
      *
      * @return array
@@ -385,88 +269,6 @@ class User extends
     }
 
     /**
-     * getPhoneLines
-     *
-     * @return array
-     */
-    public function getPhoneLines(): array
-    {
-        return $this->phoneLines;
-    }
-
-    /**
-     * setPhoneLines
-     *
-     * @param array $phoneLines
-     *
-     * @return $this
-     */
-    public function setPhoneLines(array $phoneLines): self
-    {
-        $this->phoneLines = [];
-        foreach ($phoneLines as $phoneLine) {
-            $this->addPhoneLine($phoneLine);
-        }
-
-        return $this;
-    }
-
-    /**
-     * addPhoneLine
-     *
-     * @param PhoneLine $phoneLineModel
-     *
-     * @return $this
-     */
-    public function addPhoneLine(PhoneLine $phoneLineModel): self
-    {
-        $this->phoneLines[] = $phoneLineModel;
-
-        return $this;
-    }
-
-    /**
-     * getCertifications
-     *
-     * @return array
-     */
-    public function getCertifications(): array
-    {
-        return $this->certifications;
-    }
-
-    /**
-     * setCertifications
-     *
-     * @param array $certifications
-     *
-     * @return $this
-     */
-    public function setCertifications(array $certifications): self
-    {
-        $this->certifications = [];
-        foreach ($certifications as $certification) {
-            $this->addCertification($certification);
-        }
-
-        return $this;
-    }
-
-    /**
-     * addCertification
-     *
-     * @param CertificationGraduation $certificationGraduationModel
-     *
-     * @return $this
-     */
-    public function addCertification(CertificationGraduation $certificationGraduationModel): self
-    {
-        $this->certifications[] = $certificationGraduationModel;
-
-        return $this;
-    }
-
-    /**
      * asArray
      *
      * @return array
@@ -476,23 +278,11 @@ class User extends
         return array_merge(
             $this->asMinimalArray(),
             [
-                'certifications' => array_map(
-                    static function (CertificationGraduation $certificationGraduationModel): array {
-                        return $certificationGraduationModel->asArray();
-                    },
-                    $this->certifications
-                ),
                 'leads' => array_map(
                     static function (Post $leadModel): array {
                         return $leadModel->asArray();
                     },
                     $this->leads
-                ),
-                'phoneLines' => array_map(
-                    static function (PhoneLine $phoneLineModel): array {
-                        return $phoneLineModel->asArray();
-                    },
-                    $this->phoneLines
                 ),
                 'posts' => array_map(
                     static function (Post $postModel): array {
@@ -516,12 +306,8 @@ class User extends
             'firstName' => $this->firstName,
             'lastName' => $this->lastName,
             'email' => $this->email,
-            'gender' => $this->gender,
             'googleId' => $this->googleId,
-            'location' => $this->location,
-            'office' => $this->office,
             'admin' => $this->admin,
-            'birthday' => $this->birthday,
         ];
     }
 }

@@ -27,10 +27,8 @@ use function vsprintf;
 class Client extends
     AbstractClient
 {
-    private $clientCertificationGraduation;
     private $clientLead;
     private $clientMe;
-    private $clientPhoneLine;
     private $clientPost;
 
     /*
@@ -38,24 +36,6 @@ class Client extends
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
-    /**
-     * certificationGraduation
-     *
-     * @return CertificationGraduation\Client
-     */
-    public function certificationGraduations(): CertificationGraduation\Client
-    {
-        if (null === $this->clientCertificationGraduation) {
-            $this->clientCertificationGraduation = new CertificationGraduation\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-
-        return $this->clientCertificationGraduation;
-    }
 
     /**
      * lead
@@ -94,28 +74,10 @@ class Client extends
     }
 
     /**
-     * phoneLine
-     *
-     * @return PhoneLine\Client
-     */
-    public function phoneLines(): PhoneLine\Client
-    {
-        if (null === $this->clientPhoneLine) {
-            $this->clientPhoneLine = new PhoneLine\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-
-        return $this->clientPhoneLine;
-    }
-
-    /**
      * post
      *
      */
-    public function posts()
+    public function posts(): PostClient
     {
         if (null === $this->clientPost) {
             $this->clientPost = new PostClient(
