@@ -1,22 +1,35 @@
 <?php
+declare(strict_types=1);
 
-namespace jalismrs\Stalactite\Client\Test\Authentication;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
-use jalismrs\Stalactite\Client\Authentication\Client;
-use jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Authentication\Client;
+use Jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use OutOfBoundsException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-class JwtValidationTest extends TestCase
+/**
+ * JwtValidationTest
+ *
+ * @packageJalismrs\Stalactite\Client\Tests\Authentication
+ */
+class JwtValidationTest extends
+    TestCase
 {
-    private const TEST_RSA_PUBLIC_KEY = __DIR__ . '/keys/public.pem';
     private const TEST_RSA_PRIVATE_KEY = __DIR__ . '/keys/private.pem';
+    private const TEST_RSA_PUBLIC_KEY = __DIR__ . '/keys/public.pem';
 
     /**
+     * getTestPublicKey
+     *
+     * @static
      * @return string
      */
     private static function getTestPublicKey(): string
@@ -25,6 +38,10 @@ class JwtValidationTest extends TestCase
     }
 
     /**
+     * testTransportExceptionThrownOnRSAPublicKeyFetching
+     *
+     * @return void
+     *
      * @throws ClientException
      */
     public function testTransportExceptionThrownOnRSAPublicKeyFetching(): void
@@ -33,60 +50,260 @@ class JwtValidationTest extends TestCase
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
 
         $client = new Client('invalidHost');
+
         $client->getRSAPublicKey();
     }
 
     /**
-     * @dataProvider getTestableData
-     * @param string $token
-     * @param string $publicKey
-     * @param bool $shoudlThrow
-     * @param int $exceptionCode
+     * testValidToken
+     *
+     * @return void
+     *
      * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testToken(string $token, string $publicKey, bool $shoudlThrow, int $exceptionCode): void
+    public function testValidToken(): void
     {
-        if ($shoudlThrow) {
-            $this->expectException(ClientException::class);
-            $this->expectExceptionCode($exceptionCode);
-        }
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
 
-        $mockHttpClient = new MockHttpClient([
-            new MockResponse($publicKey)
-        ]);
-
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient($mockHttpClient);
-
-        $this->assertTrue($mockAPIClient->validate($token));
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->withClaim('type', 'user')
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
     }
 
     /**
-     * @return array
+     * testInvalidPublicKeyToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function getTestableData(): array
+    public function testInvalidPublicKeyToken(): void
     {
-        $signer = new Sha256();
-        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $publicKey = self::getTestPublicKey();
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
 
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
         $time = time();
 
-        $validToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $invalidJwt = 'a' . (new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $wrongIssuerToken = (string)(new Builder())->issuedBy('wrong issuer')->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $expiredToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time - 2000)->expiresAt($time - 1000)->withClaim('type', 'user')->getToken($signer, $privateKey);
-        $invalidUserTypeToken = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->withClaim('type', 'invalid type')->getToken($signer, $privateKey);
-        $invalidStructureJwt_missingTypeClaim = (string)(new Builder())->issuedBy(Client::JWT_ISSUER)->permittedFor('testTrustedAppName')->relatedTo('0123456789')->issuedAt($time)->expiresAt($time + (60 * 60))->getToken($signer, $privateKey);
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->withClaim('type', 'user')
+                ->getToken($signer, $privateKey),
+            'invalid public key'
+        );
+    }
 
-        return [
-            [$validToken, $publicKey, false, 0],
-            [$validToken, 'invalid public key', true, ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR],
-            [$invalidJwt, $publicKey, true, ClientException::INVALID_JWT_STRING_ERROR],
-            [$wrongIssuerToken, $publicKey, true, ClientException::INVALID_JWT_ISSUER_ERROR],
-            [$expiredToken, $publicKey, true, ClientException::EXPIRED_JWT_ERROR],
-            [$invalidUserTypeToken, $publicKey, true, ClientException::INVALID_JWT_USER_TYPE_ERROR],
-            [$invalidStructureJwt_missingTypeClaim, $publicKey, true, ClientException::INVALID_JWT_STRUCTURE_ERROR]
-        ];
+    /**
+     * testInvalidToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testInvalidToken(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_JWT_STRING_ERROR);
+
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
+
+        $this->checkToken(
+            'a' . (new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->withClaim('type', 'user')
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
+    }
+
+    /**
+     * testWrongIssuerToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testWrongIssuerToken(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_JWT_ISSUER_ERROR);
+
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
+
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy('wrong issuer')
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->withClaim('type', 'user')
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
+    }
+
+    /**
+     * testExpiredToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testExpiredToken(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::EXPIRED_JWT_ERROR);
+
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
+
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time - 2000)
+                ->expiresAt($time - 1000)
+                ->withClaim('type', 'user')
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
+    }
+
+    /**
+     * testInvalidUserTypeToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testInvalidUserTypeToken(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_JWT_USER_TYPE_ERROR);
+
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
+
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->withClaim('type', 'invalid type')
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
+    }
+
+    /**
+     * testInvalidJwtStructureMissingClaimToken
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testInvalidJwtStructureMissingClaimToken(): void
+    {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionCode(ClientException::INVALID_JWT_STRUCTURE_ERROR);
+
+        $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
+        $signer = new Sha256();
+        $time = time();
+
+        $this->checkToken(
+            (string)(new Builder())
+                ->issuedBy(Client::JWT_ISSUER)
+                ->permittedFor('testTrustedAppName')
+                ->relatedTo('0123456789')
+                ->issuedAt($time)
+                ->expiresAt($time + (60 * 60))
+                ->getToken($signer, $privateKey),
+            self::getTestPublicKey()
+        );
+    }
+
+    /**
+     * checkToken
+     *
+     * @param string $token
+     * @param string $publicKey
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    private function checkToken(
+        string $token,
+        string $publicKey
+    ): void
+    {
+        $mockAPIClient = new Client(
+            'http://fakeHost',
+            null,
+            new MockHttpClient(
+                [
+                    new MockResponse($publicKey)
+                ]
+            )
+        );
+
+        $response = $mockAPIClient->validate($token);
+
+        self::assertTrue($response);
     }
 }

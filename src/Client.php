@@ -1,54 +1,75 @@
 <?php
+declare(strict_types=1);
 
-namespace jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client;
 
-class Client extends AbstractClient
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client
+ */
+class Client extends
+    ClientAbstract
 {
-    /** @var Authentication\Client $authClient */
-    private $authClient;
+    private $clientAccess;
+    private $clientAuthentication;
+    private $clientData;
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    /**
+     * access
+     *
+     * @return Access\Client
+     */
+    public function access(): Access\Client
+    {
+        if (null === $this->clientAccess) {
+            $this->clientAccess = new Access\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
 
-    /** @var DataManagement\Client $dataManagementClient */
-    private $dataManagementClient;
-
-    /** @var AccessManagement\Client $accessManagementClient */
-    private $accessManagementClient;
+        return $this->clientAccess;
+    }
 
     /**
+     * authentication
+     *
      * @return Authentication\Client
      */
-    public function auth(): Authentication\Client
+    public function authentication(): Authentication\Client
     {
-        if (!($this->authClient instanceof Authentication\Client)) {
-            $this->authClient = new Authentication\Client($this->apiHost, $this->userAgent);
-            $this->authClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientAuthentication) {
+            $this->clientAuthentication = new Authentication\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
 
-        return $this->authClient;
+        return $this->clientAuthentication;
     }
 
     /**
-     * @return DataManagement\Client
+     * data
+     *
+     * @return Data\Client
      */
-    public function data(): DataManagement\Client
+    public function data(): Data\Client
     {
-        if (!($this->dataManagementClient instanceof DataManagement\Client)) {
-            $this->dataManagementClient = new DataManagement\Client($this->apiHost, $this->userAgent);
-            $this->dataManagementClient->setHttpClient($this->getHttpClient());
+        if (null === $this->clientData) {
+            $this->clientData = new Data\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
         }
 
-        return $this->dataManagementClient;
-    }
-
-    /**
-     * @return AccessManagement\Client
-     */
-    public function access(): AccessManagement\Client
-    {
-        if (!($this->accessManagementClient instanceof AccessManagement\Client)) {
-            $this->accessManagementClient = new AccessManagement\Client($this->apiHost, $this->userAgent);
-            $this->accessManagementClient->setHttpClient($this->getHttpClient());
-        }
-
-        return $this->accessManagementClient;
+        return $this->clientData;
     }
 }

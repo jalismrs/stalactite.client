@@ -13,7 +13,8 @@ PHP client for the Stalactite API
 composer require jalismrs/stalactite-api.client
 ```
 
-# Before release
+## Before release
+All tests must pass. To run the tests locally :
 
 All tests must be ok. To start the tests, just use this command :
 

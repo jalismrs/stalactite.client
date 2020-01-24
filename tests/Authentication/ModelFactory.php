@@ -1,20 +1,33 @@
 <?php
+declare(strict_types=1);
 
-namespace jalismrs\Stalactite\Client\Test\Authentication;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
-use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 
+/**
+ * ModelFactory
+ *
+ * @packageJalismrs\Stalactite\Client\Tests\Authentication
+ */
 abstract class ModelFactory
 {
-    public static function getTestableTrustedApp(): TrustedApp
+    /**
+     * getTestableTrustedApp
+     *
+     * @static
+     * @return TrustedAppModel
+     */
+    public static function getTestableTrustedApp(): TrustedAppModel
     {
-        $trustedApp = new TrustedApp();
-        $trustedApp->setName('fake name')
+        $model = new TrustedAppModel();
+        $model
+            ->setName('fake name')
             ->setGoogleOAuthClientId('qsdfghjklm')
             ->setAuthToken('aqwzsxedcrfv')
             ->setResetToken('tgbyhnujikol')
             ->setUid('azertyuiop');
 
-        return $trustedApp;
+        return $model;
     }
 }

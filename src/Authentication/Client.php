@@ -1,59 +1,128 @@
 <?php
+declare(strict_types=1);
 
-namespace jalismrs\Stalactite\Client\Authentication;
+namespace Jalismrs\Stalactite\Client\Authentication;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
-use jalismrs\Stalactite\Client\AbstractClient;
-use jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use jalismrs\Stalactite\Client\ClientException;
-use jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
+use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
+use OutOfBoundsException;
 use Throwable;
+use function in_array;
+use function vsprintf;
 
-class Client extends AbstractClient
+/**
+ * Client
+ *
+ * @package Jalismrs\Stalactite\Client\Authentication
+ */
+class Client extends
+    ClientAbstract
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
 
-    public const API_URL_PREFIX = '/auth';
-    private const AUTHORIZED_JWT_TYPES = ['user', 'customer'];
+    private const AUTHORIZED_JWT_TYPES = [
+        'user',
+        'customer'
+    ];
 
-    /** @var TrustedAppClient $trustedAppClient */
-    private $trustedAppClient;
-
+    private $clientTrustedApp;
+    /*
+     * -------------------------------------------------------------------------
+     * Clients -----------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     /**
+     * trustedApp
+     *
+     * @return TrustedApp\Client
+     */
+    public function trustedApps(): TrustedApp\Client
+    {
+        if (null === $this->clientTrustedApp) {
+            $this->clientTrustedApp = new TrustedApp\Client(
+                $this->host,
+                $this->userAgent,
+                $this->httpClient
+            );
+        }
+
+        return $this->clientTrustedApp;
+    }
+
+    /*
+     * -------------------------------------------------------------------------
+     * API ---------------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    /**
+     * getRSAPublicKey
+     *
+     * get the Stalactite API RSA public key
+     *
      * @return string
+     *
      * @throws ClientException
-     * Get the Stalactite API RSA public key
      */
     public function getRSAPublicKey(): string
     {
         try {
-            return $this->getHttpClient()->request('GET', $this->apiHost . self::API_URL_PREFIX . '/publicKey')->getContent();
-        } catch (Throwable $t) {
-            throw new ClientException('Error while fetching Stalactite API RSA public key', ClientException::CLIENT_TRANSPORT_ERROR);
+            return $this
+                ->httpClient
+                ->request(
+                    'GET',
+                    vsprintf(
+                        '%s/auth/pulbicKey',
+                        [
+                            $this->host,
+                        ]
+                    )
+                )
+                ->getContent();
+        } catch (Throwable $throwable) {
+            throw new ClientException(
+                'Error while fetching Stalactite API RSA public key',
+                ClientException::CLIENT_TRANSPORT_ERROR,
+                $throwable
+            );
         }
     }
 
     /**
+     * validate
+     *
+     * check if the given JWT is a valid Stalactite API JWT
+     *
      * @param string $jwt
+     *
      * @return bool
+     *
+     * @throws OutOfBoundsException
      * @throws ClientException
-     * Check if the given JWT is a valid Stalactite API JWT
      */
-    public function validate(string $jwt): bool
+    public function validate(
+        string $jwt
+    ): bool
     {
         try {
             $token = $this->getTokenFromString($jwt);
-        } catch (Throwable $t) {
-            throw new ClientException('Invalid user JWT', ClientException::INVALID_JWT_STRING_ERROR, $t);
+        } catch (Throwable $throwable) {
+            throw new ClientException(
+                'Invalid user JWT',
+                ClientException::INVALID_JWT_STRING_ERROR,
+                $throwable
+            );
         }
 
         $data = new ValidationData();
@@ -61,19 +130,31 @@ class Client extends AbstractClient
 
         if (!$token->hasClaim('iss') || !$token->hasClaim('aud') || !$token->hasClaim('type') ||
             !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
-            throw new ClientException('Invalid JWT structure', ClientException::INVALID_JWT_STRUCTURE_ERROR);
+            throw new ClientException(
+                'Invalid JWT structure',
+                ClientException::INVALID_JWT_STRUCTURE_ERROR
+            );
         }
 
         if ($token->isExpired()) {
-            throw new ClientException('Expired JWT', ClientException::EXPIRED_JWT_ERROR);
+            throw new ClientException(
+                'Expired JWT',
+                ClientException::EXPIRED_JWT_ERROR
+            );
         }
 
         if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
-            throw new ClientException('Invalid JWT user type', ClientException::INVALID_JWT_USER_TYPE_ERROR);
+            throw new ClientException(
+                'Invalid JWT user type',
+                ClientException::INVALID_JWT_USER_TYPE_ERROR
+            );
         }
 
         if (!$token->validate($data)) {
-            throw new ClientException('Invalid JWT issuer', ClientException::INVALID_JWT_ISSUER_ERROR);
+            throw new ClientException(
+                'Invalid JWT issuer',
+                ClientException::INVALID_JWT_ISSUER_ERROR
+            );
         }
 
         $signer = new Sha256();
@@ -81,61 +162,85 @@ class Client extends AbstractClient
 
         try {
             return $token->verify($signer, $publicKey);
-        } catch (InvalidArgumentException $e) { // thrown by the library on invalid key
-            throw new ClientException('Invalid RSA public key', ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
-        } catch (Throwable $t) { // other exceptions result in an invalid token / signature
-            throw new ClientException('Invalid JWT signature', ClientException::INVALID_JWT_SIGNATURE_ERROR);
+        } catch (InvalidArgumentException $exception) {
+            // thrown by the library on invalid key
+            throw new ClientException(
+                'Invalid RSA public key',
+                ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR,
+                $exception
+            );
+        } catch (Throwable $throwable) { // other exceptions result in an invalid token / signature
+            throw new ClientException(
+                'Invalid JWT signature',
+                ClientException::INVALID_JWT_SIGNATURE_ERROR,
+                $throwable
+            );
         }
     }
 
     /**
-     * @param TrustedApp $trustedApp
+     * login
+     *
+     * @param TrustedAppModel $trustedAppModel
      * @param string $userGoogleJwt
+     *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidDataTypeException
      */
-    public function login(TrustedApp $trustedApp, string $userGoogleJwt): Response
+    public function login(
+        TrustedAppModel $trustedAppModel,
+        string $userGoogleJwt
+    ): Response
     {
-        $data = [
-            'appName' => $trustedApp->getName(),
-            'appToken' => $trustedApp->getAuthToken(),
-            'userGoogleJwt' => $userGoogleJwt
-        ];
-
         $schema = new JsonSchema();
-        $schema->setSchema([
-            'success' => ['type' => JsonRule::BOOLEAN_TYPE],
-            'error' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-            'jwt' => ['type' => JsonRule::STRING_TYPE, 'null' => true]
-        ]);
+        $schema->setSchema(
+            [
+                'success' => [
+                    'type' => JsonRule::BOOLEAN_TYPE
+                ],
+                'error' => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ],
+                'jwt' => [
+                    'type' => JsonRule::STRING_TYPE,
+                    'null' => true
+                ]
+            ]
+        );
 
-        $r = $this->request('POST', $this->apiHost . self::API_URL_PREFIX . '/login', ['json' => $data], $schema);
+        $response = $this->post(
+            vsprintf(
+                '%s/auth/login',
+                [
+                    $this->host,
+                ],
+            ),
+            [
+                'json' => [
+                    'appName' => $trustedAppModel->getName(),
+                    'appToken' => $trustedAppModel->getAuthToken(),
+                    'userGoogleJwt' => $userGoogleJwt,
+                ]
+            ],
+            $schema
+        );
 
-        $response = new Response();
-        $response->setSuccess($r['success'])->setError($r['error'])->setData([
-            'jwt' => $r['jwt']
-        ]);
-
-        return $response;
-    }
-
-    /**
-     * @return TrustedAppClient
-     */
-    public function trustedApps(): TrustedAppClient
-    {
-        if (!($this->trustedAppClient instanceof TrustedAppClient)) {
-            $this->trustedAppClient = new TrustedAppClient($this->apiHost, $this->userAgent);
-            $this->trustedAppClient->setHttpClient($this->getHttpClient());
-        }
-
-        return $this->trustedAppClient;
+        return new Response(
+            $response['success'],
+            $response['error'],
+            [
+                'jwt' => $response['jwt']
+            ]
+        );
     }
 
     /**
      * @param string $jwt
+     *
      * @return Token
      * @throws Throwable
      */
