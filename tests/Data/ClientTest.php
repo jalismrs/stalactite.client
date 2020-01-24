@@ -36,8 +36,8 @@ class ClientTest extends
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->authTokens();
-        $client2 = $baseClient->authTokens();
+        $client1 = $baseClient->authToken();
+        $client2 = $baseClient->authToken();
 
         self::checkClients(
             $baseClient,

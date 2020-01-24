@@ -28,7 +28,7 @@ class Client extends
      *
      * @return AuthToken\Client
      */
-    public function authTokens(): AuthToken\Client
+    public function authToken(): AuthToken\Client
     {
         if (null === $this->clientAuthToken) {
             $this->clientAuthToken = new AuthToken\Client(
