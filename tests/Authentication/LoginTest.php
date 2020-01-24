@@ -94,7 +94,7 @@ class LoginTest extends
     public function testExceptionThrownOnInvalidAPIHost(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
+        $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
 
         $client = new Client('invalidHost');
         $client->login(
@@ -115,7 +115,7 @@ class LoginTest extends
     public function testExceptionThrownOnInvalidAPIResponse(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -145,7 +145,7 @@ class LoginTest extends
     public function testExceptionThrownOnInvalidAPIResponseContent(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $mockAPIClient = new Client(
             'http://fakeHost',

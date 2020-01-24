@@ -97,7 +97,7 @@ class Client extends
         } catch (Throwable $throwable) {
             throw new ClientException(
                 'Error while fetching Stalactite API RSA public key',
-                ClientException::CLIENT_TRANSPORT_ERROR,
+                ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
         }
@@ -124,7 +124,7 @@ class Client extends
         } catch (Throwable $throwable) {
             throw new ClientException(
                 'Invalid user JWT',
-                ClientException::INVALID_JWT_STRING_ERROR,
+                ClientException::INVALID_JWT_STRING,
                 $throwable
             );
         }
@@ -136,28 +136,28 @@ class Client extends
             !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
             throw new ClientException(
                 'Invalid JWT structure',
-                ClientException::INVALID_JWT_STRUCTURE_ERROR
+                ClientException::INVALID_JWT_STRUCTURE
             );
         }
 
         if ($token->isExpired()) {
             throw new ClientException(
                 'Expired JWT',
-                ClientException::EXPIRED_JWT_ERROR
+                ClientException::EXPIRED_JWT
             );
         }
 
         if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
             throw new ClientException(
                 'Invalid JWT user type',
-                ClientException::INVALID_JWT_USER_TYPE_ERROR
+                ClientException::INVALID_JWT_USER_TYPE
             );
         }
 
         if (!$token->validate($data)) {
             throw new ClientException(
                 'Invalid JWT issuer',
-                ClientException::INVALID_JWT_ISSUER_ERROR
+                ClientException::INVALID_JWT_ISSUER
             );
         }
 
@@ -170,13 +170,13 @@ class Client extends
             // thrown by the library on invalid key
             throw new ClientException(
                 'Invalid RSA public key',
-                ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR,
+                ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY,
                 $exception
             );
         } catch (Throwable $throwable) { // other exceptions result in an invalid token / signature
             throw new ClientException(
                 'Invalid JWT signature',
-                ClientException::INVALID_JWT_SIGNATURE_ERROR,
+                ClientException::INVALID_JWT_SIGNATURE,
                 $throwable
             );
         }

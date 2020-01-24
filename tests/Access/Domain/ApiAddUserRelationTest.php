@@ -81,7 +81,7 @@ class ApiAddUserRelationTest extends
     public function testThrowOnInvalidResponseAddUserRelation(): void
     {
         $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
+        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $mockAPIClient = new Client(
             'http://fakeHost',
