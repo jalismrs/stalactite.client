@@ -1,15 +1,19 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiGetByNameAndApiKeyTest
@@ -24,13 +28,13 @@ class ApiGetByNameAndApiKeyTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGetByNameAndApiKey() : void
+    public function testGetByNameAndApiKey(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -41,10 +45,10 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
+                                'error' => null,
                                 'domains' => [
                                     ModelFactory::getTestableDomain()
-                                                ->asArray()
+                                        ->asArray()
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -53,9 +57,9 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-        
+
         $domainModel = ModelFactory::getTestableDomain();
-        
+
         $response = $mockAPIClient->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
@@ -68,21 +72,21 @@ class ApiGetByNameAndApiKeyTest extends
             $response->getData()['domains']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseGetByNameAndApiKey
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGetByNameAndApiKey() : void
+    public function testThrowOnInvalidResponseGetByNameAndApiKey(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -92,9 +96,9 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
+                                'error' => null,
                                 'domains' => ModelFactory::getTestableDomain()
-                                                         ->asArray()
+                                    ->asArray()
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -103,9 +107,9 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-        
+
         $domainModel = ModelFactory::getTestableDomain();
-        
+
         $mockAPIClient->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),

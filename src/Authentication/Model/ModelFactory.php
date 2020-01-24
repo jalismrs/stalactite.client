@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
@@ -18,9 +18,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel
+     * @return TrustedAppModel
      */
-    public static function createTrustedAppModel(array $data) : TrustedAppModel
+    public static function createTrustedAppModel(array $data): TrustedAppModel
     {
         $model = new TrustedAppModel();
         $model
@@ -29,7 +29,7 @@ abstract class ModelFactory
             ->setName($data['name'] ?? null)
             ->setResetToken($data['resetToken'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
 }

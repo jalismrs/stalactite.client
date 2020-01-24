@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\CertificationGraduation;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
@@ -27,36 +29,37 @@ class Client extends
     /**
      * getAll
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                           $jwt
+     * @param UserModel $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllCertificationGraduations(
         UserModel $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'        => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'          => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'certifications' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::CERTIFICATION_GRADUATION
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users/%s/certifications',
@@ -72,13 +75,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'certifications' => array_map(
-                    static function($certification) {
+                    static function ($certification) {
                         return ModelFactory::createCertificationGraduationModel($certification);
                     },
                     $response['certifications']
@@ -86,45 +89,46 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * addCertificationGraduation
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel                    $userModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel $certificationGraduationModel
-     * @param string                                                              $jwt
+     * @param UserModel $userModel
+     * @param CertificationGraduationModel $certificationGraduationModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function addCertificationGraduation(
         UserModel $userModel,
         CertificationGraduationModel $certificationGraduationModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         if (!$certificationGraduationModel->getType() instanceof CertificationTypeModel) {
             throw new ClientException(
                 'Certification Graduation type must be a Certification Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
             );
         }
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users/%s/certifications',
@@ -137,7 +141,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'date' => $certificationGraduationModel->getDate(),
                     'type' => [
                         'uid' => $certificationGraduationModel
@@ -148,44 +152,45 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * removeCertificationGraduation
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel                    $userModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel $certificationGraduationModel
-     * @param string                                                              $jwt
+     * @param UserModel $userModel
+     * @param CertificationGraduationModel $certificationGraduationModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function removeCertificationGraduation(
         UserModel $userModel,
         CertificationGraduationModel $certificationGraduationModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s/certifications/%s',
@@ -202,7 +207,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

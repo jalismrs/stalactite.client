@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\CertificationType;
 
@@ -34,24 +34,25 @@ class Client extends
      */
     public function getAllCertificationTypes(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'            => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'              => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'certificationTypes' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::CERTIFICATION_TYPE
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/certification/types',
@@ -66,13 +67,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'certificationTypes' => array_map(
-                    static function($certificationType) {
+                    static function ($certificationType) {
                         return ModelFactory::createCertificationTypeModel($certificationType);
                     },
                     $response['certificationTypes']
@@ -80,7 +81,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -93,25 +94,26 @@ class Client extends
     public function getCertificationType(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'           => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'             => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'certificationType' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CERTIFICATION_TYPE
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/certification/types/%s',
@@ -127,7 +129,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -138,41 +140,42 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel $certificationTypeModel
-     * @param string                                                        $jwt
+     * @param CertificationTypeModel $certificationTypeModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createCertificationType(
         CertificationTypeModel $certificationTypeModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'           => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'             => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'certificationType' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CERTIFICATION_TYPE
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/certification/types',
@@ -184,13 +187,13 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'name' => $certificationTypeModel->getName(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -201,36 +204,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel $certificationTypeModel
-     * @param string                                                        $jwt
+     * @param CertificationTypeModel $certificationTypeModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateCertificationType(
         CertificationTypeModel $certificationTypeModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/certification/types/%s',
@@ -243,19 +247,19 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'name' => $certificationTypeModel->getName(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -268,20 +272,21 @@ class Client extends
     public function deleteCertificationType(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/certification/types/%s',
@@ -297,7 +302,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

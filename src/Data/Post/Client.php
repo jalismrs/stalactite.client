@@ -1,11 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\PostModel;
 use Jalismrs\Stalactite\Client\Data\Schema;
@@ -26,32 +29,33 @@ class Client extends
      *
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws ClientException
      */
     public function getAllPosts(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'posts' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/posts',
@@ -66,13 +70,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'posts' => array_map(
-                    static function($post) {
+                    static function ($post) {
                         return ModelFactory::createPostModel($post);
                     },
                     $response['posts']
@@ -80,41 +84,42 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * getPost
      *
      * @param string $uid
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getPost(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'post' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/posts/%s',
@@ -130,7 +135,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -141,41 +146,42 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PostModel $postModel
-     * @param string                                           $jwt
+     * @param PostModel $postModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createPost(
         PostModel $postModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'post' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/posts',
@@ -187,16 +193,16 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'access'    => $postModel->allowAccess(),
-                    'admin'     => $postModel->hasAdminAccess(),
-                    'name'      => $postModel->getName(),
+                'json' => [
+                    'access' => $postModel->allowAccess(),
+                    'admin' => $postModel->hasAdminAccess(),
+                    'name' => $postModel->getName(),
                     'shortName' => $postModel->getShortName(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -207,36 +213,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PostModel $postModel
-     * @param string                                           $jwt
+     * @param PostModel $postModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updatePost(
         PostModel $postModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/posts/%s',
@@ -249,51 +256,52 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'access'    => $postModel->allowAccess(),
-                    'admin'     => $postModel->hasAdminAccess(),
-                    'name'      => $postModel->getName(),
+                'json' => [
+                    'access' => $postModel->allowAccess(),
+                    'admin' => $postModel->hasAdminAccess(),
+                    'name' => $postModel->getName(),
                     'shortName' => $postModel->getShortName(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * delete
      *
      * @param string $uid
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws ClientException
      */
     public function deletePost(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/posts/%s',
@@ -309,26 +317,26 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * getUsers
      *
      * @param string $uid
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws ClientException
      */
-    public function getUsers(string $uid, string $jwt) : Response
+    public function getUsers(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -336,17 +344,17 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'users' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/posts/%s/users',
@@ -362,13 +370,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'users' => array_map(
-                    static function($user) {
+                    static function ($user) {
                         return ModelFactory::createUserModel($user);
                     },
                     $response['users']

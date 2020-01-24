@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer;
 
@@ -33,9 +33,9 @@ class Client extends
     /**
      * me
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Customer\Me\Client
+     * @return Me\Client
      */
-    public function me() : Me\Client
+    public function me(): Me\Client
     {
         if (null === $this->clientMe) {
             $this->clientMe = new Me\Client(
@@ -44,10 +44,10 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientMe;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -58,32 +58,33 @@ class Client extends
      *
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllCustomers(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customers' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/customers',
@@ -98,13 +99,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'customers' => array_map(
-                    static function($customer) {
+                    static function ($customer) {
                         return ModelFactory::createCustomerModel($customer);
                     },
                     $response['customers']
@@ -112,7 +113,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -125,25 +126,26 @@ class Client extends
     public function getCustomer(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/customers/%s',
@@ -159,7 +161,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -170,7 +172,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $email
      * @param string $googleId
@@ -181,26 +183,26 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt) : Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/customers',
@@ -212,14 +214,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'query'   => [
-                    'email'    => $email,
+                'query' => [
+                    'email' => $email,
                     'googleId' => $googleId
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -230,41 +232,42 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param string                                               $jwt
+     * @param CustomerModel $customerModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createCustomer(
         CustomerModel $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/customers',
@@ -276,15 +279,15 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'email'     => $customerModel->getEmail(),
+                'json' => [
+                    'email' => $customerModel->getEmail(),
                     'firstName' => $customerModel->getFirstName(),
-                    'lastName'  => $customerModel->getLastName(),
+                    'lastName' => $customerModel->getLastName(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -295,36 +298,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param string                                               $jwt
+     * @param CustomerModel $customerModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateCustomer(
         CustomerModel $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/customers/%s',
@@ -337,21 +341,21 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'email'     => $customerModel->getEmail(),
+                'json' => [
+                    'email' => $customerModel->getEmail(),
                     'firstName' => $customerModel->getFirstName(),
-                    'lastName'  => $customerModel->getLastName(),
+                    'lastName' => $customerModel->getLastName(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -364,20 +368,21 @@ class Client extends
     public function deleteCustomer(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/customers/%s',
@@ -393,7 +398,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

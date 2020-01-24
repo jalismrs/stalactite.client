@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Domain;
 
@@ -29,37 +29,38 @@ class Client extends
      *
      * @param string $apiAuthToken
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllDomains(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
@@ -74,13 +75,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -88,7 +89,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $name
      * @param string $apiKey
@@ -103,29 +104,30 @@ class Client extends
         string $name,
         string $apiKey,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
@@ -137,20 +139,20 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
                 ],
-                'query'   => [
-                    'name'   => $name,
+                'query' => [
+                    'name' => $name,
                     'apiKey' => $apiKey
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -158,7 +160,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $name
      * @param string $apiAuthToken
@@ -171,29 +173,30 @@ class Client extends
     public function getByName(
         string $name,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains',
@@ -205,19 +208,19 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
                 ],
-                'query'   => [
+                'query' => [
                     'name' => $name
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -225,7 +228,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -238,30 +241,31 @@ class Client extends
     public function getDomain(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'domain' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/domains/%s',
@@ -277,7 +281,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

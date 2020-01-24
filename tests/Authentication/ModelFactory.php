@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Authentication;
 
@@ -16,9 +16,9 @@ abstract class ModelFactory
      * getTestableTrustedApp
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel
+     * @return TrustedAppModel
      */
-    public static function getTestableTrustedApp() : TrustedAppModel
+    public static function getTestableTrustedApp(): TrustedAppModel
     {
         $model = new TrustedAppModel();
         $model
@@ -27,7 +27,7 @@ abstract class ModelFactory
             ->setAuthToken('aqwzsxedcrfv')
             ->setResetToken('tgbyhnujikol')
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
 }

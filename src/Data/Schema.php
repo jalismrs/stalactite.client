@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data;
 
@@ -13,135 +13,135 @@ use hunomina\Validator\Json\Rule\JsonRule;
 abstract class Schema
 {
     public const CERTIFICATION_GRADUATION = [
-        'uid'  => [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'date' => [
-            'type'        => JsonRule::STRING_TYPE,
+            'type' => JsonRule::STRING_TYPE,
             'date-format' => 'Y-m-d'
         ],
         'type' => [
-            'type'   => JsonRule::OBJECT_TYPE,
+            'type' => JsonRule::OBJECT_TYPE,
             'schema' => self::CERTIFICATION_TYPE
         ]
     ];
-    public const CERTIFICATION_TYPE       = [
-        'uid'  => [
+    public const CERTIFICATION_TYPE = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'name' => [
             'type' => JsonRule::STRING_TYPE
         ]
     ];
-    public const CUSTOMER                 = [
-        'uid'       => [
+    public const CUSTOMER = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'email'     => [
+        'email' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'firstName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'lastName'  => [
+        'lastName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'googleId'  => [
+        'googleId' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ]
     ];
-    public const DOMAIN                   = [
-        'uid'            => [
+    public const DOMAIN = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'name'           => [
+        'name' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'type'           => [
+        'type' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'apiKey'         => [
+        'apiKey' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'externalAuth'   => [
+        'externalAuth' => [
             'type' => JsonRule::BOOLEAN_TYPE
         ],
         'generationDate' => [
-            'type'        => JsonRule::STRING_TYPE,
+            'type' => JsonRule::STRING_TYPE,
             'date-format' => 'Y-m-d',
-            'null'        => true
+            'null' => true
         ]
     ];
-    public const MINIMAL_USER             = [
-        'uid'       => [
+    public const MINIMAL_USER = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'firstName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'lastName'  => [
+        'lastName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'email'     => [
+        'email' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'gender'    => [
+        'gender' => [
             'type' => JsonRule::STRING_TYPE,
             'enum' => [
                 'male',
                 'female'
             ]
         ],
-        'googleId'  => [
+        'googleId' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'location'  => [
+        'location' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'office'    => [
+        'office' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'admin'     => [
+        'admin' => [
             'type' => JsonRule::BOOLEAN_TYPE
         ],
-        'birthday'  => [
-            'type'        => JsonRule::STRING_TYPE,
+        'birthday' => [
+            'type' => JsonRule::STRING_TYPE,
             'date-format' => 'Y-m-d',
-            'null'        => true
+            'null' => true
         ]
     ];
-    public const PHONE_LINE               = [
-        'uid'   => [
+    public const PHONE_LINE = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'value' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'type'  => [
-            'type'   => JsonRule::OBJECT_TYPE,
+        'type' => [
+            'type' => JsonRule::OBJECT_TYPE,
             'schema' => self::PHONE_TYPE
         ]
     ];
-    public const PHONE_TYPE               = [
-        'uid'  => [
+    public const PHONE_TYPE = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'name' => [
             'type' => JsonRule::STRING_TYPE
         ]
     ];
-    public const POST                     = [
-        'uid'         => [
+    public const POST = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'name'        => [
+        'name' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'shortName'   => [
+        'shortName' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'adminAccess' => [
@@ -151,60 +151,60 @@ abstract class Schema
             'type' => JsonRule::BOOLEAN_TYPE
         ]
     ];
-    public const USER                     = [
-        'uid'            => [
+    public const USER = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'firstName'      => [
+        'firstName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'lastName'       => [
+        'lastName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'email'          => [
+        'email' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'gender'         => [
+        'gender' => [
             'type' => JsonRule::STRING_TYPE,
             'enum' => [
                 'male',
                 'female'
             ]
         ],
-        'googleId'       => [
+        'googleId' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'location'       => [
+        'location' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'office'         => [
+        'office' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true
         ],
-        'admin'          => [
+        'admin' => [
             'type' => JsonRule::BOOLEAN_TYPE
         ],
-        'birthday'       => [
-            'type'        => JsonRule::STRING_TYPE,
+        'birthday' => [
+            'type' => JsonRule::STRING_TYPE,
             'date-format' => 'Y-m-d',
-            'null'        => true
+            'null' => true
         ],
-        'posts'          => [
-            'type'   => JsonRule::LIST_TYPE,
+        'posts' => [
+            'type' => JsonRule::LIST_TYPE,
             'schema' => self::POST
         ],
-        'leads'          => [
-            'type'   => JsonRule::LIST_TYPE,
+        'leads' => [
+            'type' => JsonRule::LIST_TYPE,
             'schema' => self::POST
         ],
         'certifications' => [
-            'type'   => JsonRule::LIST_TYPE,
+            'type' => JsonRule::LIST_TYPE,
             'schema' => self::CERTIFICATION_GRADUATION
         ],
-        'phoneLines'     => [
-            'type'   => JsonRule::LIST_TYPE,
+        'phoneLines' => [
+            'type' => JsonRule::LIST_TYPE,
             'schema' => self::PHONE_LINE
         ]
     ];

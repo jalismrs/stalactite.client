@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -17,17 +17,17 @@ class CertificationTypeModel extends
      * @var null|string
      */
     private $name;
-    
+
     /**
      * getName
      *
      * @return null|string
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -35,22 +35,22 @@ class CertificationTypeModel extends
      *
      * @return $this
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * asArray
      *
      * @return array
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return [
-            'uid'  => $this->uid,
+            'uid' => $this->uid,
             'name' => $this->name,
         ];
     }

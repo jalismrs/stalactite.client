@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
@@ -30,32 +30,33 @@ class Client extends
      *
      * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllTrustedApps(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'     => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'       => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApps' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/auth/trustedApps',
@@ -70,13 +71,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'trustedApps' => array_map(
-                    static function($trustedApp) {
+                    static function ($trustedApp) {
                         return ModelFactory::createTrustedAppModel($trustedApp);
                     },
                     $response['trustedApps']
@@ -84,7 +85,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -97,25 +98,26 @@ class Client extends
     public function getTrustedApp(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::TRUSTED_APP,
-                    'null'   => true
+                    'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/auth/trustedApps/%s',
@@ -131,7 +133,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -140,36 +142,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel $trustedAppModel
-     * @param string                                                           $jwt
+     * @param TrustedAppModel $trustedAppModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateTrustedApp(
         TrustedAppModel $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/auth/trustedApps/%s',
@@ -182,49 +185,50 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'googleOAuthClientId' => $trustedAppModel->getGoogleOAuthClientId(),
-                    'name'                => $trustedAppModel->getName(),
+                    'name' => $trustedAppModel->getName(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel $trustedAppModel
-     * @param string                                                           $jwt
+     * @param TrustedAppModel $trustedAppModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createTrustedApp(
         TrustedAppModel $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => array_merge(
                         Schema::TRUSTED_APP,
                         [
@@ -236,7 +240,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/auth/trustedApps',
@@ -248,14 +252,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'googleOAuthClientId' => $trustedAppModel->getGoogleOAuthClientId(),
-                    'name'                => $trustedAppModel->getName(),
+                    'name' => $trustedAppModel->getName(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -264,7 +268,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $resetToken
@@ -279,20 +283,21 @@ class Client extends
         string $uid,
         string $resetToken,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/auth/trustedApps/%s',
@@ -305,53 +310,54 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'resetToken' => $resetToken,
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * resetAuthToken
      *
-     * @param \Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel $trustedAppModel
-     * @param string                                                           $jwt
+     * @param TrustedAppModel $trustedAppModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function resetAuthToken(
         TrustedAppModel $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/auth/trustedApps/%s/authToken/reset',
@@ -364,13 +370,13 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'resetToken' => $trustedAppModel->getResetToken(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

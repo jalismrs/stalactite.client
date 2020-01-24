@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -18,9 +18,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\UserModel
+     * @return UserModel
      */
-    public static function createUserModel(array $data) : UserModel
+    public static function createUserModel(array $data): UserModel
     {
         $model = new UserModel();
         $model
@@ -34,34 +34,34 @@ abstract class ModelFactory
             ->setLocation($data['location'] ?? null)
             ->setOffice($data['office'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         if (isset($data['phoneLines'])) {
             foreach ($data['phoneLines'] as $phoneLine) {
                 $model->addPhoneLine(self::createPhoneLineModel($phoneLine));
             }
         }
-        
+
         if (isset($data['certifications'])) {
             foreach ($data['certifications'] as $certification) {
                 $model->addCertification(self::createCertificationGraduationModel($certification));
             }
         }
-        
+
         if (isset($data['posts'])) {
             foreach ($data['posts'] as $post) {
                 $model->addPost(self::createPostModel($post));
             }
         }
-        
+
         if (isset($data['leads'])) {
             foreach ($data['leads'] as $lead) {
                 $model->addLead(self::createPostModel($lead));
             }
         }
-        
+
         return $model;
     }
-    
+
     /**
      * createDomainModel
      *
@@ -69,9 +69,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\DomainModel
+     * @return DomainModel
      */
-    public static function createDomainModel(array $data) : DomainModel
+    public static function createDomainModel(array $data): DomainModel
     {
         $model = new DomainModel();
         $model
@@ -81,10 +81,10 @@ abstract class ModelFactory
             ->setName($data['name'] ?? null)
             ->setType($data['type'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createCustomerModel
      *
@@ -92,9 +92,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\CustomerModel
+     * @return CustomerModel
      */
-    public static function createCustomerModel(array $data) : CustomerModel
+    public static function createCustomerModel(array $data): CustomerModel
     {
         $model = new CustomerModel();
         $model
@@ -103,10 +103,10 @@ abstract class ModelFactory
             ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createPostModel
      *
@@ -114,9 +114,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\PostModel
+     * @return PostModel
      */
-    public static function createPostModel(array $data) : PostModel
+    public static function createPostModel(array $data): PostModel
     {
         $model = new PostModel();
         $model
@@ -125,10 +125,10 @@ abstract class ModelFactory
             ->setName($data['name'] ?? null)
             ->setShortName($data['shortName'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createCertificationTypeModel
      *
@@ -136,18 +136,18 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel
+     * @return CertificationTypeModel
      */
-    public static function createCertificationTypeModel(array $data) : CertificationTypeModel
+    public static function createCertificationTypeModel(array $data): CertificationTypeModel
     {
         $model = new CertificationTypeModel();
         $model
             ->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createCertificationGraduationModel
      *
@@ -155,9 +155,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel
+     * @return CertificationGraduationModel
      */
-    public static function createCertificationGraduationModel(array $data) : CertificationGraduationModel
+    public static function createCertificationGraduationModel(array $data): CertificationGraduationModel
     {
         $model = new CertificationGraduationModel();
         $model
@@ -168,10 +168,10 @@ abstract class ModelFactory
                     : self::createCertificationTypeModel($data['type'])
             )
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createPhoneTypeModel
      *
@@ -179,18 +179,18 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel
+     * @return PhoneTypeModel
      */
-    public static function createPhoneTypeModel(array $data) : PhoneTypeModel
+    public static function createPhoneTypeModel(array $data): PhoneTypeModel
     {
         $model = new PhoneTypeModel();
         $model
             ->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createPhoneLineModel
      *
@@ -198,9 +198,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel
+     * @return PhoneLineModel
      */
-    public static function createPhoneLineModel(array $data) : PhoneLineModel
+    public static function createPhoneLineModel(array $data): PhoneLineModel
     {
         $model = new PhoneLineModel();
         $model
@@ -211,7 +211,7 @@ abstract class ModelFactory
             )
             ->setValue($data['value'] ?? null)
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
 }

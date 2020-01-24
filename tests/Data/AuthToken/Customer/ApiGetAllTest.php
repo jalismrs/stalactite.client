@@ -1,15 +1,19 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\AuthToken\Customer;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Client;
 use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiGetAllTest
@@ -24,13 +28,13 @@ class ApiGetAllTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGetAll() : void
+    public function testGetAll(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -40,11 +44,11 @@ class ApiGetAllTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'customers' => [
                                     ModelFactory::getTestableCustomer()
-                                                ->asArray()
+                                        ->asArray()
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -53,7 +57,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->getAllCustomers(
             'fake API auth token'
         );
@@ -63,23 +67,23 @@ class ApiGetAllTest extends
             CustomerModel::class,
             $response->getData()['customers']
         );
-        
+
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGetAll
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll() : void
+    public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -88,10 +92,10 @@ class ApiGetAllTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'customers' => ModelFactory::getTestableCustomer()
-                                                           ->asArray()
+                                    ->asArray()
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -100,7 +104,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->getAllCustomers(
             'fake API auth token'
         );

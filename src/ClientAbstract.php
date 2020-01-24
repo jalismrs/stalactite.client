@@ -1,9 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -22,35 +23,36 @@ abstract class ClientAbstract
      */
     protected $host;
     /**
-     * @var \Symfony\Contracts\HttpClient\HttpClientInterface
+     * @var HttpClientInterface
      */
     protected $httpClient;
     /**
      * @var null|string
      */
     protected $userAgent;
-    
+
     /**
      * ClientAbstract constructor.
      *
-     * @param string                                                 $host
-     * @param string|null                                            $userAgent
-     * @param \Symfony\Contracts\HttpClient\HttpClientInterface|null $httpClient
+     * @param string $host
+     * @param string|null $userAgent
+     * @param HttpClientInterface|null $httpClient
      */
     public function __construct(
         string $host,
         string $userAgent = null,
         HttpClientInterface $httpClient = null
-    ) {
-        $this->host      = $host;
+    )
+    {
+        $this->host = $host;
         $this->userAgent = $userAgent;
-        
+
         if (null === $httpClient) {
             $this->httpClient = HttpClient::create(
                 array_merge_recursive(
                     [
                         'base_uri' => $host,
-                        'headers'  => [
+                        'headers' => [
                             'Content-Type' => 'application/json',
                         ],
                     ],
@@ -67,54 +69,55 @@ abstract class ClientAbstract
             $this->httpClient = $httpClient;
         }
     }
-    
+
     /**
      * getHost
      *
      * @return string
      */
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->host;
     }
-    
+
     /**
      * getHttpClient
      *
-     * @return \Symfony\Contracts\HttpClient\HttpClientInterface
+     * @return HttpClientInterface
      */
-    public function getHttpClient() : HttpClientInterface
+    public function getHttpClient(): HttpClientInterface
     {
         return $this->httpClient;
     }
-    
+
     /**
      * getUserAgent
      *
      * @return null|string
      */
-    public function getUserAgent() : ?string
+    public function getUserAgent(): ?string
     {
         return $this->userAgent;
     }
-    
+
     /**
      * delete
      *
-     * @param string                                     $url
-     * @param array                                      $options
-     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws ClientException
      */
     final protected function delete(
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'DELETE',
             $url,
@@ -122,24 +125,25 @@ abstract class ClientAbstract
             $schema
         );
     }
-    
+
     /**
      * get
      *
-     * @param string                                     $url
-     * @param array                                      $options
-     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws ClientException
      */
     final protected function get(
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'GET',
             $url,
@@ -147,24 +151,25 @@ abstract class ClientAbstract
             $schema
         );
     }
-    
+
     /**
      * post
      *
-     * @param string                                     $url
-     * @param array                                      $options
-     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws ClientException
      */
     final protected function post(
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'POST',
             $url,
@@ -172,24 +177,25 @@ abstract class ClientAbstract
             $schema
         );
     }
-    
+
     /**
      * put
      *
-     * @param string                                     $url
-     * @param array                                      $options
-     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws ClientException
      */
     final protected function put(
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'PUT',
             $url,
@@ -197,28 +203,29 @@ abstract class ClientAbstract
             $schema
         );
     }
-    
+
     /**
      * request
      *
      * contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
      *
-     * @param string                                     $method
-     * @param string                                     $url
-     * @param array                                      $options
-     * @param \hunomina\Validator\Json\Schema\JsonSchema $schema
+     * @param string $method
+     * @param string $url
+     * @param array $options
+     * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws InvalidDataTypeException
+     * @throws ClientException
      */
     private function request(
         string $method,
         string $url,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         try {
             $response = $this
                 ->httpClient
@@ -234,7 +241,7 @@ abstract class ClientAbstract
                 $throwable
             );
         }
-        
+
         $data = new JsonData();
         try {
             $data->setData($response->getContent(false));
@@ -245,14 +252,14 @@ abstract class ClientAbstract
                 $throwable
             );
         }
-        
+
         if (!$schema->validate($data)) {
             throw new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE_ERROR
             );
         }
-        
+
         $response = $data->getData();
         if (null === $response) {
             throw new ClientException(
@@ -260,7 +267,7 @@ abstract class ClientAbstract
                 ClientException::INVALID_API_RESPONSE_ERROR
             );
         }
-        
+
         return $response;
     }
 }

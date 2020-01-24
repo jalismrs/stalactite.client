@@ -1,15 +1,20 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiCreateTest
@@ -24,14 +29,14 @@ class ApiCreateTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testCreate() : void
+    public function testCreate(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -42,9 +47,9 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
-                                'domain'  => ModelFactory::getTestableDomain()
-                                                         ->asArray()
+                                'error' => null,
+                                'domain' => ModelFactory::getTestableDomain()
+                                    ->asArray()
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -52,7 +57,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'
@@ -64,21 +69,21 @@ class ApiCreateTest extends
             $response->getData()['domain']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseCreate
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseCreate() : void
+    public function testThrowOnInvalidResponseCreate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -88,8 +93,8 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
-                                'domain'  => []
+                                'error' => null,
+                                'domain' => []
                                 // invalid certification type
                             ],
                             JSON_THROW_ON_ERROR
@@ -98,7 +103,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'

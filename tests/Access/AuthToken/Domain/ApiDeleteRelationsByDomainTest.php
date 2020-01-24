@@ -1,14 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Access\AuthToken\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiDeleteRelationsByDomainTest
@@ -23,13 +27,13 @@ class ApiDeleteRelationsByDomainTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testDeleteRelationsByDomain() : void
+    public function testDeleteRelationsByDomain(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -40,7 +44,7 @@ class ApiDeleteRelationsByDomainTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -48,7 +52,7 @@ class ApiDeleteRelationsByDomainTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'
@@ -56,21 +60,21 @@ class ApiDeleteRelationsByDomainTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseDeleteRelationByDomain
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseDeleteRelationByDomain() : void
+    public function testThrowExceptionOnInvalidResponseDeleteRelationByDomain(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -80,7 +84,7 @@ class ApiDeleteRelationsByDomainTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => false
+                                'error' => false
                                 // wrong type
                             ],
                             JSON_THROW_ON_ERROR
@@ -89,7 +93,7 @@ class ApiDeleteRelationsByDomainTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'

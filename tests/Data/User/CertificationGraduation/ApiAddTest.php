@@ -1,14 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\User\CertificationGraduation;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\CertificationGraduation\Client;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiAddTest
@@ -23,13 +27,13 @@ class ApiAddTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testAdd() : void
+    public function testAdd(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -40,7 +44,7 @@ class ApiAddTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -48,7 +52,7 @@ class ApiAddTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
@@ -57,21 +61,21 @@ class ApiAddTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseAdd
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseAdd() : void
+    public function testThrowExceptionOnInvalidResponseAdd(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -81,7 +85,7 @@ class ApiAddTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => false
+                                'error' => false
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -90,38 +94,38 @@ class ApiAddTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation(),
             'fake user jwt'
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidCertificationTypeAdd
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidCertificationTypeAdd() : void
+    public function testThrowExceptionOnInvalidCertificationTypeAdd(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
             new MockHttpClient()
         );
-        
+
         $mockAPIClient->addCertificationGraduation(
             ModelFactory::getTestableUser(),
             ModelFactory::getTestableCertificationGraduation()
-                        ->setType(null),
+                ->setType(null),
             'fake user jwt'
         );
     }

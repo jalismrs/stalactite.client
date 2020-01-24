@@ -1,15 +1,20 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Authentication\TrustedApp;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Test\Authentication\ModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Authentication\ModelFactory;
 
 /**
  * ApiGetTest
@@ -24,14 +29,14 @@ class ApiGetTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGet() : void
+    public function testGet(): void
     {
         $mockClient = new Client(
             'http://fakeHost',
@@ -41,10 +46,10 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'    => true,
-                                'error'      => null,
+                                'success' => true,
+                                'error' => null,
                                 'trustedApp' => ModelFactory::getTestableTrustedApp()
-                                                            ->asArray()
+                                    ->asArray()
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -52,10 +57,10 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $response = $mockClient->getTrustedApp(
             ModelFactory::getTestableTrustedApp()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -65,21 +70,21 @@ class ApiGetTest extends
             $response->getData()['trustedApp']
         );
     }
-    
+
     /**
      * testInvalidResponseOnGet
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testInvalidResponseOnGet() : void
+    public function testInvalidResponseOnGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockClient = new Client(
             'http://fakeHost',
             null,
@@ -88,8 +93,8 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'     => true,
-                                'error'       => null,
+                                'success' => true,
+                                'error' => null,
                                 'trustedApps' => 'wrong response type'
                             ],
                             JSON_THROW_ON_ERROR
@@ -98,10 +103,10 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $mockClient->getTrustedApp(
             ModelFactory::getTestableTrustedApp()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
     }

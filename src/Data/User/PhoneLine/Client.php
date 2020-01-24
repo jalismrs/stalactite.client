@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\PhoneLine;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
@@ -27,36 +29,37 @@ class Client extends
     /**
      * getAll
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                           $jwt
+     * @param UserModel $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllPhoneLines(
         UserModel $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'phoneLines' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::PHONE_LINE
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users/%s/phone/lines',
@@ -72,13 +75,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'phoneLines' => array_map(
-                    static function($phoneLine) {
+                    static function ($phoneLine) {
                         return ModelFactory::createPhoneLineModel($phoneLine);
                     },
                     $response['phoneLines']
@@ -86,45 +89,46 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * addPhoneLine
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                $jwt
+     * @param UserModel $userModel
+     * @param PhoneLineModel $phoneLineModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function addPhoneLine(
         UserModel $userModel,
         PhoneLineModel $phoneLineModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         if (!$phoneLineModel->getType() instanceof PhoneTypeModel) {
             throw new ClientException(
                 'Phone Line type must be a Phone Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
             );
         }
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users/%s/phone/lines',
@@ -137,9 +141,9 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'value' => $phoneLineModel->getValue(),
-                    'type'  => [
+                    'type' => [
                         'uid' => $phoneLineModel
                             ->getType()
                             ->getUid(),
@@ -148,44 +152,45 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * removePhoneLine
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel      $userModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                $jwt
+     * @param UserModel $userModel
+     * @param PhoneLineModel $phoneLineModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function removePhoneLine(
         UserModel $userModel,
         PhoneLineModel $phoneLineModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s/phone/lines/%s',
@@ -202,7 +207,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

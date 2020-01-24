@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\User\Me;
 
@@ -34,33 +34,33 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getRelations(string $jwt) : Response
+    public function getRelations(string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid'    => [
+                        'uid' => [
                             'type' => JsonRule::STRING_TYPE
                         ],
                         'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
+                            'type' => JsonRule::OBJECT_TYPE,
                             'schema' => DataSchema::DOMAIN
                         ]
                     ]
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/access/users/me/relations',
@@ -75,13 +75,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => array_map(
-                    static function(array $relation) : DomainUserRelationModel {
+                    static function (array $relation): DomainUserRelationModel {
                         return ModelFactory::createDomainUserRelationModel($relation);
                     },
                     $response['relations']
@@ -89,40 +89,41 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * getAccessClearance
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                             $jwt
+     * @param DomainModel $domainModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAccessClearance(
         DomainModel $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'clearance' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::ACCESS_CLEARANCE
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/access/users/me/access/%s',
@@ -138,7 +139,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

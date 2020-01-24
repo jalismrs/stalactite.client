@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Access;
 
@@ -18,41 +18,41 @@ abstract class ModelFactory
     /**
      * @return DomainUserRelationModel
      */
-    public static function getTestableDomainUserRelation() : DomainUserRelationModel
+    public static function getTestableDomainUserRelation(): DomainUserRelationModel
     {
         $model = new DomainUserRelationModel();
         $model
             ->setUser(DataTestModelFactory::getTestableUser())
             ->setDomain(DataTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * @return DomainCustomerRelationModel
      */
-    public static function getTestableDomainCustomerRelation() : DomainCustomerRelationModel
+    public static function getTestableDomainCustomerRelation(): DomainCustomerRelationModel
     {
         $model = new DomainCustomerRelationModel();
         $model
             ->setCustomer(DataTestModelFactory::getTestableCustomer())
             ->setDomain(DataTestModelFactory::getTestableDomain())
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * @return AccessClearanceModel
      */
-    public static function getTestableAccessClearance() : AccessClearanceModel
+    public static function getTestableAccessClearance(): AccessClearanceModel
     {
         $model = new AccessClearanceModel();
         $model
             ->setAccess(false)
             ->setAccessType(AccessClearanceModel::NO_ACCESS);
-        
+
         return $model;
     }
 }

@@ -1,15 +1,20 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\CertificationType;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\CertificationType\Client;
 use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiGetTest
@@ -24,14 +29,14 @@ class ApiGetTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGet() : void
+    public function testGet(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -41,10 +46,10 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'           => true,
-                                'error'             => null,
+                                'success' => true,
+                                'error' => null,
                                 'certificationType' => ModelFactory::getTestableCertificationType()
-                                                                   ->asArray()
+                                    ->asArray()
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -52,10 +57,10 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->getCertificationType(
             ModelFactory::getTestableCertificationType()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -65,21 +70,21 @@ class ApiGetTest extends
             $response->getData()['certificationType']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseGet
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGet() : void
+    public function testThrowOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -88,8 +93,8 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'           => true,
-                                'error'             => null,
+                                'success' => true,
+                                'error' => null,
                                 'certificationType' => []
                                 // invalid certification type
                             ],
@@ -99,10 +104,10 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->getCertificationType(
             ModelFactory::getTestableCertificationType()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
     }

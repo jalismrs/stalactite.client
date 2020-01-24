@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -29,17 +29,17 @@ class CustomerModel extends
      * @var null|string
      */
     private $lastName;
-    
+
     /**
      * getGoogleId
      *
      * @return null|string
      */
-    public function getGoogleId() : ?string
+    public function getGoogleId(): ?string
     {
         return $this->googleId;
     }
-    
+
     /**
      * setGoogleId
      *
@@ -47,23 +47,23 @@ class CustomerModel extends
      *
      * @return $this
      */
-    public function setGoogleId(?string $googleId) : self
+    public function setGoogleId(?string $googleId): self
     {
         $this->googleId = $googleId;
-        
+
         return $this;
     }
-    
+
     /**
      * getEmail
      *
      * @return null|string
      */
-    public function getEmail() : ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
-    
+
     /**
      * setEmail
      *
@@ -71,23 +71,23 @@ class CustomerModel extends
      *
      * @return $this
      */
-    public function setEmail(?string $email) : self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
-        
+
         return $this;
     }
-    
+
     /**
      * getFirstName
      *
      * @return null|string
      */
-    public function getFirstName() : ?string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
-    
+
     /**
      * setFirstName
      *
@@ -95,23 +95,23 @@ class CustomerModel extends
      *
      * @return $this
      */
-    public function setFirstName(?string $firstName) : self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
-        
+
         return $this;
     }
-    
+
     /**
      * getLastName
      *
      * @return null|string
      */
-    public function getLastName() : ?string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
-    
+
     /**
      * setLastName
      *
@@ -119,26 +119,26 @@ class CustomerModel extends
      *
      * @return $this
      */
-    public function setLastName(?string $lastName) : self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
-        
+
         return $this;
     }
-    
+
     /**
      * asArray
      *
      * @return array
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return [
-            'uid'       => $this->uid,
-            'googleId'  => $this->googleId,
-            'email'     => $this->email,
+            'uid' => $this->uid,
+            'googleId' => $this->googleId,
+            'email' => $this->email,
             'firstName' => $this->firstName,
-            'lastName'  => $this->lastName,
+            'lastName' => $this->lastName,
         ];
     }
 }

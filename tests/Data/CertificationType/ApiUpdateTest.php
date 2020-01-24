@@ -1,14 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\CertificationType;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\CertificationType\Client;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiUpdateTest
@@ -23,13 +27,13 @@ class ApiUpdateTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testUpdate() : void
+    public function testUpdate(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -40,7 +44,7 @@ class ApiUpdateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -48,7 +52,7 @@ class ApiUpdateTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->updateCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'
@@ -56,21 +60,21 @@ class ApiUpdateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnInvalidResponseUpdate
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseUpdate() : void
+    public function testThrowOnInvalidResponseUpdate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -80,7 +84,7 @@ class ApiUpdateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => false
+                                'error' => false
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -89,7 +93,7 @@ class ApiUpdateTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->updateCertificationType(
             ModelFactory::getTestableCertificationType(),
             'fake user jwt'

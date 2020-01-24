@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken;
 
@@ -25,9 +25,9 @@ class Client extends
     /**
      * customer
      *
-     * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Client
+     * @return Customer\Client
      */
-    public function customers() : Customer\Client
+    public function customers(): Customer\Client
     {
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
@@ -36,16 +36,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientCustomer;
     }
-    
+
     /**
      * domain
      *
-     * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Client
+     * @return Domain\Client
      */
-    public function domains() : Domain\Client
+    public function domains(): Domain\Client
     {
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
@@ -54,16 +54,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientDomain;
     }
-    
+
     /**
      * post
      *
-     * @return \Jalismrs\Stalactite\Client\Data\AuthToken\Post\Client
+     * @return Post\Client
      */
-    public function posts() : Post\Client
+    public function posts(): Post\Client
     {
         if (null === $this->clientPost) {
             $this->clientPost = new Post\Client(
@@ -72,16 +72,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientPost;
     }
-    
+
     /**
      * user
      *
-     * @return \Jalismrs\Stalactite\Client\Data\AuthToken\User\Client
+     * @return User\Client
      */
-    public function users() : User\Client
+    public function users(): User\Client
     {
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(
@@ -90,7 +90,7 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientUser;
     }
 }

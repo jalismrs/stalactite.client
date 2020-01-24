@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Post;
 
@@ -34,29 +34,30 @@ class Client extends
      */
     public function getAllPosts(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'posts' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts',
@@ -71,13 +72,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'posts' => array_map(
-                    static function($post) {
+                    static function ($post) {
                         return ModelFactory::createPostModel($post);
                     },
                     $response['posts']
@@ -85,7 +86,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -98,30 +99,31 @@ class Client extends
     public function getPost(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'post' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts/%s',
@@ -137,7 +139,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -148,7 +150,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -161,29 +163,30 @@ class Client extends
     public function getUsers(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'users' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/posts/%s/users',
@@ -199,13 +202,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'users' => array_map(
-                    static function($user) {
+                    static function ($user) {
                         return ModelFactory::createUserModel($user);
                     },
                     $response['users']

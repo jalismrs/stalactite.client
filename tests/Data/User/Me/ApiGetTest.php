@@ -1,15 +1,20 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\User\Me;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 use Jalismrs\Stalactite\Client\Data\User\Me\Client;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiGetTest
@@ -24,14 +29,14 @@ class ApiGetTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGet() : void
+    public function testGet(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -42,9 +47,9 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
-                                'me'      => ModelFactory::getTestableUser()
-                                                         ->asArray()
+                                'error' => null,
+                                'me' => ModelFactory::getTestableUser()
+                                    ->asArray()
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -52,7 +57,7 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->getMe(
             'fake user jwt'
         );
@@ -63,21 +68,21 @@ class ApiGetTest extends
             $response->getData()['me']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGet
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGet() : void
+    public function testThrowExceptionOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -87,10 +92,10 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
-                                'me'      => [
+                                'error' => null,
+                                'me' => [
                                     ModelFactory::getTestableUser()
-                                                ->asArray()
+                                        ->asArray()
                                 ]
                                 // invalid type
                             ],
@@ -100,7 +105,7 @@ class ApiGetTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->getMe(
             'fake user jwt'
         );

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -14,48 +14,48 @@ class PhoneLineModel extends
     ModelAbstract
 {
     /**
-     * @var null|\Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel
+     * @var null|PhoneTypeModel
      */
     private $type;
     /**
      * @var null|string
      */
     private $value;
-    
+
     /**
      * getType
      *
-     * @return null|\Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel
+     * @return null|PhoneTypeModel
      */
-    public function getType() : ?PhoneTypeModel
+    public function getType(): ?PhoneTypeModel
     {
         return $this->type;
     }
-    
+
     /**
      * setType
      *
-     * @param null|\Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel $type
+     * @param null|PhoneTypeModel $type
      *
      * @return $this
      */
-    public function setType(?PhoneTypeModel $type) : self
+    public function setType(?PhoneTypeModel $type): self
     {
         $this->type = $type;
-        
+
         return $this;
     }
-    
+
     /**
      * getValue
      *
      * @return null|string
      */
-    public function getValue() : ?string
+    public function getValue(): ?string
     {
         return $this->value;
     }
-    
+
     /**
      * setValue
      *
@@ -63,24 +63,24 @@ class PhoneLineModel extends
      *
      * @return $this
      */
-    public function setValue(?string $value) : self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
-        
+
         return $this;
     }
-    
+
     /**
      * asArray
      *
      * @return array
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return [
-            'uid'   => $this->uid,
+            'uid' => $this->uid,
             'value' => $this->value,
-            'type'  => null === $this->type
+            'type' => null === $this->type
                 ? null
                 : $this->type->asArray(),
         ];

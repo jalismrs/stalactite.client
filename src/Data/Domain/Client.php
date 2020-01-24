@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
@@ -34,24 +34,25 @@ class Client extends
      */
     public function getAllDomains(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/domains',
@@ -66,13 +67,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -80,7 +81,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -93,25 +94,26 @@ class Client extends
     public function getDomain(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'domain' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/domains/%s',
@@ -127,7 +129,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -138,7 +140,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $name
      * @param string $jwt
@@ -148,7 +150,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByName(string $name, string $jwt) : Response
+    public function getByName(string $name, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -156,17 +158,17 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/domains',
@@ -178,19 +180,19 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'query'   => [
+                'query' => [
                     'name' => $name
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -198,7 +200,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $name
      * @param string $apiKey
@@ -209,7 +211,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt) : Response
+    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -217,17 +219,17 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/domains',
@@ -239,20 +241,20 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'query'   => [
-                    'name'   => $name,
+                'query' => [
+                    'name' => $name,
                     'apiKey' => $apiKey
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'domains' => array_map(
-                    static function($domain) {
+                    static function ($domain) {
                         return ModelFactory::createDomainModel($domain);
                     },
                     $response['domains']
@@ -260,41 +262,42 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * create
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                             $jwt
+     * @param DomainModel $domainModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createDomain(
         DomainModel $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'domain' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::DOMAIN
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/domains',
@@ -306,17 +309,17 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'apiKey'         => $domainModel->getApiKey(),
-                    'externalAuth'   => $domainModel->hasExternalAuth(),
+                'json' => [
+                    'apiKey' => $domainModel->getApiKey(),
+                    'externalAuth' => $domainModel->hasExternalAuth(),
                     'generationDate' => $domainModel->getGenerationDate(),
-                    'name'           => $domainModel->getName(),
-                    'type'           => $domainModel->getType(),
+                    'name' => $domainModel->getName(),
+                    'type' => $domainModel->getType(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -327,36 +330,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                             $jwt
+     * @param DomainModel $domainModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateDomain(
         DomainModel $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/domains/%s',
@@ -369,23 +373,23 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'apiKey'         => $domainModel->getApiKey(),
-                    'externalAuth'   => $domainModel->hasExternalAuth(),
+                'json' => [
+                    'apiKey' => $domainModel->getApiKey(),
+                    'externalAuth' => $domainModel->hasExternalAuth(),
                     'generationDate' => $domainModel->getGenerationDate(),
-                    'name'           => $domainModel->getName(),
-                    'type'           => $domainModel->getType(),
+                    'name' => $domainModel->getName(),
+                    'type' => $domainModel->getType(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -398,20 +402,21 @@ class Client extends
     public function deleteDomain(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/domains/%s',
@@ -427,7 +432,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

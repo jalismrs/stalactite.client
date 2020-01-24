@@ -1,15 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test;
 
 use Jalismrs\Stalactite\Client\ClientAbstract;
+use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * ClientTestTrait
  *
  * @package Test
- * @mixin \PHPUnit\Framework\TestCase
+ * @mixin TestCase
  */
 trait ClientTestTrait
 {
@@ -18,20 +21,21 @@ trait ClientTestTrait
      *
      * @static
      *
-     * @param \Jalismrs\Stalactite\Client\ClientAbstract $baseClient
-     * @param \Jalismrs\Stalactite\Client\ClientAbstract $client1
-     * @param \Jalismrs\Stalactite\Client\ClientAbstract $client2
+     * @param ClientAbstract $baseClient
+     * @param ClientAbstract $client1
+     * @param ClientAbstract $client2
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
     private static function checkClients(
         ClientAbstract $baseClient,
         ClientAbstract $client1,
         ClientAbstract $client2
-    ) : void {
+    ): void
+    {
         self::assertSame($baseClient->getHost(), $client1->getHost());
         self::assertSame($baseClient->getHttpClient(), $client1->getHttpClient());
         self::assertSame($baseClient->getUserAgent(), $client1->getUserAgent());

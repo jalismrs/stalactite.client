@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 
@@ -29,37 +29,38 @@ class Client extends
      *
      * @param string $apiAuthToken
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAllCustomers(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customers' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers',
@@ -74,13 +75,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'customers' => array_map(
-                    static function($customer) {
+                    static function ($customer) {
                         return ModelFactory::createCustomerModel($customer);
                     },
                     $response['customers']
@@ -88,7 +89,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $email
      * @param string $googleId
@@ -103,30 +104,31 @@ class Client extends
         string $email,
         string $googleId,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers',
@@ -138,14 +140,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
                 ],
-                'query'   => [
-                    'email'    => $email,
+                'query' => [
+                    'email' => $email,
                     'googleId' => $googleId
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -156,7 +158,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -169,30 +171,31 @@ class Client extends
     public function getCustomer(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this->userAgent
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/auth-token/customers/%s',
@@ -208,7 +211,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

@@ -1,8 +1,10 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
@@ -10,6 +12,7 @@ use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
 use Jalismrs\Stalactite\Client\Data\Model\UserModel;
@@ -29,52 +32,53 @@ class Client extends
     /**
      * getRelations
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param string                                             $jwt
+     * @param DomainModel $domainModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getRelations(
         DomainModel $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => [
-                        'users'     => [
-                            'type'   => JsonRule::LIST_TYPE,
+                        'users' => [
+                            'type' => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'  => [
+                                'uid' => [
                                     'type' => JsonRule::STRING_TYPE
                                 ],
                                 'user' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'type' => JsonRule::OBJECT_TYPE,
                                     'schema' => DataSchema::MINIMAL_USER
                                 ]
                             ]
                         ],
                         'customers' => [
-                            'type'   => JsonRule::LIST_TYPE,
+                            'type' => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'      => [
+                                'uid' => [
                                     'type' => JsonRule::STRING_TYPE
                                 ],
                                 'customer' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'type' => JsonRule::OBJECT_TYPE,
                                     'schema' => DataSchema::CUSTOMER
                                 ]
                             ]
@@ -83,7 +87,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/access/domains/%s/relations',
@@ -99,26 +103,26 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelationModel {
+                    'users' => array_map(
+                        static function (array $relation) use ($domainModel): DomainUserRelationModel {
                             $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
                             $domainUserRelationModel->setDomain($domainModel);
-                            
+
                             return $domainUserRelationModel;
                         },
                         $response['relations']['users']
                     ),
                     'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelationModel {
+                        static function (array $relation) use ($domainModel): DomainCustomerRelationModel {
                             $domainCustomerRelation = ModelFactory::createDomainCustomerRelationModel($relation);
                             $domainCustomerRelation->setDomain($domainModel);
-                            
+
                             return $domainCustomerRelation;
                         },
                         $response['relations']['customers']
@@ -127,43 +131,44 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * addUserRelation
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel $domainModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel   $userModel
-     * @param string                                             $jwt
+     * @param DomainModel $domainModel
+     * @param UserModel $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function addUserRelation(
         DomainModel $domainModel,
         UserModel $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relation' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::DOMAIN_USER_RELATION
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/access/domains/%s/relations/users',
@@ -176,13 +181,13 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'user' => $userModel->getUid(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -193,43 +198,44 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * addCustomerRelation
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel   $domainModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param string                                               $jwt
+     * @param DomainModel $domainModel
+     * @param CustomerModel $customerModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function addCustomerRelation(
         DomainModel $domainModel,
         CustomerModel $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'  => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'    => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relation' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::DOMAIN_CUSTOMER_RELATION
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/access/domains/%s/relations/customers',
@@ -242,13 +248,13 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'customer' => $customerModel->getUid(),
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

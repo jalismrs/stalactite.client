@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -14,48 +14,48 @@ class CertificationGraduationModel extends
     ModelAbstract
 {
     /**
-     * @var null|\Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel
+     * @var null|CertificationTypeModel
      */
     private $type;
     /**
      * @var
      */
     private $date;
-    
+
     /**
      * getType
      *
-     * @return null|\Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel
+     * @return null|CertificationTypeModel
      */
-    public function getType() : ?CertificationTypeModel
+    public function getType(): ?CertificationTypeModel
     {
         return $this->type;
     }
-    
+
     /**
      * setType
      *
-     * @param null|\Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel $certificationTypeModel
+     * @param null|CertificationTypeModel $certificationTypeModel
      *
      * @return $this
      */
-    public function setType(?CertificationTypeModel $certificationTypeModel) : self
+    public function setType(?CertificationTypeModel $certificationTypeModel): self
     {
         $this->type = $certificationTypeModel;
-        
+
         return $this;
     }
-    
+
     /**
      * getDate
      *
      * @return null|string
      */
-    public function getDate() : ?string
+    public function getDate(): ?string
     {
         return $this->date;
     }
-    
+
     /**
      * setDate
      *
@@ -63,22 +63,22 @@ class CertificationGraduationModel extends
      *
      * @return $this
      */
-    public function setDate(?string $date) : self
+    public function setDate(?string $date): self
     {
         $this->date = $date;
-        
+
         return $this;
     }
-    
+
     /**
      * asArray
      *
      * @return array
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return [
-            'uid'  => $this->uid,
+            'uid' => $this->uid,
             'type' => null === $this->type
                 ? null
                 : $this->type->asArray(),

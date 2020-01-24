@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
@@ -19,9 +19,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel
+     * @return DomainUserRelationModel
      */
-    public static function createDomainUserRelationModel(array $data) : DomainUserRelationModel
+    public static function createDomainUserRelationModel(array $data): DomainUserRelationModel
     {
         $model = new DomainUserRelationModel();
         $model
@@ -36,10 +36,10 @@ abstract class ModelFactory
                     : null
             )
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createDomainCustomerRelationModel
      *
@@ -47,9 +47,9 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel
+     * @return DomainCustomerRelationModel
      */
-    public static function createDomainCustomerRelationModel(array $data) : DomainCustomerRelationModel
+    public static function createDomainCustomerRelationModel(array $data): DomainCustomerRelationModel
     {
         $model = new DomainCustomerRelationModel();
         $model
@@ -64,10 +64,10 @@ abstract class ModelFactory
                     : null
             )
             ->setUid($data['uid'] ?? null);
-        
+
         return $model;
     }
-    
+
     /**
      * createAccessClearanceModel
      *
@@ -75,15 +75,15 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Model\AccessClearanceModel
+     * @return AccessClearanceModel
      */
-    public static function createAccessClearanceModel(array $data) : AccessClearanceModel
+    public static function createAccessClearanceModel(array $data): AccessClearanceModel
     {
         $model = new AccessClearanceModel();
         $model
             ->setAccess($data['accessGranted'] ?? false)
             ->setAccessType($data['accessType'] ?? AccessClearanceModel::NO_ACCESS);
-        
+
         return $model;
     }
 }

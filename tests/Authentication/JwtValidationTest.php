@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Authentication;
 
@@ -8,7 +8,10 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use OutOfBoundsException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -21,52 +24,52 @@ class JwtValidationTest extends
     TestCase
 {
     private const TEST_RSA_PRIVATE_KEY = __DIR__ . '/keys/private.pem';
-    private const TEST_RSA_PUBLIC_KEY  = __DIR__ . '/keys/public.pem';
-    
+    private const TEST_RSA_PUBLIC_KEY = __DIR__ . '/keys/public.pem';
+
     /**
      * getTestPublicKey
      *
      * @static
      * @return string
      */
-    private static function getTestPublicKey() : string
+    private static function getTestPublicKey(): string
     {
         return file_get_contents(self::TEST_RSA_PUBLIC_KEY);
     }
-    
+
     /**
      * testTransportExceptionThrownOnRSAPublicKeyFetching
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws ClientException
      */
-    public function testTransportExceptionThrownOnRSAPublicKeyFetching() : void
+    public function testTransportExceptionThrownOnRSAPublicKeyFetching(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
-        
+
         $client = new Client('invalidHost');
-        
+
         $client->getRSAPublicKey();
     }
-    
+
     /**
      * testValidToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testValidToken() : void
+    public function testValidToken(): void
     {
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -79,26 +82,26 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * testInvalidPublicKeyToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testInvalidPublicKeyToken() : void
+    public function testInvalidPublicKeyToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -111,26 +114,26 @@ class JwtValidationTest extends
             'invalid public key'
         );
     }
-    
+
     /**
      * testInvalidToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testInvalidToken() : void
+    public function testInvalidToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_STRING_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             'a' . (new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -143,26 +146,26 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * testWrongIssuerToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testWrongIssuerToken() : void
+    public function testWrongIssuerToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_ISSUER_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy('wrong issuer')
@@ -175,26 +178,26 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * testExpiredToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testExpiredToken() : void
+    public function testExpiredToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::EXPIRED_JWT_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -207,26 +210,26 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * testInvalidUserTypeToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testInvalidUserTypeToken() : void
+    public function testInvalidUserTypeToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_USER_TYPE_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -239,26 +242,26 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * testInvalidJwtStructureMissingClaimToken
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testInvalidJwtStructureMissingClaimToken() : void
+    public function testInvalidJwtStructureMissingClaimToken(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_JWT_STRUCTURE_ERROR);
-        
+
         $privateKey = new Key('file://' . self::TEST_RSA_PRIVATE_KEY);
-        $signer     = new Sha256();
-        $time       = time();
-        
+        $signer = new Sha256();
+        $time = time();
+
         $this->checkToken(
             (string)(new Builder())
                 ->issuedBy(Client::JWT_ISSUER)
@@ -270,7 +273,7 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
      * checkToken
      *
@@ -279,15 +282,16 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \OutOfBoundsException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ClientException
+     * @throws OutOfBoundsException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
     private function checkToken(
         string $token,
         string $publicKey
-    ) : void {
+    ): void
+    {
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -297,9 +301,9 @@ class JwtValidationTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->validate($token);
-        
+
         self::assertTrue($response);
     }
 }

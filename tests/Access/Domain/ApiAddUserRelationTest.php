@@ -1,16 +1,21 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Access\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Domain\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Test\Access\ModelFactory;
-use Test\Data\ModelFactory as DataTestModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Access\ModelFactory;
+use Test\Data\ModelFactory as DataTestModelFactory;
 
 /**
  * ApiAddUserRelationTest
@@ -25,14 +30,14 @@ class ApiAddUserRelationTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testAddUserRelation() : void
+    public function testAddUserRelation(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -42,10 +47,10 @@ class ApiAddUserRelationTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'  => true,
-                                'error'    => null,
+                                'success' => true,
+                                'error' => null,
                                 'relation' => ModelFactory::getTestableDomainUserRelation()
-                                                          ->asArray()
+                                    ->asArray()
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -53,7 +58,7 @@ class ApiAddUserRelationTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->addUserRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableUser(),
@@ -63,21 +68,21 @@ class ApiAddUserRelationTest extends
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainUserRelationModel::class, $response->getData()['relation']);
     }
-    
+
     /**
      * testThrowOnInvalidResponseAddUserRelation
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseAddUserRelation() : void
+    public function testThrowOnInvalidResponseAddUserRelation(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -86,8 +91,8 @@ class ApiAddUserRelationTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'  => true,
-                                'error'    => null,
+                                'success' => true,
+                                'error' => null,
                                 'relation' => []
                                 // wrong type
                             ],
@@ -97,7 +102,7 @@ class ApiAddUserRelationTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->addUserRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableUser(),

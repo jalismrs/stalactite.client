@@ -1,17 +1,22 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Access\Domain;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Domain\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
 use Jalismrs\Stalactite\Client\ClientException;
-use Test\Access\ModelFactory;
-use Test\Data\ModelFactory as DataTestModelFactory;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Access\ModelFactory;
+use Test\Data\ModelFactory as DataTestModelFactory;
 
 /**
  * ApiGetRelationsTest
@@ -26,23 +31,23 @@ class ApiGetRelationsTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGetRelations() : void
+    public function testGetRelations(): void
     {
         $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-                                          ->asArray();
+            ->asArray();
         unset($domainUserRelation['domain']);
-        
+
         $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
-                                              ->asArray();
+            ->asArray();
         unset($domainCustomerRelation['domain']);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -51,10 +56,10 @@ class ApiGetRelationsTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'relations' => [
-                                    'users'     => [
+                                    'users' => [
                                         $domainUserRelation
                                     ],
                                     'customers' => [
@@ -68,14 +73,14 @@ class ApiGetRelationsTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->getRelations(
             DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
-        
+
         static::assertIsArray($response->getData()['relations']);
         static::assertArrayHasKey(
             'users',
@@ -85,7 +90,7 @@ class ApiGetRelationsTest extends
             'customers',
             $response->getData()['relations']
         );
-        
+
         static::assertContainsOnlyInstancesOf(
             DomainUserRelationModel::class,
             $response->getData()['relations']['users']
@@ -95,29 +100,29 @@ class ApiGetRelationsTest extends
             $response->getData()['relations']['customers']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseGetRelations
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGetRelations() : void
+    public function testThrowOnInvalidResponseGetRelations(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-                                          ->asArray();
+            ->asArray();
         unset($domainUserRelation['domain']);
-        
+
         $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
-                                              ->asArray();
+            ->asArray();
         unset($domainCustomerRelation['domain']);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -126,10 +131,10 @@ class ApiGetRelationsTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'relations' => [
-                                    'users'     => $domainUserRelation,
+                                    'users' => $domainUserRelation,
                                     'customers' => $domainCustomerRelation
                                 ]
                             ],
@@ -139,7 +144,7 @@ class ApiGetRelationsTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->getRelations(
             DataTestModelFactory::getTestableDomain(),
             'fake user jwt'

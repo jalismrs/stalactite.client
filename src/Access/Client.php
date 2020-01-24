@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access;
 
@@ -26,9 +26,9 @@ class Client extends
     /**
      * authToken
      *
-     * @return \Jalismrs\Stalactite\Client\Access\AuthToken\Client
+     * @return AuthToken\Client
      */
-    public function authTokens() : AuthToken\Client
+    public function authTokens(): AuthToken\Client
     {
         if (null === $this->clientAuthToken) {
             $this->clientAuthToken = new AuthToken\Client(
@@ -37,16 +37,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientAuthToken;
     }
-    
+
     /**
      * customer
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Customer\Client
+     * @return Customer\Client
      */
-    public function customers() : Customer\Client
+    public function customers(): Customer\Client
     {
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
@@ -55,16 +55,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientCustomer;
     }
-    
+
     /**
      * domain
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Domain\Client
+     * @return Domain\Client
      */
-    public function domains() : Domain\Client
+    public function domains(): Domain\Client
     {
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
@@ -73,16 +73,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientDomain;
     }
-    
+
     /**
      * relation
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Relation\Client
+     * @return Relation\Client
      */
-    public function relations() : Relation\Client
+    public function relations(): Relation\Client
     {
         if (null === $this->clientRelation) {
             $this->clientRelation = new Relation\Client(
@@ -91,16 +91,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientRelation;
     }
-    
+
     /**
      * user
      *
-     * @return \Jalismrs\Stalactite\Client\Access\User\Client
+     * @return User\Client
      */
-    public function users() : User\Client
+    public function users(): User\Client
     {
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(
@@ -109,7 +109,7 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientUser;
     }
 }

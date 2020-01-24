@@ -1,11 +1,15 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Authentication;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -22,13 +26,13 @@ class LoginTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testSchemaValidationOnLogin() : void
+    public function testSchemaValidationOnLogin(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -39,8 +43,8 @@ class LoginTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null,
-                                'jwt'     => 'hello'
+                                'error' => null,
+                                'jwt' => 'hello'
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -49,8 +53,8 @@ class LoginTest extends
                         json_encode(
                             [
                                 'success' => false,
-                                'error'   => 'An error occurred',
-                                'jwt'     => null
+                                'error' => 'An error occurred',
+                                'jwt' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -58,7 +62,7 @@ class LoginTest extends
                 ]
             )
         );
-        
+
         // assert valid return and response content
         $response = $mockAPIClient->login(
             ModelFactory::getTestableTrustedApp(),
@@ -67,7 +71,7 @@ class LoginTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertIsString($response->getData()['jwt']);
-        
+
         // assert valid return and response content
         $response = $mockAPIClient->login(
             ModelFactory::getTestableTrustedApp(),
@@ -77,42 +81,42 @@ class LoginTest extends
         self::assertNotNull($response->getError());
         self::assertNull($response->getData()['jwt']);
     }
-    
+
     /**
      * testExceptionThrownOnInvalidAPIHost
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIHost() : void
+    public function testExceptionThrownOnInvalidAPIHost(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT_ERROR);
-        
+
         $client = new Client('invalidHost');
         $client->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
     }
-    
+
     /**
      * testExceptionThrownOnInvalidAPIResponse
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIResponse() : void
+    public function testExceptionThrownOnInvalidAPIResponse(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -122,27 +126,27 @@ class LoginTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
     }
-    
+
     /**
      * testExceptionThrownOnInvalidAPIResponseContent
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testExceptionThrownOnInvalidAPIResponseContent() : void
+    public function testExceptionThrownOnInvalidAPIResponseContent(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -151,8 +155,8 @@ class LoginTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'      => false,
-                                'error'        => 'An error occurred',
+                                'success' => false,
+                                'error' => 'An error occurred',
                                 'invalidField' => true
                             ],
                             JSON_THROW_ON_ERROR
@@ -161,7 +165,7 @@ class LoginTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'

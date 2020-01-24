@@ -1,14 +1,17 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Customer;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
 use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
@@ -33,9 +36,9 @@ class Client extends
     /**
      * me
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Customer\Me\Client
+     * @return Me\Client
      */
-    public function me() : Me\Client
+    public function me(): Me\Client
     {
         if (null === $this->clientMe) {
             $this->clientMe = new  Me\Client(
@@ -44,10 +47,10 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientMe;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -56,44 +59,45 @@ class Client extends
     /**
      * getRelations
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param string                                               $jwt
+     * @param CustomerModel $customerModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getRelations(
         CustomerModel $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid'    => [
+                        'uid' => [
                             'type' => JsonRule::STRING_TYPE
                         ],
                         'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
+                            'type' => JsonRule::OBJECT_TYPE,
                             'schema' => DataSchema::DOMAIN
                         ]
                     ]
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/access/customers/%s/relations',
@@ -109,57 +113,58 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => array_map(
-                    static function(array $relation) use ($customerModel): DomainCustomerRelationModel {
+                    static function (array $relation) use ($customerModel): DomainCustomerRelationModel {
                         return ModelFactory::createDomainCustomerRelationModel($relation)
-                                           ->setCustomer($customerModel);
+                            ->setCustomer($customerModel);
                     },
                     $response['relations']
                 )
             ]
         );
     }
-    
+
     /**
      * getAccessClearance
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\CustomerModel $customerModel
-     * @param \Jalismrs\Stalactite\Client\Data\Model\DomainModel   $domainModel
-     * @param string                                               $jwt
+     * @param CustomerModel $customerModel
+     * @param DomainModel $domainModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function getAccessClearance(
         CustomerModel $customerModel,
         DomainModel $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'clearance' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::ACCESS_CLEARANCE
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/access/customers/%s/access/%s',
@@ -176,7 +181,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

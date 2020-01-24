@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
@@ -17,44 +17,44 @@ class DomainUserRelationModel extends
      * @var null|UserModel
      */
     private $user;
-    
+
     /**
      * getUser
      *
-     * @return null|\Jalismrs\Stalactite\Client\Data\Model\UserModel
+     * @return null|UserModel
      */
-    public function getUser() : ?UserModel
+    public function getUser(): ?UserModel
     {
         return $this->user;
     }
-    
+
     /**
      * setUser
      *
-     * @param null|\Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
+     * @param null|UserModel $userModel
      *
      * @return $this
      */
-    public function setUser(?UserModel $userModel) : self
+    public function setUser(?UserModel $userModel): self
     {
         $this->user = $userModel;
-        
+
         return $this;
     }
-    
+
     /**
      * asArray
      *
      * @return array
      */
-    public function asArray() : array
+    public function asArray(): array
     {
         return [
-            'uid'    => $this->uid,
+            'uid' => $this->uid,
             'domain' => null === $this->domain
                 ? null
                 : $this->domain->asArray(),
-            'user'   => null === $this->user
+            'user' => null === $this->user
                 ? null
                 : $this->user->asArray(),
         ];

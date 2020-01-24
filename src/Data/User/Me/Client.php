@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Me;
 
@@ -35,25 +35,26 @@ class Client extends
      */
     public function getMe(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me'      => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'me' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users/me',
@@ -68,7 +69,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -79,36 +80,37 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * update
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\UserModel $userModel
-     * @param string                                           $jwt
+     * @param UserModel $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateMe(
         UserModel $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users/me',
@@ -120,58 +122,59 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
-                    'birthday'  => $userModel->getBirthday(),
+                'json' => [
+                    'birthday' => $userModel->getBirthday(),
                     'firstName' => $userModel->getFirstName(),
-                    'lastName'  => $userModel->getLastName(),
-                    'office'    => $userModel->getOffice(),
+                    'lastName' => $userModel->getLastName(),
+                    'office' => $userModel->getOffice(),
                 ]
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * addPhoneLine
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                $jwt
+     * @param PhoneLineModel $phoneLineModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function addPhoneLine(
         PhoneLineModel $phoneLineModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         if (!$phoneLineModel->getType() instanceof PhoneTypeModel) {
             throw new ClientException(
                 'Phone Line type must be a Phone Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
             );
         }
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users/me/phone/lines',
@@ -183,9 +186,9 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => [
+                'json' => [
                     'value' => $phoneLineModel->getValue(),
-                    'type'  => [
+                    'type' => [
                         'uid' => $phoneLineModel
                             ->getType()
                             ->getUid(),
@@ -194,42 +197,43 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * removePhoneLine
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel $phoneLineModel
-     * @param string                                                $jwt
+     * @param PhoneLineModel $phoneLineModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function removePhoneLine(
         PhoneLineModel $phoneLineModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/users/me/phone/lines/%s',
@@ -245,7 +249,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

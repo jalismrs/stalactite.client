@@ -1,12 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Client;
-use Test\ClientTestTrait;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Test\ClientTestTrait;
 
 /**
  * ClientTest
@@ -17,26 +19,26 @@ class ClientTest extends
     TestCase
 {
     use ClientTestTrait;
-    
+
     /**
      * testTrustedApp
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      */
-    public function testTrustedApp() : void
+    public function testTrustedApp(): void
     {
         $baseClient = new Client(
             'http://fakeHost',
             null,
             new MockHttpClient()
         );
-        
+
         $client1 = $baseClient->trustedApps();
         $client2 = $baseClient->trustedApps();
-        
+
         self::checkClients(
             $baseClient,
             $client1,

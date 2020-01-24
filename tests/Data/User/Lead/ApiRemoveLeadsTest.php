@@ -1,14 +1,18 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Test\Data\User\Lead;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Client;
-use Test\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Test\Data\ModelFactory;
 
 /**
  * ApiRemoveLeadsTest
@@ -23,13 +27,13 @@ class ApiRemoveLeadsTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testRemoveLeads() : void
+    public function testRemoveLeads(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -40,7 +44,7 @@ class ApiRemoveLeadsTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -48,7 +52,7 @@ class ApiRemoveLeadsTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
@@ -59,21 +63,21 @@ class ApiRemoveLeadsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnInvalidResponseRemoveLeads
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseRemoveLeads() : void
+    public function testThrowOnInvalidResponseRemoveLeads(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE_ERROR);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -83,7 +87,7 @@ class ApiRemoveLeadsTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => false
+                                'error' => false
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -92,7 +96,7 @@ class ApiRemoveLeadsTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
@@ -101,21 +105,21 @@ class ApiRemoveLeadsTest extends
             'fake user jwt'
         );
     }
-    
+
     /**
      * testThrowOnInvalidPostsParameterRemoveLeads
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidPostsParameterRemoveLeads() : void
+    public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -125,7 +129,7 @@ class ApiRemoveLeadsTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -133,12 +137,12 @@ class ApiRemoveLeadsTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
-                            ->asArray()
+                    ->asArray()
             ],
             'fake user jwt'
         );

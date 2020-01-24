@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
@@ -22,9 +22,9 @@ class Client extends
     /**
      * access
      *
-     * @return \Jalismrs\Stalactite\Client\Access\Client
+     * @return Access\Client
      */
-    public function access() : Access\Client
+    public function access(): Access\Client
     {
         if (null === $this->clientAccess) {
             $this->clientAccess = new Access\Client(
@@ -33,16 +33,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientAccess;
     }
-    
+
     /**
      * authentication
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Client
+     * @return Authentication\Client
      */
-    public function authentication() : Authentication\Client
+    public function authentication(): Authentication\Client
     {
         if (null === $this->clientAuthentication) {
             $this->clientAuthentication = new Authentication\Client(
@@ -51,16 +51,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientAuthentication;
     }
-    
+
     /**
      * data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Client
+     * @return Data\Client
      */
-    public function data() : Data\Client
+    public function data(): Data\Client
     {
         if (null === $this->clientData) {
             $this->clientData = new Data\Client(
@@ -69,7 +69,7 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientData;
     }
 }

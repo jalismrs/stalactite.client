@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
@@ -16,7 +16,7 @@ class ClientException extends
     ////////////////////
     /** Common Error **/
     ////////////////////
-    
+
     /**
      * An error occurred while contacting an API
      */
@@ -29,11 +29,11 @@ class ClientException extends
      * Invalid parameter passed to the API client
      */
     public const INVALID_PARAMETER_PASSED_TO_CLIENT = 2;
-    
+
     ////////////////////////////
     /** Authentication Error **/
     ////////////////////////////
-    
+
     /**
      * Expired user JWT
      */
