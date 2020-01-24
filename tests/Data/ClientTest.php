@@ -99,32 +99,6 @@ class ClientTest extends
     }
 
     /**
-     * testPhoneType
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    public function testPhoneType(): void
-    {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
-            new MockHttpClient()
-        );
-
-        $client1 = $baseClient->phoneTypes();
-        $client2 = $baseClient->phoneTypes();
-
-        self::checkClients(
-            $baseClient,
-            $client1,
-            $client2
-        );
-    }
-
-    /**
      * testPost
      *
      * @return void

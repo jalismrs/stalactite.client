@@ -25,14 +25,10 @@ abstract class ModelFactory
         $model = new User();
         $model
             ->setAdmin($data['admin'] ?? false)
-            ->setBirthday($data['birthday'] ?? null)
             ->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
-            ->setGender($data['gender'] ?? null)
             ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
-            ->setLocation($data['location'] ?? null)
-            ->setOffice($data['office'] ?? null)
             ->setUid($data['uid'] ?? null);
 
         if (isset($data['posts'])) {

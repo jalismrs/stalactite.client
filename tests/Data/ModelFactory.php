@@ -24,14 +24,11 @@ abstract class ModelFactory
         $model
             ->setFirstName('azerty')
             ->setLastName('uiop')
-            ->setGender('male')
             ->setEmail('goodMorning@hello.hi')
             ->setGoogleId('0123456789')
             ->setAdmin(false)
-            ->setBirthday('2000-01-01')
             ->addPost(self::getTestablePost())
             ->addLead(self::getTestablePost())
-            ->addPhoneLine(self::getTestablePhoneLine())
             ->setUid('azertyuiop');
 
         return $model;
