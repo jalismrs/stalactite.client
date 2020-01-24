@@ -18,11 +18,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return UserModel
+     * @return User
      */
-    public static function createUserModel(array $data): UserModel
+    public static function createUserModel(array $data): User
     {
-        $model = new UserModel();
+        $model = new User();
         $model
             ->setAdmin($data['admin'] ?? false)
             ->setBirthday($data['birthday'] ?? null)
@@ -69,11 +69,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return DomainModel
+     * @return Domain
      */
-    public static function createDomainModel(array $data): DomainModel
+    public static function createDomainModel(array $data): Domain
     {
-        $model = new DomainModel();
+        $model = new Domain();
         $model
             ->setApiKey($data['apiKey'] ?? null)
             ->setExternalAuth($data['externalAuth'] ?? false)
@@ -92,11 +92,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return CustomerModel
+     * @return Customer
      */
-    public static function createCustomerModel(array $data): CustomerModel
+    public static function createCustomerModel(array $data): Customer
     {
-        $model = new CustomerModel();
+        $model = new Customer();
         $model
             ->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
@@ -114,11 +114,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return PostModel
+     * @return Post
      */
-    public static function createPostModel(array $data): PostModel
+    public static function createPostModel(array $data): Post
     {
-        $model = new PostModel();
+        $model = new Post();
         $model
             ->setAccess($data['allowAccess'] ?? false)
             ->setAdminAccess($data['adminAccess'] ?? false)
@@ -136,11 +136,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return CertificationTypeModel
+     * @return CertificationType
      */
-    public static function createCertificationTypeModel(array $data): CertificationTypeModel
+    public static function createCertificationTypeModel(array $data): CertificationType
     {
-        $model = new CertificationTypeModel();
+        $model = new CertificationType();
         $model
             ->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
@@ -155,11 +155,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return CertificationGraduationModel
+     * @return CertificationGraduation
      */
-    public static function createCertificationGraduationModel(array $data): CertificationGraduationModel
+    public static function createCertificationGraduationModel(array $data): CertificationGraduation
     {
-        $model = new CertificationGraduationModel();
+        $model = new CertificationGraduation();
         $model
             ->setDate($data['date'] ?? null)
             ->setType(
@@ -179,11 +179,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return PhoneTypeModel
+     * @return PhoneType
      */
-    public static function createPhoneTypeModel(array $data): PhoneTypeModel
+    public static function createPhoneTypeModel(array $data): PhoneType
     {
-        $model = new PhoneTypeModel();
+        $model = new PhoneType();
         $model
             ->setName($data['name'] ?? null)
             ->setUid($data['uid'] ?? null);
@@ -198,11 +198,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return PhoneLineModel
+     * @return PhoneLine
      */
-    public static function createPhoneLineModel(array $data): PhoneLineModel
+    public static function createPhoneLineModel(array $data): PhoneLine
     {
-        $model = new PhoneLineModel();
+        $model = new PhoneLine();
         $model
             ->setType(
                 null === $data['type']

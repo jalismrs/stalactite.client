@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\Model\AccessClearanceModel;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\User\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\Exception;
@@ -66,7 +66,7 @@ class ApiGetAccessClearanceTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            AccessClearanceModel::class,
+            AccessClearance::class,
             $response->getData()['clearance']
         );
     }

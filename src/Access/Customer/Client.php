@@ -7,13 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -22,10 +22,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Access\CustomerModel
+ * @package Jalismrs\Stalactite\Client\Access\Customer
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     private $clientMe;
     /*
@@ -59,7 +59,7 @@ class Client extends
     /**
      * getRelations
      *
-     * @param CustomerModel $customerModel
+     * @param Customer $customerModel
      * @param string $jwt
      *
      * @return Response
@@ -69,7 +69,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getRelations(
-        CustomerModel $customerModel,
+        Customer $customerModel,
         string $jwt
     ): Response
     {
@@ -119,7 +119,7 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function (array $relation) use ($customerModel): DomainCustomerRelationModel {
+                    static function (array $relation) use ($customerModel): DomainCustomerRelation {
                         return ModelFactory::createDomainCustomerRelationModel($relation)
                             ->setCustomer($customerModel);
                     },
@@ -132,8 +132,8 @@ class Client extends
     /**
      * getAccessClearance
      *
-     * @param CustomerModel $customerModel
-     * @param DomainModel $domainModel
+     * @param Customer $customerModel
+     * @param Domain $domainModel
      * @param string $jwt
      *
      * @return Response
@@ -143,8 +143,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getAccessClearance(
-        CustomerModel $customerModel,
-        DomainModel $domainModel,
+        Customer $customerModel,
+        Domain $domainModel,
         string $jwt
     ): Response
     {

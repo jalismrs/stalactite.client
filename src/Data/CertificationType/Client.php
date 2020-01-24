@@ -7,9 +7,9 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationType;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
@@ -22,7 +22,7 @@ use function vsprintf;
  * @package Jalismrs\Stalactite\Client\Data
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * @param string $jwt
@@ -144,7 +144,7 @@ class Client extends
     /**
      * create
      *
-     * @param CertificationTypeModel $certificationTypeModel
+     * @param CertificationType $certificationTypeModel
      * @param string $jwt
      *
      * @return Response
@@ -154,7 +154,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createCertificationType(
-        CertificationTypeModel $certificationTypeModel,
+        CertificationType $certificationTypeModel,
         string $jwt
     ): Response
     {
@@ -208,7 +208,7 @@ class Client extends
     /**
      * update
      *
-     * @param CertificationTypeModel $certificationTypeModel
+     * @param CertificationType $certificationTypeModel
      * @param string $jwt
      *
      * @return Response
@@ -218,7 +218,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updateCertificationType(
-        CertificationTypeModel $certificationTypeModel,
+        CertificationType $certificationTypeModel,
         string $jwt
     ): Response
     {

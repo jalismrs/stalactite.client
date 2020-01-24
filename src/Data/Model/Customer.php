@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
-use Jalismrs\Stalactite\Client\ModelAbstract;
+use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
- * CustomerModel
+ * Customer
  *
  * @package Jalismrs\Stalactite\Client\Data\Model
  */
-class CustomerModel extends
-    ModelAbstract
+class Customer extends
+    AbstractModel
 {
     /**
      * @var null|string

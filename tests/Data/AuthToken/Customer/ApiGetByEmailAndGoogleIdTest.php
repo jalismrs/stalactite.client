@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Client;
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -68,7 +68,7 @@ class ApiGetByEmailAndGoogleIdTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CustomerModel::class,
+            Customer::class,
             $response->getData()['customer']
         );
     }

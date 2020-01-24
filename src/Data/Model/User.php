@@ -3,17 +3,17 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
-use Jalismrs\Stalactite\Client\ModelAbstract;
+use Jalismrs\Stalactite\Client\AbstractModel;
 use function array_map;
 use function array_reduce;
 
 /**
- * UserModel
+ * User
  *
  * @package Jalismrs\Stalactite\Client\Data\Model
  */
-class UserModel extends
-    ModelAbstract
+class User extends
+    AbstractModel
 {
     /**
      * @var null|string
@@ -314,11 +314,11 @@ class UserModel extends
     /**
      * addPost
      *
-     * @param PostModel $postModel
+     * @param Post $postModel
      *
      * @return $this
      */
-    public function addPost(PostModel $postModel): self
+    public function addPost(Post $postModel): self
     {
         $this->posts[] = $postModel;
 
@@ -334,7 +334,7 @@ class UserModel extends
     {
         return array_reduce(
             $this->getPosts(),
-            static function (bool $carry, PostModel $postModel): bool {
+            static function (bool $carry, Post $postModel): bool {
                 return $carry
                     ||
                     $postModel->hasAdminAccess();
@@ -373,11 +373,11 @@ class UserModel extends
     /**
      * addLead
      *
-     * @param PostModel $leadModel
+     * @param Post $leadModel
      *
      * @return $this
      */
-    public function addLead(PostModel $leadModel): self
+    public function addLead(Post $leadModel): self
     {
         $this->leads[] = $leadModel;
 
@@ -414,11 +414,11 @@ class UserModel extends
     /**
      * addPhoneLine
      *
-     * @param PhoneLineModel $phoneLineModel
+     * @param PhoneLine $phoneLineModel
      *
      * @return $this
      */
-    public function addPhoneLine(PhoneLineModel $phoneLineModel): self
+    public function addPhoneLine(PhoneLine $phoneLineModel): self
     {
         $this->phoneLines[] = $phoneLineModel;
 
@@ -455,11 +455,11 @@ class UserModel extends
     /**
      * addCertification
      *
-     * @param CertificationGraduationModel $certificationGraduationModel
+     * @param CertificationGraduation $certificationGraduationModel
      *
      * @return $this
      */
-    public function addCertification(CertificationGraduationModel $certificationGraduationModel): self
+    public function addCertification(CertificationGraduation $certificationGraduationModel): self
     {
         $this->certifications[] = $certificationGraduationModel;
 
@@ -477,25 +477,25 @@ class UserModel extends
             $this->asMinimalArray(),
             [
                 'certifications' => array_map(
-                    static function (CertificationGraduationModel $certificationGraduationModel): array {
+                    static function (CertificationGraduation $certificationGraduationModel): array {
                         return $certificationGraduationModel->asArray();
                     },
                     $this->certifications
                 ),
                 'leads' => array_map(
-                    static function (PostModel $leadModel): array {
+                    static function (Post $leadModel): array {
                         return $leadModel->asArray();
                     },
                     $this->leads
                 ),
                 'phoneLines' => array_map(
-                    static function (PhoneLineModel $phoneLineModel): array {
+                    static function (PhoneLine $phoneLineModel): array {
                         return $phoneLineModel->asArray();
                     },
                     $this->phoneLines
                 ),
                 'posts' => array_map(
-                    static function (PostModel $postModel): array {
+                    static function (Post $postModel): array {
                         return $postModel->asArray();
                     },
                     $this->posts

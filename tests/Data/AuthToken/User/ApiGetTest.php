@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\User\Client;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +65,7 @@ class ApiGetTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            UserModel::class,
+            User::class,
             $response->getData()['user']
         );
     }

@@ -7,12 +7,12 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -21,10 +21,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Access\UserModel\Me
+ * @package Jalismrs\Stalactite\Client\Access\User\Me
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * @param string $jwt
@@ -81,7 +81,7 @@ class Client extends
             $response['error'],
             [
                 'relations' => array_map(
-                    static function (array $relation): DomainUserRelationModel {
+                    static function (array $relation): DomainUserRelation {
                         return ModelFactory::createDomainUserRelationModel($relation);
                     },
                     $response['relations']
@@ -93,7 +93,7 @@ class Client extends
     /**
      * getAccessClearance
      *
-     * @param DomainModel $domainModel
+     * @param Domain $domainModel
      * @param string $jwt
      *
      * @return Response
@@ -103,7 +103,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getAccessClearance(
-        DomainModel $domainModel,
+        Domain $domainModel,
         string $jwt
     ): Response
     {

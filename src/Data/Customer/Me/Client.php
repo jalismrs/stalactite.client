@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
@@ -17,10 +17,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\CustomerModel\Me
+ * @package Jalismrs\Stalactite\Client\Data\Customer\Me
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * @param string $jwt

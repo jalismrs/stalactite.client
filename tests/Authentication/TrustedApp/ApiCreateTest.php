@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\Exception;
@@ -72,7 +72,7 @@ class ApiCreateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            TrustedAppModel::class,
+            TrustedApp::class,
             $response->getData()['trustedApp']
         );
     }

@@ -19,11 +19,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return DomainUserRelationModel
+     * @return DomainUserRelation
      */
-    public static function createDomainUserRelationModel(array $data): DomainUserRelationModel
+    public static function createDomainUserRelationModel(array $data): DomainUserRelation
     {
-        $model = new DomainUserRelationModel();
+        $model = new DomainUserRelation();
         $model
             ->setUser(
                 isset($data['user'])
@@ -47,11 +47,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return DomainCustomerRelationModel
+     * @return DomainCustomerRelation
      */
-    public static function createDomainCustomerRelationModel(array $data): DomainCustomerRelationModel
+    public static function createDomainCustomerRelationModel(array $data): DomainCustomerRelation
     {
-        $model = new DomainCustomerRelationModel();
+        $model = new DomainCustomerRelation();
         $model
             ->setCustomer(
                 isset($data['customer'])
@@ -75,14 +75,14 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return AccessClearanceModel
+     * @return AccessClearance
      */
-    public static function createAccessClearanceModel(array $data): AccessClearanceModel
+    public static function createAccessClearanceModel(array $data): AccessClearance
     {
-        $model = new AccessClearanceModel();
+        $model = new AccessClearance();
         $model
             ->setAccess($data['accessGranted'] ?? false)
-            ->setAccessType($data['accessType'] ?? AccessClearanceModel::NO_ACCESS);
+            ->setAccessType($data['accessType'] ?? AccessClearance::NO_ACCESS);
 
         return $model;
     }

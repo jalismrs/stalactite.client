@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
-use Jalismrs\Stalactite\Client\ModelAbstract;
+use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
- * PhoneLineModel
+ * PhoneLine
  *
  * @package Jalismrs\Stalactite\Client\Data\Model
  */
-class PhoneLineModel extends
-    ModelAbstract
+class PhoneLine extends
+    AbstractModel
 {
     /**
-     * @var null|PhoneTypeModel
+     * @var null|PhoneType
      */
     private $type;
     /**
@@ -25,9 +25,9 @@ class PhoneLineModel extends
     /**
      * getType
      *
-     * @return null|PhoneTypeModel
+     * @return null|PhoneType
      */
-    public function getType(): ?PhoneTypeModel
+    public function getType(): ?PhoneType
     {
         return $this->type;
     }
@@ -35,11 +35,11 @@ class PhoneLineModel extends
     /**
      * setType
      *
-     * @param null|PhoneTypeModel $type
+     * @param null|PhoneType $type
      *
      * @return $this
      */
-    public function setType(?PhoneTypeModel $type): self
+    public function setType(?PhoneType $type): self
     {
         $this->type = $type;
 

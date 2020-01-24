@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -21,9 +21,9 @@ trait ClientTestTrait
      *
      * @static
      *
-     * @param ClientAbstract $baseClient
-     * @param ClientAbstract $client1
-     * @param ClientAbstract $client2
+     * @param AbstractClient $baseClient
+     * @param AbstractClient $client1
+     * @param AbstractClient $client2
      *
      * @return void
      *
@@ -31,9 +31,9 @@ trait ClientTestTrait
      * @throws InvalidArgumentException
      */
     private static function checkClients(
-        ClientAbstract $baseClient,
-        ClientAbstract $client1,
-        ClientAbstract $client2
+        AbstractClient $baseClient,
+        AbstractClient $client1,
+        AbstractClient $client2
     ): void
     {
         self::assertSame($baseClient->getHost(), $client1->getHost());

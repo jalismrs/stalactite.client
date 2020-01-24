@@ -7,11 +7,11 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -20,15 +20,15 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\UserModel\Lead
+ * @package Jalismrs\Stalactite\Client\Data\User\Lead
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAll
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -38,7 +38,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getAllLeads(
-        UserModel $userModel,
+        User $userModel,
         string $jwt
     ): Response
     {
@@ -92,7 +92,7 @@ class Client extends
     /**
      * addLeads
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param array $leadModels
      * @param string $jwt
      *
@@ -103,7 +103,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addLeads(
-        UserModel $userModel,
+        User $userModel,
         array $leadModels,
         string $jwt
     ): Response
@@ -113,9 +113,9 @@ class Client extends
         ];
 
         foreach ($leadModels as $leadModel) {
-            if (!$leadModel instanceof PostModel) {
+            if (!$leadModel instanceof Post) {
                 throw new ClientException(
-                    '$leads array parameter must be a PostModel model array',
+                    '$leads array parameter must be a Post model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }
@@ -164,7 +164,7 @@ class Client extends
     /**
      * removeLeads
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param array $leadModels
      * @param string $jwt
      *
@@ -175,7 +175,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function removeLeads(
-        UserModel $userModel,
+        User $userModel,
         array $leadModels,
         string $jwt
     ): Response
@@ -185,9 +185,9 @@ class Client extends
         ];
 
         foreach ($leadModels as $leadModel) {
-            if (!$leadModel instanceof PostModel) {
+            if (!$leadModel instanceof Post) {
                 throw new ClientException(
-                    '$leads array parameter must be a PostModel model array',
+                    '$leads array parameter must be a Post model array',
                     ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
                 );
             }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client;
 
 /**
- * ModelAbstract
+ * AbstractModel
  *
  * @package Jalismrs\Stalactite\Client
  */
-abstract class ModelAbstract
+abstract class AbstractModel
 {
     /**
      * @var null|string

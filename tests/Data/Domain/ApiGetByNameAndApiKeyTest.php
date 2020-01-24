@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -68,7 +68,7 @@ class ApiGetByNameAndApiKeyTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            DomainModel::class,
+            Domain::class,
             $response->getData()['domains']
         );
     }

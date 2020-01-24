@@ -3,27 +3,27 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
 
 /**
- * DomainCustomerRelationModel
+ * DomainCustomerRelation
  *
  * @package Jalismrs\Stalactite\Client\Access\Model
  */
-class DomainCustomerRelationModel extends
-    DomainRelationModelAbstract
+class DomainCustomerRelation extends
+    DomainRelation
 {
     /**
-     * @var null|CustomerModel
+     * @var null|Customer
      */
     private $customer;
 
     /**
      * getCustomer
      *
-     * @return null|CustomerModel
+     * @return null|Customer
      */
-    public function getCustomer(): ?CustomerModel
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
@@ -31,11 +31,11 @@ class DomainCustomerRelationModel extends
     /**
      * setCustomer
      *
-     * @param null|CustomerModel $customerModel
+     * @param null|Customer $customerModel
      *
      * @return $this
      */
-    public function setCustomer(?CustomerModel $customerModel): self
+    public function setCustomer(?Customer $customerModel): self
     {
         $this->customer = $customerModel;
 

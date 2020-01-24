@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
-use Jalismrs\Stalactite\Client\ModelAbstract;
+use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
- * CertificationGraduationModel
+ * CertificationGraduation
  *
  * @package Jalismrs\Stalactite\Client\Data\Model
  */
-class CertificationGraduationModel extends
-    ModelAbstract
+class CertificationGraduation extends
+    AbstractModel
 {
     /**
-     * @var null|CertificationTypeModel
+     * @var null|CertificationType
      */
     private $type;
     /**
@@ -25,9 +25,9 @@ class CertificationGraduationModel extends
     /**
      * getType
      *
-     * @return null|CertificationTypeModel
+     * @return null|CertificationType
      */
-    public function getType(): ?CertificationTypeModel
+    public function getType(): ?CertificationType
     {
         return $this->type;
     }
@@ -35,11 +35,11 @@ class CertificationGraduationModel extends
     /**
      * setType
      *
-     * @param null|CertificationTypeModel $certificationTypeModel
+     * @param null|CertificationType $certificationTypeModel
      *
      * @return $this
      */
-    public function setType(?CertificationTypeModel $certificationTypeModel): self
+    public function setType(?CertificationType $certificationTypeModel): self
     {
         $this->type = $certificationTypeModel;
 

@@ -7,12 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 use function array_merge;
@@ -21,21 +22,23 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\UserModel
+ * @package Jalismrs\Stalactite\Client\Data\User
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     private $clientCertificationGraduation;
     private $clientLead;
     private $clientMe;
     private $clientPhoneLine;
     private $clientPost;
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
+
     /**
      * certificationGraduation
      *
@@ -111,12 +114,11 @@ class Client extends
     /**
      * post
      *
-     * @return Post\Client
      */
-    public function posts(): Post\Client
+    public function posts()
     {
         if (null === $this->clientPost) {
-            $this->clientPost = new Post\Client(
+            $this->clientPost = new PostClient(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -131,6 +133,7 @@ class Client extends
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
+
     /**
      * getAllUsers
      *
@@ -314,7 +317,7 @@ class Client extends
     /**
      * create
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -324,7 +327,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createUser(
-        UserModel $userModel,
+        User $userModel,
         string $jwt
     ): Response
     {
@@ -361,13 +364,13 @@ class Client extends
                     $userModel->asMinimalArray(),
                     [
                         'leads' => array_map(
-                            static function (PostModel $leadModel): ?string {
+                            static function (Post $leadModel): ?string {
                                 return $leadModel->getUid();
                             },
                             $userModel->getLeads()
                         ),
                         'posts' => array_map(
-                            static function (PostModel $postModel): ?string {
+                            static function (Post $postModel): ?string {
                                 return $postModel->getUid();
                             },
                             $userModel->getPosts()
@@ -392,7 +395,7 @@ class Client extends
     /**
      * update
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -402,7 +405,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updateUser(
-        UserModel $userModel,
+        User $userModel,
         string $jwt
     ): Response
     {

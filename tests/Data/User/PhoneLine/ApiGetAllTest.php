@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\PhoneLine;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneLine;
 use Jalismrs\Stalactite\Client\Data\User\PhoneLine\Client;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +65,7 @@ class ApiGetAllTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            PhoneLineModel::class,
+            PhoneLine::class,
             $response->getData()['phoneLines']
         );
     }
