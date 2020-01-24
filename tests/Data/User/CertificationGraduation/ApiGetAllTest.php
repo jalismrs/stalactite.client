@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\CertificationGraduation;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduation;
 use Jalismrs\Stalactite\Client\Data\User\CertificationGraduation\Client;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +65,7 @@ class ApiGetAllTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            CertificationGraduationModel::class,
+            CertificationGraduation::class,
             $response->getData()['certifications']
         );
     }

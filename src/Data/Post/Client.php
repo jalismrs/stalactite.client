@@ -7,10 +7,10 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -19,10 +19,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\PostModel
+ * @package Jalismrs\Stalactite\Client\Data\Post
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAll
@@ -150,7 +150,7 @@ class Client extends
     /**
      * create
      *
-     * @param PostModel $postModel
+     * @param Post $postModel
      * @param string $jwt
      *
      * @return Response
@@ -160,7 +160,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createPost(
-        PostModel $postModel,
+        Post $postModel,
         string $jwt
     ): Response
     {
@@ -217,7 +217,7 @@ class Client extends
     /**
      * update
      *
-     * @param PostModel $postModel
+     * @param Post $postModel
      * @param string $jwt
      *
      * @return Response
@@ -227,7 +227,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updatePost(
-        PostModel $postModel,
+        Post $postModel,
         string $jwt
     ): Response
     {

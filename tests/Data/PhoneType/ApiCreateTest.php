@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\PhoneType;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneType;
 use Jalismrs\Stalactite\Client\Data\PhoneType\Client;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -65,7 +65,7 @@ class ApiCreateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            PhoneTypeModel::class,
+            PhoneType::class,
             $response->getData()['phoneType']
         );
     }

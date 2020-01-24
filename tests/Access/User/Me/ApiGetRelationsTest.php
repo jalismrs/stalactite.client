@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\User\Me;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\User\Me\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -67,7 +67,7 @@ class ApiGetRelationsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            DomainUserRelationModel::class,
+            DomainUserRelation::class,
             $response->getData()['relations']
         );
     }

@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +54,7 @@ class ApiUpdateTest extends
         );
 
         $response = $mockAPIClient->updateUser(
-            new UserModel(),
+            new User(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -95,7 +95,7 @@ class ApiUpdateTest extends
         );
 
         $mockAPIClient->updateUser(
-            new UserModel(),
+            new User(),
             'fake user jwt'
         );
     }

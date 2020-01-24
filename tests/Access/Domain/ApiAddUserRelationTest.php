@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Domain\Client;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -66,7 +66,7 @@ class ApiAddUserRelationTest extends
         );
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
-        static::assertInstanceOf(DomainUserRelationModel::class, $response->getData()['relation']);
+        static::assertInstanceOf(DomainUserRelation::class, $response->getData()['relation']);
     }
 
     /**

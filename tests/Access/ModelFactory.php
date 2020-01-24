@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access;
 
-use Jalismrs\Stalactite\Client\Access\Model\AccessClearanceModel;
-use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 
 /**
@@ -16,11 +16,11 @@ use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 abstract class ModelFactory
 {
     /**
-     * @return DomainUserRelationModel
+     * @return DomainUserRelation
      */
-    public static function getTestableDomainUserRelation(): DomainUserRelationModel
+    public static function getTestableDomainUserRelation(): DomainUserRelation
     {
-        $model = new DomainUserRelationModel();
+        $model = new DomainUserRelation();
         $model
             ->setUser(DataTestModelFactory::getTestableUser())
             ->setDomain(DataTestModelFactory::getTestableDomain())
@@ -30,11 +30,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return DomainCustomerRelationModel
+     * @return DomainCustomerRelation
      */
-    public static function getTestableDomainCustomerRelation(): DomainCustomerRelationModel
+    public static function getTestableDomainCustomerRelation(): DomainCustomerRelation
     {
-        $model = new DomainCustomerRelationModel();
+        $model = new DomainCustomerRelation();
         $model
             ->setCustomer(DataTestModelFactory::getTestableCustomer())
             ->setDomain(DataTestModelFactory::getTestableDomain())
@@ -44,14 +44,14 @@ abstract class ModelFactory
     }
 
     /**
-     * @return AccessClearanceModel
+     * @return AccessClearance
      */
-    public static function getTestableAccessClearance(): AccessClearanceModel
+    public static function getTestableAccessClearance(): AccessClearance
     {
-        $model = new AccessClearanceModel();
+        $model = new AccessClearance();
         $model
             ->setAccess(false)
-            ->setAccessType(AccessClearanceModel::NO_ACCESS);
+            ->setAccessType(AccessClearance::NO_ACCESS);
 
         return $model;
     }

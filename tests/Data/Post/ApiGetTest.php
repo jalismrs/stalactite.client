@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Post\Client;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -66,7 +66,7 @@ class ApiGetTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            PostModel::class,
+            Post::class,
             $response->getData()['post']
         );
     }
@@ -96,7 +96,7 @@ class ApiGetTest extends
                                 'success' => true,
                                 'error' => null,
                                 'post' => []
-                                // invalid PostModel
+                                // invalid Post
                             ],
                             JSON_THROW_ON_ERROR
                         )

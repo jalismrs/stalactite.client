@@ -7,10 +7,10 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneType;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -19,10 +19,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\PhoneTypeModel
+ * @package Jalismrs\Stalactite\Client\Data\PhoneType
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAll
@@ -147,7 +147,7 @@ class Client extends
     /**
      * create
      *
-     * @param PhoneTypeModel $phoneTypeModel
+     * @param PhoneType $phoneTypeModel
      * @param string $jwt
      *
      * @return Response
@@ -157,7 +157,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createPhoneType(
-        PhoneTypeModel $phoneTypeModel,
+        PhoneType $phoneTypeModel,
         string $jwt
     ): Response
     {
@@ -211,7 +211,7 @@ class Client extends
     /**
      * update
      *
-     * @param PhoneTypeModel $phoneTypeModel
+     * @param PhoneType $phoneTypeModel
      * @param string $jwt
      *
      * @return Response
@@ -221,7 +221,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updatePhoneType(
-        PhoneTypeModel $phoneTypeModel,
+        PhoneType $phoneTypeModel,
         string $jwt
     ): Response
     {

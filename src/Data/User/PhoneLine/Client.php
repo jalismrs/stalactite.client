@@ -7,12 +7,12 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneLine;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneType;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -21,15 +21,15 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\UserModel\PhoneLineModel
+ * @package Jalismrs\Stalactite\Client\Data\User\PhoneLine
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAll
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -39,7 +39,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getAllPhoneLines(
-        UserModel $userModel,
+        User $userModel,
         string $jwt
     ): Response
     {
@@ -93,8 +93,8 @@ class Client extends
     /**
      * addPhoneLine
      *
-     * @param UserModel $userModel
-     * @param PhoneLineModel $phoneLineModel
+     * @param User $userModel
+     * @param PhoneLine $phoneLineModel
      * @param string $jwt
      *
      * @return Response
@@ -104,12 +104,12 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addPhoneLine(
-        UserModel $userModel,
-        PhoneLineModel $phoneLineModel,
+        User $userModel,
+        PhoneLine $phoneLineModel,
         string $jwt
     ): Response
     {
-        if (!$phoneLineModel->getType() instanceof PhoneTypeModel) {
+        if (!$phoneLineModel->getType() instanceof PhoneType) {
             throw new ClientException(
                 'Phone Line type must be a Phone Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
@@ -162,8 +162,8 @@ class Client extends
     /**
      * removePhoneLine
      *
-     * @param UserModel $userModel
-     * @param PhoneLineModel $phoneLineModel
+     * @param User $userModel
+     * @param PhoneLine $phoneLineModel
      * @param string $jwt
      *
      * @return Response
@@ -173,8 +173,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function removePhoneLine(
-        UserModel $userModel,
-        PhoneLineModel $phoneLineModel,
+        User $userModel,
+        PhoneLine $phoneLineModel,
         string $jwt
     ): Response
     {

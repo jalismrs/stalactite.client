@@ -7,15 +7,15 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelationModel;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelationModel;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -24,15 +24,15 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Access\DomainModel
+ * @package Jalismrs\Stalactite\Client\Access\Domain
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getRelations
      *
-     * @param DomainModel $domainModel
+     * @param Domain $domainModel
      * @param string $jwt
      *
      * @return Response
@@ -42,7 +42,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getRelations(
-        DomainModel $domainModel,
+        Domain $domainModel,
         string $jwt
     ): Response
     {
@@ -110,7 +110,7 @@ class Client extends
             [
                 'relations' => [
                     'users' => array_map(
-                        static function (array $relation) use ($domainModel): DomainUserRelationModel {
+                        static function (array $relation) use ($domainModel): DomainUserRelation {
                             $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
                             $domainUserRelationModel->setDomain($domainModel);
 
@@ -119,7 +119,7 @@ class Client extends
                         $response['relations']['users']
                     ),
                     'customers' => array_map(
-                        static function (array $relation) use ($domainModel): DomainCustomerRelationModel {
+                        static function (array $relation) use ($domainModel): DomainCustomerRelation {
                             $domainCustomerRelation = ModelFactory::createDomainCustomerRelationModel($relation);
                             $domainCustomerRelation->setDomain($domainModel);
 
@@ -135,8 +135,8 @@ class Client extends
     /**
      * addUserRelation
      *
-     * @param DomainModel $domainModel
-     * @param UserModel $userModel
+     * @param Domain $domainModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -146,8 +146,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addUserRelation(
-        DomainModel $domainModel,
-        UserModel $userModel,
+        Domain $domainModel,
+        User $userModel,
         string $jwt
     ): Response
     {
@@ -202,8 +202,8 @@ class Client extends
     /**
      * addCustomerRelation
      *
-     * @param DomainModel $domainModel
-     * @param CustomerModel $customerModel
+     * @param Domain $domainModel
+     * @param Customer $customerModel
      * @param string $jwt
      *
      * @return Response
@@ -213,8 +213,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addCustomerRelation(
-        DomainModel $domainModel,
-        CustomerModel $customerModel,
+        Domain $domainModel,
+        Customer $customerModel,
         string $jwt
     ): Response
     {

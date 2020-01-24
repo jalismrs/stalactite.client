@@ -8,9 +8,9 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -20,10 +20,10 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Authentication\TrustedAppModel
+ * @package Jalismrs\Stalactite\Client\Authentication\TrustedApp
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAllTrustedApps
@@ -146,7 +146,7 @@ class Client extends
     /**
      * update
      *
-     * @param TrustedAppModel $trustedAppModel
+     * @param TrustedApp $trustedAppModel
      * @param string $jwt
      *
      * @return Response
@@ -156,7 +156,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updateTrustedApp(
-        TrustedAppModel $trustedAppModel,
+        TrustedApp $trustedAppModel,
         string $jwt
     ): Response
     {
@@ -202,7 +202,7 @@ class Client extends
     /**
      * create
      *
-     * @param TrustedAppModel $trustedAppModel
+     * @param TrustedApp $trustedAppModel
      * @param string $jwt
      *
      * @return Response
@@ -212,7 +212,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createTrustedApp(
-        TrustedAppModel $trustedAppModel,
+        TrustedApp $trustedAppModel,
         string $jwt
     ): Response
     {
@@ -326,7 +326,7 @@ class Client extends
     /**
      * resetAuthToken
      *
-     * @param TrustedAppModel $trustedAppModel
+     * @param TrustedApp $trustedAppModel
      * @param string $jwt
      *
      * @return Response
@@ -336,7 +336,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function resetAuthToken(
-        TrustedAppModel $trustedAppModel,
+        TrustedApp $trustedAppModel,
         string $jwt
     ): Response
     {

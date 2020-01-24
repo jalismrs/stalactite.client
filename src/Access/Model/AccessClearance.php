@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
 /**
- * AccessClearanceModel
+ * AccessClearance
  *
  * @package Jalismrs\Stalactite\Client\Access\Model
  */
-class AccessClearanceModel
+class AccessClearance
 {
     public const ADMIN_ACCESS = 'admin';
     public const NO_ACCESS = null;
@@ -21,7 +21,7 @@ class AccessClearanceModel
     private $accessType;
 
     /**
-     * AccessClearanceModel constructor.
+     * AccessClearance constructor.
      *
      * @param bool $hasAccess
      * @param string|null $accessType
@@ -46,7 +46,7 @@ class AccessClearanceModel
     /**
      * @param bool $access
      *
-     * @return AccessClearanceModel
+     * @return AccessClearance
      */
     public function setAccess(bool $access): self
     {
@@ -66,7 +66,7 @@ class AccessClearanceModel
     /**
      * @param string|null $accessType
      *
-     * @return AccessClearanceModel
+     * @return AccessClearance
      */
     public function setAccessType(?string $accessType): self
     {

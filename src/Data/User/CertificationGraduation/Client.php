@@ -7,12 +7,12 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduation;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationType;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
@@ -21,15 +21,15 @@ use function vsprintf;
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Data\UserModel\CertificationGraduationModel
+ * @package Jalismrs\Stalactite\Client\Data\User\CertificationGraduation
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * getAll
      *
-     * @param UserModel $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -39,7 +39,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function getAllCertificationGraduations(
-        UserModel $userModel,
+        User $userModel,
         string $jwt
     ): Response
     {
@@ -93,8 +93,8 @@ class Client extends
     /**
      * addCertificationGraduation
      *
-     * @param UserModel $userModel
-     * @param CertificationGraduationModel $certificationGraduationModel
+     * @param User $userModel
+     * @param CertificationGraduation $certificationGraduationModel
      * @param string $jwt
      *
      * @return Response
@@ -104,12 +104,12 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function addCertificationGraduation(
-        UserModel $userModel,
-        CertificationGraduationModel $certificationGraduationModel,
+        User $userModel,
+        CertificationGraduation $certificationGraduationModel,
         string $jwt
     ): Response
     {
-        if (!$certificationGraduationModel->getType() instanceof CertificationTypeModel) {
+        if (!$certificationGraduationModel->getType() instanceof CertificationType) {
             throw new ClientException(
                 'Certification Graduation type must be a Certification Type',
                 ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
@@ -162,8 +162,8 @@ class Client extends
     /**
      * removeCertificationGraduation
      *
-     * @param UserModel $userModel
-     * @param CertificationGraduationModel $certificationGraduationModel
+     * @param User $userModel
+     * @param CertificationGraduation $certificationGraduationModel
      * @param string $jwt
      *
      * @return Response
@@ -173,8 +173,8 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function removeCertificationGraduation(
-        UserModel $userModel,
-        CertificationGraduationModel $certificationGraduationModel,
+        User $userModel,
+        CertificationGraduation $certificationGraduationModel,
         string $jwt
     ): Response
     {

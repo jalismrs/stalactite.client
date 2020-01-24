@@ -8,24 +8,24 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Response;
 use function vsprintf;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Access\AuthToken\DomainModel
+ * @package Jalismrs\Stalactite\Client\Access\AuthToken\Domain
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * deleteRelationsByDomain
      *
-     * @param DomainModel $domainModel
+     * @param Domain $domainModel
      * @param string $apiAuthToken
      *
      * @return Response
@@ -35,7 +35,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function deleteRelationsByDomain(
-        DomainModel $domainModel,
+        Domain $domainModel,
         string $apiAuthToken
     ): Response
     {

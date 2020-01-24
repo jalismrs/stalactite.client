@@ -8,8 +8,9 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client as TrustedAppClient;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
@@ -28,7 +29,7 @@ use function vsprintf;
  * @package Jalismrs\Stalactite\Client\Authentication
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
 
@@ -38,20 +39,22 @@ class Client extends
     ];
 
     private $clientTrustedApp;
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
+
     /**
      * trustedApp
      *
-     * @return TrustedApp\Client
+     * @return TrustedAppClient
      */
-    public function trustedApps(): TrustedApp\Client
+    public function trustedApps(): TrustedAppClient
     {
         if (null === $this->clientTrustedApp) {
-            $this->clientTrustedApp = new TrustedApp\Client(
+            $this->clientTrustedApp = new TrustedAppClient(
                 $this->host,
                 $this->userAgent,
                 $this->httpClient
@@ -66,6 +69,7 @@ class Client extends
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
+
     /**
      * getRSAPublicKey
      *
@@ -181,7 +185,7 @@ class Client extends
     /**
      * login
      *
-     * @param TrustedAppModel $trustedAppModel
+     * @param TrustedApp $trustedAppModel
      * @param string $userGoogleJwt
      *
      * @return Response
@@ -191,7 +195,7 @@ class Client extends
      * @throws InvalidDataTypeException
      */
     public function login(
-        TrustedAppModel $trustedAppModel,
+        TrustedApp $trustedAppModel,
         string $userGoogleJwt
     ): Response
     {

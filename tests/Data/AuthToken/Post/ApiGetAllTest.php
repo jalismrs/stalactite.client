@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Post\Client;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -64,7 +64,7 @@ class ApiGetAllTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
-            PostModel::class,
+            Post::class,
             $response->getData()['posts']
         );
     }

@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\CertificationType\Client;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationType;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +65,7 @@ class ApiCreateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertInstanceOf(
-            CertificationTypeModel::class,
+            CertificationType::class,
             $response->getData()['certificationType']
         );
     }

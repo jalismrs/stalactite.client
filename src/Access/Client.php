@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access;
 
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 
 /**
  * Client
@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\ClientAbstract;
  * @package Jalismrs\Stalactite\Client\Access
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     private $clientAuthToken;
     private $clientCustomer;

@@ -18,11 +18,11 @@ abstract class ModelFactory
      *
      * @param array $data
      *
-     * @return TrustedAppModel
+     * @return TrustedApp
      */
-    public static function createTrustedAppModel(array $data): TrustedAppModel
+    public static function createTrustedAppModel(array $data): TrustedApp
     {
-        $model = new TrustedAppModel();
+        $model = new TrustedApp();
         $model
             ->setAuthToken($data['authToken'] ?? null)
             ->setGoogleOAuthClientId($data['googleOAuthClientId'] ?? null)

@@ -7,9 +7,9 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
@@ -22,7 +22,7 @@ use function vsprintf;
  * @package Jalismrs\Stalactite\Client\Data\DOmain
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * @param string $jwt
@@ -266,7 +266,7 @@ class Client extends
     /**
      * create
      *
-     * @param DomainModel $domainModel
+     * @param Domain $domainModel
      * @param string $jwt
      *
      * @return Response
@@ -276,7 +276,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function createDomain(
-        DomainModel $domainModel,
+        Domain $domainModel,
         string $jwt
     ): Response
     {
@@ -334,7 +334,7 @@ class Client extends
     /**
      * update
      *
-     * @param DomainModel $domainModel
+     * @param Domain $domainModel
      * @param string $jwt
      *
      * @return Response
@@ -344,7 +344,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function updateDomain(
-        DomainModel $domainModel,
+        Domain $domainModel,
         string $jwt
     ): Response
     {

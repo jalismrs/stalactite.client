@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
-use Jalismrs\Stalactite\Client\ModelAbstract;
+use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
- * TrustedAppModel
+ * TrustedApp
  *
  * @package Jalismrs\Stalactite\Client\Authentication\Model
  */
-class TrustedAppModel extends
-    ModelAbstract
+class TrustedApp extends
+    AbstractModel
 {
     /**
      * @var null|string

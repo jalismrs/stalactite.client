@@ -12,11 +12,11 @@ use Throwable;
 use function array_merge_recursive;
 
 /**
- * ClientAbstract
+ * AbstractClient
  *
  * @package Jalismrs\Stalactite\Client
  */
-abstract class ClientAbstract
+abstract class AbstractClient
 {
     /**
      * @var string
@@ -32,7 +32,7 @@ abstract class ClientAbstract
     protected $userAgent;
 
     /**
-     * ClientAbstract constructor.
+     * AbstractClient constructor.
      *
      * @param string $host
      * @param string|null $userAgent

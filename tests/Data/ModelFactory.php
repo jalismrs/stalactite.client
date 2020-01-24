@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data;
 
-use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel;
-use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
-use Jalismrs\Stalactite\Client\Data\Model\DomainModel;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneLineModel;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneTypeModel;
-use Jalismrs\Stalactite\Client\Data\Model\PostModel;
-use Jalismrs\Stalactite\Client\Data\Model\UserModel;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduation;
+use Jalismrs\Stalactite\Client\Data\Model\CertificationType;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneLine;
+use Jalismrs\Stalactite\Client\Data\Model\PhoneType;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 
 /**
  * ModelFactory
@@ -20,11 +20,11 @@ use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 abstract class ModelFactory
 {
     /**
-     * @return UserModel
+     * @return User
      */
-    public static function getTestableUser(): UserModel
+    public static function getTestableUser(): User
     {
-        $model = new UserModel();
+        $model = new User();
         $model
             ->setFirstName('azerty')
             ->setLastName('uiop')
@@ -43,11 +43,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return PostModel
+     * @return Post
      */
-    public static function getTestablePost(): PostModel
+    public static function getTestablePost(): Post
     {
-        $model = new PostModel();
+        $model = new Post();
         $model
             ->setName('azerty')
             ->setAdminAccess(false)
@@ -59,11 +59,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return DomainModel
+     * @return Domain
      */
-    public static function getTestableDomain(): DomainModel
+    public static function getTestableDomain(): Domain
     {
-        $model = new DomainModel();
+        $model = new Domain();
         $model
             ->setName('azerty')
             ->setType('api')
@@ -76,11 +76,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return CustomerModel
+     * @return Customer
      */
-    public static function getTestableCustomer(): CustomerModel
+    public static function getTestableCustomer(): Customer
     {
-        $model = new CustomerModel();
+        $model = new Customer();
         $model
             ->setEmail('goodmorning@hello.hi')
             ->setFirstName('azerty')
@@ -92,11 +92,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return CertificationGraduationModel
+     * @return CertificationGraduation
      */
-    public static function getTestableCertificationGraduation(): CertificationGraduationModel
+    public static function getTestableCertificationGraduation(): CertificationGraduation
     {
-        $model = new CertificationGraduationModel();
+        $model = new CertificationGraduation();
         $model
             ->setDate('2000-01-01')
             ->setType(self::getTestableCertificationType())
@@ -106,11 +106,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return PhoneLineModel
+     * @return PhoneLine
      */
-    public static function getTestablePhoneLine(): PhoneLineModel
+    public static function getTestablePhoneLine(): PhoneLine
     {
-        $model = new PhoneLineModel();
+        $model = new PhoneLine();
         $model
             ->setValue('0123456789')
             ->setType(self::getTestablePhoneType())
@@ -120,11 +120,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return PhoneTypeModel
+     * @return PhoneType
      */
-    public static function getTestablePhoneType(): PhoneTypeModel
+    public static function getTestablePhoneType(): PhoneType
     {
-        $model = new PhoneTypeModel();
+        $model = new PhoneType();
         $model
             ->setName('azerty')
             ->setUid('azertyuiop');
@@ -133,11 +133,11 @@ abstract class ModelFactory
     }
 
     /**
-     * @return CertificationTypeModel
+     * @return CertificationType
      */
-    public static function getTestableCertificationType(): CertificationTypeModel
+    public static function getTestableCertificationType(): CertificationType
     {
-        $model = new CertificationTypeModel();
+        $model = new CertificationType();
         $model
             ->setName('azerty')
             ->setUid('azertyuiop');

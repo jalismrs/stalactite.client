@@ -8,24 +8,24 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
-use Jalismrs\Stalactite\Client\ClientAbstract;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Model\CustomerModel;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Response;
 use function vsprintf;
 
 /**
  * Client
  *
- * @package Jalismrs\Stalactite\Client\Access\AuthToken\CustomerModel
+ * @package Jalismrs\Stalactite\Client\Access\AuthToken\Customer
  */
 class Client extends
-    ClientAbstract
+    AbstractClient
 {
     /**
      * deleteRelationsByCustomer
      *
-     * @param CustomerModel $customerModel
+     * @param Customer $customerModel
      * @param string $apiAuthToken
      *
      * @return Response
@@ -35,7 +35,7 @@ class Client extends
      * @throws InvalidSchemaException
      */
     public function deleteRelationsByCustomer(
-        CustomerModel $customerModel,
+        Customer $customerModel,
         string $apiAuthToken
     ): Response
     {

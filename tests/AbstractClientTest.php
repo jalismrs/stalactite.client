@@ -10,11 +10,11 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * ClientAbstractTest
+ * AbstractClientTest
  *
  * @package Test
  */
-class ClientAbstractTest extends
+class AbstractClientTest extends
     TestCase
 {
     /**
