@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data\AuthToken;
+namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken;
 
 use Jalismrs\Stalactite\Client\Data\AuthToken\Client;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Test\ClientTestTrait;
+use Jalismrs\Stalactite\Client\Tests\ClientTestTrait;
 
 /**
  * ClientTest
  *
- * @package Test\Data\AuthToken
+ * @package Jalismrs\Stalactite\Client\Tests\Data\AuthToken
  */
 class ClientTest extends
     TestCase

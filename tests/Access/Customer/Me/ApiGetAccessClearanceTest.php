@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Access\Customer\Me;
+namespace Jalismrs\Stalactite\Client\Tests\Access\Customer\Me;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -14,13 +14,13 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Test\Access\ModelFactory;
-use Test\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 
 /**
  * ApiGetAccessClearanceTest
  *
- * @package Test\Access\Customer\Me
+ * @packageJalismrs\Stalactite\Client\Tests\Access\Customer\Me
  */
 class ApiGetAccessClearanceTest extends
     TestCase

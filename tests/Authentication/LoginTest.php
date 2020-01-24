@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Authentication;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * LoginTest
  *
- * @package Test\Authentication
+ * @packageJalismrs\Stalactite\Client\Tests\Authentication
  */
 class LoginTest extends
     TestCase

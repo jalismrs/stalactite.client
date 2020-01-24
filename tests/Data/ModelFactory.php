@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data;
+namespace Jalismrs\Stalactite\Client\Tests\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\CertificationGraduationModel;
 use Jalismrs\Stalactite\Client\Data\Model\CertificationTypeModel;
@@ -15,7 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\UserModel;
 /**
  * ModelFactory
  *
- * @package Test\Data
+ * @packageJalismrs\Stalactite\Client\Tests\Data
  */
 abstract class ModelFactory
 {

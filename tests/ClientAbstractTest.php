@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test;
+namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\Client;
 use PHPUnit\Framework\ExpectationFailedException;

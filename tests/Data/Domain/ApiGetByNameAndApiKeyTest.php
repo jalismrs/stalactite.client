@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data\Domain;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -13,12 +13,12 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Test\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 
 /**
  * ApiGetByNameAndApiKeyTest
  *
- * @package Test\Data\Domain
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
  */
 class ApiGetByNameAndApiKeyTest extends
     TestCase

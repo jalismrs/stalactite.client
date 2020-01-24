@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Authentication;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedAppModel;
 
 /**
  * ModelFactory
  *
- * @package Test\Authentication
+ * @packageJalismrs\Stalactite\Client\Tests\Authentication
  */
 abstract class ModelFactory
 {

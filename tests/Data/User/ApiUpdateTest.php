@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data\User;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiUpdateTest
  *
- * @package Test\Data\User
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User
  */
 class ApiUpdateTest extends
     TestCase

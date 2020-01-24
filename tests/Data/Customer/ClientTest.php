@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data\Customer;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
 use Jalismrs\Stalactite\Client\Data\Customer\Client;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Test\ClientTestTrait;
+use Jalismrs\Stalactite\Client\Tests\ClientTestTrait;
 
 /**
  * ClientTest
  *
- * @package Test\Data\Customer
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
  */
 class ClientTest extends
     TestCase

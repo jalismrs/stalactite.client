@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Data\AuthToken;
+namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken;
 
 use BadMethodCallException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
@@ -15,7 +15,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * JwtFactoryTest
  *
- * @package Test\Data\AuthToken
+ * @package Jalismrs\Stalactite\Client\Tests\Data\AuthToken
  */
 class JwtFactoryTest extends
     TestCase
