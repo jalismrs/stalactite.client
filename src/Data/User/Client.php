@@ -29,7 +29,6 @@ class Client extends
 {
     private $clientLead;
     private $clientMe;
-    private $clientPhoneLine;
     private $clientPost;
 
     /*
@@ -75,28 +74,10 @@ class Client extends
     }
 
     /**
-     * phoneLine
-     *
-     * @return PhoneLine\Client
-     */
-    public function phoneLines(): PhoneLine\Client
-    {
-        if (null === $this->clientPhoneLine) {
-            $this->clientPhoneLine = new PhoneLine\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-
-        return $this->clientPhoneLine;
-    }
-
-    /**
      * post
      *
      */
-    public function posts()
+    public function posts(): PostClient
     {
         if (null === $this->clientPost) {
             $this->clientPost = new PostClient(

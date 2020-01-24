@@ -16,7 +16,6 @@ class Client extends
     private $clientAuthToken;
     private $clientCustomer;
     private $clientDomain;
-    private $clientPhoneType;
     private $clientPost;
     private $clientUser;
     /*
@@ -76,24 +75,6 @@ class Client extends
         }
 
         return $this->clientDomain;
-    }
-
-    /**
-     * phoneType
-     *
-     * @return PhoneType\Client
-     */
-    public function phoneTypes(): PhoneType\Client
-    {
-        if (null === $this->clientPhoneType) {
-            $this->clientPhoneType = new PhoneType\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
-        }
-
-        return $this->clientPhoneType;
     }
 
     /**

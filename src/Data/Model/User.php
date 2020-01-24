@@ -59,10 +59,6 @@ class User extends
      * @var array
      */
     private $leads = [];
-    /**
-     * @var array
-     */
-    private $phoneLines = [];
 
     /**
      * getEmail
@@ -376,47 +372,6 @@ class User extends
     public function addLead(Post $leadModel): self
     {
         $this->leads[] = $leadModel;
-
-        return $this;
-    }
-
-    /**
-     * getPhoneLines
-     *
-     * @return array
-     */
-    public function getPhoneLines(): array
-    {
-        return $this->phoneLines;
-    }
-
-    /**
-     * setPhoneLines
-     *
-     * @param array $phoneLines
-     *
-     * @return $this
-     */
-    public function setPhoneLines(array $phoneLines): self
-    {
-        $this->phoneLines = [];
-        foreach ($phoneLines as $phoneLine) {
-            $this->addPhoneLine($phoneLine);
-        }
-
-        return $this;
-    }
-
-    /**
-     * addPhoneLine
-     *
-     * @param PhoneLine $phoneLineModel
-     *
-     * @return $this
-     */
-    public function addPhoneLine(PhoneLine $phoneLineModel): self
-    {
-        $this->phoneLines[] = $phoneLineModel;
 
         return $this;
     }

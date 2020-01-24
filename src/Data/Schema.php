@@ -93,7 +93,7 @@ abstract class Schema
             'null' => true
         ]
     ];
-    public const PHONE_LINE = [
+
         'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
@@ -103,14 +103,6 @@ abstract class Schema
         'type' => [
             'type' => JsonRule::OBJECT_TYPE,
             'schema' => self::PHONE_TYPE
-        ]
-    ];
-    public const PHONE_TYPE = [
-        'uid' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'name' => [
-            'type' => JsonRule::STRING_TYPE
         ]
     ];
     public const POST = [
@@ -177,10 +169,6 @@ abstract class Schema
         'leads' => [
             'type' => JsonRule::LIST_TYPE,
             'schema' => self::POST
-        ],
-        'phoneLines' => [
-            'type' => JsonRule::LIST_TYPE,
-            'schema' => self::PHONE_LINE
         ]
     ];
 }

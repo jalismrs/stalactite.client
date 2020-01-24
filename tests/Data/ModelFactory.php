@@ -5,8 +5,6 @@ namespace Jalismrs\Stalactite\Client\Tests\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneLine;
-use Jalismrs\Stalactite\Client\Data\Model\PhoneType;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 
@@ -85,35 +83,6 @@ abstract class ModelFactory
             ->setGoogleId('0123456789')
             ->setUid('azertyuiop');
 
-        return $model;
-    }
-
-    /**
-     * @return PhoneLine
-     */
-    public static function getTestablePhoneLine(): PhoneLine
-    {
-        $model = new PhoneLine();
-        $model
-            ->setValue('0123456789')
-            ->setType(self::getTestablePhoneType())
-            ->setUid('azertyuiop');
-
-        return $model;
-    }
-
-    /**
-     * @return PhoneType
-     */
-    public static function getTestablePhoneType(): PhoneType
-    {
-        $model = new PhoneType();
-        $model
-            ->setName('azerty')
-            ->setUid('azertyuiop');
-
-        return $model;
-    }
         return $model;
     }
 }

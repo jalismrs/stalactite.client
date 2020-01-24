@@ -35,12 +35,6 @@ abstract class ModelFactory
             ->setOffice($data['office'] ?? null)
             ->setUid($data['uid'] ?? null);
 
-        if (isset($data['phoneLines'])) {
-            foreach ($data['phoneLines'] as $phoneLine) {
-                $model->addPhoneLine(self::createPhoneLineModel($phoneLine));
-            }
-        }
-
         if (isset($data['posts'])) {
             foreach ($data['posts'] as $post) {
                 $model->addPost(self::createPostModel($post));
@@ -118,49 +112,6 @@ abstract class ModelFactory
             ->setAdminAccess($data['adminAccess'] ?? false)
             ->setName($data['name'] ?? null)
             ->setShortName($data['shortName'] ?? null)
-            ->setUid($data['uid'] ?? null);
-
-        return $model;
-    }
-
-    /**
-     * createPhoneTypeModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return PhoneType
-     */
-    public static function createPhoneTypeModel(array $data): PhoneType
-    {
-        $model = new PhoneType();
-        $model
-            ->setName($data['name'] ?? null)
-            ->setUid($data['uid'] ?? null);
-
-        return $model;
-    }
-
-    /**
-     * createPhoneLineModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return PhoneLine
-     */
-    public static function createPhoneLineModel(array $data): PhoneLine
-    {
-        $model = new PhoneLine();
-        $model
-            ->setType(
-                null === $data['type']
-                    ? null
-                    : self::createPhoneTypeModel($data['type'])
-            )
-            ->setValue($data['value'] ?? null)
             ->setUid($data['uid'] ?? null);
 
         return $model;
