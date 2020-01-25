@@ -87,7 +87,7 @@ class Client extends
                 ->request(
                     'GET',
                     vsprintf(
-                        '%s/auth/pulbicKey',
+                        '%s/auth/publicKey',
                         [
                             $this->host,
                         ]
