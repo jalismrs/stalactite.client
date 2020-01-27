@@ -1,7 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
+
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * AccessClearance
@@ -10,97 +12,102 @@ namespace Jalismrs\Stalactite\Client\Access\Model;
  */
 class AccessClearance
 {
+    public const NO_ACCESS    = null;
     public const ADMIN_ACCESS = 'admin';
-    public const NO_ACCESS = null;
-    public const USER_ACCESS = 'user';
-
-    /** @var bool $access */
-    private $access;
-
+    public const USER_ACCESS  = 'user';
+    
+    /** @var bool $accessGranted */
+    private $accessGranted;
+    
     /** @var string|null $accessType */
     private $accessType;
-
+    
     /**
      * AccessClearance constructor.
      *
-     * @param bool $hasAccess
+     * @param bool        $accessGranted
      * @param string|null $accessType
      */
     public function __construct(
-        bool $hasAccess = false,
+        bool $accessGranted = false,
         string $accessType = null
-    )
-    {
-        $this->access = $hasAccess;
-        $this->accessType = $accessType ?? self::NO_ACCESS;
+    ) {
+        $this->accessGranted = $accessGranted;
+        $this->accessType    = $accessType ?? self::NO_ACCESS;
     }
-
+    
     /**
      * @return bool
      */
-    public function allowAccess(): bool
+    public function hasAccessGranted() : bool
     {
-        return $this->access;
+        return $this->accessGranted;
     }
-
+    
     /**
-     * @param bool $access
+     * setAccessGranted
      *
-     * @return AccessClearance
+     * @param bool $accessGranted
+     *
+     * @return $this
      */
-    public function setAccess(bool $access): self
+    public function setAccessGranted(bool $accessGranted) : self
     {
-        $this->access = $access;
-
+        $this->accessGranted = $accessGranted;
+        
         return $this;
     }
-
+    
     /**
      * @return string|null
      */
-    public function getAccessType(): ?string
+    public function getAccessType() : ?string
     {
         return $this->accessType;
     }
-
+    
     /**
      * @param string|null $accessType
      *
      * @return AccessClearance
      */
-    public function setAccessType(?string $accessType): self
+    public function setAccessType(?string $accessType) : self
     {
         $this->accessType = $accessType;
-
+        
         return $this;
     }
-
+    
     /**
      * @return bool
      */
-    public function hasUserAccess(): bool
+    public function hasUserAccessGranted() : bool
     {
-        return $this->allowAccess() && $this->accessType === self::USER_ACCESS;
+        return $this->hasAccessGranted() && $this->accessType === self::USER_ACCESS;
     }
-
+    
     /**
      * @return bool
      */
-    public function hasAdminAccess(): bool
+    public function hasAdminAccessGranted() : bool
     {
-        return $this->allowAccess() && $this->accessType === self::ADMIN_ACCESS;
+        return $this->hasAccessGranted() && $this->accessType === self::ADMIN_ACCESS;
     }
-
+    
     /**
      * asArray
      *
      * @return array
+     *
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
-    public function asArray(): array
+    public function asArray() : array
     {
-        return [
-            'accessGranted' => $this->access,
-            'accessType' => $this->accessType,
-        ];
+        throw new Deprecated(
+            'Reimplemented with serializer',
+            500,
+            'src/Util/SerializerFactory.php',
+            1
+        );
     }
 }
