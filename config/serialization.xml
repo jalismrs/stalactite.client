@@ -218,7 +218,7 @@
     </class>
 
     <class
-            name="Jalismrs\Stalactite\Client\Data\Model\Post"
+            name="Jalismrs\Stalactite\Client\Data\Model\User"
     >
         <attribute
                 name="admin"
@@ -237,7 +237,7 @@
         >
             <group>main</group>
             <group>min</group>
-            <group>update-me</group>
+            <group>updateMe</group>
         </attribute>
         <attribute
                 name="googleId"
@@ -250,7 +250,7 @@
         >
             <group>main</group>
             <group>min</group>
-            <group>update-me</group>
+            <group>updateMe</group>
         </attribute>
         <attribute
                 name="leads"
