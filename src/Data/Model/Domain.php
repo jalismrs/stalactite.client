@@ -154,21 +154,4 @@ class Domain extends
 
         return $this;
     }
-    
-    /**
-     * asArray
-     *
-     * @return array
-     *
-     * @throws \PHPUnit\Framework\Error\Deprecated
-     */
-    public function asArray(): array
-    {
-        throw new Deprecated(
-            'Reimplemented with Serializer',
-            500,
-            'Serializer.php',
-            1
-        );
-    }
 }
