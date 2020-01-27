@@ -93,21 +93,4 @@ class AccessClearance
     {
         return $this->hasAccessGranted() && $this->accessType === self::ADMIN_ACCESS;
     }
-    
-    /**
-     * asArray
-     *
-     * @return array
-     *
-     * @throws \PHPUnit\Framework\Error\Deprecated
-     */
-    public function asArray() : array
-    {
-        throw new Deprecated(
-            'Reimplemented with serializer',
-            500,
-            'src/Util/SerializerFactory.php',
-            1
-        );
-    }
 }

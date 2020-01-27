@@ -3,15 +3,15 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
-use Jalismrs\Stalactite\Client\Util\SerializerFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * SerializerFactoryTestTest
+ * SerializerTest
  *
  * @package Jalismrs\Stalactite\Client\Tests
  */
-class SerializerFactoryTestTest extends
+class SerializerTest extends
     TestCase
 {
     /**
@@ -23,11 +23,12 @@ class SerializerFactoryTestTest extends
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
     public function testCreate() : void
     {
-        $serializer1 = SerializerFactory::create();
-        $serializer2 = SerializerFactory::create();
+        $serializer1 = Serializer::create();
+        $serializer2 = Serializer::create();
         
         self::assertSame($serializer1, $serializer2);
     }

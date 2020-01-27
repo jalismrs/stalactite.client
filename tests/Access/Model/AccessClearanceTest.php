@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access;
 
-use Jalismrs\Stalactite\Client\Util\SerializerFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,19 +29,11 @@ class AccessClearanceTest extends
      */
     public function testGroupMain() : void
     {
-        $serializer = SerializerFactory::create();
+        $serializer = Serializer::create();
         
         $object = ModelFactory::getTestableAccessClearance();
         
-        $given = $serializer->normalize(
-            $object,
-            null,
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
+        $given = $serializer->normalize($object);
         
         $expected = [
             'accessGranted' => $object->hasAccessGranted(),

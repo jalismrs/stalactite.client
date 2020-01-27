@@ -10,7 +10,7 @@ use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
-use Jalismrs\Stalactite\Client\Util\SerializerFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -42,9 +42,7 @@ class ApiGetAccessClearanceTest extends
      */
     public function testGetAccessClearance() : void
     {
-        $serializer = SerializerFactory::create();
-        
-        $accessClearance = ModelFactory::getTestableAccessClearance();
+        $serializer = Serializer::create();
         
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -57,13 +55,7 @@ class ApiGetAccessClearanceTest extends
                                 'success'   => true,
                                 'error'     => null,
                                 'clearance' => $serializer->normalize(
-                                    $accessClearance,
-                                    null,
-                                    [
-                                        'groups' => [
-                                            'main',
-                                        ],
-                                    ]
+                                    ModelFactory::getTestableAccessClearance()
                                 ),
                             ],
                             JSON_THROW_ON_ERROR
