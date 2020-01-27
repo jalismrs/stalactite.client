@@ -15,6 +15,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetUsersTest
@@ -58,7 +59,7 @@ class ApiGetUsersTest extends
                                     $serializer->normalize(
                                         ModelFactory::getTestableUser(),
                                         [
-                                            'groups' => [
+                                            AbstractNormalizer::GROUPS => [
                                                 'main',
                                             ],
                                         ]

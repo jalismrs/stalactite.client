@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function vsprintf;
 
@@ -287,7 +288,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $customerModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'create',
                         ],
                     ]
@@ -358,7 +359,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $customerModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'update',
                         ],
                     ]

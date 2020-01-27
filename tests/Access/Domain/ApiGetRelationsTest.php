@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetRelationsTest
@@ -58,8 +59,11 @@ class ApiGetRelationsTest extends
                                         $serializer->normalize(
                                             ModelFactory::getTestableDomainUserRelation(),
                                             [
-                                                'groups' => [
-                                                    'relationDomain',
+                                                AbstractNormalizer::GROUPS             => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
                                                 ],
                                             ]
                                         )
@@ -68,8 +72,11 @@ class ApiGetRelationsTest extends
                                         $serializer->normalize(
                                             ModelFactory::getTestableDomainCustomerRelation(),
                                             [
-                                                'groups' => [
-                                                    'relationDomain',
+                                                AbstractNormalizer::GROUPS             => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
                                                 ],
                                             ]
                                         )
@@ -145,16 +152,22 @@ class ApiGetRelationsTest extends
                                     'users'     => $serializer->normalize(
                                         ModelFactory::getTestableDomainUserRelation(),
                                         [
-                                            'groups' => [
-                                                'relationDomain',
+                                            AbstractNormalizer::GROUPS             => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'domain'
                                             ],
                                         ]
                                     ),
                                     'customers' => $serializer->normalize(
                                         ModelFactory::getTestableDomainCustomerRelation(),
                                         [
-                                            'groups' => [
-                                                'relationDomain',
+                                            AbstractNormalizer::GROUPS             => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'domain'
                                             ],
                                         ]
                                     )

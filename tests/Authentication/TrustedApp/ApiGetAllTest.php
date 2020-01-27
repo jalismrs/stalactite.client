@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetAllTest
@@ -58,7 +59,7 @@ class ApiGetAllTest extends
                                     $serializer->normalize(
                                         ModelFactory::getTestableTrustedApp(),
                                         [
-                                            'groups' => [
+                                            AbstractNormalizer::GROUPS => [
                                                 'main',
                                             ],
                                         ]

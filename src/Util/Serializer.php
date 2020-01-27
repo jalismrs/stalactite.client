@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Util;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\XmlFileLoader;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerObject;
 use function array_replace_recursive;
@@ -19,7 +20,7 @@ use function Jalismrs\Stalactite\Client\path;
 final class Serializer
 {
     private const CONTEXT = [
-        'groups' => [
+        AbstractNormalizer::GROUPS => [
             'common',
         ],
     ];

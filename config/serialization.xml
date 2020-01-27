@@ -30,13 +30,11 @@
                 name="domain"
         >
             <group>main</group>
-            <group>relationCustomer</group>
-            <group>relationUser</group>
         </attribute>
         <attribute
                 name="uid"
         >
-            <group>common</group>
+            <group>main</group>
         </attribute>
     </class>
 
@@ -46,7 +44,6 @@
         <attribute
                 name="customer"
         >
-            <group>relationDomain</group>
             <group>main</group>
         </attribute>
     </class>
@@ -57,7 +54,6 @@
         <attribute
                 name="user"
         >
-            <group>relationDomain</group>
             <group>main</group>
         </attribute>
     </class>

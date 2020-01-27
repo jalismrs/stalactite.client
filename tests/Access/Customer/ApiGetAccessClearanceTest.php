@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetAccessClearanceTest
@@ -57,7 +58,7 @@ class ApiGetAccessClearanceTest extends
                                 'clearance' => $serializer->normalize(
                                     ModelFactory::getTestableAccessClearance(),
                                     [
-                                        'groups' => [
+                                        AbstractNormalizer::GROUPS => [
                                             'main',
                                         ],
                                     ]

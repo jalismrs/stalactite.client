@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function vsprintf;
 
 /**
@@ -124,7 +125,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $userModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'updateMe',
                         ],
                     ]

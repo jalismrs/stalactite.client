@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiCreateTest
@@ -53,7 +54,7 @@ class ApiCreateTest extends
                             'trustedApp' => $serializer->normalize(
                                 ModelFactory::getTestableTrustedApp(),
                                 [
-                                    'groups' => [
+                                    AbstractNormalizer::GROUPS => [
                                         'main',
                                         'reset',
                                     ],

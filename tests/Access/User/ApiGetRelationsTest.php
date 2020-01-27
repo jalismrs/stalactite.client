@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\User\Client;
 use Jalismrs\Stalactite\Client\ClientException;
@@ -14,6 +12,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetRelationsTest
@@ -57,8 +56,11 @@ class ApiGetRelationsTest extends
                                     $serializer->normalize(
                                         ModelFactory::getTestableDomainUserRelation(),
                                         [
-                                            'groups' => [
-                                                'relationUser',
+                                            AbstractNormalizer::GROUPS             => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'user'
                                             ],
                                         ]
                                     )
@@ -117,7 +119,7 @@ class ApiGetRelationsTest extends
                                 'relations' => $serializer->normalize(
                                     ModelFactory::getTestableDomainUserRelation(),
                                     [
-                                        'groups' => [
+                                        AbstractNormalizer::GROUPS => [
                                             'main',
                                         ],
                                     ]

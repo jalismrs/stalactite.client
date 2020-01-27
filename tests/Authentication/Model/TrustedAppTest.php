@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\Model;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * TrustedAppTest
@@ -63,7 +64,7 @@ class TrustedAppTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'main',
                 ],
             ]
@@ -101,7 +102,7 @@ class TrustedAppTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'reset',
                 ],
             ]
@@ -136,7 +137,7 @@ class TrustedAppTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'create',
                 ],
             ]
@@ -172,7 +173,7 @@ class TrustedAppTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'update',
                 ],
             ]

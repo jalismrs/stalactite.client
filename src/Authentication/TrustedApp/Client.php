@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
 use function vsprintf;
@@ -193,7 +194,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $trustedAppModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'update',
                         ],
                     ]
@@ -270,7 +271,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $trustedAppModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'create',
                         ],
                     ]
@@ -397,7 +398,7 @@ class Client extends
                 'json'    => $serializer->normalize(
                     $trustedAppModel,
                     [
-                        'groups' => [
+                        AbstractNormalizer::GROUPS => [
                             'reset',
                         ],
                     ]

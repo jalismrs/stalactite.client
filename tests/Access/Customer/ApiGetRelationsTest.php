@@ -1,21 +1,18 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\Customer;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Customer\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetRelationsTest
@@ -41,10 +38,10 @@ class ApiGetRelationsTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testGetRelations(): void
+    public function testGetRelations() : void
     {
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -53,14 +50,17 @@ class ApiGetRelationsTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'   => true,
+                                'error'     => null,
                                 'relations' => [
                                     $serializer->normalize(
                                         ModelFactory::getTestableDomainCustomerRelation(),
                                         [
-                                            'groups' => [
-                                                'relationCustomer',
+                                            AbstractNormalizer::GROUPS             => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'customer'
                                             ],
                                         ]
                                     )
@@ -72,12 +72,12 @@ class ApiGetRelationsTest extends
                 ]
             )
         );
-
+        
         $response = $mockAPIClient->getRelations(
             DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'
         );
-
+        
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertContainsOnlyInstancesOf(
@@ -100,13 +100,13 @@ class ApiGetRelationsTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetRelations(): void
+    public function testThrowExceptionOnInvalidResponseGetRelations() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
+        
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -115,12 +115,12 @@ class ApiGetRelationsTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'   => true,
+                                'error'     => null,
                                 'relations' => $serializer->normalize(
                                     ModelFactory::getTestableDomainCustomerRelation(),
                                     [
-                                        'groups' => [
+                                        AbstractNormalizer::GROUPS => [
                                             'main',
                                         ],
                                     ]
@@ -133,7 +133,7 @@ class ApiGetRelationsTest extends
                 ]
             )
         );
-
+        
         $mockAPIClient->getRelations(
             DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'

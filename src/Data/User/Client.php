@@ -16,6 +16,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
 use function vsprintf;
@@ -331,7 +332,7 @@ class Client extends
                     $serializer->normalize(
                         $userModel,
                         [
-                            'groups' => [
+                            AbstractNormalizer::GROUPS => [
                                 'min',
                             ],
                         ]
@@ -392,7 +393,7 @@ class Client extends
         $body = $serializer->normalize(
             $userModel,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'min',
                 ],
             ]

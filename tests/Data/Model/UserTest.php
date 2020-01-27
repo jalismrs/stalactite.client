@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * UserTest
@@ -63,7 +64,7 @@ class UserTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'main',
                 ],
             ]
@@ -79,7 +80,7 @@ class UserTest extends
             'leads'     => $serializer->normalize(
                 $model->getLeads(),
                 [
-                    'groups' => [
+                    AbstractNormalizer::GROUPS => [
                         'main',
                     ],
                 ]
@@ -87,7 +88,7 @@ class UserTest extends
             'posts'     => $serializer->normalize(
                 $model->getPosts(),
                 [
-                    'groups' => [
+                    AbstractNormalizer::GROUPS => [
                         'main',
                     ],
                 ]
@@ -119,7 +120,7 @@ class UserTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'min',
                 ],
             ]
@@ -159,7 +160,7 @@ class UserTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                'groups' => [
+                AbstractNormalizer::GROUPS => [
                     'updateMe',
                 ],
             ]

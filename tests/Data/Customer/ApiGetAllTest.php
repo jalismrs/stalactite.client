@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetAllTest
@@ -54,7 +55,7 @@ class ApiGetAllTest extends
                                     $serializer->normalize(
                                         ModelFactory::getTestableCustomer(),
                                         [
-                                            'groups' => [
+                                            AbstractNormalizer::GROUPS => [
                                                 'main',
                                             ],
                                         ]
@@ -114,7 +115,7 @@ class ApiGetAllTest extends
                                 'customers' => $serializer->normalize(
                                     ModelFactory::getTestableCustomer(),
                                     [
-                                        'groups' => [
+                                        AbstractNormalizer::GROUPS => [
                                             'main',
                                         ],
                                     ]
