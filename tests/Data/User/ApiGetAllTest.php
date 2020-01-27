@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,14 +29,21 @@ class ApiGetAllTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testGetAll(): void
     {
+        $serializer = Serializer::create();
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -47,8 +55,14 @@ class ApiGetAllTest extends
                                 'success' => true,
                                 'error' => null,
                                 'users' => [
-                                    ModelFactory::getTestableUser()
-                                        ->asMinimalArray()
+                                    $serializer->normalize(
+                                        ModelFactory::getTestableUser(),
+                                        [
+                                            'groups' => [
+                                                'min',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR

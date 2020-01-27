@@ -285,21 +285,4 @@ class User extends
             1
         );
     }
-    
-    /**
-     * asMinimalArray
-     *
-     * @return array
-     */
-    public function asMinimalArray() : array
-    {
-        return [
-            'uid'       => $this->uid,
-            'firstName' => $this->firstName,
-            'lastName'  => $this->lastName,
-            'email'     => $this->email,
-            'googleId'  => $this->googleId,
-            'admin'     => $this->admin,
-        ];
-    }
 }
