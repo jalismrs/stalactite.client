@@ -81,16 +81,21 @@ class Client extends
     }
     
     /**
-     * update
+     * updateMe
      *
-     * @param User   $userModel
-     * @param string $jwt
+     * @param \Jalismrs\Stalactite\Client\Data\Model\User $userModel
+     * @param string                                      $jwt
      *
-     * @return Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function updateMe(
         User $userModel,

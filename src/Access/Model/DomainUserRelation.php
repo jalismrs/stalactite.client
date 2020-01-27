@@ -4,8 +4,6 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * DomainUserRelation

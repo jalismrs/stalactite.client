@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
-use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * TrustedApp

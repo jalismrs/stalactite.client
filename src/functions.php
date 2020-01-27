@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
-use function array_map;
-use function array_walk;
 use function get_class;
 use function gettype;
 use function is_a;
@@ -85,7 +83,7 @@ function getUids(array $models, string $class = null) : array
 {
     $uids = [];
     
-    foreach($models as $model) {
+    foreach ($models as $model) {
         $uids[] = getUid($model, $class);
     }
     

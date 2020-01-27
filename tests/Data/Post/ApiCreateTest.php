@@ -1,21 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Post\Client;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -43,10 +38,10 @@ class ApiCreateTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testCreate(): void
+    public function testCreate() : void
     {
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -56,8 +51,8 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => $serializer->normalize(
+                                'error'   => null,
+                                'post'    => $serializer->normalize(
                                     ModelFactory::getTestablePost(),
                                     [
                                         AbstractNormalizer::GROUPS => [
@@ -72,7 +67,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-
+        
         $response = $mockAPIClient->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'
@@ -84,21 +79,26 @@ class ApiCreateTest extends
             $response->getData()['post']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseCreate
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseCreate(): void
+    public function testThrowExceptionOnInvalidResponseCreate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -108,8 +108,8 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => []
+                                'error'   => null,
+                                'post'    => []
                                 // invalid Post
                             ],
                             JSON_THROW_ON_ERROR
@@ -118,7 +118,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-
+        
         $mockAPIClient->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'

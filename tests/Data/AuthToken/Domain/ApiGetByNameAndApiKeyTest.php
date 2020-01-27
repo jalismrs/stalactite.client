@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken\Domain;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;

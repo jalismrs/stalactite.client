@@ -1,11 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * DomainCustomerRelation
@@ -19,17 +17,17 @@ class DomainCustomerRelation extends
      * @var null|Customer
      */
     private $customer;
-
+    
     /**
      * getCustomer
      *
      * @return null|Customer
      */
-    public function getCustomer(): ?Customer
+    public function getCustomer() : ?Customer
     {
         return $this->customer;
     }
-
+    
     /**
      * setCustomer
      *
@@ -37,10 +35,10 @@ class DomainCustomerRelation extends
      *
      * @return $this
      */
-    public function setCustomer(?Customer $customerModel): self
+    public function setCustomer(?Customer $customerModel) : self
     {
         $this->customer = $customerModel;
-
+        
         return $this;
     }
 }

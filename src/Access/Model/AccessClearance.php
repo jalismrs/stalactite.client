@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
-use PHPUnit\Framework\Error\Deprecated;
-
 /**
  * AccessClearance
  *

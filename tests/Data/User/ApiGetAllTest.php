@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
@@ -8,13 +8,11 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -41,7 +39,7 @@ class ApiGetAllTest extends
      * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
      * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testGetAll(): void
+    public function testGetAll() : void
     {
         $serializer = Serializer::create();
         
@@ -54,8 +52,8 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'users' => [
+                                'error'   => null,
+                                'users'   => [
                                     $serializer->normalize(
                                         ModelFactory::getTestableUser(),
                                         [
@@ -72,7 +70,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $response = $mockAPIClient->getAllUsers(
             'fake user jwt'
         );
@@ -83,7 +81,7 @@ class ApiGetAllTest extends
             $response->getData()['users']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseOnGetAll
      *
@@ -93,11 +91,11 @@ class ApiGetAllTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnGetAll(): void
+    public function testThrowOnInvalidResponseOnGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -107,8 +105,8 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'users' => null
+                                'error'   => null,
+                                'users'   => null
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -117,7 +115,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $mockAPIClient->getAllUsers(
             'fake user jwt'
         );
