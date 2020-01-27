@@ -31,10 +31,10 @@ class AccessClearanceTest extends
     public function testGroupCommon() : void
     {
         $serializer = Serializer::create();
+    
+        $model = ModelFactory::getTestableAccessClearance();
         
-        $object = ModelFactory::getTestableAccessClearance();
-        
-        $actual = $serializer->normalize($object);
+        $actual = $serializer->normalize($model);
         
         $expected = [];
         
@@ -57,11 +57,11 @@ class AccessClearanceTest extends
     public function testGroupMain() : void
     {
         $serializer = Serializer::create();
-        
-        $object = ModelFactory::getTestableAccessClearance();
+    
+        $model = ModelFactory::getTestableAccessClearance();
         
         $actual = $serializer->normalize(
-            $object,
+            $model,
             [
                 'groups' => [
                     'main',
@@ -70,8 +70,8 @@ class AccessClearanceTest extends
         );
         
         $expected = [
-            'accessGranted' => $object->hasAccessGranted(),
-            'accessType'    => $object->getAccessType(),
+            'accessGranted' => $model->hasAccessGranted(),
+            'accessType'    => $model->getAccessType(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);

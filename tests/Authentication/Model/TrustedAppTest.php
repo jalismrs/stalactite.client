@@ -31,10 +31,10 @@ class TrustedAppTest extends
     public function testGroupCommon() : void
     {
         $serializer = Serializer::create();
+    
+        $model = ModelFactory::getTestableTrustedApp();
         
-        $object = ModelFactory::getTestableTrustedApp();
-        
-        $actual = $serializer->normalize($object);
+        $actual = $serializer->normalize($model);
         
         $expected = [];
         
@@ -57,11 +57,11 @@ class TrustedAppTest extends
     public function testGroupMain() : void
     {
         $serializer = Serializer::create();
-        
-        $object = ModelFactory::getTestableTrustedApp();
+    
+        $model = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize(
-            $object,
+            $model,
             [
                 'groups' => [
                     'main',
@@ -70,10 +70,10 @@ class TrustedAppTest extends
         );
         
         $expected = [
-            'uid'                 => $object->getUid(),
-            'name'                => $object->getName(),
-            'authToken'           => $object->getAuthToken(),
-            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
+            'uid'                 => $model->getUid(),
+            'name'                => $model->getName(),
+            'authToken'           => $model->getAuthToken(),
+            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -95,11 +95,11 @@ class TrustedAppTest extends
     public function testGroupReset() : void
     {
         $serializer = Serializer::create();
-        
-        $object = ModelFactory::getTestableTrustedApp();
+    
+        $model = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize(
-            $object,
+            $model,
             [
                 'groups' => [
                     'reset',
@@ -108,7 +108,7 @@ class TrustedAppTest extends
         );
         
         $expected = [
-            'resetToken' => $object->getResetToken(),
+            'resetToken' => $model->getResetToken(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -130,11 +130,11 @@ class TrustedAppTest extends
     public function testGroupCreate() : void
     {
         $serializer = Serializer::create();
-        
-        $object = ModelFactory::getTestableTrustedApp();
+    
+        $model = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize(
-            $object,
+            $model,
             [
                 'groups' => [
                     'create',
@@ -143,8 +143,8 @@ class TrustedAppTest extends
         );
         
         $expected = [
-            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
-            'name'                => $object->getName(),
+            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
+            'name'                => $model->getName(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -166,11 +166,11 @@ class TrustedAppTest extends
     public function testGroupUpdate() : void
     {
         $serializer = Serializer::create();
-        
-        $object = ModelFactory::getTestableTrustedApp();
+    
+        $model = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize(
-            $object,
+            $model,
             [
                 'groups' => [
                     'update',
@@ -179,8 +179,8 @@ class TrustedAppTest extends
         );
         
         $expected = [
-            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
-            'name'                => $object->getName(),
+            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
+            'name'                => $model->getName(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);
