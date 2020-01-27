@@ -5,6 +5,9 @@
         xsi:schemaLocation="http://symfony.com/schema/dic/serializer-mapping
         https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
 >
+    <!--
+        # Access ###############################################################
+    -->
     <class
             name="Jalismrs\Stalactite\Client\Access\Model\AccessClearance"
     >
@@ -20,6 +23,44 @@
         </attribute>
     </class>
 
+    <class
+            name="Jalismrs\Stalactite\Client\Access\Model\DomainRelation"
+    >
+        <attribute
+                name="domain"
+        >
+            <group>main</group>
+        </attribute>
+        <attribute
+                name="uid"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <class
+            name="Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation"
+    >
+        <attribute
+                name="customer"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <class
+            name="Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation"
+    >
+        <attribute
+                name="user"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <!--
+        # Authentication #######################################################
+    -->
     <class
             name="Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp"
     >
@@ -54,6 +95,9 @@
         </attribute>
     </class>
 
+    <!--
+        # Data #################################################################
+    -->
     <class
             name="Jalismrs\Stalactite\Client\Data\Model\Customer"
     >
