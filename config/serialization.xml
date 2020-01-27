@@ -225,18 +225,24 @@
         >
             <group>main</group>
             <group>min</group>
+            <group>create</group>
+            <group>update</group>
         </attribute>
         <attribute
                 name="email"
         >
             <group>main</group>
             <group>min</group>
+            <group>create</group>
+            <group>update</group>
         </attribute>
         <attribute
                 name="firstName"
         >
             <group>main</group>
             <group>min</group>
+            <group>create</group>
+            <group>update</group>
             <group>updateMe</group>
         </attribute>
         <attribute
@@ -250,6 +256,8 @@
         >
             <group>main</group>
             <group>min</group>
+            <group>create</group>
+            <group>update</group>
             <group>updateMe</group>
         </attribute>
         <attribute

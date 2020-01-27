@@ -139,6 +139,82 @@ class UserTest extends
     }
     
     /**
+     * testGroupCreate
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     */
+    public function testGroupCreate() : void
+    {
+        $serializer = Serializer::create();
+        
+        $model = ModelFactory::getTestableUser();
+        
+        $actual = $serializer->normalize(
+            $model,
+            [
+                AbstractNormalizer::GROUPS => [
+                    'create',
+                ],
+            ]
+        );
+        
+        $expected = [
+            'firstName' => $model->getFirstName(),
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'admin'     => $model->isAdmin(),
+        ];
+        
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+    
+    /**
+     * testGroupUpdate
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     */
+    public function testGroupUpdate() : void
+    {
+        $serializer = Serializer::create();
+        
+        $model = ModelFactory::getTestableUser();
+        
+        $actual = $serializer->normalize(
+            $model,
+            [
+                AbstractNormalizer::GROUPS => [
+                    'update',
+                ],
+            ]
+        );
+        
+        $expected = [
+            'firstName' => $model->getFirstName(),
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'admin'     => $model->isAdmin(),
+        ];
+        
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+    
+    /**
      * testGroupUpdateMe
      *
      * @return void

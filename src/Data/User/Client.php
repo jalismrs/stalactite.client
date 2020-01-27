@@ -333,7 +333,7 @@ class Client extends
                         $userModel,
                         [
                             AbstractNormalizer::GROUPS => [
-                                'min',
+                                'create',
                             ],
                         ]
                     ),
@@ -390,16 +390,6 @@ class Client extends
     ) : Response {
         $serializer = Serializer::create();
         
-        $body = $serializer->normalize(
-            $userModel,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'min',
-                ],
-            ]
-        );
-        unset($body['googleId'], $body['uid']);
-        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -425,7 +415,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $body,
+                'json'    => $serializer->normalize(
+                    $userModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
