@@ -183,7 +183,7 @@ class Client extends
                 ],
                 'json' => [
                     'user' => $userModel->getUid(),
-                ]
+                ],
             ],
             $schema
         );
@@ -250,7 +250,7 @@ class Client extends
                 ],
                 'json' => [
                     'customer' => $customerModel->getUid(),
-                ]
+                ],
             ],
             $schema
         );

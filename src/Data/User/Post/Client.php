@@ -15,6 +15,8 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
+use function Jalismrs\Stalactite\Client\getUid;
+use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -108,23 +110,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'posts' => []
-        ];
-
-        foreach ($postModels as $postModel) {
-            if (!$postModel instanceof Post) {
-                throw new ClientException(
-                    '$posts array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $postModel->getUid()) {
-                $body['posts'][] = $postModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -150,7 +135,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'posts' => getUids(
+                        $postModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );
@@ -180,23 +170,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'posts' => []
-        ];
-
-        foreach ($postModels as $postModel) {
-            if (!$postModel instanceof Post) {
-                throw new ClientException(
-                    '$posts array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $postModel->getUid()) {
-                $body['posts'][] = $postModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -222,7 +195,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'posts' => getUids(
+                        $postModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );

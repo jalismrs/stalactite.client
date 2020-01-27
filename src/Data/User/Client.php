@@ -19,6 +19,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
+use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -338,17 +339,13 @@ class Client extends
                         ]
                     ),
                     [
-                        'leads' => array_map(
-                            static function(Post $leadModel) : ?string {
-                                return $leadModel->getUid();
-                            },
-                            $userModel->getLeads()
+                        'leads' => getUids(
+                            $userModel->getLeads(),
+                            Post::class
                         ),
-                        'posts' => array_map(
-                            static function(Post $postModel) : ?string {
-                                return $postModel->getUid();
-                            },
-                            $userModel->getPosts()
+                        'posts' => getUids(
+                            $userModel->getPosts(),
+                            Post::class
                         ),
                     ],
                 ),

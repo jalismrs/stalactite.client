@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
+use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -108,23 +109,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'leads' => []
-        ];
-
-        foreach ($leadModels as $leadModel) {
-            if (!$leadModel instanceof Post) {
-                throw new ClientException(
-                    '$leads array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $leadModel->getUid()) {
-                $body['leads'][] = $leadModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -150,7 +134,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'leads' => getUids(
+                        $leadModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );
@@ -180,23 +169,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'leads' => []
-        ];
-
-        foreach ($leadModels as $leadModel) {
-            if (!$leadModel instanceof Post) {
-                throw new ClientException(
-                    '$leads array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $leadModel->getUid()) {
-                $body['posts'][] = $leadModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -222,7 +194,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'leads' => getUids(
+                        $leadModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );

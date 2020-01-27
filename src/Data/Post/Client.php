@@ -281,7 +281,7 @@ class Client extends
                             'update',
                         ],
                     ]
-                )
+                ),
             ],
             $schema
         );
