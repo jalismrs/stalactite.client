@@ -50,7 +50,7 @@ abstract class ModelFactory
     {
         $model = new AccessClearance();
         $model
-            ->setAccess(false)
+            ->setAccessGranted(false)
             ->setAccessType(AccessClearance::NO_ACCESS);
 
         return $model;

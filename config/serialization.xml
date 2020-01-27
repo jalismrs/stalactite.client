@@ -5,4 +5,19 @@
         xsi:schemaLocation="http://symfony.com/schema/dic/serializer-mapping
         https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
 >
+    <class
+            name="Jalismrs\Stalactite\Client\Access\Model\AccessClearance"
+    >
+        <attribute
+                name="accessGranted"
+        >
+            <group>main</group>
+        </attribute>
+
+        <attribute
+                name="accessType"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
 </serializer>
