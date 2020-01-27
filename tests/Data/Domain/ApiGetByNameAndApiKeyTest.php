@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -36,6 +37,8 @@ class ApiGetByNameAndApiKeyTest extends
      */
     public function testGetByNameAndApiKey(): void
     {
+        $serializer = Serializer::create();
+    
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -86,7 +89,9 @@ class ApiGetByNameAndApiKeyTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
+        $serializer = Serializer::create();
+    
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,

@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Domain\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,8 @@ class ApiAddUserRelationTest extends
      */
     public function testAddUserRelation(): void
     {
+        $serializer = Serializer::create();
+    
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,

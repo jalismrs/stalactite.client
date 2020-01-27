@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Access\Domain\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -40,6 +41,8 @@ class ApiGetRelationsTest extends
      */
     public function testGetRelations(): void
     {
+        $serializer = Serializer::create();
+    
         $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
             ->asArray();
         unset($domainUserRelation['domain']);
@@ -114,7 +117,9 @@ class ApiGetRelationsTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
+        $serializer = Serializer::create();
+    
         $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
             ->asArray();
         unset($domainUserRelation['domain']);
