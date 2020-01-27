@@ -32,11 +32,13 @@
                 name="googleOAuthClientId"
         >
             <group>main</group>
+            <group>upsert</group>
         </attribute>
         <attribute
                 name="name"
         >
             <group>main</group>
+            <group>upsert</group>
         </attribute>
         <attribute
                 name="resetToken"

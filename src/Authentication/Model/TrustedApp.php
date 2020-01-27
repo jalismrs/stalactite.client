@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * TrustedApp
@@ -130,14 +131,16 @@ class TrustedApp extends
      * asArray
      *
      * @return array
+     *
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
     public function asArray() : array
     {
-        return [
-            'uid'                 => $this->uid,
-            'name'                => $this->name,
-            'authToken'           => $this->authToken,
-            'googleOAuthClientId' => $this->googleOAuthClientId,
-        ];
+        throw new Deprecated(
+            'Reimplemented with Serializer',
+            500,
+            'Serializer.php',
+            1
+        );
     }
 }

@@ -80,7 +80,7 @@ class TrustedAppTest extends
     }
     
     /**
-     * testGroupMain
+     * testGroupReset
      *
      * @return void
      *
@@ -109,6 +109,42 @@ class TrustedAppTest extends
         
         $expected = [
             'resetToken' => $object->getResetToken(),
+        ];
+        
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+    
+    /**
+     * testGroupUpsert
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     */
+    public function testGroupUpsert() : void
+    {
+        $serializer = Serializer::create();
+        
+        $object = ModelFactory::getTestableTrustedApp();
+        
+        $actual = $serializer->normalize(
+            $object,
+            [
+                'groups' => [
+                    'upsert',
+                ],
+            ]
+        );
+        
+        $expected = [
+            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
+            'name'                => $object->getName(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);
