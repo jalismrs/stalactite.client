@@ -194,7 +194,7 @@ class Client extends
                     $trustedAppModel,
                     [
                         'groups' => [
-                            'upsert',
+                            'update',
                         ],
                     ]
                 ),
@@ -271,7 +271,7 @@ class Client extends
                     $trustedAppModel,
                     [
                         'groups' => [
-                            'upsert',
+                            'create',
                         ],
                     ]
                 ),

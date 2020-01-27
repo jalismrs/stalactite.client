@@ -115,7 +115,7 @@ class TrustedAppTest extends
     }
     
     /**
-     * testGroupUpsert
+     * testGroupCreate
      *
      * @return void
      *
@@ -127,7 +127,7 @@ class TrustedAppTest extends
      * @throws \Symfony\Component\Serializer\Exception\LogicException
      * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
-    public function testGroupUpsert() : void
+    public function testGroupCreate() : void
     {
         $serializer = Serializer::create();
         
@@ -137,7 +137,43 @@ class TrustedAppTest extends
             $object,
             [
                 'groups' => [
-                    'upsert',
+                    'create',
+                ],
+            ]
+        );
+        
+        $expected = [
+            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
+            'name'                => $object->getName(),
+        ];
+        
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+    
+    /**
+     * testGroupUpdate
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     */
+    public function testGroupUpdate() : void
+    {
+        $serializer = Serializer::create();
+        
+        $object = ModelFactory::getTestableTrustedApp();
+        
+        $actual = $serializer->normalize(
+            $object,
+            [
+                'groups' => [
+                    'update',
                 ],
             ]
         );
