@@ -89,4 +89,49 @@
             <group>main</group>
         </attribute>
     </class>
+
+    <class
+            name="Jalismrs\Stalactite\Client\Data\Model\Domain"
+    >
+        <attribute
+                name="apiKey"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="externalAuth"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="generationDate"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="name"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="type"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="uid"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
 </serializer>
