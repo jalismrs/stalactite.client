@@ -134,4 +134,42 @@
             <group>main</group>
         </attribute>
     </class>
+
+    <class
+            name="Jalismrs\Stalactite\Client\Data\Model\Post"
+    >
+        <attribute
+                name="adminAccess"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="allowAccess"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="name"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="shortName"
+        >
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute
+                name="uid"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
 </serializer>
