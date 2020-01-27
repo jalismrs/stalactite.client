@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 
 /**
  * DomainCustomerRelation
@@ -41,22 +42,35 @@ class DomainCustomerRelation extends
 
         return $this;
     }
-
+    
     /**
      * asArray
      *
      * @return array
+     *
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
     public function asArray(): array
     {
+        $serializer = Serializer::create();
+        
         return [
             'uid' => $this->uid,
             'domain' => null === $this->domain
                 ? null
                 : $this->domain->asArray(),
-            'customer' => null === $this->customer
-                ? null
-                : $this->customer->asArray(),
+            'customer' => $serializer->normalize(
+                $this->customer,
+                [
+                    'groups' => [
+                        'main',
+                    ],
+                ]
+            ),
         ];
     }
 }
