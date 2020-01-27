@@ -43,8 +43,14 @@ class ApiGetRelationsTest extends
     {
         $serializer = Serializer::create();
         
-        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-                                          ->asArray();
+        $domainUserRelation = $serializer->normalize(
+            ModelFactory::getTestableDomainUserRelation(),
+            [
+                'groups' => [
+                    'main',
+                ],
+            ]
+        );
         unset($domainUserRelation['domain']);
         
         $domainCustomerRelation = $serializer->normalize(
@@ -131,8 +137,14 @@ class ApiGetRelationsTest extends
         
         $serializer = Serializer::create();
         
-        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-                                          ->asArray();
+        $domainUserRelation = $serializer->normalize(
+            ModelFactory::getTestableDomainUserRelation(),
+            [
+                'groups' => [
+                    'main',
+                ],
+            ]
+        );
         unset($domainUserRelation['domain']);
         
         $domainCustomerRelation = $serializer->normalize(
