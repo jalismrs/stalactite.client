@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Access\Model;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * DomainCustomerRelation
@@ -48,34 +49,15 @@ class DomainCustomerRelation extends
      *
      * @return array
      *
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
     public function asArray(): array
     {
-        $serializer = Serializer::create();
-        
-        return [
-            'uid' => $this->uid,
-            'domain' => $serializer->normalize(
-                $this->domain,
-                [
-                    'groups' => [
-                        'main',
-                    ],
-                ]
-            ),
-            'customer' => $serializer->normalize(
-                $this->customer,
-                [
-                    'groups' => [
-                        'main',
-                    ],
-                ]
-            ),
-        ];
+        throw new Deprecated(
+            'Reimplemented with Serializer',
+            500,
+            'Serializer.php',
+            1
+        );
     }
 }

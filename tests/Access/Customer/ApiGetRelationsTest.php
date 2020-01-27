@@ -30,18 +30,29 @@ class ApiGetRelationsTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testGetRelations(): void
     {
         $serializer = Serializer::create();
     
-        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
-            ->asArray();
+        $domainCustomerRelation = $serializer->normalize(
+            ModelFactory::getTestableDomainCustomerRelation(),
+            [
+                'groups' => [
+                    'main',
+                ],
+            ]
+        );
         unset($domainCustomerRelation['customer']);
 
         $mockAPIClient = new Client(
@@ -77,15 +88,20 @@ class ApiGetRelationsTest extends
             $response->getData()['relations']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetRelations
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowExceptionOnInvalidResponseGetRelations(): void
     {
@@ -104,8 +120,14 @@ class ApiGetRelationsTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'relations' => ModelFactory::getTestableDomainCustomerRelation()
-                                    ->asArray()
+                                'relations' => $serializer->normalize(
+                                    ModelFactory::getTestableDomainCustomerRelation(),
+                                    [
+                                        'groups' => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                                 // invalid
                             ],
                             JSON_THROW_ON_ERROR
