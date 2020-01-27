@@ -43,16 +43,6 @@ class ApiGetRelationsTest extends
     {
         $serializer = Serializer::create();
         
-        $domainUserRelation = $serializer->normalize(
-            ModelFactory::getTestableDomainUserRelation(),
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
-        unset($domainUserRelation['user']);
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -64,7 +54,14 @@ class ApiGetRelationsTest extends
                                 'success'   => true,
                                 'error'     => null,
                                 'relations' => [
-                                    $domainUserRelation
+                                    $serializer->normalize(
+                                        ModelFactory::getTestableDomainUserRelation(),
+                                        [
+                                            'groups' => [
+                                                'relationUser',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR

@@ -43,26 +43,6 @@ class ApiGetRelationsTest extends
     {
         $serializer = Serializer::create();
         
-        $domainUserRelation = $serializer->normalize(
-            ModelFactory::getTestableDomainUserRelation(),
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
-        unset($domainUserRelation['domain']);
-        
-        $domainCustomerRelation = $serializer->normalize(
-            ModelFactory::getTestableDomainCustomerRelation(),
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
-        unset($domainCustomerRelation['domain']);
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -75,10 +55,24 @@ class ApiGetRelationsTest extends
                                 'error'     => null,
                                 'relations' => [
                                     'users'     => [
-                                        $domainUserRelation
+                                        $serializer->normalize(
+                                            ModelFactory::getTestableDomainUserRelation(),
+                                            [
+                                                'groups' => [
+                                                    'relationDomain',
+                                                ],
+                                            ]
+                                        )
                                     ],
                                     'customers' => [
-                                        $domainCustomerRelation
+                                        $serializer->normalize(
+                                            ModelFactory::getTestableDomainCustomerRelation(),
+                                            [
+                                                'groups' => [
+                                                    'relationDomain',
+                                                ],
+                                            ]
+                                        )
                                     ]
                                 ]
                             ],
@@ -137,26 +131,6 @@ class ApiGetRelationsTest extends
         
         $serializer = Serializer::create();
         
-        $domainUserRelation = $serializer->normalize(
-            ModelFactory::getTestableDomainUserRelation(),
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
-        unset($domainUserRelation['domain']);
-        
-        $domainCustomerRelation = $serializer->normalize(
-            ModelFactory::getTestableDomainCustomerRelation(),
-            [
-                'groups' => [
-                    'main',
-                ],
-            ]
-        );
-        unset($domainCustomerRelation['domain']);
-        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -168,8 +142,22 @@ class ApiGetRelationsTest extends
                                 'success'   => true,
                                 'error'     => null,
                                 'relations' => [
-                                    'users'     => $domainUserRelation,
-                                    'customers' => $domainCustomerRelation
+                                    'users'     => $serializer->normalize(
+                                        ModelFactory::getTestableDomainUserRelation(),
+                                        [
+                                            'groups' => [
+                                                'relationDomain',
+                                            ],
+                                        ]
+                                    ),
+                                    'customers' => $serializer->normalize(
+                                        ModelFactory::getTestableDomainCustomerRelation(),
+                                        [
+                                            'groups' => [
+                                                'relationDomain',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
