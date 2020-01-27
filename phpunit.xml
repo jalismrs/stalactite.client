@@ -19,5 +19,12 @@
         >
             <directory>tests</directory>
         </testsuite>
+        <testsuite
+                name="models"
+        >
+            <directory>tests/Access/Model</directory>
+            <directory>tests/Authentication/Model</directory>
+            <directory>tests/Data/Model</directory>
+        </testsuite>
     </testsuites>
 </phpunit>
