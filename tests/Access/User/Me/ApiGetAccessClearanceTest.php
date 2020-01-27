@@ -55,7 +55,12 @@ class ApiGetAccessClearanceTest extends
                                 'success'   => true,
                                 'error'     => null,
                                 'clearance' => $serializer->normalize(
-                                    ModelFactory::getTestableAccessClearance()
+                                    ModelFactory::getTestableAccessClearance(),
+                                    [
+                                        'groups' => [
+                                            'main',
+                                        ],
+                                    ]
                                 ),
                             ],
                             JSON_THROW_ON_ERROR

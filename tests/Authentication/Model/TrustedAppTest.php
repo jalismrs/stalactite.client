@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Access\Model;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication\Model;
 
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Access
  */
-class AccessClearanceTest extends
+class TrustedAppTest extends
     TestCase
 {
     /**
@@ -32,7 +32,7 @@ class AccessClearanceTest extends
     {
         $serializer = Serializer::create();
         
-        $object = ModelFactory::getTestableAccessClearance();
+        $object = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize($object);
         
@@ -58,7 +58,7 @@ class AccessClearanceTest extends
     {
         $serializer = Serializer::create();
         
-        $object = ModelFactory::getTestableAccessClearance();
+        $object = ModelFactory::getTestableTrustedApp();
         
         $actual = $serializer->normalize(
             $object,
@@ -70,8 +70,45 @@ class AccessClearanceTest extends
         );
         
         $expected = [
-            'accessGranted' => $object->hasAccessGranted(),
-            'accessType'    => $object->getAccessType(),
+            'uid'                 => $object->getUid(),
+            'name'                => $object->getName(),
+            'authToken'           => $object->getAuthToken(),
+            'googleOAuthClientId' => $object->getGoogleOAuthClientId(),
+        ];
+        
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+    
+    /**
+     * testGroupMain
+     *
+     * @return void
+     *
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     */
+    public function testGroupReset() : void
+    {
+        $serializer = Serializer::create();
+        
+        $object = ModelFactory::getTestableTrustedApp();
+        
+        $actual = $serializer->normalize(
+            $object,
+            [
+                'groups' => [
+                    'reset',
+                ],
+            ]
+        );
+        
+        $expected = [
+            'resetToken' => $object->getResetToken(),
         ];
         
         self::assertEqualsCanonicalizing($expected, $actual);

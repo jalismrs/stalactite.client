@@ -13,9 +13,38 @@
         >
             <group>main</group>
         </attribute>
-
         <attribute
                 name="accessType"
+        >
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <class
+            name="Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp"
+    >
+        <attribute
+                name="authToken"
+        >
+            <group>main</group>
+        </attribute>
+        <attribute
+                name="googleOAuthClientId"
+        >
+            <group>main</group>
+        </attribute>
+        <attribute
+                name="name"
+        >
+            <group>main</group>
+        </attribute>
+        <attribute
+                name="resetToken"
+        >
+            <group>reset</group>
+        </attribute>
+        <attribute
+                name="uid"
         >
             <group>main</group>
         </attribute>

@@ -20,7 +20,7 @@ final class Serializer
 {
     private const CONTEXT = [
         'groups' => [
-            'main',
+            'common',
         ],
     ];
     
