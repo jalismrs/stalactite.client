@@ -22,10 +22,12 @@ abstract class AbstractClient
      * @var string
      */
     protected $host;
+
     /**
      * @var HttpClientInterface
      */
     protected $httpClient;
+
     /**
      * @var null|string
      */
@@ -81,13 +83,19 @@ abstract class AbstractClient
     }
 
     /**
-     * getHttpClient
-     *
      * @return HttpClientInterface
      */
     public function getHttpClient(): HttpClientInterface
     {
         return $this->httpClient;
+    }
+
+    /**
+     * @param HttpClientInterface $httpClient
+     */
+    public function setHttpClient(HttpClientInterface $httpClient): void
+    {
+        $this->httpClient = $httpClient;
     }
 
     /**
