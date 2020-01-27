@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * Domain
@@ -153,21 +154,21 @@ class Domain extends
 
         return $this;
     }
-
+    
     /**
      * asArray
      *
      * @return array
+     *
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
     public function asArray(): array
     {
-        return [
-            'uid' => $this->uid,
-            'name' => $this->name,
-            'type' => $this->type,
-            'apiKey' => $this->apiKey,
-            'externalAuth' => $this->externalAuth,
-            'generationDate' => $this->generationDate,
-        ];
+        throw new Deprecated(
+            'Reimplemented with Serializer',
+            500,
+            'Serializer.php',
+            1
+        );
     }
 }

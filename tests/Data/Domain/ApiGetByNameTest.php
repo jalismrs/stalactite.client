@@ -1,20 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 
 /**
  * ApiGetByNameTest
@@ -29,16 +25,21 @@ class ApiGetByNameTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testGetByName(): void
+    public function testGetByName() : void
     {
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -48,10 +49,16 @@ class ApiGetByNameTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
+                                'error'   => null,
                                 'domains' => [
-                                    ModelFactory::getTestableDomain()
-                                        ->asArray()
+                                    $serializer->normalize(
+                                        ModelFactory::getTestableDomain(),
+                                        [
+                                            'groups' => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -60,10 +67,10 @@ class ApiGetByNameTest extends
                 ]
             )
         );
-
+        
         $response = $mockAPIClient->getByName(
             ModelFactory::getTestableDomain()
-                ->getName(),
+                        ->getName(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -73,23 +80,28 @@ class ApiGetByNameTest extends
             $response->getData()['domains']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetByName
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGetByName(): void
+    public function testThrowOnInvalidResponseGetByName() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
+        
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -99,9 +111,15 @@ class ApiGetByNameTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domains' => ModelFactory::getTestableDomain()
-                                    ->asArray()
+                                'error'   => null,
+                                'domains' => $serializer->normalize(
+                                    ModelFactory::getTestableDomain(),
+                                    [
+                                        'groups' => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -110,10 +128,10 @@ class ApiGetByNameTest extends
                 ]
             )
         );
-
+        
         $mockAPIClient->getByName(
             ModelFactory::getTestableDomain()
-                ->getName(),
+                        ->getName(),
             'fake user jwt'
         );
     }

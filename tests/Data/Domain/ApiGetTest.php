@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
@@ -8,14 +8,11 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use PHPUnit\Framework\Exception;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 
 /**
  * ApiGetTest
@@ -30,17 +27,22 @@ class ApiGetTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws Exception
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
-    public function testGet(): void
+    public function testGet() : void
     {
         $serializer = Serializer::create();
-    
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -50,9 +52,15 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domain' => ModelFactory::getTestableDomain()
-                                    ->asArray()
+                                'error'   => null,
+                                'domain'  => $serializer->normalize(
+                                    ModelFactory::getTestableDomain(),
+                                    [
+                                        'groups' => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -60,10 +68,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $response = $mockAPIClient->getDomain(
             ModelFactory::getTestableDomain()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -73,7 +81,7 @@ class ApiGetTest extends
             $response->getData()['domain']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGet
      *
@@ -83,11 +91,11 @@ class ApiGetTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseGet(): void
+    public function testThrowOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+        
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -97,8 +105,8 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domain' => []
+                                'error'   => null,
+                                'domain'  => []
                                 // invalid domain
                             ],
                             JSON_THROW_ON_ERROR
@@ -107,10 +115,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $mockAPIClient->getDomain(
             ModelFactory::getTestableDomain()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
     }

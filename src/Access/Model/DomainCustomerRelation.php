@@ -60,9 +60,14 @@ class DomainCustomerRelation extends
         
         return [
             'uid' => $this->uid,
-            'domain' => null === $this->domain
-                ? null
-                : $this->domain->asArray(),
+            'domain' => $serializer->normalize(
+                $this->domain,
+                [
+                    'groups' => [
+                        'main',
+                    ],
+                ]
+            ),
             'customer' => $serializer->normalize(
                 $this->customer,
                 [
