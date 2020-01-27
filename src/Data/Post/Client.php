@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use function array_map;
 use function vsprintf;
 
@@ -146,24 +147,31 @@ class Client extends
             ]
         );
     }
-
+    
     /**
-     * create
+     * createPost
      *
-     * @param Post $postModel
-     * @param string $jwt
+     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $postModel
+     * @param string                                      $jwt
      *
-     * @return Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function createPost(
         Post $postModel,
         string $jwt
     ): Response
     {
+        $serializer = Serializer::create();
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -193,12 +201,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'access' => $postModel->allowAccess(),
-                    'admin' => $postModel->hasAdminAccess(),
-                    'name' => $postModel->getName(),
-                    'shortName' => $postModel->getShortName(),
-                ]
+                'json' => $serializer->normalize(
+                    $postModel,
+                    [
+                        'groups' => [
+                            'create',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
@@ -213,24 +223,31 @@ class Client extends
             ]
         );
     }
-
+    
     /**
-     * update
+     * updatePost
      *
-     * @param Post $postModel
-     * @param string $jwt
+     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $postModel
+     * @param string                                      $jwt
      *
-     * @return Response
+     * @return \Jalismrs\Stalactite\Client\Response
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function updatePost(
         Post $postModel,
         string $jwt
     ): Response
     {
+        $serializer = Serializer::create();
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -256,12 +273,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'access' => $postModel->allowAccess(),
-                    'admin' => $postModel->hasAdminAccess(),
-                    'name' => $postModel->getName(),
-                    'shortName' => $postModel->getShortName(),
-                ]
+                'json' => $serializer->normalize(
+                    $postModel,
+                    [
+                        'groups' => [
+                            'update',
+                        ],
+                    ]
+                )
             ],
             $schema
         );
