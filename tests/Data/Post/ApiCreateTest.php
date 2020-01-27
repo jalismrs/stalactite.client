@@ -30,12 +30,17 @@ class ApiCreateTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws Exception
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\Exception
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testCreate(): void
     {
@@ -51,8 +56,14 @@ class ApiCreateTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'post' => ModelFactory::getTestablePost()
-                                    ->asArray()
+                                'post' => $serializer->normalize(
+                                    ModelFactory::getTestablePost(),
+                                    [
+                                        'groups' => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                             ],
                             JSON_THROW_ON_ERROR
                         )

@@ -106,15 +106,20 @@ class ApiAddPostsTest extends
             'fake user jwt'
         );
     }
-
+    
     /**
      * testThrowOnInvalidPostsParameterAddPosts
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testThrowOnInvalidPostsParameterAddPosts(): void
     {
@@ -144,8 +149,14 @@ class ApiAddPostsTest extends
         $mockAPIClient->addPosts(
             ModelFactory::getTestableUser(),
             [
-                ModelFactory::getTestablePost()
-                    ->asArray()
+                $serializer->normalize(
+                    ModelFactory::getTestablePost(),
+                    [
+                        'groups' => [
+                            'main',
+                        ],
+                    ]
+                )
             ],
             'fake user jwt'
         );

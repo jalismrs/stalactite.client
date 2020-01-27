@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use function array_map;
 
 /**
@@ -267,28 +268,40 @@ class User extends
 
         return $this;
     }
-
+    
     /**
      * asArray
      *
      * @return array
+     *
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
     public function asArray(): array
     {
+        $serializer = Serializer::create();
+        
         return array_merge(
             $this->asMinimalArray(),
             [
-                'leads' => array_map(
-                    static function (Post $leadModel): array {
-                        return $leadModel->asArray();
-                    },
-                    $this->leads
+                'leads' => $serializer->normalize(
+                    $this->leads,
+                    [
+                        'groups' => [
+                            'main',
+                        ],
+                    ]
                 ),
-                'posts' => array_map(
-                    static function (Post $postModel): array {
-                        return $postModel->asArray();
-                    },
-                    $this->posts
+                'posts' => $serializer->normalize(
+                    $this->posts,
+                    [
+                        'groups' => [
+                            'main',
+                        ],
+                    ]
                 ),
             ],
         );

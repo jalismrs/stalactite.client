@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * Post
@@ -125,20 +126,21 @@ class Post extends
 
         return $this;
     }
-
+    
     /**
      * asArray
      *
      * @return array
+     *
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
     public function asArray(): array
     {
-        return [
-            'uid' => $this->uid,
-            'name' => $this->name,
-            'shortName' => $this->shortName,
-            'adminAccess' => $this->adminAccess,
-            'allowAccess' => $this->allowAccess,
-        ];
+        throw new Deprecated(
+            'Reimplemented with Serializer',
+            500,
+            'Serializer.php',
+            1
+        );
     }
 }
