@@ -1,11 +1,11 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use function array_map;
+use PHPUnit\Framework\Error\Deprecated;
 
 /**
  * User
@@ -19,47 +19,47 @@ class User extends
      * @var null|string
      */
     private $email;
-
+    
     /**
      * @var null|string
      */
     private $googleId;
-
+    
     /**
      * @var null|string
      */
     private $lastName;
-
+    
     /**
      * @var null|string
      */
     private $firstName;
-
+    
     /**
      * @var bool
      */
     private $admin = false;
-
+    
     /**
      * @var array
      */
     private $posts = [];
-
+    
     /**
      * @var array
      */
     private $leads = [];
-
+    
     /**
      * getEmail
      *
      * @return null|string
      */
-    public function getEmail(): ?string
+    public function getEmail() : ?string
     {
         return $this->email;
     }
-
+    
     /**
      * setEmail
      *
@@ -67,23 +67,23 @@ class User extends
      *
      * @return $this
      */
-    public function setEmail(?string $email): self
+    public function setEmail(?string $email) : self
     {
         $this->email = $email;
-
+        
         return $this;
     }
-
+    
     /**
      * getGoogleId
      *
      * @return null|string
      */
-    public function getGoogleId(): ?string
+    public function getGoogleId() : ?string
     {
         return $this->googleId;
     }
-
+    
     /**
      * setGoogleId
      *
@@ -91,23 +91,23 @@ class User extends
      *
      * @return $this
      */
-    public function setGoogleId(?string $googleId): self
+    public function setGoogleId(?string $googleId) : self
     {
         $this->googleId = $googleId;
-
+        
         return $this;
     }
-
+    
     /**
      * getLastName
      *
      * @return null|string
      */
-    public function getLastName(): ?string
+    public function getLastName() : ?string
     {
         return $this->lastName;
     }
-
+    
     /**
      * setLastName
      *
@@ -115,23 +115,23 @@ class User extends
      *
      * @return $this
      */
-    public function setLastName(?string $lastName): self
+    public function setLastName(?string $lastName) : self
     {
         $this->lastName = $lastName;
-
+        
         return $this;
     }
-
+    
     /**
      * getFirstName
      *
      * @return null|string
      */
-    public function getFirstName(): ?string
+    public function getFirstName() : ?string
     {
         return $this->firstName;
     }
-
+    
     /**
      * setFirstName
      *
@@ -139,23 +139,23 @@ class User extends
      *
      * @return $this
      */
-    public function setFirstName(?string $firstName): self
+    public function setFirstName(?string $firstName) : self
     {
         $this->firstName = $firstName;
-
+        
         return $this;
     }
-
+    
     /**
      * isAdmin
      *
      * @return bool
      */
-    public function isAdmin(): bool
+    public function isAdmin() : bool
     {
         return $this->admin;
     }
-
+    
     /**
      * setAdmin
      *
@@ -163,19 +163,19 @@ class User extends
      *
      * @return $this
      */
-    public function setAdmin(bool $admin): self
+    public function setAdmin(bool $admin) : self
     {
         $this->admin = $admin;
-
+        
         return $this;
     }
-
+    
     /**
      * hasAdminPost
      *
      * @return bool
      */
-    public function hasAdminPost(): bool
+    public function hasAdminPost() : bool
     {
         /** @var Post $post */
         foreach ($this->posts as $post) {
@@ -183,20 +183,20 @@ class User extends
                 return true;
             }
         }
-
+        
         return false;
     }
-
+    
     /**
      * getPosts
      *
      * @return array
      */
-    public function getPosts(): array
+    public function getPosts() : array
     {
         return $this->posts;
     }
-
+    
     /**
      * setPosts
      *
@@ -204,16 +204,16 @@ class User extends
      *
      * @return $this
      */
-    public function setPosts(array $posts): self
+    public function setPosts(array $posts) : self
     {
         $this->posts = [];
         foreach ($posts as $post) {
             $this->addPost($post);
         }
-
+        
         return $this;
     }
-
+    
     /**
      * addPost
      *
@@ -221,23 +221,23 @@ class User extends
      *
      * @return $this
      */
-    public function addPost(Post $postModel): self
+    public function addPost(Post $postModel) : self
     {
         $this->posts[] = $postModel;
-
+        
         return $this;
     }
-
+    
     /**
      * getLeads
      *
      * @return array
      */
-    public function getLeads(): array
+    public function getLeads() : array
     {
         return $this->leads;
     }
-
+    
     /**
      * setLeads
      *
@@ -245,16 +245,16 @@ class User extends
      *
      * @return $this
      */
-    public function setLeads(array $leads): self
+    public function setLeads(array $leads) : self
     {
         $this->leads = [];
         foreach ($leads as $lead) {
             $this->addLead($lead);
         }
-
+        
         return $this;
     }
-
+    
     /**
      * addLead
      *
@@ -262,10 +262,10 @@ class User extends
      *
      * @return $this
      */
-    public function addLead(Post $leadModel): self
+    public function addLead(Post $leadModel) : self
     {
         $this->leads[] = $leadModel;
-
+        
         return $this;
     }
     
@@ -274,53 +274,32 @@ class User extends
      *
      * @return array
      *
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \PHPUnit\Framework\Error\Deprecated
      */
-    public function asArray(): array
+    public function asArray() : array
     {
-        $serializer = Serializer::create();
-        
-        return array_merge(
-            $this->asMinimalArray(),
-            [
-                'leads' => $serializer->normalize(
-                    $this->leads,
-                    [
-                        'groups' => [
-                            'main',
-                        ],
-                    ]
-                ),
-                'posts' => $serializer->normalize(
-                    $this->posts,
-                    [
-                        'groups' => [
-                            'main',
-                        ],
-                    ]
-                ),
-            ],
+        throw new Deprecated(
+            'Reimplemented with Serializer',
+            500,
+            'Serializer.php',
+            1
         );
     }
-
+    
     /**
      * asMinimalArray
      *
      * @return array
      */
-    public function asMinimalArray(): array
+    public function asMinimalArray() : array
     {
         return [
-            'uid' => $this->uid,
+            'uid'       => $this->uid,
             'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-            'email' => $this->email,
-            'googleId' => $this->googleId,
-            'admin' => $this->admin,
+            'lastName'  => $this->lastName,
+            'email'     => $this->email,
+            'googleId'  => $this->googleId,
+            'admin'     => $this->admin,
         ];
     }
 }

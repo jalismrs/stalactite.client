@@ -29,11 +29,16 @@ class ApiGetUsersTest extends
      *
      * @return void
      *
-     * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws \Jalismrs\Stalactite\Client\ClientException
+     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
+     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
      */
     public function testGetUsers(): void
     {
@@ -50,8 +55,14 @@ class ApiGetUsersTest extends
                                 'success' => true,
                                 'error' => null,
                                 'users' => [
-                                    ModelFactory::getTestableUser()
-                                        ->asArray()
+                                    $serializer->normalize(
+                                        ModelFactory::getTestableUser(),
+                                        [
+                                            'groups' => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR

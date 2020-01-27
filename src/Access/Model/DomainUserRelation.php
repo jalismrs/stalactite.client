@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
@@ -18,17 +18,17 @@ class DomainUserRelation extends
      * @var null|User
      */
     private $user;
-
+    
     /**
      * getUser
      *
      * @return null|User
      */
-    public function getUser(): ?User
+    public function getUser() : ?User
     {
         return $this->user;
     }
-
+    
     /**
      * setUser
      *
@@ -36,10 +36,10 @@ class DomainUserRelation extends
      *
      * @return $this
      */
-    public function setUser(?User $userModel): self
+    public function setUser(?User $userModel) : self
     {
         $this->user = $userModel;
-
+        
         return $this;
     }
     
@@ -54,12 +54,12 @@ class DomainUserRelation extends
      * @throws \Symfony\Component\Serializer\Exception\LogicException
      * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
-    public function asArray(): array
+    public function asArray() : array
     {
         $serializer = Serializer::create();
         
         return [
-            'uid' => $this->uid,
+            'uid'    => $this->uid,
             'domain' => $serializer->normalize(
                 $this->domain,
                 [
@@ -68,9 +68,14 @@ class DomainUserRelation extends
                     ],
                 ]
             ),
-            'user' => null === $this->user
-                ? null
-                : $this->user->asArray(),
+            'user'   => $serializer->normalize(
+                $this->user,
+                [
+                    'groups' => [
+                        'main',
+                    ],
+                ]
+            ),
         ];
     }
 }
