@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Me;
 
@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use function vsprintf;
 
 /**
@@ -33,26 +34,25 @@ class Client extends
      */
     public function getMe(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'me'      => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-
+        
         $response = $this->get(
             vsprintf(
                 '%s/data/users/me',
@@ -67,7 +67,7 @@ class Client extends
             ],
             $schema
         );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -78,11 +78,11 @@ class Client extends
             ]
         );
     }
-
+    
     /**
      * update
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -94,21 +94,22 @@ class Client extends
     public function updateMe(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
+        $serializer = Serializer::create();
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this->post(
             vsprintf(
                 '%s/data/users/me',
@@ -120,14 +121,18 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'firstName' => $userModel->getFirstName(),
-                    'lastName' => $userModel->getLastName()
-                ]
+                'json'    => $serializer->normalize(
+                    $userModel,
+                    [
+                        'groups' => [
+                            'updateMe',
+                        ],
+                    ]
+                )
             ],
             $schema
         );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
