@@ -21,7 +21,6 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerObject;
 use function array_replace_recursive;
-use function Jalismrs\Stalactite\Client\path;
 
 /**
  * Serializer
@@ -30,6 +29,8 @@ use function Jalismrs\Stalactite\Client\path;
  */
 final class Serializer
 {
+    private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
+
     private const CONTEXT = [
         AbstractNormalizer::GROUPS => [
             'common',
@@ -56,9 +57,7 @@ final class Serializer
             [
                 new ObjectNormalizer(
                     new ClassMetadataFactory(
-                        new XmlFileLoader(
-                            path('config/serialization.xml')
-                        )
+                        new XmlFileLoader(self::CONFIG_FILE)
                     )
                 ),
             ],

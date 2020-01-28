@@ -25,9 +25,6 @@
     "phpunit/phpunit": ">=7 <9"
   },
   "autoload": {
-    "files": [
-      "./src/functions.php"
-    ],
     "psr-4": {
       "Jalismrs\\Stalactite\\Client\\": "src/"
     }
