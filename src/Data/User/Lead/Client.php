@@ -16,7 +16,6 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelpers;
 use function array_map;
-use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**

@@ -1,10 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 
 /**
  * SerializerTest
@@ -19,17 +23,17 @@ class SerializerTest extends
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testCreate() : void
+    public function testCreate(): void
     {
         $serializer1 = Serializer::getInstance();
         $serializer2 = Serializer::getInstance();
-        
+
         self::assertSame($serializer1, $serializer2);
     }
 }

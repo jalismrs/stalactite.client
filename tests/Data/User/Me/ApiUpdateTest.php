@@ -1,14 +1,22 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me;
 
+use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Me\Client;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 
 /**
  * ApiUpdateTest
@@ -23,18 +31,18 @@ class ApiUpdateTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ClientException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testUpdate() : void
+    public function testUpdate(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -45,7 +53,7 @@ class ApiUpdateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => null
+                                'error' => null
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -53,7 +61,7 @@ class ApiUpdateTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->updateMe(
             ModelFactory::getTestableUser(),
             'fake user jwt'
@@ -61,26 +69,26 @@ class ApiUpdateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseUpdate
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseUpdate() : void
+    public function testThrowExceptionOnInvalidResponseUpdate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -90,7 +98,7 @@ class ApiUpdateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error'   => false
+                                'error' => false
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -99,7 +107,7 @@ class ApiUpdateTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->updateMe(
             ModelFactory::getTestableUser(),
             'fake user jwt'

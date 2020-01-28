@@ -4,6 +4,17 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Util;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\BadMethodCallException;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\ExtraAttributesException;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
+use Symfony\Component\Serializer\Exception\RuntimeException;
+use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -26,7 +37,7 @@ final class Serializer
     ];
 
     /**
-     * @var \Symfony\Component\Serializer\Serializer
+     * @var SerializerObject
      */
     private $serializer;
 
@@ -35,9 +46,9 @@ final class Serializer
     /**
      * Serializer constructor.
      *
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
     private function __construct()
     {
@@ -63,9 +74,9 @@ final class Serializer
      * @static
      * @return static
      *
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
     public static function getInstance(): self
     {
@@ -84,10 +95,10 @@ final class Serializer
      *
      * @return array
      *
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function normalize($data, array $context = []): array
     {
@@ -111,14 +122,14 @@ final class Serializer
      *
      * @return array|object
      *
-     * @throws \Symfony\Component\Serializer\Exception\BadMethodCallException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\ExtraAttributesException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\NotNormalizableValueException
-     * @throws \Symfony\Component\Serializer\Exception\RuntimeException
-     * @throws \Symfony\Component\Serializer\Exception\UnexpectedValueException
+     * @throws BadMethodCallException
+     * @throws ExceptionInterface
+     * @throws ExtraAttributesException
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws NotNormalizableValueException
+     * @throws RuntimeException
+     * @throws UnexpectedValueException
      */
     public function denormalize($data, string $type, array $context = [])
     {
@@ -142,7 +153,7 @@ final class Serializer
      *
      * @return string
      *
-     * @throws \Symfony\Component\Serializer\Exception\NotEncodableValueException
+     * @throws NotEncodableValueException
      */
     public function serialize($data, array $context = []): string
     {
@@ -166,7 +177,7 @@ final class Serializer
      *
      * @return array|object
      *
-     * @throws \Symfony\Component\Serializer\Exception\NotEncodableValueException
+     * @throws NotEncodableValueException
      */
     public function deserialize($data, string $type, array $context = [])
     {

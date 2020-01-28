@@ -1,11 +1,17 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\Model;
 
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -21,46 +27,46 @@ class DomainCustomerRelationTest extends
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainCustomerRelation();
-        
+
         $actual = $serializer->normalize($model);
-        
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainCustomerRelation();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -69,10 +75,10 @@ class DomainCustomerRelationTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'      => $model->getUid(),
-            'domain'   => $serializer->normalize(
+            'uid' => $model->getUid(),
+            'domain' => $serializer->normalize(
                 $model->getDomain(),
                 [
                     AbstractNormalizer::GROUPS => [
@@ -89,33 +95,33 @@ class DomainCustomerRelationTest extends
                 ]
             ),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupIgnoreDomain
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupIgnoreDomain() : void
+    public function testGroupIgnoreDomain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainCustomerRelation();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS             => [
+                AbstractNormalizer::GROUPS => [
                     'main',
                 ],
                 AbstractNormalizer::IGNORED_ATTRIBUTES => [
@@ -123,9 +129,9 @@ class DomainCustomerRelationTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'      => $model->getUid(),
+            'uid' => $model->getUid(),
             'customer' => $serializer->normalize(
                 $model->getCustomer(),
                 [
@@ -135,33 +141,33 @@ class DomainCustomerRelationTest extends
                 ]
             ),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMainIgnoreCustomer
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupMainIgnoreCustomer() : void
+    public function testGroupMainIgnoreCustomer(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainCustomerRelation();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS             => [
+                AbstractNormalizer::GROUPS => [
                     'main',
                 ],
                 AbstractNormalizer::IGNORED_ATTRIBUTES => [
@@ -169,9 +175,9 @@ class DomainCustomerRelationTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'    => $model->getUid(),
+            'uid' => $model->getUid(),
             'domain' => $serializer->normalize(
                 $model->getDomain(),
                 [
@@ -181,7 +187,7 @@ class DomainCustomerRelationTest extends
                 ]
             ),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }

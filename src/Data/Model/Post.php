@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -29,17 +29,17 @@ class Post extends
      * @var bool
      */
     private $adminAccess = false;
-    
+
     /**
      * getName
      *
      * @return null|string
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -47,23 +47,23 @@ class Post extends
      *
      * @return $this
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getShortName
      *
      * @return null|string
      */
-    public function getShortName() : ?string
+    public function getShortName(): ?string
     {
         return $this->shortName;
     }
-    
+
     /**
      * setShortName
      *
@@ -71,23 +71,23 @@ class Post extends
      *
      * @return $this
      */
-    public function setShortName(?string $shortName) : self
+    public function setShortName(?string $shortName): self
     {
         $this->shortName = $shortName;
-        
+
         return $this;
     }
-    
+
     /**
      * allowAccess
      *
      * @return bool
      */
-    public function allowAccess() : bool
+    public function allowAccess(): bool
     {
         return $this->allowAccess;
     }
-    
+
     /**
      * setAccess
      *
@@ -95,23 +95,23 @@ class Post extends
      *
      * @return $this
      */
-    public function setAccess(bool $allowAccess) : self
+    public function setAccess(bool $allowAccess): self
     {
         $this->allowAccess = $allowAccess;
-        
+
         return $this;
     }
-    
+
     /**
      * hasAdminAccess
      *
      * @return bool
      */
-    public function hasAdminAccess() : bool
+    public function hasAdminAccess(): bool
     {
         return $this->adminAccess;
     }
-    
+
     /**
      * setAdminAccess
      *
@@ -119,10 +119,10 @@ class Post extends
      *
      * @return $this
      */
-    public function setAdminAccess(bool $adminAccess) : self
+    public function setAdminAccess(bool $adminAccess): self
     {
         $this->adminAccess = $adminAccess;
-        
+
         return $this;
     }
 }

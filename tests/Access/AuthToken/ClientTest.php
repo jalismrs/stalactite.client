@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken;
 
 use Jalismrs\Stalactite\Client\Access\AuthToken\Client;
+use Jalismrs\Stalactite\Client\Tests\ClientTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Jalismrs\Stalactite\Client\Tests\ClientTestTrait;
 
 /**
  * ClientTest

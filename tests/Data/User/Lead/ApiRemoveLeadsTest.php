@@ -7,13 +7,17 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Client;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -107,28 +111,28 @@ class ApiRemoveLeadsTest extends
             'fake user jwt'
         );
     }
-    
+
     /**
      * testThrowOnInvalidPostsParameterRemoveLeads
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ClientException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
      * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-    
+
         $serializer = Serializer::getInstance();
-    
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
@@ -17,10 +17,14 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelpers;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
-use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -46,7 +50,7 @@ class Client extends
      *
      * @return Lead\Client
      */
-    public function leads() : Lead\Client
+    public function leads(): Lead\Client
     {
         if (null === $this->clientLead) {
             $this->clientLead = new Lead\Client(
@@ -64,7 +68,7 @@ class Client extends
      *
      * @return Me\Client
      */
-    public function me() : Me\Client
+    public function me(): Me\Client
     {
         if (null === $this->clientMe) {
             $this->clientMe = new Me\Client(
@@ -81,7 +85,7 @@ class Client extends
      * post
      *
      */
-    public function posts() : PostClient
+    public function posts(): PostClient
     {
         if (null === $this->clientPost) {
             $this->clientPost = new PostClient(
@@ -113,19 +117,20 @@ class Client extends
      */
     public function getAllUsers(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'users' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::MINIMAL_USER
                 ]
             ]
@@ -151,7 +156,7 @@ class Client extends
             $response['error'],
             [
                 'users' => array_map(
-                    static function($user) {
+                    static function ($user) {
                         return ModelFactory::createUserModel($user);
                     },
                     $response['users']
@@ -172,20 +177,21 @@ class Client extends
     public function getUser(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
@@ -228,7 +234,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt) : Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -236,13 +242,13 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
@@ -259,8 +265,8 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'query'   => [
-                    'email'    => $email,
+                'query' => [
+                    'email' => $email,
                     'googleId' => $googleId
                 ]
             ],
@@ -281,24 +287,25 @@ class Client extends
     /**
      * createUser
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\User $userModel
-     * @param string                                      $jwt
+     * @param User $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function createUser(
         User $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $serializer = Serializer::getInstance();
 
         $schema = new JsonSchema();
@@ -307,13 +314,13 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
@@ -330,7 +337,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => array_merge(
+                'json' => array_merge(
                     $serializer->normalize(
                         $userModel,
                         [
@@ -368,24 +375,25 @@ class Client extends
     /**
      * updateUser
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\User $userModel
-     * @param string                                      $jwt
+     * @param User $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
     public function updateUser(
         User $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $serializer = Serializer::getInstance();
 
         $schema = new JsonSchema();
@@ -394,7 +402,7 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
@@ -413,7 +421,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $serializer->normalize(
+                'json' => $serializer->normalize(
                     $userModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -440,7 +448,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function deleteUser(string $uid, string $jwt) : Response
+    public function deleteUser(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -448,7 +456,7 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]

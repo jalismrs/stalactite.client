@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\User;
 
@@ -11,9 +11,16 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -29,22 +36,22 @@ class ApiGetAccessClearanceTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \PHPUnit\Framework\Exception
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ClientException
+     * @throws Exception
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
      */
-    public function testGetAccessClearance() : void
+    public function testGetAccessClearance(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -53,8 +60,8 @@ class ApiGetAccessClearanceTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'clearance' => $serializer->normalize(
                                     ModelFactory::getTestableAccessClearance(),
                                     [
@@ -70,7 +77,7 @@ class ApiGetAccessClearanceTest extends
                 ]
             )
         );
-        
+
         $response = $mockAPIClient->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
@@ -82,7 +89,7 @@ class ApiGetAccessClearanceTest extends
             $response->getData()['clearance']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGetAccessClearance
      *
@@ -92,11 +99,11 @@ class ApiGetAccessClearanceTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetAccessClearance() : void
+    public function testThrowExceptionOnInvalidResponseGetAccessClearance(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -105,8 +112,8 @@ class ApiGetAccessClearanceTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success'   => true,
-                                'error'     => null,
+                                'success' => true,
+                                'error' => null,
                                 'clearance' => []
                                 // wrong type
                             ],
@@ -116,7 +123,7 @@ class ApiGetAccessClearanceTest extends
                 ]
             )
         );
-        
+
         $mockAPIClient->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'

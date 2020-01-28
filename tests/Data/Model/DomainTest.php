@@ -1,11 +1,17 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\CircularReferenceException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -21,46 +27,46 @@ class DomainTest extends
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize($model);
-        
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -69,38 +75,38 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'            => $model->getUid(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'uid' => $model->getUid(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -109,37 +115,37 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
+     * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws CircularReferenceException
+     * @throws ExceptionInterface
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -148,15 +154,15 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }
