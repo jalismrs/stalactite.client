@@ -7,11 +7,11 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
@@ -111,7 +111,7 @@ class Client extends
                 'relations' => [
                     'users' => array_map(
                         static function (array $relation) use ($domainModel): DomainUserRelation {
-                            $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
+                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
                             $domainUserRelationModel->setDomain($domainModel);
 
                             return $domainUserRelationModel;
@@ -120,7 +120,7 @@ class Client extends
                     ),
                     'customers' => array_map(
                         static function (array $relation) use ($domainModel): DomainCustomerRelation {
-                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelationModel($relation);
+                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
                             $domainCustomerRelation->setDomain($domainModel);
 
                             return $domainCustomerRelation;
@@ -194,7 +194,7 @@ class Client extends
             [
                 'relation' => null === $response['relation']
                     ? null
-                    : ModelFactory::createDomainUserRelationModel($response['relation']),
+                    : ModelFactory::createDomainUserRelation($response['relation']),
             ]
         );
     }
@@ -261,7 +261,7 @@ class Client extends
             [
                 'relation' => null === $response['relation']
                     ? null
-                    : ModelFactory::createDomainCustomerRelationModel($response['relation']),
+                    : ModelFactory::createDomainCustomerRelation($response['relation']),
             ]
         );
     }

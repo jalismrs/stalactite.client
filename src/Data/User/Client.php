@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -15,12 +16,12 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\ModelHelpers;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
-use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -34,19 +35,19 @@ class Client extends
     private $clientLead;
     private $clientMe;
     private $clientPost;
-    
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * lead
      *
      * @return Lead\Client
      */
-    public function leads() : Lead\Client
+    public function leads(): Lead\Client
     {
         if (null === $this->clientLead) {
             $this->clientLead = new Lead\Client(
@@ -55,16 +56,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientLead;
     }
-    
+
     /**
      * me
      *
      * @return Me\Client
      */
-    public function me() : Me\Client
+    public function me(): Me\Client
     {
         if (null === $this->clientMe) {
             $this->clientMe = new Me\Client(
@@ -73,15 +74,15 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientMe;
     }
-    
+
     /**
      * post
      *
      */
-    public function posts() : PostClient
+    public function posts(): PostClient
     {
         if (null === $this->clientPost) {
             $this->clientPost = new PostClient(
@@ -90,16 +91,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientPost;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * getAllUsers
      *
@@ -113,24 +114,25 @@ class Client extends
      */
     public function getAllUsers(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
+                'users' => [
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::MINIMAL_USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users',
@@ -145,21 +147,21 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'users' => array_map(
-                    static function($user) {
-                        return ModelFactory::createUserModel($user);
+                    static function ($user) {
+                        return ModelFactory::createUser($user);
                     },
                     $response['users']
                 )
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -172,25 +174,26 @@ class Client extends
     public function getUser(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users/%s',
@@ -206,18 +209,18 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
-    
+
     /**
      * @param string $email
      * @param string $googleId
@@ -228,7 +231,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt) : Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -236,18 +239,18 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users',
@@ -259,66 +262,58 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'query'   => [
-                    'email'    => $email,
+                'query' => [
+                    'email' => $email,
                     'googleId' => $googleId
                 ]
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
-    
+
     /**
-     * createUser
-     *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\User $userModel
-     * @param string                                      $jwt
-     *
-     * @return \Jalismrs\Stalactite\Client\Response
-     *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @param User $userModel
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function createUser(
         User $userModel,
         string $jwt
-    ) : Response {
-        $serializer = Serializer::create();
-        
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'user' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users',
@@ -330,8 +325,8 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => array_merge(
-                    $serializer->normalize(
+                'json' => array_merge(
+                    Serializer::getInstance()->normalize(
                         $userModel,
                         [
                             AbstractNormalizer::GROUPS => [
@@ -340,11 +335,11 @@ class Client extends
                         ]
                     ),
                     [
-                        'leads' => ModelHelpers::getUids(
+                        'leads' => ModelHelper::getUids(
                             $userModel->getLeads(),
                             Post::class
                         ),
-                        'posts' => ModelHelpers::getUids(
+                        'posts' => ModelHelper::getUids(
                             $userModel->getPosts(),
                             Post::class
                         ),
@@ -353,54 +348,49 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
-    
+
     /**
      * updateUser
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\User $userModel
-     * @param string                                      $jwt
+     * @param User $userModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateUser(
         User $userModel,
         string $jwt
-    ) : Response {
-        $serializer = Serializer::create();
-        
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/users/%s',
@@ -413,7 +403,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json'    => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $userModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -424,13 +414,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -440,7 +430,7 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function deleteUser(string $uid, string $jwt) : Response
+    public function deleteUser(string $uid, string $jwt): Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -448,13 +438,13 @@ class Client extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s',
@@ -470,7 +460,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

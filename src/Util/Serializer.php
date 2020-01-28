@@ -1,16 +1,19 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerObject;
+use Throwable;
 use function array_replace_recursive;
-use function Jalismrs\Stalactite\Client\path;
 
 /**
  * Serializer
@@ -19,33 +22,35 @@ use function Jalismrs\Stalactite\Client\path;
  */
 final class Serializer
 {
+    private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
+
     private const CONTEXT = [
         AbstractNormalizer::GROUPS => [
             'common',
         ],
     ];
-    
+
     /**
-     * @var \Symfony\Component\Serializer\Serializer
+     * @var SerializerObject
      */
     private $serializer;
-    
+
+    private static $instance;
+
     /**
      * Serializer constructor.
      *
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
      */
-    public function __construct()
+    private function __construct()
     {
         $this->serializer = new SerializerObject(
             [
                 new ObjectNormalizer(
                     new ClassMetadataFactory(
-                        new XmlFileLoader(
-                            path('config/serialization.xml')
-                        )
+                        new XmlFileLoader(self::CONFIG_FILE)
                     )
                 ),
             ],
@@ -54,28 +59,28 @@ final class Serializer
             ]
         );
     }
-    
+
     /**
      * create
      *
      * @static
      * @return static
      *
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws SerializerException
      */
-    public static function create() : self
+    public static function getInstance(): self
     {
-        static $serializer = null;
-        
-        if (null === $serializer) {
-            $serializer = new self();
+        if (!(self::$instance instanceof self)) {
+            try {
+                self::$instance = new self();
+            } catch (Throwable $t) {
+                throw new SerializerException('Error while instantiating the serializer', null, $t);
+            }
         }
-        
-        return $serializer;
+
+        return self::$instance;
     }
-    
+
     /**
      * normalize
      *
@@ -84,56 +89,54 @@ final class Serializer
      *
      * @return array
      *
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
+     * @throws SerializerException
      */
-    public function normalize($data, array $context = []) : array
+    public function normalize($data, array $context = []): array
     {
-        return $this->serializer->normalize(
-            $data,
-            'json',
-            array_replace_recursive(
-                self::CONTEXT,
-                [],
-                $context
-            )
-        );
+        try {
+            return $this->serializer->normalize(
+                $data,
+                'json',
+                array_replace_recursive(
+                    self::CONTEXT,
+                    [],
+                    $context
+                )
+            );
+        } catch (Throwable $t) {
+            throw new SerializerException('Error while normalizing data', null, $t);
+        }
     }
-    
+
     /**
      * denormalize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *
-     * @throws \Symfony\Component\Serializer\Exception\BadMethodCallException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\ExtraAttributesException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\NotNormalizableValueException
-     * @throws \Symfony\Component\Serializer\Exception\RuntimeException
-     * @throws \Symfony\Component\Serializer\Exception\UnexpectedValueException
+     * @throws SerializerException
      */
     public function denormalize($data, string $type, array $context = [])
     {
-        return $this->serializer->denormalize(
-            $data,
-            $type,
-            'json',
-            array_replace_recursive(
-                self::CONTEXT,
-                [],
-                $context
-            )
-        );
+        try {
+            return $this->serializer->denormalize(
+                $data,
+                $type,
+                'json',
+                array_replace_recursive(
+                    self::CONTEXT,
+                    [],
+                    $context
+                )
+            );
+        } catch (Throwable $t) {
+            throw new SerializerException('Error while denormalizing data', null, $t);
+        }
     }
-    
+
     /**
      * serialize
      *
@@ -142,43 +145,51 @@ final class Serializer
      *
      * @return string
      *
-     * @throws \Symfony\Component\Serializer\Exception\NotEncodableValueException
+     * @throws SerializerException
      */
-    public function serialize($data, array $context = []) : string
+    public function serialize($data, array $context = []): string
     {
-        return $this->serializer->serialize(
-            $data,
-            'json',
-            array_replace_recursive(
-                self::CONTEXT,
-                [],
-                $context
-            )
-        );
+        try {
+            return $this->serializer->serialize(
+                $data,
+                'json',
+                array_replace_recursive(
+                    self::CONTEXT,
+                    [],
+                    $context
+                )
+            );
+        } catch (Throwable $t) {
+            throw new SerializerException('Error while serializing data', null, $t);
+        }
     }
-    
+
     /**
      * deserialize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *
-     * @throws \Symfony\Component\Serializer\Exception\NotEncodableValueException
+     * @throws SerializerException
      */
     public function deserialize($data, string $type, array $context = [])
     {
-        return $this->serializer->deserialize(
-            $data,
-            $type,
-            'json',
-            array_replace_recursive(
-                self::CONTEXT,
-                [],
-                $context
-            )
-        );
+        try {
+            return $this->serializer->deserialize(
+                $data,
+                $type,
+                'json',
+                array_replace_recursive(
+                    self::CONTEXT,
+                    [],
+                    $context
+                )
+            );
+        } catch (Throwable $t) {
+            throw new SerializerException('Error while deserializing data', null, $t);
+        }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -33,17 +33,17 @@ class Domain extends
      * @var null|string
      */
     private $generationDate;
-    
+
     /**
      * getName
      *
      * @return null|string
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -51,23 +51,23 @@ class Domain extends
      *
      * @return $this
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getType
      *
      * @return null|string
      */
-    public function getType() : ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
-    
+
     /**
      * setType
      *
@@ -75,23 +75,23 @@ class Domain extends
      *
      * @return $this
      */
-    public function setType(?string $type) : self
+    public function setType(?string $type): self
     {
         $this->type = $type;
-        
+
         return $this;
     }
-    
+
     /**
      * getApiKey
      *
      * @return null|string
      */
-    public function getApiKey() : ?string
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
     }
-    
+
     /**
      * setApiKey
      *
@@ -99,23 +99,23 @@ class Domain extends
      *
      * @return $this
      */
-    public function setApiKey(?string $apiKey) : self
+    public function setApiKey(?string $apiKey): self
     {
         $this->apiKey = $apiKey;
-        
+
         return $this;
     }
-    
+
     /**
      * hasExternalAuth
      *
      * @return bool
      */
-    public function hasExternalAuth() : bool
+    public function hasExternalAuth(): bool
     {
         return $this->externalAuth;
     }
-    
+
     /**
      * setExternalAuth
      *
@@ -123,23 +123,23 @@ class Domain extends
      *
      * @return $this
      */
-    public function setExternalAuth(bool $externalAuth) : self
+    public function setExternalAuth(bool $externalAuth): self
     {
         $this->externalAuth = $externalAuth;
-        
+
         return $this;
     }
-    
+
     /**
      * getGenerationDate
      *
      * @return null|string
      */
-    public function getGenerationDate() : ?string
+    public function getGenerationDate(): ?string
     {
         return $this->generationDate;
     }
-    
+
     /**
      * setGenerationDate
      *
@@ -147,10 +147,10 @@ class Domain extends
      *
      * @return $this
      */
-    public function setGenerationDate(?string $generationDate) : self
+    public function setGenerationDate(?string $generationDate): self
     {
         $this->generationDate = $generationDate;
-        
+
         return $this;
     }
 }

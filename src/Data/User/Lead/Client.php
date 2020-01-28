@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -14,9 +15,8 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\ModelHelpers;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
-use function Jalismrs\Stalactite\Client\getUids;
 use function vsprintf;
 
 /**
@@ -83,7 +83,7 @@ class Client extends
             [
                 'leads' => array_map(
                     static function ($lead) {
-                        return ModelFactory::createPostModel($lead);
+                        return ModelFactory::createPost($lead);
                     },
                     $response['leads']
                 )
@@ -103,6 +103,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
      */
     public function addLeads(
         User $userModel,
@@ -136,7 +137,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json' => [
-                    'leads' => ModelHelpers::getUids(
+                    'leads' => ModelHelper::getUids(
                         $leadModels,
                         Post::class
                     )
@@ -163,6 +164,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
      */
     public function removeLeads(
         User $userModel,
@@ -196,7 +198,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json' => [
-                    'leads' => ModelHelpers::getUids(
+                    'leads' => ModelHelper::getUids(
                         $leadModels,
                         Post::class
                     )

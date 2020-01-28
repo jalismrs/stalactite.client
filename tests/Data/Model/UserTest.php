@@ -1,11 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -21,46 +24,38 @@ class UserTest extends
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize($model);
-        
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -69,15 +64,15 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'       => $model->getUid(),
+            'uid' => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'googleId'  => $model->getGoogleId(),
-            'admin'     => $model->isAdmin(),
-            'leads'     => $serializer->normalize(
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'googleId' => $model->getGoogleId(),
+            'admin' => $model->isAdmin(),
+            'leads' => $serializer->normalize(
                 $model->getLeads(),
                 [
                     AbstractNormalizer::GROUPS => [
@@ -85,7 +80,7 @@ class UserTest extends
                     ],
                 ]
             ),
-            'posts'     => $serializer->normalize(
+            'posts' => $serializer->normalize(
                 $model->getPosts(),
                 [
                     AbstractNormalizer::GROUPS => [
@@ -94,29 +89,25 @@ class UserTest extends
                 ]
             ),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMin
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupMin() : void
+    public function testGroupMin(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -125,38 +116,34 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'       => $model->getUid(),
+            'uid' => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'googleId'  => $model->getGoogleId(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'googleId' => $model->getGoogleId(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -165,36 +152,32 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -203,36 +186,32 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdateMe
      *
      * @return void
      *
-     * @throws \PHPUnit\Framework\ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
+     * @throws ExpectationFailedException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
-    public function testGroupUpdateMe() : void
+    public function testGroupUpdateMe(): void
     {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $model = ModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -241,12 +220,12 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
+            'lastName' => $model->getLastName(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }

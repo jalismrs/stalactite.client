@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function vsprintf;
@@ -79,7 +80,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function ($post) {
-                        return ModelFactory::createPostModel($post);
+                        return ModelFactory::createPost($post);
                     },
                     $response['posts']
                 )
@@ -144,35 +145,29 @@ class Client extends
             [
                 'post' => null === $response['post']
                     ? null
-                    : ModelFactory::createPostModel($response['post']),
+                    : ModelFactory::createPost($response['post']),
             ]
         );
     }
-    
+
     /**
      * createPost
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $postModel
-     * @param string                                      $jwt
+     * @param Post $postModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function createPost(
         Post $postModel,
         string $jwt
     ): Response
     {
-        $serializer = Serializer::create();
-        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -202,7 +197,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $postModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -220,35 +215,29 @@ class Client extends
             [
                 'post' => null === $response['post']
                     ? null
-                    : ModelFactory::createPostModel($response['post']),
+                    : ModelFactory::createPost($response['post']),
             ]
         );
     }
-    
+
     /**
      * updatePost
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $postModel
-     * @param string                                      $jwt
+     * @param Post $postModel
+     * @param string $jwt
      *
-     * @return \Jalismrs\Stalactite\Client\Response
+     * @return Response
      *
-     * @throws \Jalismrs\Stalactite\Client\ClientException
-     * @throws \Symfony\Component\Serializer\Exception\CircularReferenceException
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Serializer\Exception\LogicException
-     * @throws \Symfony\Component\Serializer\Exception\MappingException
-     * @throws \hunomina\Validator\Json\Exception\InvalidDataTypeException
-     * @throws \hunomina\Validator\Json\Exception\InvalidSchemaException
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updatePost(
         Post $postModel,
         string $jwt
     ): Response
     {
-        $serializer = Serializer::create();
-        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -274,7 +263,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $postModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -397,7 +386,7 @@ class Client extends
             [
                 'users' => array_map(
                     static function ($user) {
-                        return ModelFactory::createUserModel($user);
+                        return ModelFactory::createUser($user);
                     },
                     $response['users']
                 )

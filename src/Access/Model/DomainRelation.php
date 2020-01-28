@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
-use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\AbstractModel;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 
 /**
  * DomainRelation

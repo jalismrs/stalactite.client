@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
@@ -29,17 +29,17 @@ class TrustedApp extends
      * @var null|string
      */
     private $resetToken;
-    
+
     /**
      * getName
      *
      * @return null|string
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -47,23 +47,23 @@ class TrustedApp extends
      *
      * @return $this
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getGoogleOAuthClientId
      *
      * @return null|string
      */
-    public function getGoogleOAuthClientId() : ?string
+    public function getGoogleOAuthClientId(): ?string
     {
         return $this->googleOAuthClientId;
     }
-    
+
     /**
      * setGoogleOAuthClientId
      *
@@ -71,23 +71,23 @@ class TrustedApp extends
      *
      * @return $this
      */
-    public function setGoogleOAuthClientId(?string $googleOAuthClientId) : self
+    public function setGoogleOAuthClientId(?string $googleOAuthClientId): self
     {
         $this->googleOAuthClientId = $googleOAuthClientId;
-        
+
         return $this;
     }
-    
+
     /**
      * getAuthToken
      *
      * @return null|string
      */
-    public function getAuthToken() : ?string
+    public function getAuthToken(): ?string
     {
         return $this->authToken;
     }
-    
+
     /**
      * setAuthToken
      *
@@ -95,23 +95,23 @@ class TrustedApp extends
      *
      * @return $this
      */
-    public function setAuthToken(?string $authToken) : self
+    public function setAuthToken(?string $authToken): self
     {
         $this->authToken = $authToken;
-        
+
         return $this;
     }
-    
+
     /**
      * getResetToken
      *
      * @return null|string
      */
-    public function getResetToken() : ?string
+    public function getResetToken(): ?string
     {
         return $this->resetToken;
     }
-    
+
     /**
      * setResetToken
      *
@@ -119,10 +119,10 @@ class TrustedApp extends
      *
      * @return $this
      */
-    public function setResetToken(?string $resetToken) : self
+    public function setResetToken(?string $resetToken): self
     {
         $this->resetToken = $resetToken;
-        
+
         return $this;
     }
 }
