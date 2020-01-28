@@ -31,7 +31,7 @@ class Client extends
         if (null === $this->clientAccess) {
             $this->clientAccess = new Access\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -49,7 +49,7 @@ class Client extends
         if (null === $this->clientAuthentication) {
             $this->clientAuthentication = new Authentication\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -67,7 +67,7 @@ class Client extends
         if (null === $this->clientData) {
             $this->clientData = new Data\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }

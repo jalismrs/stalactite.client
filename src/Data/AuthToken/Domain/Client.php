@@ -41,7 +41,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -108,7 +108,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -177,7 +177,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -245,7 +245,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();

@@ -33,7 +33,7 @@ class Client extends
         if (null === $this->clientAuthToken) {
             $this->clientAuthToken = new AuthToken\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -51,7 +51,7 @@ class Client extends
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -69,7 +69,7 @@ class Client extends
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -87,7 +87,7 @@ class Client extends
         if (null === $this->clientPost) {
             $this->clientPost = new Post\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -105,7 +105,7 @@ class Client extends
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }

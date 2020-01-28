@@ -31,7 +31,7 @@ class Client extends
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -49,7 +49,7 @@ class Client extends
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -67,7 +67,7 @@ class Client extends
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }

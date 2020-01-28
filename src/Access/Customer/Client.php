@@ -43,7 +43,7 @@ class Client extends
         if (null === $this->clientMe) {
             $this->clientMe = new  Me\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }

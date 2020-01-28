@@ -56,7 +56,7 @@ class Client extends
         if (null === $this->clientTrustedApp) {
             $this->clientTrustedApp = new TrustedAppClient(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }

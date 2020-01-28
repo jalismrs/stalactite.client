@@ -29,7 +29,7 @@ abstract class AbstractClient
     /**
      * @var null|string
      */
-    protected $userAgent;
+    private $userAgent;
     
     /**
      * AbstractClient constructor.

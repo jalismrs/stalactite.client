@@ -52,7 +52,7 @@ class Client extends
         if (null === $this->clientLead) {
             $this->clientLead = new Lead\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -70,7 +70,7 @@ class Client extends
         if (null === $this->clientMe) {
             $this->clientMe = new Me\Client(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
@@ -87,7 +87,7 @@ class Client extends
         if (null === $this->clientPost) {
             $this->clientPost = new PostClient(
                 $this->host,
-                $this->userAgent,
+                $this->getUserAgent(),
                 $this->httpClient
             );
         }
