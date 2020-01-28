@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\ModelHelpers;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
@@ -339,11 +340,11 @@ class Client extends
                         ]
                     ),
                     [
-                        'leads' => getUids(
+                        'leads' => ModelHelpers::getUids(
                             $userModel->getLeads(),
                             Post::class
                         ),
-                        'posts' => getUids(
+                        'posts' => ModelHelpers::getUids(
                             $userModel->getPosts(),
                             Post::class
                         ),
