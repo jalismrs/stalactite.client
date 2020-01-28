@@ -38,6 +38,7 @@ class ApiRemovePostsTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testRemovePosts(): void
     {
@@ -78,6 +79,7 @@ class ApiRemovePostsTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidResponseRemovePosts(): void
     {
@@ -125,6 +127,7 @@ class ApiRemovePostsTest extends
      * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {

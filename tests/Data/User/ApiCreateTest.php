@@ -46,6 +46,7 @@ class ApiCreateTest extends
      * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testCreate(): void
     {
@@ -102,6 +103,7 @@ class ApiCreateTest extends
      * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidResponseOnCreate(): void
     {

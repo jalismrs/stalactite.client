@@ -38,6 +38,7 @@ class ApiAddLeadsTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testAddPosts(): void
     {
@@ -78,6 +79,7 @@ class ApiAddLeadsTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidResponseAddPosts(): void
     {
@@ -125,6 +127,7 @@ class ApiAddLeadsTest extends
      * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidPostsParameterAddPosts(): void
     {

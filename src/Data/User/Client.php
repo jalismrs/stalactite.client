@@ -285,21 +285,18 @@ class Client extends
     }
 
     /**
-     * createUser
-     *
      * @param User $userModel
      * @param string $jwt
-     *
      * @return Response
-     *
-     * @throws ClientException
      * @throws CircularReferenceException
+     * @throws ClientException
      * @throws ExceptionInterface
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws \InvalidArgumentException
      */
     public function createUser(
         User $userModel,

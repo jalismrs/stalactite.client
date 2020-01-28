@@ -38,6 +38,7 @@ class ApiRemoveLeadsTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testRemoveLeads(): void
     {
@@ -78,6 +79,7 @@ class ApiRemoveLeadsTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidResponseRemoveLeads(): void
     {
@@ -125,6 +127,7 @@ class ApiRemoveLeadsTest extends
      * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {
