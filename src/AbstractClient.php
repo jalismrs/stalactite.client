@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
@@ -22,97 +22,122 @@ abstract class AbstractClient
      * @var string
      */
     protected $host;
-
     /**
      * @var HttpClientInterface
      */
     protected $httpClient;
-
     /**
      * @var null|string
      */
     protected $userAgent;
-
+    
     /**
      * AbstractClient constructor.
      *
-     * @param string $host
-     * @param string|null $userAgent
+     * @param string                   $host
+     * @param string|null              $userAgent
      * @param HttpClientInterface|null $httpClient
      */
     public function __construct(
         string $host,
         string $userAgent = null,
         HttpClientInterface $httpClient = null
-    )
-    {
-        $this->host = $host;
-        $this->userAgent = $userAgent;
-
-        if (null === $httpClient) {
-            $this->httpClient = HttpClient::create(
-                array_merge_recursive(
-                    [
-                        'base_uri' => $host,
-                        'headers' => [
-                            'Content-Type' => 'application/json',
-                        ],
-                    ],
-                    null === $userAgent
-                        ? []
-                        : [
-                        'headers' => [
-                            'User-Agent' => $userAgent,
-                        ],
-                    ]
-                )
-            );
-        } else {
-            $this->httpClient = $httpClient;
-        }
+    ) {
+        $this->host       = $host;
+        $this->userAgent  = $userAgent;
+        $this->httpClient = $httpClient;
     }
-
+    
     /**
      * getHost
      *
      * @return string
      */
-    public function getHost(): string
+    public function getHost() : string
     {
         return $this->host;
     }
-
+    
     /**
      * @return HttpClientInterface
      */
-    public function getHttpClient(): HttpClientInterface
+    public function getHttpClient() : HttpClientInterface
     {
+        if (null === $this->httpClient) {
+            $this->httpClient = $this->buildHttpClient();
+        }
+        
         return $this->httpClient;
     }
-
+    
     /**
+     * setHttpClient
+     *
      * @param HttpClientInterface $httpClient
+     *
+     * @return $this
      */
-    public function setHttpClient(HttpClientInterface $httpClient): void
+    public function setHttpClient(HttpClientInterface $httpClient) : self
     {
         $this->httpClient = $httpClient;
+        
+        return $this;
     }
-
+    
+    /**
+     * buildHttpClient
+     *
+     * @return HttpClientInterface
+     */
+    private function buildHttpClient() : HttpClientInterface {
+        return HttpClient::create(
+            array_merge_recursive(
+                [
+                    'base_uri' => $this->host,
+                    'headers'  => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ],
+                null === $this->userAgent
+                    ? []
+                    : [
+                    'headers' => [
+                        'User-Agent' => $this->userAgent,
+                    ],
+                ]
+            )
+        );
+    }
+    
     /**
      * getUserAgent
      *
      * @return null|string
      */
-    public function getUserAgent(): ?string
+    public function getUserAgent() : ?string
     {
         return $this->userAgent;
     }
-
+    
+    /**
+     * setUserAgent
+     *
+     * @param string $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent(string $userAgent) : self
+    {
+        $this->userAgent = $userAgent;
+        
+        return $this;
+    }
+    
     /**
      * delete
      *
-     * @param string $url
-     * @param array $options
+     * @param string     $url
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -124,8 +149,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         return $this->request(
             'DELETE',
             $url,
@@ -133,12 +157,12 @@ abstract class AbstractClient
             $schema
         );
     }
-
+    
     /**
      * get
      *
-     * @param string $url
-     * @param array $options
+     * @param string     $url
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -150,8 +174,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         return $this->request(
             'GET',
             $url,
@@ -159,12 +182,12 @@ abstract class AbstractClient
             $schema
         );
     }
-
+    
     /**
      * post
      *
-     * @param string $url
-     * @param array $options
+     * @param string     $url
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -176,8 +199,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         return $this->request(
             'POST',
             $url,
@@ -185,12 +207,12 @@ abstract class AbstractClient
             $schema
         );
     }
-
+    
     /**
      * put
      *
-     * @param string $url
-     * @param array $options
+     * @param string     $url
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -202,8 +224,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         return $this->request(
             'PUT',
             $url,
@@ -211,15 +232,15 @@ abstract class AbstractClient
             $schema
         );
     }
-
+    
     /**
      * request
      *
      * contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
      *
-     * @param string $method
-     * @param string $url
-     * @param array $options
+     * @param string     $method
+     * @param string     $url
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -232,8 +253,7 @@ abstract class AbstractClient
         string $url,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         try {
             $response = $this
                 ->httpClient
@@ -249,7 +269,7 @@ abstract class AbstractClient
                 $throwable
             );
         }
-
+        
         $data = new JsonData();
         try {
             $data->setData($response->getContent(false));
@@ -260,14 +280,14 @@ abstract class AbstractClient
                 $throwable
             );
         }
-
+        
         if (!$schema->validate($data)) {
             throw new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
             );
         }
-
+        
         $response = $data->getData();
         if (null === $response) {
             throw new ClientException(
@@ -275,7 +295,7 @@ abstract class AbstractClient
                 ClientException::INVALID_API_RESPONSE
             );
         }
-
+        
         return $response;
     }
 }
