@@ -292,9 +292,8 @@ class JwtValidationTest extends
         string $publicKey
     ): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockAPIClient = new Client('http://fakeHost');
+        $mockAPIClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse($publicKey)

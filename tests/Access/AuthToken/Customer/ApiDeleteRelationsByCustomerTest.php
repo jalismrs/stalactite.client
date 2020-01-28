@@ -35,9 +35,8 @@ class ApiDeleteRelationsByCustomerTest extends
      */
     public function testDeleteRelationsByCustomer(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockAPIClient = new Client('http://fakeHost');
+        $mockAPIClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -75,9 +74,8 @@ class ApiDeleteRelationsByCustomerTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockAPIClient = new Client('http://fakeHost');
+        $mockAPIClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(

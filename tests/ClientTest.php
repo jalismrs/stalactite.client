@@ -29,9 +29,8 @@ class ClientTest extends
      */
     public function testAccess(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 
@@ -55,9 +54,8 @@ class ClientTest extends
      */
     public function testAuthentication(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 
@@ -81,9 +79,8 @@ class ClientTest extends
      */
     public function testData(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 

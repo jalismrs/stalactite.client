@@ -30,9 +30,8 @@ class ClientTest extends
      */
     public function testCustomer(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 
@@ -56,9 +55,8 @@ class ClientTest extends
      */
     public function testDomain(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 
@@ -82,9 +80,8 @@ class ClientTest extends
      */
     public function testPost(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 
@@ -108,9 +105,8 @@ class ClientTest extends
      */
     public function testUser(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 

@@ -67,13 +67,13 @@ class ApiCreateTest extends
             ]
         );
 
-        $mockClient = new Client(
+        $mockAPIClient = new Client(
             'http://fakeHost',
             null,
             $mockHttpClient
         );
 
-        $response = $mockClient->createTrustedApp(
+        $response = $mockAPIClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -99,10 +99,9 @@ class ApiCreateTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client(
-            'http://fakeHost',
-            null,
+    
+        $mockAPIClient = new Client('http://fakeHost');
+        $mockAPIClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -118,8 +117,8 @@ class ApiCreateTest extends
                 ]
             )
         );
-
-        $mockClient->createTrustedApp(
+    
+        $mockAPIClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

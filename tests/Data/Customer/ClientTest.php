@@ -30,9 +30,8 @@ class ClientTest extends
      */
     public function testMe(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $baseClient = new Client('http://fakeHost');
+        $baseClient->setHttpClient(
             new MockHttpClient()
         );
 

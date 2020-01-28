@@ -28,9 +28,7 @@ class AbstractClientTest extends
     public function testHost(): void
     {
         $host = 'http://fakeHost';
-        $client = new Client(
-            $host
-        );
+        $client = new Client($host);
 
         self::assertSame($host, $client->getHost());
     }
@@ -45,9 +43,7 @@ class AbstractClientTest extends
      */
     public function testUserAgent(): void
     {
-        $client = new Client(
-            'http://fakeHost'
-        );
+        $client = new Client('http://fakeHost');
 
         self::assertNull($client->getUserAgent());
 
@@ -72,11 +68,8 @@ class AbstractClientTest extends
     public function testHttpClient(): void
     {
         $mockHttpClient = new MockHttpClient();
-        $client = new Client(
-            'http://fakeHost',
-            null,
-            $mockHttpClient
-        );
+        $client = new Client('http://fakeHost');
+        $client->setHttpClient($mockHttpClient);
 
         self::assertSame($mockHttpClient, $client->getHttpClient());
     }
