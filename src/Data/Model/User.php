@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
 use Jalismrs\Stalactite\Client\AbstractModel;
-use function array_map;
 
 /**
  * User
@@ -266,48 +265,5 @@ class User extends
         $this->leads[] = $leadModel;
 
         return $this;
-    }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return array_merge(
-            $this->asMinimalArray(),
-            [
-                'leads' => array_map(
-                    static function (Post $leadModel): array {
-                        return $leadModel->asArray();
-                    },
-                    $this->leads
-                ),
-                'posts' => array_map(
-                    static function (Post $postModel): array {
-                        return $postModel->asArray();
-                    },
-                    $this->posts
-                ),
-            ],
-        );
-    }
-
-    /**
-     * asMinimalArray
-     *
-     * @return array
-     */
-    public function asMinimalArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-            'email' => $this->email,
-            'googleId' => $this->googleId,
-            'admin' => $this->admin,
-        ];
     }
 }

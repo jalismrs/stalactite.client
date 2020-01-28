@@ -20,7 +20,7 @@ abstract class ModelFactory
      *
      * @return TrustedApp
      */
-    public static function createTrustedAppModel(array $data): TrustedApp
+    public static function createTrustedApp(array $data): TrustedApp
     {
         $model = new TrustedApp();
         $model

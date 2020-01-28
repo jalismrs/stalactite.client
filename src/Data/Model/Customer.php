@@ -125,20 +125,4 @@ class Customer extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'googleId' => $this->googleId,
-            'email' => $this->email,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-        ];
-    }
 }

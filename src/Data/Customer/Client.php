@@ -13,6 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function vsprintf;
 
@@ -106,7 +109,7 @@ class Client extends
             [
                 'customers' => array_map(
                     static function ($customer) {
-                        return ModelFactory::createCustomerModel($customer);
+                        return ModelFactory::createCustomer($customer);
                     },
                     $response['customers']
                 )
@@ -168,7 +171,7 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }
@@ -228,13 +231,13 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }
 
     /**
-     * create
+     * createCustomer
      *
      * @param Customer $customerModel
      * @param string $jwt
@@ -244,6 +247,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function createCustomer(
         Customer $customerModel,
@@ -279,11 +283,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'email' => $customerModel->getEmail(),
-                    'firstName' => $customerModel->getFirstName(),
-                    'lastName' => $customerModel->getLastName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $customerModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
             ],
             $schema
         );
@@ -294,13 +301,13 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }
 
     /**
-     * update
+     * updateCustomer
      *
      * @param Customer $customerModel
      * @param string $jwt
@@ -310,6 +317,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateCustomer(
         Customer $customerModel,
@@ -341,11 +349,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'email' => $customerModel->getEmail(),
-                    'firstName' => $customerModel->getFirstName(),
-                    'lastName' => $customerModel->getLastName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $customerModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                )
             ],
             $schema
         );

@@ -7,12 +7,15 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
-use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
 use function vsprintf;
@@ -78,7 +81,7 @@ class Client extends
             [
                 'trustedApps' => array_map(
                     static function ($trustedApp) {
-                        return ModelFactory::createTrustedAppModel($trustedApp);
+                        return ModelFactory::createTrustedApp($trustedApp);
                     },
                     $response['trustedApps']
                 )
@@ -138,22 +141,22 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
 
     /**
-     * update
+     * updateTrustedApp
      *
      * @param TrustedApp $trustedAppModel
      * @param string $jwt
      *
      * @return Response
-     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
@@ -185,10 +188,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'googleOAuthClientId' => $trustedAppModel->getGoogleOAuthClientId(),
-                    'name' => $trustedAppModel->getName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $trustedAppModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
@@ -200,7 +207,7 @@ class Client extends
     }
 
     /**
-     * create
+     * createTrustedApp
      *
      * @param TrustedApp $trustedAppModel
      * @param string $jwt
@@ -210,6 +217,9 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @noinspection PhpUnusedLocalVariableInspection
+     * @noinspection PhpUnusedLocalVariableInspection
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
@@ -252,10 +262,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'googleOAuthClientId' => $trustedAppModel->getGoogleOAuthClientId(),
-                    'name' => $trustedAppModel->getName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $trustedAppModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
@@ -264,7 +278,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
@@ -334,6 +348,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function resetAuthToken(
         TrustedApp $trustedAppModel,
@@ -370,9 +385,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'resetToken' => $trustedAppModel->getResetToken(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $trustedAppModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'reset',
+                        ],
+                    ]
+                )
             ],
             $schema
         );
@@ -381,7 +401,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }

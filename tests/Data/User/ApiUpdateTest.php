@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -29,9 +30,10 @@ class ApiUpdateTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function testUpdate(): void
     {
@@ -69,6 +71,7 @@ class ApiUpdateTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseOnUpdate(): void
     {

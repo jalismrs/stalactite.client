@@ -9,14 +9,17 @@ use Jalismrs\Stalactite\Client\Access\Domain\Client;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetRelationsTest
@@ -34,19 +37,14 @@ class ApiGetRelationsTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function testGetRelations(): void
     {
-        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-            ->asArray();
-        unset($domainUserRelation['domain']);
-
-        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
-            ->asArray();
-        unset($domainCustomerRelation['domain']);
+        $serializer = Serializer::getInstance();
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -60,10 +58,30 @@ class ApiGetRelationsTest extends
                                 'error' => null,
                                 'relations' => [
                                     'users' => [
-                                        $domainUserRelation
+                                        $serializer->normalize(
+                                            ModelFactory::getTestableDomainUserRelation(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
+                                                ],
+                                            ]
+                                        )
                                     ],
                                     'customers' => [
-                                        $domainCustomerRelation
+                                        $serializer->normalize(
+                                            ModelFactory::getTestableDomainCustomerRelation(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
+                                                ],
+                                            ]
+                                        )
                                     ]
                                 ]
                             ],
@@ -109,19 +127,14 @@ class ApiGetRelationsTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseGetRelations(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $domainUserRelation = ModelFactory::getTestableDomainUserRelation()
-            ->asArray();
-        unset($domainUserRelation['domain']);
-
-        $domainCustomerRelation = ModelFactory::getTestableDomainCustomerRelation()
-            ->asArray();
-        unset($domainCustomerRelation['domain']);
+        $serializer = Serializer::getInstance();
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -134,8 +147,28 @@ class ApiGetRelationsTest extends
                                 'success' => true,
                                 'error' => null,
                                 'relations' => [
-                                    'users' => $domainUserRelation,
-                                    'customers' => $domainCustomerRelation
+                                    'users' => $serializer->normalize(
+                                        ModelFactory::getTestableDomainUserRelation(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'domain'
+                                            ],
+                                        ]
+                                    ),
+                                    'customers' => $serializer->normalize(
+                                        ModelFactory::getTestableDomainCustomerRelation(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                'domain'
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR

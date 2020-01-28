@@ -13,6 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function vsprintf;
 
@@ -74,7 +77,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -136,7 +139,7 @@ class Client extends
             [
                 'domain' => null === $response['domain']
                     ? null
-                    : ModelFactory::createDomainModel($response['domain']),
+                    : ModelFactory::createDomain($response['domain']),
             ]
         );
     }
@@ -193,7 +196,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -255,7 +258,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -264,7 +267,7 @@ class Client extends
     }
 
     /**
-     * create
+     * createDomain
      *
      * @param Domain $domainModel
      * @param string $jwt
@@ -274,6 +277,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function createDomain(
         Domain $domainModel,
@@ -309,13 +313,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'apiKey' => $domainModel->getApiKey(),
-                    'externalAuth' => $domainModel->hasExternalAuth(),
-                    'generationDate' => $domainModel->getGenerationDate(),
-                    'name' => $domainModel->getName(),
-                    'type' => $domainModel->getType(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $domainModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
             ],
             $schema
         );
@@ -326,13 +331,13 @@ class Client extends
             [
                 'domain' => null === $response['domain']
                     ? null
-                    : ModelFactory::createDomainModel($response['domain']),
+                    : ModelFactory::createDomain($response['domain']),
             ]
         );
     }
 
     /**
-     * update
+     * updateDomain
      *
      * @param Domain $domainModel
      * @param string $jwt
@@ -342,6 +347,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateDomain(
         Domain $domainModel,
@@ -373,13 +379,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'apiKey' => $domainModel->getApiKey(),
-                    'externalAuth' => $domainModel->hasExternalAuth(),
-                    'generationDate' => $domainModel->getGenerationDate(),
-                    'name' => $domainModel->getName(),
-                    'type' => $domainModel->getType(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $domainModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                )
             ],
             $schema
         );

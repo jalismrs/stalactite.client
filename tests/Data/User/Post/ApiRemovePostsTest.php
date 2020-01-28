@@ -5,33 +5,29 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 
 /**
- * ApiRemovePostsTest
- *
+ * Class ApiRemovePostsTest
  * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
  */
 class ApiRemovePostsTest extends
     TestCase
 {
     /**
-     * testRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemovePosts(): void
     {
@@ -65,11 +61,8 @@ class ApiRemovePostsTest extends
     }
 
     /**
-     * testThrowOnInvalidResponseRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
@@ -107,18 +100,14 @@ class ApiRemovePostsTest extends
     }
 
     /**
-     * testThrowOnInvalidPostsParameterRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
+        $this->expectException(InvalidArgumentException::class);
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -141,8 +130,7 @@ class ApiRemovePostsTest extends
         $mockAPIClient->removePosts(
             ModelFactory::getTestableUser(),
             [
-                ModelFactory::getTestablePost()
-                    ->asArray()
+                'not a post'
             ],
             'fake user jwt'
         );

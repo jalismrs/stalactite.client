@@ -41,22 +41,4 @@ class DomainCustomerRelation extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'domain' => null === $this->domain
-                ? null
-                : $this->domain->asArray(),
-            'customer' => null === $this->customer
-                ? null
-                : $this->customer->asArray(),
-        ];
-    }
 }

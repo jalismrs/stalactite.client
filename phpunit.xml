@@ -19,5 +19,32 @@
         >
             <directory>tests</directory>
         </testsuite>
+        <testsuite
+                name="access"
+        >
+            <directory>tests/Access</directory>
+        </testsuite>
+        <testsuite
+                name="authentication"
+        >
+            <directory>tests/Authentication</directory>
+        </testsuite>
+        <testsuite
+                name="data"
+        >
+            <directory>tests/Data</directory>
+        </testsuite>
+        <testsuite
+                name="model"
+        >
+            <directory>tests/Access/Model</directory>
+            <directory>tests/Authentication/Model</directory>
+            <directory>tests/Data/Model</directory>
+        </testsuite>
+        <testsuite
+                name="util"
+        >
+            <directory>tests/Util</directory>
+        </testsuite>
     </testsuites>
 </phpunit>

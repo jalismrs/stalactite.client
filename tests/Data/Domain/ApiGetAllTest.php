@@ -8,12 +8,15 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetAllTest
@@ -30,12 +33,15 @@ class ApiGetAllTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function testGetAll(): void
     {
+        $serializer = Serializer::getInstance();
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -47,8 +53,14 @@ class ApiGetAllTest extends
                                 'success' => true,
                                 'error' => null,
                                 'domains' => [
-                                    ModelFactory::getTestableDomain()
-                                        ->asArray()
+                                    $serializer->normalize(
+                                        ModelFactory::getTestableDomain(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -77,11 +89,14 @@ class ApiGetAllTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
+
+        $serializer = Serializer::getInstance();
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -93,8 +108,14 @@ class ApiGetAllTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'domains' => ModelFactory::getTestableDomain()
-                                    ->asArray()
+                                'domains' => $serializer->normalize(
+                                    ModelFactory::getTestableDomain(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR

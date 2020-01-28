@@ -7,10 +7,10 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
@@ -82,7 +82,7 @@ class Client extends
             [
                 'relations' => array_map(
                     static function (array $relation): DomainUserRelation {
-                        return ModelFactory::createDomainUserRelationModel($relation);
+                        return ModelFactory::createDomainUserRelation($relation);
                     },
                     $response['relations']
                 )
@@ -144,7 +144,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearanceModel($response['clearance'])
+                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
             ]
         );
     }

@@ -125,20 +125,4 @@ class Post extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'name' => $this->name,
-            'shortName' => $this->shortName,
-            'adminAccess' => $this->adminAccess,
-            'allowAccess' => $this->allowAccess,
-        ];
-    }
 }

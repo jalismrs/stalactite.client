@@ -228,7 +228,7 @@ class Client extends
                     'appName' => $trustedAppModel->getName(),
                     'appToken' => $trustedAppModel->getAuthToken(),
                     'userGoogleJwt' => $userGoogleJwt,
-                ]
+                ],
             ],
             $schema
         );

@@ -10,12 +10,12 @@ namespace Jalismrs\Stalactite\Client\Access\Model;
  */
 class AccessClearance
 {
-    public const ADMIN_ACCESS = 'admin';
     public const NO_ACCESS = null;
+    public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
 
-    /** @var bool $access */
-    private $access;
+    /** @var bool $accessGranted */
+    private $accessGranted;
 
     /** @var string|null $accessType */
     private $accessType;
@@ -23,34 +23,36 @@ class AccessClearance
     /**
      * AccessClearance constructor.
      *
-     * @param bool $hasAccess
+     * @param bool $accessGranted
      * @param string|null $accessType
      */
     public function __construct(
-        bool $hasAccess = false,
+        bool $accessGranted = false,
         string $accessType = null
     )
     {
-        $this->access = $hasAccess;
+        $this->accessGranted = $accessGranted;
         $this->accessType = $accessType ?? self::NO_ACCESS;
     }
 
     /**
      * @return bool
      */
-    public function allowAccess(): bool
+    public function hasAccessGranted(): bool
     {
-        return $this->access;
+        return $this->accessGranted;
     }
 
     /**
-     * @param bool $access
+     * setAccessGranted
      *
-     * @return AccessClearance
+     * @param bool $accessGranted
+     *
+     * @return $this
      */
-    public function setAccess(bool $access): self
+    public function setAccessGranted(bool $accessGranted): self
     {
-        $this->access = $access;
+        $this->accessGranted = $accessGranted;
 
         return $this;
     }
@@ -78,29 +80,16 @@ class AccessClearance
     /**
      * @return bool
      */
-    public function hasUserAccess(): bool
+    public function hasUserAccessGranted(): bool
     {
-        return $this->allowAccess() && $this->accessType === self::USER_ACCESS;
+        return $this->hasAccessGranted() && $this->accessType === self::USER_ACCESS;
     }
 
     /**
      * @return bool
      */
-    public function hasAdminAccess(): bool
+    public function hasAdminAccessGranted(): bool
     {
-        return $this->allowAccess() && $this->accessType === self::ADMIN_ACCESS;
-    }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'accessGranted' => $this->access,
-            'accessType' => $this->accessType,
-        ];
+        return $this->hasAccessGranted() && $this->accessType === self::ADMIN_ACCESS;
     }
 }

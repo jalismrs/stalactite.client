@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -15,6 +16,10 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
 use function vsprintf;
@@ -149,7 +154,7 @@ class Client extends
             [
                 'users' => array_map(
                     static function ($user) {
-                        return ModelFactory::createUserModel($user);
+                        return ModelFactory::createUser($user);
                     },
                     $response['users']
                 )
@@ -211,7 +216,7 @@ class Client extends
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
@@ -271,22 +276,20 @@ class Client extends
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
 
     /**
-     * create
-     *
      * @param User $userModel
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function createUser(
         User $userModel,
@@ -323,19 +326,22 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json' => array_merge(
-                    $userModel->asMinimalArray(),
+                    Serializer::getInstance()->normalize(
+                        $userModel,
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'create',
+                            ],
+                        ]
+                    ),
                     [
-                        'leads' => array_map(
-                            static function (Post $leadModel): ?string {
-                                return $leadModel->getUid();
-                            },
-                            $userModel->getLeads()
+                        'leads' => ModelHelper::getUids(
+                            $userModel->getLeads(),
+                            Post::class
                         ),
-                        'posts' => array_map(
-                            static function (Post $postModel): ?string {
-                                return $postModel->getUid();
-                            },
-                            $userModel->getPosts()
+                        'posts' => ModelHelper::getUids(
+                            $userModel->getPosts(),
+                            Post::class
                         ),
                     ],
                 ),
@@ -349,13 +355,13 @@ class Client extends
             [
                 'user' => null === $response['user']
                     ? null
-                    : ModelFactory::createUserModel($response['user']),
+                    : ModelFactory::createUser($response['user']),
             ]
         );
     }
 
     /**
-     * update
+     * updateUser
      *
      * @param User $userModel
      * @param string $jwt
@@ -365,15 +371,13 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateUser(
         User $userModel,
         string $jwt
     ): Response
     {
-        $body = $userModel->asMinimalArray();
-        unset($body['googleId'], $body['uid']);
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -399,7 +403,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => Serializer::getInstance()->normalize(
+                    $userModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );

@@ -153,21 +153,4 @@ class Domain extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'name' => $this->name,
-            'type' => $this->type,
-            'apiKey' => $this->apiKey,
-            'externalAuth' => $this->externalAuth,
-            'generationDate' => $this->generationDate,
-        ];
-    }
 }

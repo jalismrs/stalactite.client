@@ -125,19 +125,4 @@ class TrustedApp extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'name' => $this->name,
-            'authToken' => $this->authToken,
-            'googleOAuthClientId' => $this->googleOAuthClientId,
-        ];
-    }
 }

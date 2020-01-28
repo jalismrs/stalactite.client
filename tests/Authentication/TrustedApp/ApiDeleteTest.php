@@ -7,12 +7,12 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 
 /**
  * ApiDeleteTest
@@ -60,6 +60,7 @@ class ApiDeleteTest extends
             $trustedAppModel->getResetToken(),
             'fake user jwt'
         );
+
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }

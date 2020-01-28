@@ -8,14 +8,17 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Customer\Client;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiGetAccessClearanceTest
@@ -33,12 +36,15 @@ class ApiGetAccessClearanceTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function testGetAccessClearance(): void
     {
+        $serializer = Serializer::getInstance();
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -49,8 +55,14 @@ class ApiGetAccessClearanceTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'clearance' => ModelFactory::getTestableAccessClearance()
-                                    ->asArray()
+                                'clearance' => $serializer->normalize(
+                                    ModelFactory::getTestableAccessClearance(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                ),
                             ],
                             JSON_THROW_ON_ERROR
                         )

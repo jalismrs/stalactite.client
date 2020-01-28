@@ -41,22 +41,4 @@ class DomainUserRelation extends
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    public function asArray(): array
-    {
-        return [
-            'uid' => $this->uid,
-            'domain' => null === $this->domain
-                ? null
-                : $this->domain->asArray(),
-            'user' => null === $this->user
-                ? null
-                : $this->user->asArray(),
-        ];
-    }
 }

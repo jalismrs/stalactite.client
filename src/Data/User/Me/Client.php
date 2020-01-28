@@ -13,6 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function vsprintf;
 
 /**
@@ -74,13 +77,13 @@ class Client extends
             [
                 'me' => null === $response['me']
                     ? null
-                    : ModelFactory::createUserModel($response['me']),
+                    : ModelFactory::createUser($response['me']),
             ]
         );
     }
 
     /**
-     * update
+     * updateMe
      *
      * @param User $userModel
      * @param string $jwt
@@ -90,6 +93,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateMe(
         User $userModel,
@@ -120,10 +124,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'firstName' => $userModel->getFirstName(),
-                    'lastName' => $userModel->getLastName()
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $userModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'updateMe',
+                        ],
+                    ]
+                )
             ],
             $schema
         );

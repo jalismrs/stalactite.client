@@ -13,6 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function vsprintf;
 
@@ -77,7 +80,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function ($post) {
-                        return ModelFactory::createPostModel($post);
+                        return ModelFactory::createPost($post);
                     },
                     $response['posts']
                 )
@@ -142,13 +145,13 @@ class Client extends
             [
                 'post' => null === $response['post']
                     ? null
-                    : ModelFactory::createPostModel($response['post']),
+                    : ModelFactory::createPost($response['post']),
             ]
         );
     }
 
     /**
-     * create
+     * createPost
      *
      * @param Post $postModel
      * @param string $jwt
@@ -158,6 +161,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function createPost(
         Post $postModel,
@@ -193,12 +197,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'access' => $postModel->allowAccess(),
-                    'admin' => $postModel->hasAdminAccess(),
-                    'name' => $postModel->getName(),
-                    'shortName' => $postModel->getShortName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $postModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
@@ -209,13 +215,13 @@ class Client extends
             [
                 'post' => null === $response['post']
                     ? null
-                    : ModelFactory::createPostModel($response['post']),
+                    : ModelFactory::createPost($response['post']),
             ]
         );
     }
 
     /**
-     * update
+     * updatePost
      *
      * @param Post $postModel
      * @param string $jwt
@@ -225,6 +231,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updatePost(
         Post $postModel,
@@ -256,12 +263,14 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => [
-                    'access' => $postModel->allowAccess(),
-                    'admin' => $postModel->hasAdminAccess(),
-                    'name' => $postModel->getName(),
-                    'shortName' => $postModel->getShortName(),
-                ]
+                'json' => Serializer::getInstance()->normalize(
+                    $postModel,
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
             ],
             $schema
         );
@@ -377,7 +386,7 @@ class Client extends
             [
                 'users' => array_map(
                     static function ($user) {
-                        return ModelFactory::createUserModel($user);
+                        return ModelFactory::createUser($user);
                     },
                     $response['users']
                 )

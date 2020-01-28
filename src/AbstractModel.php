@@ -38,11 +38,4 @@ abstract class AbstractModel
 
         return $this;
     }
-
-    /**
-     * asArray
-     *
-     * @return array
-     */
-    abstract public function asArray(): array;
 }

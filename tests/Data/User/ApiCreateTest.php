@@ -5,16 +5,19 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiCreateTest
@@ -32,12 +35,16 @@ class ApiCreateTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
+     * @throws SerializerException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testCreate(): void
     {
+        $serializer = Serializer::getInstance();
+
         $mockAPIClient = new Client(
             'http://fakeHost',
             null,
@@ -48,8 +55,14 @@ class ApiCreateTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'user' => ModelFactory::getTestableUser()
-                                    ->asArray()
+                                'user' => $serializer->normalize(
+                                    ModelFactory::getTestableUser(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -78,6 +91,8 @@ class ApiCreateTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseOnCreate(): void
     {

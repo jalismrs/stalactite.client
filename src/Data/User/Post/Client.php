@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -14,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
 use function vsprintf;
 
@@ -81,7 +83,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function ($post) {
-                        return ModelFactory::createPostModel($post);
+                        return ModelFactory::createPost($post);
                     },
                     $response['posts']
                 )
@@ -101,6 +103,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
      */
     public function addPosts(
         User $userModel,
@@ -108,23 +111,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'posts' => []
-        ];
-
-        foreach ($postModels as $postModel) {
-            if (!$postModel instanceof Post) {
-                throw new ClientException(
-                    '$posts array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $postModel->getUid()) {
-                $body['posts'][] = $postModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -150,7 +136,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'posts' => ModelHelper::getUids(
+                        $postModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );
@@ -173,6 +164,7 @@ class Client extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws InvalidArgumentException
      */
     public function removePosts(
         User $userModel,
@@ -180,23 +172,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $body = [
-            'posts' => []
-        ];
-
-        foreach ($postModels as $postModel) {
-            if (!$postModel instanceof Post) {
-                throw new ClientException(
-                    '$posts array parameter must be a Post model array',
-                    ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT
-                );
-            }
-
-            if (null !== $postModel->getUid()) {
-                $body['posts'][] = $postModel->getUid();
-            }
-        }
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -222,7 +197,12 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $body,
+                'json' => [
+                    'posts' => ModelHelper::getUids(
+                        $postModels,
+                        Post::class
+                    )
+                ],
             ],
             $schema
         );
