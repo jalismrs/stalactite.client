@@ -284,7 +284,7 @@ class Client extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -359,7 +359,7 @@ class Client extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $schema = new JsonSchema();
         $schema->setSchema(

@@ -42,7 +42,7 @@ class ApiGetByEmailAndGoogleIdTest extends
      */
     public function testGetByEmailAndGoogleId() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

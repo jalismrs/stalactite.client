@@ -40,7 +40,7 @@ class ApiDeleteTest extends
      */
     public function testDelete() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

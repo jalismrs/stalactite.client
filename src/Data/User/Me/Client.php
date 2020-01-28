@@ -101,7 +101,7 @@ class Client extends
         User $userModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $schema = new JsonSchema();
         $schema->setSchema(

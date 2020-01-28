@@ -39,7 +39,7 @@ class ApiGetByNameTest extends
      */
     public function testGetByName() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -101,7 +101,7 @@ class ApiGetByNameTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

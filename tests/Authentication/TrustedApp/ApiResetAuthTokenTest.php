@@ -40,7 +40,7 @@ class ApiResetAuthTokenTest extends
      */
     public function testResetAuthToken() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockClient = new Client(
             'http://fakeHost',

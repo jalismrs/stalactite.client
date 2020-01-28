@@ -40,7 +40,7 @@ class ApiGetTest extends
      */
     public function testGet() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -98,7 +98,7 @@ class ApiGetTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

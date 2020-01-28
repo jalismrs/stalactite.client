@@ -43,7 +43,7 @@ class ApiAddCustomerRelationTest extends
      */
     public function testAddCustomerRelation() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

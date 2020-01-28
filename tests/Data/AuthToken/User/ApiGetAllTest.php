@@ -41,7 +41,7 @@ class ApiGetAllTest extends
      */
     public function testGetAll() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

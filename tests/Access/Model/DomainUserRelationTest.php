@@ -31,7 +31,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupCommon() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableDomainUserRelation();
         
@@ -57,7 +57,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupMain() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableDomainUserRelation();
         
@@ -108,7 +108,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupIgnoreDomain() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableDomainUserRelation();
         
@@ -154,7 +154,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupMainIgnoreUser() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableDomainUserRelation();
         

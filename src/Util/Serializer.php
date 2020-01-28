@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -24,12 +24,14 @@ final class Serializer
             'common',
         ],
     ];
-    
+
     /**
      * @var \Symfony\Component\Serializer\Serializer
      */
     private $serializer;
-    
+
+    private static $instance;
+
     /**
      * Serializer constructor.
      *
@@ -37,7 +39,7 @@ final class Serializer
      * @throws \Symfony\Component\Serializer\Exception\LogicException
      * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
-    public function __construct()
+    private function __construct()
     {
         $this->serializer = new SerializerObject(
             [
@@ -54,7 +56,7 @@ final class Serializer
             ]
         );
     }
-    
+
     /**
      * create
      *
@@ -65,17 +67,15 @@ final class Serializer
      * @throws \Symfony\Component\Serializer\Exception\LogicException
      * @throws \Symfony\Component\Serializer\Exception\MappingException
      */
-    public static function create() : self
+    public static function getInstance(): self
     {
-        static $serializer = null;
-        
-        if (null === $serializer) {
-            $serializer = new self();
+        if (!(self::$instance instanceof self)) {
+            self::$instance = new self();
         }
-        
-        return $serializer;
+
+        return self::$instance;
     }
-    
+
     /**
      * normalize
      *
@@ -89,7 +89,7 @@ final class Serializer
      * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Serializer\Exception\LogicException
      */
-    public function normalize($data, array $context = []) : array
+    public function normalize($data, array $context = []): array
     {
         return $this->serializer->normalize(
             $data,
@@ -101,13 +101,13 @@ final class Serializer
             )
         );
     }
-    
+
     /**
      * denormalize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *
@@ -133,7 +133,7 @@ final class Serializer
             )
         );
     }
-    
+
     /**
      * serialize
      *
@@ -144,7 +144,7 @@ final class Serializer
      *
      * @throws \Symfony\Component\Serializer\Exception\NotEncodableValueException
      */
-    public function serialize($data, array $context = []) : string
+    public function serialize($data, array $context = []): string
     {
         return $this->serializer->serialize(
             $data,
@@ -156,13 +156,13 @@ final class Serializer
             )
         );
     }
-    
+
     /**
      * deserialize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *

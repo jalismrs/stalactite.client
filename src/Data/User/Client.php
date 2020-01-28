@@ -34,13 +34,13 @@ class Client extends
     private $clientLead;
     private $clientMe;
     private $clientPost;
-    
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * lead
      *
@@ -55,10 +55,10 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientLead;
     }
-    
+
     /**
      * me
      *
@@ -73,10 +73,10 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientMe;
     }
-    
+
     /**
      * post
      *
@@ -90,16 +90,16 @@ class Client extends
                 $this->httpClient
             );
         }
-        
+
         return $this->clientPost;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * getAllUsers
      *
@@ -130,7 +130,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users',
@@ -145,7 +145,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -159,7 +159,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -190,7 +190,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users/%s',
@@ -206,7 +206,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -217,7 +217,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * @param string $email
      * @param string $googleId
@@ -247,7 +247,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->get(
             vsprintf(
                 '%s/data/users',
@@ -266,7 +266,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -277,7 +277,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * createUser
      *
@@ -299,8 +299,8 @@ class Client extends
         User $userModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -318,7 +318,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->post(
             vsprintf(
                 '%s/data/users',
@@ -353,7 +353,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -364,7 +364,7 @@ class Client extends
             ]
         );
     }
-    
+
     /**
      * updateUser
      *
@@ -386,8 +386,8 @@ class Client extends
         User $userModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
-        
+        $serializer = Serializer::getInstance();
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -400,7 +400,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->put(
             vsprintf(
                 '%s/data/users/%s',
@@ -424,13 +424,13 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -454,7 +454,7 @@ class Client extends
                 ]
             ]
         );
-        
+
         $response = $this->delete(
             vsprintf(
                 '%s/data/users/%s',
@@ -470,7 +470,7 @@ class Client extends
             ],
             $schema
         );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

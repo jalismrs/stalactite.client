@@ -254,7 +254,7 @@ class Client extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -329,7 +329,7 @@ class Client extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $schema = new JsonSchema();
         $schema->setSchema(

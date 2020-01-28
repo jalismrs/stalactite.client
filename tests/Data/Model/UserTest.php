@@ -31,7 +31,7 @@ class UserTest extends
      */
     public function testGroupCommon() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         
@@ -57,7 +57,7 @@ class UserTest extends
      */
     public function testGroupMain() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         
@@ -113,7 +113,7 @@ class UserTest extends
      */
     public function testGroupMin() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         
@@ -153,7 +153,7 @@ class UserTest extends
      */
     public function testGroupCreate() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         
@@ -191,7 +191,7 @@ class UserTest extends
      */
     public function testGroupUpdate() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         
@@ -229,7 +229,7 @@ class UserTest extends
      */
     public function testGroupUpdateMe() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $model = ModelFactory::getTestableUser();
         

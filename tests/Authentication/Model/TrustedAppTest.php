@@ -31,7 +31,7 @@ class TrustedAppTest extends
      */
     public function testGroupCommon() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $model = ModelFactory::getTestableTrustedApp();
         
@@ -57,7 +57,7 @@ class TrustedAppTest extends
      */
     public function testGroupMain() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $model = ModelFactory::getTestableTrustedApp();
         
@@ -95,7 +95,7 @@ class TrustedAppTest extends
      */
     public function testGroupReset() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $model = ModelFactory::getTestableTrustedApp();
         
@@ -130,7 +130,7 @@ class TrustedAppTest extends
      */
     public function testGroupCreate() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $model = ModelFactory::getTestableTrustedApp();
         
@@ -166,7 +166,7 @@ class TrustedAppTest extends
      */
     public function testGroupUpdate() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $model = ModelFactory::getTestableTrustedApp();
         

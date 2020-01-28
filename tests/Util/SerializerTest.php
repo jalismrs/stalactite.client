@@ -27,8 +27,8 @@ class SerializerTest extends
      */
     public function testCreate() : void
     {
-        $serializer1 = Serializer::create();
-        $serializer2 = Serializer::create();
+        $serializer1 = Serializer::getInstance();
+        $serializer2 = Serializer::getInstance();
         
         self::assertSame($serializer1, $serializer2);
     }

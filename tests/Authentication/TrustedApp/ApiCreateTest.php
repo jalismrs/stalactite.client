@@ -40,7 +40,7 @@ class ApiCreateTest extends
      */
     public function testCreate() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockHttpClient = new MockHttpClient(
             [

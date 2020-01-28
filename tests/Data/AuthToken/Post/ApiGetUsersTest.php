@@ -41,7 +41,7 @@ class ApiGetUsersTest extends
      */
     public function testGetUsers() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',

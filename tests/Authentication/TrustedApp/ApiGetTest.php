@@ -42,7 +42,7 @@ class ApiGetTest extends
      */
     public function testGet() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockClient = new Client(
             'http://fakeHost',

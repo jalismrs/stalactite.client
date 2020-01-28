@@ -127,7 +127,7 @@ class ApiAddPostsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
     
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
     
         $mockAPIClient = new Client(
             'http://fakeHost',

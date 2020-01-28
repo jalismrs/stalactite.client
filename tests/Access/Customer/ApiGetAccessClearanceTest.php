@@ -43,7 +43,7 @@ class ApiGetAccessClearanceTest extends
      */
     public function testGetAccessClearance() : void
     {
-        $serializer = Serializer::create();
+        $serializer = Serializer::getInstance();
         
         $mockAPIClient = new Client(
             'http://fakeHost',
