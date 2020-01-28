@@ -100,8 +100,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $serializer = Serializer::getInstance();
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -126,7 +124,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $userModel,
                     [
                         AbstractNormalizer::GROUPS => [

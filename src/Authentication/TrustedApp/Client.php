@@ -163,8 +163,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $serializer = Serializer::getInstance();
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -190,7 +188,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $trustedAppModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -220,14 +218,14 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
+     * @noinspection PhpUnusedLocalVariableInspection
+     * @noinspection PhpUnusedLocalVariableInspection
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
     ): Response
     {
-        $serializer = Serializer::getInstance();
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -264,7 +262,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $trustedAppModel,
                     [
                         AbstractNormalizer::GROUPS => [
@@ -357,8 +355,6 @@ class Client extends
         string $jwt
     ): Response
     {
-        $serializer = Serializer::getInstance();
-
         $schema = new JsonSchema();
         $schema->setSchema(
             [
@@ -389,7 +385,7 @@ class Client extends
                 'headers' => [
                     'X-API-TOKEN' => $jwt
                 ],
-                'json' => $serializer->normalize(
+                'json' => Serializer::getInstance()->normalize(
                     $trustedAppModel,
                     [
                         AbstractNormalizer::GROUPS => [
