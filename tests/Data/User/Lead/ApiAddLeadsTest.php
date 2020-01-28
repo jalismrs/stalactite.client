@@ -5,20 +5,14 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Client;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * ApiAddLeadsTest
@@ -29,18 +23,14 @@ class ApiAddLeadsTest extends
     TestCase
 {
     /**
-     * testAddPosts
-     *
-     * @return void
-     *
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testAddPosts(): void
+    public function testAddLeads(): void
     {
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -72,16 +62,12 @@ class ApiAddLeadsTest extends
     }
 
     /**
-     * testThrowOnInvalidResponseAddPosts
-     *
-     * @return void
-     *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
      */
-    public function testThrowOnInvalidResponseAddPosts(): void
+    public function testThrowOnInvalidResponseAddLeads(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
@@ -115,26 +101,14 @@ class ApiAddLeadsTest extends
     }
 
     /**
-     * testThrowOnInvalidPostsParameterAddPosts
-     *
-     * @return void
-     *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
      */
-    public function testThrowOnInvalidPostsParameterAddPosts(): void
+    public function testThrowOnInvalidLeadsParameterAddLeads(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-
-        $serializer = Serializer::getInstance();
+        $this->expectException(InvalidArgumentException::class);
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -157,14 +131,7 @@ class ApiAddLeadsTest extends
         $mockAPIClient->addLeads(
             ModelFactory::getTestableUser(),
             [
-                $serializer->normalize(
-                    ModelFactory::getTestablePost(),
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'main',
-                        ],
-                    ]
-                )
+                'not a lead'
             ],
             'fake user jwt'
         );

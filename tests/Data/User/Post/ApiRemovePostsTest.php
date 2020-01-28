@@ -5,40 +5,29 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiRemovePostsTest
- *
+ * Class ApiRemovePostsTest
  * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
  */
 class ApiRemovePostsTest extends
     TestCase
 {
     /**
-     * testRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemovePosts(): void
     {
@@ -72,14 +61,10 @@ class ApiRemovePostsTest extends
     }
 
     /**
-     * testThrowOnInvalidResponseRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidResponseRemovePosts(): void
     {
@@ -115,26 +100,14 @@ class ApiRemovePostsTest extends
     }
 
     /**
-     * testThrowOnInvalidPostsParameterRemovePosts
-     *
-     * @return void
-     *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_PARAMETER_PASSED_TO_CLIENT);
-
-        $serializer = Serializer::getInstance();
+        $this->expectException(InvalidArgumentException::class);
 
         $mockAPIClient = new Client(
             'http://fakeHost',
@@ -157,14 +130,7 @@ class ApiRemovePostsTest extends
         $mockAPIClient->removePosts(
             ModelFactory::getTestableUser(),
             [
-                $serializer->normalize(
-                    ModelFactory::getTestablePost(),
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'main',
-                        ],
-                    ]
-                )
+                'not a post'
             ],
             'fake user jwt'
         );

@@ -4,11 +4,10 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * SerializerTest
@@ -24,10 +23,8 @@ class SerializerTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testCreate(): void
     {

@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractClient;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -17,11 +18,7 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -288,15 +285,11 @@ class Client extends
      * @param User $userModel
      * @param string $jwt
      * @return Response
-     * @throws CircularReferenceException
      * @throws ClientException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws LogicException
-     * @throws MappingException
-     * @throws \InvalidArgumentException
+     * @throws SerializerException
+     * @throws InvalidArgumentException
      */
     public function createUser(
         User $userModel,
@@ -378,13 +371,9 @@ class Client extends
      * @return Response
      *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateUser(
         User $userModel,

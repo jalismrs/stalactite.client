@@ -5,13 +5,10 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -28,12 +25,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupCommon(): void
     {
@@ -54,12 +47,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupMain(): void
     {
@@ -110,12 +99,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupMin(): void
     {
@@ -150,12 +135,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupCreate(): void
     {
@@ -188,12 +169,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupUpdate(): void
     {
@@ -226,12 +203,8 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
+     * @throws SerializerException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      */
     public function testGroupUpdateMe(): void
     {

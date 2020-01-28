@@ -5,21 +5,18 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Client;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -38,15 +35,11 @@ class ApiCreateTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws SerializerException
+     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testCreate(): void
     {
@@ -96,14 +89,10 @@ class ApiCreateTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseOnCreate(): void
     {

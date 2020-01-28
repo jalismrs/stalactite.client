@@ -14,11 +14,7 @@ use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Symfony\Component\Serializer\Exception\CircularReferenceException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -157,15 +153,10 @@ class Client extends
      * @param string $jwt
      *
      * @return Response
-     *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
@@ -226,13 +217,9 @@ class Client extends
      * @return Response
      *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
@@ -361,13 +348,9 @@ class Client extends
      * @return Response
      *
      * @throws ClientException
-     * @throws CircularReferenceException
-     * @throws ExceptionInterface
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function resetAuthToken(
         TrustedApp $trustedAppModel,
