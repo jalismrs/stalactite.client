@@ -15,7 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Client as PostClient;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\ModelHelpers;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Exception\CircularReferenceException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -347,11 +347,11 @@ class Client extends
                         ]
                     ),
                     [
-                        'leads' => ModelHelpers::getUids(
+                        'leads' => ModelHelper::getUids(
                             $userModel->getLeads(),
                             Post::class
                         ),
-                        'posts' => ModelHelpers::getUids(
+                        'posts' => ModelHelper::getUids(
                             $userModel->getPosts(),
                             Post::class
                         ),

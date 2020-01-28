@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\ModelHelpers;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
 use function vsprintf;
 
@@ -135,7 +135,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json' => [
-                    'leads' => ModelHelpers::getUids(
+                    'leads' => ModelHelper::getUids(
                         $leadModels,
                         Post::class
                     )
@@ -195,7 +195,7 @@ class Client extends
                     'X-API-TOKEN' => $jwt
                 ],
                 'json' => [
-                    'leads' => ModelHelpers::getUids(
+                    'leads' => ModelHelper::getUids(
                         $leadModels,
                         Post::class
                     )

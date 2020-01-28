@@ -11,11 +11,11 @@ use function is_a;
 use function is_object;
 
 /**
- * ModelHelpers
+ * ModelHelper
  *
  * @package Jalismrs\Stalactite\Client\Util
  */
-final class ModelHelpers
+final class ModelHelper
 {
     /**
      * getUids
