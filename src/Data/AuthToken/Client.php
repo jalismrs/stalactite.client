@@ -33,7 +33,7 @@ class Client extends
             $this->clientCustomer = new Customer\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -51,7 +51,7 @@ class Client extends
             $this->clientDomain = new Domain\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -69,7 +69,7 @@ class Client extends
             $this->clientPost = new Post\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -87,7 +87,7 @@ class Client extends
             $this->clientUser = new User\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 

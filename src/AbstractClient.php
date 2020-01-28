@@ -256,7 +256,7 @@ abstract class AbstractClient
     ) : array {
         try {
             $response = $this
-                ->httpClient
+                ->getHttpClient()
                 ->request(
                     $method,
                     $url,

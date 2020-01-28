@@ -44,7 +44,7 @@ class Client extends
             $this->clientMe = new  Me\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 

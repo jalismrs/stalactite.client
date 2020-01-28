@@ -57,7 +57,7 @@ class Client extends
             $this->clientTrustedApp = new TrustedAppClient(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -83,7 +83,7 @@ class Client extends
     {
         try {
             return $this
-                ->httpClient
+                ->getHttpClient()
                 ->request(
                     'GET',
                     vsprintf(

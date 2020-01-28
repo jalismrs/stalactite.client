@@ -32,7 +32,7 @@ class Client extends
             $this->clientAccess = new Access\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -50,7 +50,7 @@ class Client extends
             $this->clientAuthentication = new Authentication\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
@@ -68,7 +68,7 @@ class Client extends
             $this->clientData = new Data\Client(
                 $this->host,
                 $this->getUserAgent(),
-                $this->httpClient
+                $this->getHttpClient()
             );
         }
 
