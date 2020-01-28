@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access;
 
@@ -28,7 +28,7 @@ class Client extends
      *
      * @return AuthToken\Client
      */
-    public function authToken(): AuthToken\Client
+    public function authToken() : AuthToken\Client
     {
         if (null === $this->clientAuthToken) {
             $this->clientAuthToken = new AuthToken\Client(
@@ -36,17 +36,20 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientAuthToken
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientAuthToken;
     }
-
+    
     /**
      * customer
      *
      * @return Customer\Client
      */
-    public function customers(): Customer\Client
+    public function customers() : Customer\Client
     {
         if (null === $this->clientCustomer) {
             $this->clientCustomer = new Customer\Client(
@@ -54,17 +57,20 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientCustomer
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientCustomer;
     }
-
+    
     /**
      * domain
      *
      * @return Domain\Client
      */
-    public function domains(): Domain\Client
+    public function domains() : Domain\Client
     {
         if (null === $this->clientDomain) {
             $this->clientDomain = new Domain\Client(
@@ -72,17 +78,20 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientDomain
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientDomain;
     }
-
+    
     /**
      * relation
      *
      * @return Relation\Client
      */
-    public function relations(): Relation\Client
+    public function relations() : Relation\Client
     {
         if (null === $this->clientRelation) {
             $this->clientRelation = new Relation\Client(
@@ -90,17 +99,20 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientRelation
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientRelation;
     }
-
+    
     /**
      * user
      *
      * @return User\Client
      */
-    public function users(): User\Client
+    public function users() : User\Client
     {
         if (null === $this->clientUser) {
             $this->clientUser = new User\Client(
@@ -108,8 +120,11 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientUser
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientUser;
     }
 }

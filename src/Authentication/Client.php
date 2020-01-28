@@ -59,6 +59,9 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientTrustedApp
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientTrustedApp;

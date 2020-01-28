@@ -34,6 +34,9 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientAccess
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientAccess;
@@ -52,6 +55,9 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientAuthentication
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientAuthentication;
@@ -70,6 +76,9 @@ class Client extends
                 $this->getUserAgent(),
                 $this->getHttpClient()
             );
+            $this->clientData
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientData;

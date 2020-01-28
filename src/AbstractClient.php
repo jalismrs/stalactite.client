@@ -122,11 +122,11 @@ abstract class AbstractClient
     /**
      * setUserAgent
      *
-     * @param string $userAgent
+     * @param string|null $userAgent
      *
      * @return $this
      */
-    public function setUserAgent(string $userAgent) : self
+    public function setUserAgent(?string $userAgent) : self
     {
         $this->userAgent = $userAgent;
         
