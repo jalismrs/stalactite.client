@@ -113,7 +113,7 @@ class Client extends
             [
                 'customers' => array_map(
                     static function ($customer) {
-                        return ModelFactory::createCustomerModel($customer);
+                        return ModelFactory::createCustomer($customer);
                     },
                     $response['customers']
                 )
@@ -175,7 +175,7 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }
@@ -235,7 +235,7 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }
@@ -311,7 +311,7 @@ class Client extends
             [
                 'customer' => null === $response['customer']
                     ? null
-                    : ModelFactory::createCustomerModel($response['customer']),
+                    : ModelFactory::createCustomer($response['customer']),
             ]
         );
     }

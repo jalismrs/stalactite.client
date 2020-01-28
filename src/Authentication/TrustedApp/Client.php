@@ -85,7 +85,7 @@ class Client extends
             [
                 'trustedApps' => array_map(
                     static function ($trustedApp) {
-                        return ModelFactory::createTrustedAppModel($trustedApp);
+                        return ModelFactory::createTrustedApp($trustedApp);
                     },
                     $response['trustedApps']
                 )
@@ -145,7 +145,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
@@ -293,7 +293,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }
@@ -422,7 +422,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'trustedApp' => ModelFactory::createTrustedAppModel($response['trustedApp'])
+                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
             ]
         );
     }

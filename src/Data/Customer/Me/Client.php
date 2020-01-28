@@ -73,7 +73,7 @@ class Client extends
             [
                 'me' => null === $response['me']
                     ? null
-                    : ModelFactory::createCustomerModel($response['me']),
+                    : ModelFactory::createCustomer($response['me']),
             ]
         );
     }

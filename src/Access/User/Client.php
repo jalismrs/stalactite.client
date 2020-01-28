@@ -120,7 +120,7 @@ class Client extends
             [
                 'relations' => array_map(
                     static function (array $relation) use ($userModel): DomainUserRelation {
-                        $domainUserRelationModel = ModelFactory::createDomainUserRelationModel($relation);
+                        $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
                         $domainUserRelationModel->setUser($userModel);
 
                         return $domainUserRelationModel;
@@ -188,7 +188,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearanceModel($response['clearance'])
+                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
             ]
         );
     }

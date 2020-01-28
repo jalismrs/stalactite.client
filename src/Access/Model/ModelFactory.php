@@ -21,18 +21,18 @@ abstract class ModelFactory
      *
      * @return DomainUserRelation
      */
-    public static function createDomainUserRelationModel(array $data): DomainUserRelation
+    public static function createDomainUserRelation(array $data): DomainUserRelation
     {
         $model = new DomainUserRelation();
         $model
             ->setUser(
                 isset($data['user'])
-                    ? DataModelFactory::createUserModel($data['user'])
+                    ? DataModelFactory::createUser($data['user'])
                     : null
             )
             ->setDomain(
                 isset($data['domain'])
-                    ? DataModelFactory::createDomainModel($data['domain'])
+                    ? DataModelFactory::createDomain($data['domain'])
                     : null
             )
             ->setUid($data['uid'] ?? null);
@@ -49,18 +49,18 @@ abstract class ModelFactory
      *
      * @return DomainCustomerRelation
      */
-    public static function createDomainCustomerRelationModel(array $data): DomainCustomerRelation
+    public static function createDomainCustomerRelation(array $data): DomainCustomerRelation
     {
         $model = new DomainCustomerRelation();
         $model
             ->setCustomer(
                 isset($data['customer'])
-                    ? DataModelFactory::createCustomerModel($data['customer'])
+                    ? DataModelFactory::createCustomer($data['customer'])
                     : null
             )
             ->setDomain(
                 isset($data['domain'])
-                    ? DataModelFactory::createDomainModel($data['domain'])
+                    ? DataModelFactory::createDomain($data['domain'])
                     : null
             )
             ->setUid($data['uid'] ?? null);
@@ -77,7 +77,7 @@ abstract class ModelFactory
      *
      * @return AccessClearance
      */
-    public static function createAccessClearanceModel(array $data): AccessClearance
+    public static function createAccessClearance(array $data): AccessClearance
     {
         $model = new AccessClearance();
         $model

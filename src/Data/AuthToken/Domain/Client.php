@@ -82,7 +82,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -153,7 +153,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -221,7 +221,7 @@ class Client extends
             [
                 'domains' => array_map(
                     static function ($domain) {
-                        return ModelFactory::createDomainModel($domain);
+                        return ModelFactory::createDomain($domain);
                     },
                     $response['domains']
                 )
@@ -288,7 +288,7 @@ class Client extends
             [
                 'domain' => null === $response['domain']
                     ? null
-                    : ModelFactory::createDomainModel($response['domain']),
+                    : ModelFactory::createDomain($response['domain']),
             ]
         );
     }

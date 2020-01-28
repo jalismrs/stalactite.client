@@ -82,7 +82,7 @@ class Client extends
             [
                 'leads' => array_map(
                     static function ($lead) {
-                        return ModelFactory::createPostModel($lead);
+                        return ModelFactory::createPost($lead);
                     },
                     $response['leads']
                 )

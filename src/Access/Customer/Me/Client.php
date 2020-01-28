@@ -84,7 +84,7 @@ class Client extends
             [
                 'relations' => array_map(
                     static function (array $relation): DomainCustomerRelation {
-                        return ModelFactory::createDomainCustomerRelationModel($relation);
+                        return ModelFactory::createDomainCustomerRelation($relation);
                     },
                     $response['relations']
                 )
@@ -146,7 +146,7 @@ class Client extends
             $response['success'],
             $response['error'],
             [
-                'clearance' => ModelFactory::createAccessClearanceModel($response['clearance'])
+                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
             ]
         );
     }

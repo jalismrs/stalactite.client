@@ -20,7 +20,7 @@ abstract class ModelFactory
      *
      * @return User
      */
-    public static function createUserModel(array $data): User
+    public static function createUser(array $data): User
     {
         $model = new User();
         $model
@@ -33,13 +33,13 @@ abstract class ModelFactory
 
         if (isset($data['posts'])) {
             foreach ($data['posts'] as $post) {
-                $model->addPost(self::createPostModel($post));
+                $model->addPost(self::createPost($post));
             }
         }
 
         if (isset($data['leads'])) {
             foreach ($data['leads'] as $lead) {
-                $model->addLead(self::createPostModel($lead));
+                $model->addLead(self::createPost($lead));
             }
         }
 
@@ -55,7 +55,7 @@ abstract class ModelFactory
      *
      * @return Domain
      */
-    public static function createDomainModel(array $data): Domain
+    public static function createDomain(array $data): Domain
     {
         $model = new Domain();
         $model
@@ -78,7 +78,7 @@ abstract class ModelFactory
      *
      * @return Customer
      */
-    public static function createCustomerModel(array $data): Customer
+    public static function createCustomer(array $data): Customer
     {
         $model = new Customer();
         $model
@@ -100,7 +100,7 @@ abstract class ModelFactory
      *
      * @return Post
      */
-    public static function createPostModel(array $data): Post
+    public static function createPost(array $data): Post
     {
         $model = new Post();
         $model

@@ -82,7 +82,7 @@ class Client extends
             [
                 'posts' => array_map(
                     static function ($post) {
-                        return ModelFactory::createPostModel($post);
+                        return ModelFactory::createPost($post);
                     },
                     $response['posts']
                 )
