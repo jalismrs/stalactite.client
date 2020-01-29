@@ -38,6 +38,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->trustedApps();
         $client2 = $mockClient->trustedApps();

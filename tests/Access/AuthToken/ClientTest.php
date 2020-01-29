@@ -20,7 +20,7 @@ class ClientTest extends
     TestCase
 {
     use ClientTestTrait;
-
+    
     /**
      * testCustomer
      *
@@ -38,26 +38,27 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
-
+        $mockClient->setUserAgent('fake user agent');
+        
         $client1 = $mockClient->customers();
         $client2 = $mockClient->customers();
-
+        
         self::checkClients(
             $mockClient,
             $client1,
             $client2
         );
     }
-
+    
     /**
-     * testDomain
+     * testDomainDefault
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testDomain(): void
+    public function testDomainDefault(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
@@ -66,6 +67,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->domains();
         $client2 = $mockClient->domains();
@@ -94,6 +96,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->users();
         $client2 = $mockClient->users();

@@ -38,6 +38,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->authToken();
         $client2 = $mockClient->authToken();
@@ -66,6 +67,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->customers();
         $client2 = $mockClient->customers();
@@ -94,6 +96,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->domains();
         $client2 = $mockClient->domains();
@@ -122,6 +125,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->posts();
         $client2 = $mockClient->posts();
@@ -150,6 +154,7 @@ class ClientTest extends
         $mockClient->setLogger(
             new TestLogger()
         );
+        $mockClient->setUserAgent('fake user agent');
 
         $client1 = $mockClient->users();
         $client2 = $mockClient->users();
