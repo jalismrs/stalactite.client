@@ -131,23 +131,23 @@ abstract class AbstractClient
     /**
      * delete
      *
-     * @param string     $url
+     * @param string     $uri
      * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws InvalidDataTypeException
      * @throws ClientException
+     * @throws InvalidDataTypeException
      */
     final protected function delete(
-        string $url,
+        string $uri,
         array $options,
         JsonSchema $schema
     ) : array {
         return $this->request(
             'DELETE',
-            $url,
+            $uri,
             $options,
             $schema
         );
@@ -156,23 +156,23 @@ abstract class AbstractClient
     /**
      * get
      *
-     * @param string     $url
+     * @param string     $endpoint
      * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws InvalidDataTypeException
      * @throws ClientException
+     * @throws InvalidDataTypeException
      */
     final protected function get(
-        string $url,
+        string $endpoint,
         array $options,
         JsonSchema $schema
     ) : array {
         return $this->request(
             'GET',
-            $url,
+            $endpoint,
             $options,
             $schema
         );
@@ -181,23 +181,23 @@ abstract class AbstractClient
     /**
      * post
      *
-     * @param string     $url
+     * @param string     $endpoint
      * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws InvalidDataTypeException
      * @throws ClientException
+     * @throws InvalidDataTypeException
      */
     final protected function post(
-        string $url,
+        string $endpoint,
         array $options,
         JsonSchema $schema
     ) : array {
         return $this->request(
             'POST',
-            $url,
+            $endpoint,
             $options,
             $schema
         );
@@ -206,23 +206,23 @@ abstract class AbstractClient
     /**
      * put
      *
-     * @param string     $url
+     * @param string     $endpoint
      * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws InvalidDataTypeException
      * @throws ClientException
+     * @throws InvalidDataTypeException
      */
     final protected function put(
-        string $url,
+        string $endpoint,
         array $options,
         JsonSchema $schema
     ) : array {
         return $this->request(
             'PUT',
-            $url,
+            $endpoint,
             $options,
             $schema
         );
@@ -231,21 +231,19 @@ abstract class AbstractClient
     /**
      * request
      *
-     * contact the Stalactite API, check the response based on a JsonSchema and then return the response as an array
-     *
      * @param string     $method
-     * @param string     $url
+     * @param string     $endpoint
      * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
      *
-     * @throws InvalidDataTypeException
      * @throws ClientException
+     * @throws InvalidDataTypeException
      */
     private function request(
         string $method,
-        string $url,
+        string $endpoint,
         array $options,
         JsonSchema $schema
     ) : array {
@@ -254,7 +252,7 @@ abstract class AbstractClient
                 ->getHttpClient()
                 ->request(
                     $method,
-                    $url,
+                    "{$this->host}{$endpoint}",
                     $options
                 );
         } catch (Throwable $throwable) {

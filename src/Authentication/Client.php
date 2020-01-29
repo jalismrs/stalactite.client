@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication;
 
@@ -32,26 +32,26 @@ class Client extends
     AbstractClient
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
-
+    
     private const AUTHORIZED_JWT_TYPES = [
         'user',
         'customer'
     ];
-
+    
     private $clientTrustedApp;
-
+    
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
+    
     /**
      * trustedApp
      *
      * @return TrustedAppClient
      */
-    public function trustedApps(): TrustedAppClient
+    public function trustedApps() : TrustedAppClient
     {
         if (null === $this->clientTrustedApp) {
             $this->clientTrustedApp = new TrustedAppClient($this->getHost());
@@ -59,16 +59,16 @@ class Client extends
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
         }
-
+        
         return $this->clientTrustedApp;
     }
-
+    
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
+    
     /**
      * getRSAPublicKey
      *
@@ -78,19 +78,14 @@ class Client extends
      *
      * @throws ClientException
      */
-    public function getRSAPublicKey(): string
+    public function getRSAPublicKey() : string
     {
         try {
             return $this
                 ->getHttpClient()
                 ->request(
                     'GET',
-                    vsprintf(
-                        '%s/auth/publicKey',
-                        [
-                            $this->getHost(),
-                        ]
-                    )
+                    $this->getHost() . '/auth/publicKey'
                 )
                 ->getContent();
         } catch (Throwable $throwable) {
@@ -101,7 +96,7 @@ class Client extends
             );
         }
     }
-
+    
     /**
      * validate
      *
@@ -116,8 +111,7 @@ class Client extends
      */
     public function validate(
         string $jwt
-    ): bool
-    {
+    ) : bool {
         try {
             $token = $this->getTokenFromString($jwt);
         } catch (Throwable $throwable) {
@@ -127,10 +121,10 @@ class Client extends
                 $throwable
             );
         }
-
+        
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
-
+        
         if (!$token->hasClaim('iss') || !$token->hasClaim('aud') || !$token->hasClaim('type') ||
             !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
             throw new ClientException(
@@ -138,31 +132,31 @@ class Client extends
                 ClientException::INVALID_JWT_STRUCTURE
             );
         }
-
+        
         if ($token->isExpired()) {
             throw new ClientException(
                 'Expired JWT',
                 ClientException::EXPIRED_JWT
             );
         }
-
+        
         if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
             throw new ClientException(
                 'Invalid JWT user type',
                 ClientException::INVALID_JWT_USER_TYPE
             );
         }
-
+        
         if (!$token->validate($data)) {
             throw new ClientException(
                 'Invalid JWT issuer',
                 ClientException::INVALID_JWT_ISSUER
             );
         }
-
-        $signer = new Sha256();
+        
+        $signer    = new Sha256();
         $publicKey = new Key($this->getRSAPublicKey());
-
+        
         try {
             return $token->verify($signer, $publicKey);
         } catch (InvalidArgumentException $exception) {
@@ -180,12 +174,12 @@ class Client extends
             );
         }
     }
-
+    
     /**
      * login
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $userGoogleJwt
+     * @param string     $userGoogleJwt
      *
      * @return Response
      *
@@ -196,42 +190,36 @@ class Client extends
     public function login(
         TrustedApp $trustedAppModel,
         string $userGoogleJwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'jwt' => [
+                'jwt'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this->post(
-            vsprintf(
-                '%s/auth/login',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/auth/login',
             [
                 'json' => [
-                    'appName' => $trustedAppModel->getName(),
-                    'appToken' => $trustedAppModel->getAuthToken(),
+                    'appName'       => $trustedAppModel->getName(),
+                    'appToken'      => $trustedAppModel->getAuthToken(),
                     'userGoogleJwt' => $userGoogleJwt,
                 ],
             ],
             $schema
         );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -240,14 +228,14 @@ class Client extends
             ]
         );
     }
-
+    
     /**
      * @param string $jwt
      *
      * @return Token
      * @throws Throwable
      */
-    protected function getTokenFromString(string $jwt): Token
+    protected function getTokenFromString(string $jwt) : Token
     {
         return (new Parser())->parse($jwt);
     }

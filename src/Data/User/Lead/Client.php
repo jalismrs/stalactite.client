@@ -63,9 +63,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/users/%s/leads',
+                '/data/users/%s/leads',
                 [
-                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),
@@ -126,9 +125,8 @@ class Client extends
 
         $response = $this->post(
             vsprintf(
-                '%s/data/users/%s/leads',
+                '/data/users/%s/leads',
                 [
-                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),
@@ -187,9 +185,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/data/users/%s/leads',
+                '/data/users/%s/leads',
                 [
-                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),

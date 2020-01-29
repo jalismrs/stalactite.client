@@ -88,12 +88,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -150,9 +145,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -206,12 +200,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -272,12 +261,7 @@ class Client extends
         );
 
         $response = $this->post(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -338,9 +322,8 @@ class Client extends
 
         $response = $this->put(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->getHost(),
                     $customerModel->getUid(),
                 ],
             ),
@@ -395,9 +378,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->getHost(),
                     $uid,
                 ],
             ),

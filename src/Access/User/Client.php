@@ -99,9 +99,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/access/users/%s/relations',
+                '/access/users/%s/relations',
                 [
-                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),
@@ -168,9 +167,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/access/users/%s/access/%s',
+                '/access/users/%s/access/%s',
                 [
-                    $this->getHost(),
                     $userModel->getUid(),
                     $domainModel->getUid(),
                 ],

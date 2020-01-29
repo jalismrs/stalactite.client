@@ -57,12 +57,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/users/me',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/data/users/me',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -114,12 +109,7 @@ class Client extends
         );
 
         $response = $this->post(
-            vsprintf(
-                '%s/data/users/me',
-                [
-                    $this->getHost(),
-                ],
-            ),
+            '/data/users/me',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
