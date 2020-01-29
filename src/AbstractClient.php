@@ -12,6 +12,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
 use function array_merge_recursive;
+use function json_encode;
 
 /**
  * AbstractClient
@@ -120,7 +121,7 @@ abstract class AbstractClient
         if (null === $this->logger) {
             $this->logger = $this->createDefaultLogger();
         }
-    
+        
         return $this->logger;
     }
     
@@ -129,7 +130,7 @@ abstract class AbstractClient
      *
      * @return LoggerInterface
      */
-    private function createDefaultLogger(): LoggerInterface
+    private function createDefaultLogger() : LoggerInterface
     {
         return new NullLogger();
     }
@@ -298,6 +299,18 @@ abstract class AbstractClient
         JsonSchema $schema
     ) : array {
         try {
+            $this->getLogger()
+                 ->debug(
+                     json_encode(
+                         [
+                             $method,
+                             "{$this->host}{$endpoint}",
+                             $options,
+                         ],
+                         JSON_THROW_ON_ERROR, 512
+                     )
+                 );
+            
             $response = $this
                 ->getHttpClient()
                 ->request(
@@ -312,23 +325,30 @@ abstract class AbstractClient
                 $throwable
             );
             
-            $this->getLogger()->error($exception);
+            $this->getLogger()
+                 ->error($exception);
             
             throw $exception;
         }
         
         $data = new JsonData();
         try {
-            $data->setData($response->getContent(false));
+            $content = $response->getContent(false);
+            
+            $this->getLogger()
+                 ->debug($content);
+            
+            $data->setData($content);
         } catch (Throwable $throwable) {
             $exception = new ClientException(
                 'Invalid json response from Stalactite API',
                 ClientException::INVALID_API_RESPONSE,
                 $throwable
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -337,9 +357,10 @@ abstract class AbstractClient
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -349,9 +370,10 @@ abstract class AbstractClient
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
