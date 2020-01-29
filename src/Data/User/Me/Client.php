@@ -60,7 +60,7 @@ class Client extends
             vsprintf(
                 '%s/data/users/me',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -117,7 +117,7 @@ class Client extends
             vsprintf(
                 '%s/data/users/me',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [

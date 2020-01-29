@@ -55,7 +55,7 @@ class Client extends
             vsprintf(
                 '%s/access/relations/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $domainRelationModel->getUid(),
                 ],
             ),

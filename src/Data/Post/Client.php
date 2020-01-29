@@ -63,7 +63,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -127,7 +127,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -190,7 +190,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -255,7 +255,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $postModel->getUid(),
                 ],
             ),
@@ -315,7 +315,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -368,7 +368,7 @@ class Client extends
             vsprintf(
                 '%s/data/posts/%s/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),

@@ -92,7 +92,7 @@ class Client extends
             vsprintf(
                 '%s/access/domains/%s/relations',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $domainModel->getUid(),
                 ],
             ),
@@ -173,7 +173,7 @@ class Client extends
             vsprintf(
                 '%s/access/domains/%s/relations/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $domainModel->getUid(),
                 ],
             ),
@@ -240,7 +240,7 @@ class Client extends
             vsprintf(
                 '%s/access/domains/%s/relations/customers',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $domainModel->getUid(),
                 ],
             ),

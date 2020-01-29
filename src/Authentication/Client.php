@@ -54,7 +54,7 @@ class Client extends
     public function trustedApps(): TrustedAppClient
     {
         if (null === $this->clientTrustedApp) {
-            $this->clientTrustedApp = new TrustedAppClient($this->host);
+            $this->clientTrustedApp = new TrustedAppClient($this->getHost());
             $this->clientTrustedApp
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -88,7 +88,7 @@ class Client extends
                     vsprintf(
                         '%s/auth/publicKey',
                         [
-                            $this->host,
+                            $this->getHost(),
                         ]
                     )
                 )
@@ -219,7 +219,7 @@ class Client extends
             vsprintf(
                 '%s/auth/login',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [

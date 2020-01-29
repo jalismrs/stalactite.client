@@ -56,7 +56,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers/me',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [

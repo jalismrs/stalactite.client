@@ -61,7 +61,7 @@ class Client extends
             vsprintf(
                 '%s/access/auth-token/users/%s/relations',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),

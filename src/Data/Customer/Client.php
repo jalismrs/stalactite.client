@@ -41,7 +41,7 @@ class Client extends
     public function me(): Me\Client
     {
         if (null === $this->clientMe) {
-            $this->clientMe = new Me\Client($this->host);
+            $this->clientMe = new Me\Client($this->getHost());
             $this->clientMe
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -91,7 +91,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -152,7 +152,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -209,7 +209,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -275,7 +275,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -340,7 +340,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $customerModel->getUid(),
                 ],
             ),
@@ -397,7 +397,7 @@ class Client extends
             vsprintf(
                 '%s/data/customers/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),

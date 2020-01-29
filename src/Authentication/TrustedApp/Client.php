@@ -64,7 +64,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -125,7 +125,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -180,7 +180,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $trustedAppModel->getUid(),
                 ],
             ),
@@ -255,7 +255,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -316,7 +316,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -377,7 +377,7 @@ class Client extends
             vsprintf(
                 '%s/auth/trustedApps/%s/authToken/reset',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $trustedAppModel->getUid(),
                 ],
             ),

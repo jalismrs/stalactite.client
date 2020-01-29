@@ -60,7 +60,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -121,7 +121,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -176,7 +176,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -237,7 +237,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -306,7 +306,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -371,7 +371,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $domainModel->getUid(),
                 ],
             ),
@@ -428,7 +428,7 @@ class Client extends
             vsprintf(
                 '%s/data/domains/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),

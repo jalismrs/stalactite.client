@@ -50,7 +50,7 @@ class Client extends
     public function leads(): Lead\Client
     {
         if (null === $this->clientLead) {
-            $this->clientLead = new Lead\Client($this->host);
+            $this->clientLead = new Lead\Client($this->getHost());
             $this->clientLead
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -67,7 +67,7 @@ class Client extends
     public function me(): Me\Client
     {
         if (null === $this->clientMe) {
-            $this->clientMe = new Me\Client($this->host);
+            $this->clientMe = new Me\Client($this->getHost());
             $this->clientMe
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -83,7 +83,7 @@ class Client extends
     public function posts(): PostClient
     {
         if (null === $this->clientPost) {
-            $this->clientPost = new PostClient($this->host);
+            $this->clientPost = new PostClient($this->getHost());
             $this->clientPost
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -134,7 +134,7 @@ class Client extends
             vsprintf(
                 '%s/data/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -195,7 +195,7 @@ class Client extends
             vsprintf(
                 '%s/data/users/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
@@ -252,7 +252,7 @@ class Client extends
             vsprintf(
                 '%s/data/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -315,7 +315,7 @@ class Client extends
             vsprintf(
                 '%s/data/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -392,7 +392,7 @@ class Client extends
             vsprintf(
                 '%s/data/users/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $userModel->getUid(),
                 ],
             ),
@@ -446,7 +446,7 @@ class Client extends
             vsprintf(
                 '%s/data/users/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),

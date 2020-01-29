@@ -95,7 +95,7 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
     
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Client('invalidHost');
         $mockClient->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'

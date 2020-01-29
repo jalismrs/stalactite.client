@@ -21,11 +21,11 @@ abstract class AbstractClient
     /**
      * @var string
      */
-    protected $host;
+    private $host;
     /**
      * @var HttpClientInterface
      */
-    protected $httpClient;
+    private $httpClient;
     /**
      * @var null|string
      */
@@ -34,18 +34,12 @@ abstract class AbstractClient
     /**
      * AbstractClient constructor.
      *
-     * @param string                   $host
-     * @param string|null              $userAgent
-     * @param HttpClientInterface|null $httpClient
+     * @param string $host
      */
     public function __construct(
-        string $host,
-        string $userAgent = null,
-        HttpClientInterface $httpClient = null
+        string $host
     ) {
-        $this->host       = $host;
-        $this->userAgent  = $userAgent;
-        $this->httpClient = $httpClient;
+        $this->host = $host;
     }
     
     /**
@@ -89,7 +83,8 @@ abstract class AbstractClient
      *
      * @return HttpClientInterface
      */
-    private function buildHttpClient() : HttpClientInterface {
+    private function buildHttpClient() : HttpClientInterface
+    {
         return HttpClient::create(
             array_merge_recursive(
                 [

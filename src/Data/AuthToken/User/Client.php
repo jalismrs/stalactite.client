@@ -62,7 +62,7 @@ class Client extends
             vsprintf(
                 '%s/data/auth-token/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -130,7 +130,7 @@ class Client extends
             vsprintf(
                 '%s/data/auth-token/users',
                 [
-                    $this->host,
+                    $this->getHost(),
                 ],
             ),
             [
@@ -197,7 +197,7 @@ class Client extends
             vsprintf(
                 '%s/data/auth-token/users/%s',
                 [
-                    $this->host,
+                    $this->getHost(),
                     $uid,
                 ],
             ),
