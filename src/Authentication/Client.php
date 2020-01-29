@@ -80,6 +80,7 @@ class Client extends
      */
     public function getRSAPublicKey() : string
     {
+        //TODO: uniformize
         try {
             return $this
                 ->getHttpClient()
