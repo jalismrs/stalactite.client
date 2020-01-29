@@ -6,6 +6,8 @@ namespace Jalismrs\Stalactite\Client;
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
@@ -26,6 +28,10 @@ abstract class AbstractClient
      * @var HttpClientInterface
      */
     private $httpClient;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
     /**
      * @var null|string
      */
@@ -58,7 +64,7 @@ abstract class AbstractClient
     public function getHttpClient() : HttpClientInterface
     {
         if (null === $this->httpClient) {
-            $this->httpClient = $this->buildHttpClient();
+            $this->httpClient = $this->createDefaultHttpClient();
         }
         
         return $this->httpClient;
@@ -79,11 +85,11 @@ abstract class AbstractClient
     }
     
     /**
-     * buildHttpClient
+     * createDefaultHttpClient
      *
      * @return HttpClientInterface
      */
-    private function buildHttpClient() : HttpClientInterface
+    private function createDefaultHttpClient() : HttpClientInterface
     {
         return HttpClient::create(
             array_merge_recursive(
@@ -102,6 +108,44 @@ abstract class AbstractClient
                 ]
             )
         );
+    }
+    
+    /**
+     * getLogger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger() : LoggerInterface
+    {
+        if (null === $this->logger) {
+            $this->logger = $this->createDefaultLogger();
+        }
+    
+        return $this->logger;
+    }
+    
+    /**
+     * createDefaultLogger
+     *
+     * @return LoggerInterface
+     */
+    private function createDefaultLogger(): LoggerInterface
+    {
+        return new NullLogger();
+    }
+    
+    /**
+     * setLogger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return $this
+     */
+    public function setLogger(LoggerInterface $logger) : self
+    {
+        $this->logger = $logger;
+        
+        return $this;
     }
     
     /**
@@ -127,6 +171,12 @@ abstract class AbstractClient
         
         return $this;
     }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * API calls ---------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
     
     /**
      * delete
