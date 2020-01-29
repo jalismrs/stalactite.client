@@ -28,9 +28,9 @@ class AbstractClientTest extends
     public function testHost(): void
     {
         $host = 'http://fakeHost';
-        $client = new Client($host);
+        $mockClient = new Client($host);
 
-        self::assertSame($host, $client->getHost());
+        self::assertSame($host, $mockClient->getHost());
     }
 
     /**
@@ -43,18 +43,16 @@ class AbstractClientTest extends
      */
     public function testUserAgent(): void
     {
-        $client = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
 
-        self::assertNull($client->getUserAgent());
+        self::assertNull($mockClient->getUserAgent());
 
         $userAgent = 'fake user agent';
-        $client = new Client(
-            'http://fakeHost',
-            $userAgent
-        );
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setUserAgent($userAgent);
 
-        self::assertIsString($client->getUserAgent());
-        self::assertSame($userAgent, $client->getUserAgent());
+        self::assertIsString($mockClient->getUserAgent());
+        self::assertSame($userAgent, $mockClient->getUserAgent());
     }
 
     /**
@@ -68,9 +66,9 @@ class AbstractClientTest extends
     public function testHttpClient(): void
     {
         $mockHttpClient = new MockHttpClient();
-        $client = new Client('http://fakeHost');
-        $client->setHttpClient($mockHttpClient);
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient($mockHttpClient);
 
-        self::assertSame($mockHttpClient, $client->getHttpClient());
+        self::assertSame($mockHttpClient, $mockClient->getHttpClient());
     }
 }

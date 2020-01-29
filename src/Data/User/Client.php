@@ -50,11 +50,7 @@ class Client extends
     public function leads(): Lead\Client
     {
         if (null === $this->clientLead) {
-            $this->clientLead = new Lead\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientLead = new Lead\Client($this->host);
             $this->clientLead
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -71,11 +67,7 @@ class Client extends
     public function me(): Me\Client
     {
         if (null === $this->clientMe) {
-            $this->clientMe = new Me\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientMe = new Me\Client($this->host);
             $this->clientMe
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -91,11 +83,7 @@ class Client extends
     public function posts(): PostClient
     {
         if (null === $this->clientPost) {
-            $this->clientPost = new PostClient(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientPost = new PostClient($this->host);
             $this->clientPost
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());

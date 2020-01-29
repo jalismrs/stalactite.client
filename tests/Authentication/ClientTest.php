@@ -30,16 +30,16 @@ class ClientTest extends
      */
     public function testTrustedApp(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->trustedApps();
-        $client2 = $baseClient->trustedApps();
+        $client1 = $mockClient->trustedApps();
+        $client2 = $mockClient->trustedApps();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );

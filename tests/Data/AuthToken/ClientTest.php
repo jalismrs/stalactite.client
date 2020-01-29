@@ -30,16 +30,16 @@ class ClientTest extends
      */
     public function testCustomer(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->customers();
-        $client2 = $baseClient->customers();
+        $client1 = $mockClient->customers();
+        $client2 = $mockClient->customers();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -55,16 +55,16 @@ class ClientTest extends
      */
     public function testDomain(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->domains();
-        $client2 = $baseClient->domains();
+        $client1 = $mockClient->domains();
+        $client2 = $mockClient->domains();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -80,16 +80,16 @@ class ClientTest extends
      */
     public function testPost(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->posts();
-        $client2 = $baseClient->posts();
+        $client1 = $mockClient->posts();
+        $client2 = $mockClient->posts();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -105,16 +105,16 @@ class ClientTest extends
      */
     public function testUser(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->users();
-        $client2 = $baseClient->users();
+        $client1 = $mockClient->users();
+        $client2 = $mockClient->users();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );

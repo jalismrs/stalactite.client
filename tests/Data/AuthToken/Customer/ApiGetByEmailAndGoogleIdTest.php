@@ -44,8 +44,8 @@ class ApiGetByEmailAndGoogleIdTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -71,7 +71,7 @@ class ApiGetByEmailAndGoogleIdTest extends
 
         $customerModel = ModelFactory::getTestableCustomer();
 
-        $response = $mockAPIClient->getByEmailAndGoogleId(
+        $response = $mockClient->getByEmailAndGoogleId(
             $customerModel->getEmail(),
             $customerModel->getGoogleId(),
             'fake API auth token'
@@ -98,8 +98,8 @@ class ApiGetByEmailAndGoogleIdTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -118,7 +118,7 @@ class ApiGetByEmailAndGoogleIdTest extends
 
         $customerModel = ModelFactory::getTestableCustomer();
 
-        $mockAPIClient->getByEmailAndGoogleId(
+        $mockClient->getByEmailAndGoogleId(
             $customerModel->getEmail(),
             $customerModel->getGoogleId(),
             'fake API auth token'

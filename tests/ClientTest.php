@@ -29,16 +29,16 @@ class ClientTest extends
      */
     public function testAccess(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->access();
-        $client2 = $baseClient->access();
+        $client1 = $mockClient->access();
+        $client2 = $mockClient->access();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -54,16 +54,16 @@ class ClientTest extends
      */
     public function testAuthentication(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->authentication();
-        $client2 = $baseClient->authentication();
+        $client1 = $mockClient->authentication();
+        $client2 = $mockClient->authentication();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -79,16 +79,16 @@ class ClientTest extends
      */
     public function testData(): void
     {
-        $baseClient = new Client('http://fakeHost');
-        $baseClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->data();
-        $client2 = $baseClient->data();
+        $client1 = $mockClient->data();
+        $client2 = $mockClient->data();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );

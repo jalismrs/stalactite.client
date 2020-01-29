@@ -35,8 +35,8 @@ class ApiDeleteRelationTest extends
      */
     public function testDeleteRelation(): void
     {
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -52,7 +52,7 @@ class ApiDeleteRelationTest extends
             )
         );
 
-        $response = $mockAPIClient->deleteRelation(
+        $response = $mockClient->deleteRelation(
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'
         );
@@ -74,8 +74,8 @@ class ApiDeleteRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -92,7 +92,7 @@ class ApiDeleteRelationTest extends
             )
         );
 
-        $mockAPIClient->deleteRelation(
+        $mockClient->deleteRelation(
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'
         );

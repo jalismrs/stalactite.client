@@ -44,8 +44,8 @@ class ApiCreateTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiCreateTest extends
             )
         );
 
-        $response = $mockAPIClient->createDomain(
+        $response = $mockClient->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'
         );
@@ -96,8 +96,8 @@ class ApiCreateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -115,7 +115,7 @@ class ApiCreateTest extends
             )
         );
 
-        $mockAPIClient->createDomain(
+        $mockClient->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'
         );

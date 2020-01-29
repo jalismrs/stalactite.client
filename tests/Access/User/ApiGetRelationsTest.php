@@ -43,8 +43,8 @@ class ApiGetRelationsTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -73,7 +73,7 @@ class ApiGetRelationsTest extends
             )
         );
 
-        $response = $mockAPIClient->getRelations(
+        $response = $mockClient->getRelations(
             DataTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
@@ -102,8 +102,8 @@ class ApiGetRelationsTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -128,7 +128,7 @@ class ApiGetRelationsTest extends
             )
         );
 
-        $mockAPIClient->getRelations(
+        $mockClient->getRelations(
             DataTestModelFactory::getTestableUser(),
             'fake user jwt'
         );

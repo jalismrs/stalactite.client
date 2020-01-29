@@ -42,8 +42,8 @@ class ApiGetAllTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $response = $mockAPIClient->getAllTrustedApps(
+        $response = $mockClient->getAllTrustedApps(
             'fake user jwt'
         );
 
@@ -95,8 +95,8 @@ class ApiGetAllTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -113,7 +113,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $mockAPIClient->getAllTrustedApps(
+        $mockClient->getAllTrustedApps(
             'fake user jwt'
         );
     }

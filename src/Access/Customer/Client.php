@@ -41,11 +41,7 @@ class Client extends
     public function me(): Me\Client
     {
         if (null === $this->clientMe) {
-            $this->clientMe = new  Me\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientMe = new  Me\Client($this->host);
             $this->clientMe
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());

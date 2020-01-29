@@ -44,8 +44,8 @@ class ApiResetAuthTokenTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiResetAuthTokenTest extends
             )
         );
 
-        $response = $mockAPIClient->resetAuthToken(
+        $response = $mockClient->resetAuthToken(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -96,8 +96,8 @@ class ApiResetAuthTokenTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -113,7 +113,7 @@ class ApiResetAuthTokenTest extends
             )
         );
 
-        $mockAPIClient->resetAuthToken(
+        $mockClient->resetAuthToken(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

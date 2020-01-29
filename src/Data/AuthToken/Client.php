@@ -30,11 +30,7 @@ class Client extends
     public function customers(): Customer\Client
     {
         if (null === $this->clientCustomer) {
-            $this->clientCustomer = new Customer\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientCustomer = new Customer\Client($this->host);
             $this->clientCustomer
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -51,11 +47,7 @@ class Client extends
     public function domains(): Domain\Client
     {
         if (null === $this->clientDomain) {
-            $this->clientDomain = new Domain\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientDomain = new Domain\Client($this->host);
             $this->clientDomain
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -72,11 +64,7 @@ class Client extends
     public function posts(): Post\Client
     {
         if (null === $this->clientPost) {
-            $this->clientPost = new Post\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientPost = new Post\Client($this->host);
             $this->clientPost
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -93,11 +81,7 @@ class Client extends
     public function users(): User\Client
     {
         if (null === $this->clientUser) {
-            $this->clientUser = new User\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientUser = new User\Client($this->host);
             $this->clientUser
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());

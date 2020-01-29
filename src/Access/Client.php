@@ -31,11 +31,7 @@ class Client extends
     public function authToken() : AuthToken\Client
     {
         if (null === $this->clientAuthToken) {
-            $this->clientAuthToken = new AuthToken\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientAuthToken = new AuthToken\Client($this->host);
             $this->clientAuthToken
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -52,11 +48,7 @@ class Client extends
     public function customers() : Customer\Client
     {
         if (null === $this->clientCustomer) {
-            $this->clientCustomer = new Customer\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientCustomer = new Customer\Client($this->host);
             $this->clientCustomer
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -73,11 +65,7 @@ class Client extends
     public function domains() : Domain\Client
     {
         if (null === $this->clientDomain) {
-            $this->clientDomain = new Domain\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientDomain = new Domain\Client($this->host);
             $this->clientDomain
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -94,11 +82,7 @@ class Client extends
     public function relations() : Relation\Client
     {
         if (null === $this->clientRelation) {
-            $this->clientRelation = new Relation\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientRelation = new Relation\Client($this->host);
             $this->clientRelation
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());
@@ -115,11 +99,7 @@ class Client extends
     public function users() : User\Client
     {
         if (null === $this->clientUser) {
-            $this->clientUser = new User\Client(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientUser = new User\Client($this->host);
             $this->clientUser
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());

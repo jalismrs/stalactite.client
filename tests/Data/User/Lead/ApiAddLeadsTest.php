@@ -32,8 +32,8 @@ class ApiAddLeadsTest extends
      */
     public function testAddLeads(): void
     {
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -49,7 +49,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $response = $mockAPIClient->addLeads(
+        $response = $mockClient->addLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -71,8 +71,8 @@ class ApiAddLeadsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -89,7 +89,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $mockAPIClient->addLeads(
+        $mockClient->addLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -108,8 +108,8 @@ class ApiAddLeadsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -125,7 +125,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $mockAPIClient->addLeads(
+        $mockClient->addLeads(
             ModelFactory::getTestableUser(),
             [
                 'not a lead'

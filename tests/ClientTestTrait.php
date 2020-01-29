@@ -21,7 +21,7 @@ trait ClientTestTrait
      *
      * @static
      *
-     * @param AbstractClient $baseClient
+     * @param AbstractClient $mockClient
      * @param AbstractClient $client1
      * @param AbstractClient $client2
      *
@@ -31,14 +31,14 @@ trait ClientTestTrait
      * @throws InvalidArgumentException
      */
     private static function checkClients(
-        AbstractClient $baseClient,
+        AbstractClient $mockClient,
         AbstractClient $client1,
         AbstractClient $client2
     ): void
     {
-        self::assertSame($baseClient->getHost(), $client1->getHost());
-        self::assertSame($baseClient->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($baseClient->getUserAgent(), $client1->getUserAgent());
+        self::assertSame($mockClient->getHost(), $client1->getHost());
+        self::assertSame($mockClient->getHttpClient(), $client1->getHttpClient());
+        self::assertSame($mockClient->getUserAgent(), $client1->getUserAgent());
         self::assertSame($client1, $client2);
     }
 }

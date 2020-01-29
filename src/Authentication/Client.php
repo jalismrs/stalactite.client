@@ -54,11 +54,7 @@ class Client extends
     public function trustedApps(): TrustedAppClient
     {
         if (null === $this->clientTrustedApp) {
-            $this->clientTrustedApp = new TrustedAppClient(
-                $this->host,
-                $this->getUserAgent(),
-                $this->getHttpClient()
-            );
+            $this->clientTrustedApp = new TrustedAppClient($this->host);
             $this->clientTrustedApp
                 ->setHttpClient($this->getHttpClient())
                 ->setUserAgent($this->getUserAgent());

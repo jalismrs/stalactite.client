@@ -31,8 +31,8 @@ class ApiRemoveLeadsTest extends
      */
     public function testRemoveLeads(): void
     {
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -48,7 +48,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $response = $mockAPIClient->removeLeads(
+        $response = $mockClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -70,8 +70,8 @@ class ApiRemoveLeadsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -88,7 +88,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockAPIClient->removeLeads(
+        $mockClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -107,8 +107,8 @@ class ApiRemoveLeadsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockAPIClient = new Client('http://fakeHost');
-        $mockAPIClient->setHttpClient(
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -124,7 +124,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockAPIClient->removeLeads(
+        $mockClient->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 'not a lead'
