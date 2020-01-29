@@ -73,8 +73,12 @@ final class Serializer
         if (!(self::$instance instanceof self)) {
             try {
                 self::$instance = new self();
-            } catch (Throwable $t) {
-                throw new SerializerException('Error while instantiating the serializer', null, $t);
+            } catch (Throwable $throwable) {
+                throw new SerializerException(
+                    'Error while instantiating the serializer',
+                    null,
+                    $throwable
+                );
             }
         }
 
@@ -103,8 +107,12 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while normalizing data', null, $t);
+        } catch (Throwable $throwable) {
+            throw new SerializerException(
+                'Error while normalizing data',
+                null,
+                $throwable
+            );
         }
     }
 
@@ -132,8 +140,12 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while denormalizing data', null, $t);
+        } catch (Throwable $throwable) {
+            throw new SerializerException(
+                'Error while denormalizing data',
+                null,
+                $throwable
+            );
         }
     }
 
@@ -159,8 +171,12 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while serializing data', null, $t);
+        } catch (Throwable $throwable) {
+            throw new SerializerException(
+                'Error while serializing data',
+                null,
+                $throwable
+            );
         }
     }
 
@@ -188,8 +204,12 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while deserializing data', null, $t);
+        } catch (Throwable $throwable) {
+            throw new SerializerException(
+                'Error while deserializing data',
+                null,
+                $throwable
+            );
         }
     }
 }

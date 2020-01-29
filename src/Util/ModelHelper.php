@@ -36,7 +36,9 @@ final class ModelHelper
                 $uids[] = $model->getUid();
             } else {
                 $actual = is_object($model) ? get_class($model) : gettype($model);
-                throw new InvalidArgumentException('model parameter must be a ' . ($class ?: AbstractModel::class) . ' model, ' . $actual . ' given');
+                throw new InvalidArgumentException(
+                    'model parameter must be a ' . ($class ?: AbstractModel::class) . ' model, ' . $actual . ' given'
+                );
             }
         }
 

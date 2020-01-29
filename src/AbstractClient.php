@@ -306,37 +306,53 @@ abstract class AbstractClient
                     $options
                 );
         } catch (Throwable $throwable) {
-            throw new ClientException(
+            $exception = new ClientException(
                 'Error while contacting Stalactite API',
                 ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
+            
+            $this->getLogger()->error($exception);
+            
+            throw $exception;
         }
         
         $data = new JsonData();
         try {
             $data->setData($response->getContent(false));
         } catch (Throwable $throwable) {
-            throw new ClientException(
+            $exception = new ClientException(
                 'Invalid json response from Stalactite API',
                 ClientException::INVALID_API_RESPONSE,
                 $throwable
             );
+    
+            $this->getLogger()->error($exception);
+    
+            throw $exception;
         }
         
         if (!$schema->validate($data)) {
-            throw new ClientException(
+            $exception = new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
             );
+    
+            $this->getLogger()->error($exception);
+    
+            throw $exception;
         }
         
         $response = $data->getData();
         if (null === $response) {
-            throw new ClientException(
+            $exception = new ClientException(
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
             );
+    
+            $this->getLogger()->error($exception);
+    
+            throw $exception;
         }
         
         return $response;
