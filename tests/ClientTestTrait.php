@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -34,10 +34,10 @@ trait ClientTestTrait
         AbstractClient $mockClient,
         AbstractClient $client1,
         AbstractClient $client2
-    ): void
-    {
+    ) : void {
         self::assertSame($mockClient->getHost(), $client1->getHost());
         self::assertSame($mockClient->getHttpClient(), $client1->getHttpClient());
+        self::assertSame($mockClient->getLogger(), $client1->getLogger());
         self::assertSame($mockClient->getUserAgent(), $client1->getUserAgent());
         self::assertSame($client1, $client2);
     }

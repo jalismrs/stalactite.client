@@ -57,6 +57,7 @@ class Client extends
             $this->clientTrustedApp = new TrustedAppClient($this->getHost());
             $this->clientTrustedApp
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
         

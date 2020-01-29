@@ -33,6 +33,7 @@ class Client extends
             $this->clientCustomer = new Customer\Client($this->getHost());
             $this->clientCustomer
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -50,6 +51,7 @@ class Client extends
             $this->clientDomain = new Domain\Client($this->getHost());
             $this->clientDomain
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -67,6 +69,7 @@ class Client extends
             $this->clientPost = new Post\Client($this->getHost());
             $this->clientPost
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -84,6 +87,7 @@ class Client extends
             $this->clientUser = new User\Client($this->getHost());
             $this->clientUser
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 

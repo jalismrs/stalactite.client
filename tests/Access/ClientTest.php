@@ -7,6 +7,7 @@ use Jalismrs\Stalactite\Client\Access\Client;
 use Jalismrs\Stalactite\Client\Tests\ClientTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\Test\TestLogger;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 
@@ -34,6 +35,9 @@ class ClientTest extends
         $mockClient->setHttpClient(
             new MockHttpClient()
         );
+        $mockClient->setLogger(
+            new TestLogger()
+        );
 
         $client1 = $mockClient->authToken();
         $client2 = $mockClient->authToken();
@@ -58,6 +62,9 @@ class ClientTest extends
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient()
+        );
+        $mockClient->setLogger(
+            new TestLogger()
         );
 
         $client1 = $mockClient->customers();
@@ -84,6 +91,9 @@ class ClientTest extends
         $mockClient->setHttpClient(
             new MockHttpClient()
         );
+        $mockClient->setLogger(
+            new TestLogger()
+        );
 
         $client1 = $mockClient->domains();
         $client2 = $mockClient->domains();
@@ -109,6 +119,9 @@ class ClientTest extends
         $mockClient->setHttpClient(
             new MockHttpClient()
         );
+        $mockClient->setLogger(
+            new TestLogger()
+        );
 
         $client1 = $mockClient->relations();
         $client2 = $mockClient->relations();
@@ -133,6 +146,9 @@ class ClientTest extends
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient()
+        );
+        $mockClient->setLogger(
+            new TestLogger()
         );
 
         $client1 = $mockClient->users();

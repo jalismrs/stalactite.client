@@ -53,6 +53,7 @@ class Client extends
             $this->clientLead = new Lead\Client($this->getHost());
             $this->clientLead
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -70,6 +71,7 @@ class Client extends
             $this->clientMe = new Me\Client($this->getHost());
             $this->clientMe
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -86,6 +88,7 @@ class Client extends
             $this->clientPost = new PostClient($this->getHost());
             $this->clientPost
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 

@@ -32,6 +32,7 @@ class Client extends
             $this->clientAccess = new Access\Client($this->getHost());
             $this->clientAccess
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -49,6 +50,7 @@ class Client extends
             $this->clientAuthentication = new Authentication\Client($this->getHost());
             $this->clientAuthentication
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
@@ -66,6 +68,7 @@ class Client extends
             $this->clientData = new Data\Client($this->getHost());
             $this->clientData
                 ->setHttpClient($this->getHttpClient())
+                ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
