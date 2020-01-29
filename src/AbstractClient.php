@@ -86,12 +86,39 @@ abstract class AbstractClient
     }
     
     /**
+     * getLogger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger() : LoggerInterface
+    {
+        if (null === $this->logger) {
+            $this->logger = $this->createDefaultLogger();
+        }
+        
+        return $this->logger;
+    }
+    
+    /**
+     * setLogger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return $this
+     */
+    public function setLogger(LoggerInterface $logger) : self
+    {
+        $this->logger = $logger;
+        
+        return $this;
+    }
+    
+    /**
      * createDefaultHttpClient
      *
      * @return HttpClientInterface
      */
-    private function createDefaultHttpClient() : HttpClientInterface
-    {
+    private function createDefaultHttpClient() : HttpClientInterface {
         return HttpClient::create(
             array_merge_recursive(
                 [
@@ -112,20 +139,6 @@ abstract class AbstractClient
     }
     
     /**
-     * getLogger
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger() : LoggerInterface
-    {
-        if (null === $this->logger) {
-            $this->logger = $this->createDefaultLogger();
-        }
-        
-        return $this->logger;
-    }
-    
-    /**
      * createDefaultLogger
      *
      * @return LoggerInterface
@@ -133,20 +146,6 @@ abstract class AbstractClient
     private function createDefaultLogger() : LoggerInterface
     {
         return new NullLogger();
-    }
-    
-    /**
-     * setLogger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
-    public function setLogger(LoggerInterface $logger) : self
-    {
-        $this->logger = $logger;
-        
-        return $this;
     }
     
     /**
