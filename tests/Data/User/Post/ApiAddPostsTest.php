@@ -32,9 +32,8 @@ class ApiAddPostsTest extends
      */
     public function testAddPosts(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -50,7 +49,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $response = $mockAPIClient->addPosts(
+        $response = $mockClient->addPosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -72,9 +71,8 @@ class ApiAddPostsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -91,7 +89,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $mockAPIClient->addPosts(
+        $mockClient->addPosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -110,9 +108,8 @@ class ApiAddPostsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -128,7 +125,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $mockAPIClient->addPosts(
+        $mockClient->addPosts(
             ModelFactory::getTestableUser(),
             [
                 'not a post'

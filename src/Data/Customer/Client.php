@@ -41,11 +41,10 @@ class Client extends
     public function me(): Me\Client
     {
         if (null === $this->clientMe) {
-            $this->clientMe = new Me\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientMe = new Me\Client($this->getHost());
+            $this->clientMe
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientMe;
@@ -89,12 +88,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -151,9 +145,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),
@@ -207,12 +200,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -273,12 +261,7 @@ class Client extends
         );
 
         $response = $this->post(
-            vsprintf(
-                '%s/data/customers',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/customers',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -339,9 +322,8 @@ class Client extends
 
         $response = $this->put(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->host,
                     $customerModel->getUid(),
                 ],
             ),
@@ -396,9 +378,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/data/customers/%s',
+                '/data/customers/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),

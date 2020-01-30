@@ -35,9 +35,8 @@ class ApiDeleteRelationsByDomainTest extends
      */
     public function testDeleteRelationsByDomain(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -53,7 +52,7 @@ class ApiDeleteRelationsByDomainTest extends
             )
         );
 
-        $response = $mockAPIClient->deleteRelationsByDomain(
+        $response = $mockClient->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'
         );
@@ -75,9 +74,8 @@ class ApiDeleteRelationsByDomainTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -94,7 +92,7 @@ class ApiDeleteRelationsByDomainTest extends
             )
         );
 
-        $mockAPIClient->deleteRelationsByDomain(
+        $mockClient->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'
         );

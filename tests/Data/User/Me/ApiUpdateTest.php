@@ -37,9 +37,8 @@ class ApiUpdateTest extends
      */
     public function testUpdate(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -55,7 +54,7 @@ class ApiUpdateTest extends
             )
         );
 
-        $response = $mockAPIClient->updateMe(
+        $response = $mockClient->updateMe(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );
@@ -78,9 +77,8 @@ class ApiUpdateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -97,7 +95,7 @@ class ApiUpdateTest extends
             )
         );
 
-        $mockAPIClient->updateMe(
+        $mockClient->updateMe(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );

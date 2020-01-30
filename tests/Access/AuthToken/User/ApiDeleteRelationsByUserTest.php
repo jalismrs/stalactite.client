@@ -35,9 +35,8 @@ class ApiDeleteRelationsByUserTest extends
      */
     public function testDeleteRelationsByUser(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -53,7 +52,7 @@ class ApiDeleteRelationsByUserTest extends
             )
         );
 
-        $response = $mockAPIClient->deleteRelationsByUser(
+        $response = $mockClient->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'
         );
@@ -75,9 +74,8 @@ class ApiDeleteRelationsByUserTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -94,7 +92,7 @@ class ApiDeleteRelationsByUserTest extends
             )
         );
 
-        $mockAPIClient->deleteRelationsByUser(
+        $mockClient->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'
         );

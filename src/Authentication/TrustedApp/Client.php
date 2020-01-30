@@ -61,12 +61,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/auth/trustedApps',
-                [
-                    $this->host,
-                ],
-            ),
+            '/auth/trustedApps',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -123,9 +118,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/auth/trustedApps/%s',
+                '/auth/trustedApps/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),
@@ -178,9 +172,8 @@ class Client extends
 
         $response = $this->put(
             vsprintf(
-                '%s/auth/trustedApps/%s',
+                '/auth/trustedApps/%s',
                 [
-                    $this->host,
                     $trustedAppModel->getUid(),
                 ],
             ),
@@ -252,12 +245,7 @@ class Client extends
         );
 
         $response = $this->post(
-            vsprintf(
-                '%s/auth/trustedApps',
-                [
-                    $this->host,
-                ],
-            ),
+            '/auth/trustedApps',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -314,9 +302,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/auth/trustedApps/%s',
+                '/auth/trustedApps/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),
@@ -375,9 +362,8 @@ class Client extends
 
         $response = $this->put(
             vsprintf(
-                '%s/auth/trustedApps/%s/authToken/reset',
+                '/auth/trustedApps/%s/authToken/reset',
                 [
-                    $this->host,
                     $trustedAppModel->getUid(),
                 ],
             ),

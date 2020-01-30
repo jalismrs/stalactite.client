@@ -53,9 +53,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/access/relations/%s',
+                '/access/relations/%s',
                 [
-                    $this->host,
                     $domainRelationModel->getUid(),
                 ],
             ),

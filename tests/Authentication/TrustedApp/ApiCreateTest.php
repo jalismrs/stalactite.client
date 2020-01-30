@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 
@@ -40,39 +40,36 @@ class ApiCreateTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testCreate(): void
+    public function testCreate() : void
     {
         $serializer = Serializer::getInstance();
-
-        $mockHttpClient = new MockHttpClient(
-            [
-                new MockResponse(
-                    json_encode(
-                        [
-                            'success' => true,
-                            'error' => null,
-                            'trustedApp' => $serializer->normalize(
-                                ModelFactory::getTestableTrustedApp(),
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'main',
-                                        'reset',
-                                    ],
-                                ]
-                            ),
-                        ],
-                        JSON_THROW_ON_ERROR
+        
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
+            new MockHttpClient(
+                [
+                    new MockResponse(
+                        json_encode(
+                            [
+                                'success'    => true,
+                                'error'      => null,
+                                'trustedApp' => $serializer->normalize(
+                                    ModelFactory::getTestableTrustedApp(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                            'reset',
+                                        ],
+                                    ]
+                                ),
+                            ],
+                            JSON_THROW_ON_ERROR
+                        )
                     )
-                )
-            ]
+                ]
+            )
         );
-
-        $mockClient = new Client(
-            'http://fakeHost',
-            null,
-            $mockHttpClient
-        );
-
+        
         $response = $mockClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
@@ -84,7 +81,7 @@ class ApiCreateTest extends
             $response->getData()['trustedApp']
         );
     }
-
+    
     /**
      * testThrowOnCreate
      *
@@ -95,21 +92,20 @@ class ApiCreateTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnCreate(): void
+    public function testThrowOnCreate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client(
-            'http://fakeHost',
-            null,
+        
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'    => true,
+                                'error'      => null,
                                 'trustedApp' => []
                             ],
                             JSON_THROW_ON_ERROR
@@ -118,7 +114,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-
+        
         $mockClient->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'

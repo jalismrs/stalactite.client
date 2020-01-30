@@ -30,17 +30,16 @@ class ClientTest extends
      */
     public function testLead(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->leads();
-        $client2 = $baseClient->leads();
+        $client1 = $mockClient->leads();
+        $client2 = $mockClient->leads();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -56,17 +55,16 @@ class ClientTest extends
      */
     public function testMe(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->me();
-        $client2 = $baseClient->me();
+        $client1 = $mockClient->me();
+        $client2 = $mockClient->me();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );
@@ -82,17 +80,16 @@ class ClientTest extends
      */
     public function testPost(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->posts();
-        $client2 = $baseClient->posts();
+        $client1 = $mockClient->posts();
+        $client2 = $mockClient->posts();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );

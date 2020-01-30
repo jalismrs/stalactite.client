@@ -29,11 +29,10 @@ class Client extends
     public function customers(): Customer\Client
     {
         if (null === $this->clientCustomer) {
-            $this->clientCustomer = new Customer\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientCustomer = new Customer\Client($this->getHost());
+            $this->clientCustomer
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientCustomer;
@@ -47,11 +46,10 @@ class Client extends
     public function domains(): Domain\Client
     {
         if (null === $this->clientDomain) {
-            $this->clientDomain = new Domain\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientDomain = new Domain\Client($this->getHost());
+            $this->clientDomain
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientDomain;
@@ -65,11 +63,10 @@ class Client extends
     public function users(): User\Client
     {
         if (null === $this->clientUser) {
-            $this->clientUser = new User\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientUser = new User\Client($this->getHost());
+            $this->clientUser
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientUser;

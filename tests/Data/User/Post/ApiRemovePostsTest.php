@@ -31,9 +31,8 @@ class ApiRemovePostsTest extends
      */
     public function testRemovePosts(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -49,7 +48,7 @@ class ApiRemovePostsTest extends
             )
         );
 
-        $response = $mockAPIClient->removePosts(
+        $response = $mockClient->removePosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -71,9 +70,8 @@ class ApiRemovePostsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -90,7 +88,7 @@ class ApiRemovePostsTest extends
             )
         );
 
-        $mockAPIClient->removePosts(
+        $mockClient->removePosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -109,9 +107,8 @@ class ApiRemovePostsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -127,7 +124,7 @@ class ApiRemovePostsTest extends
             )
         );
 
-        $mockAPIClient->removePosts(
+        $mockClient->removePosts(
             ModelFactory::getTestableUser(),
             [
                 'not a post'

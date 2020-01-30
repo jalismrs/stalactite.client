@@ -30,17 +30,16 @@ class ClientTest extends
      */
     public function testMe(): void
     {
-        $baseClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
 
-        $client1 = $baseClient->me();
-        $client2 = $baseClient->me();
+        $client1 = $mockClient->me();
+        $client2 = $mockClient->me();
 
         self::checkClients(
-            $baseClient,
+            $mockClient,
             $client1,
             $client2
         );

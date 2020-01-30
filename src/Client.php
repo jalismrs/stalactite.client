@@ -29,11 +29,10 @@ class Client extends
     public function access(): Access\Client
     {
         if (null === $this->clientAccess) {
-            $this->clientAccess = new Access\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientAccess = new Access\Client($this->getHost());
+            $this->clientAccess
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientAccess;
@@ -47,11 +46,10 @@ class Client extends
     public function authentication(): Authentication\Client
     {
         if (null === $this->clientAuthentication) {
-            $this->clientAuthentication = new Authentication\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientAuthentication = new Authentication\Client($this->getHost());
+            $this->clientAuthentication
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientAuthentication;
@@ -65,11 +63,10 @@ class Client extends
     public function data(): Data\Client
     {
         if (null === $this->clientData) {
-            $this->clientData = new Data\Client(
-                $this->host,
-                $this->userAgent,
-                $this->httpClient
-            );
+            $this->clientData = new Data\Client($this->getHost());
+            $this->clientData
+                ->setHttpClient($this->getHttpClient())
+                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->clientData;

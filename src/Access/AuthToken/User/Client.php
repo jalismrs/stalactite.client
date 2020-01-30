@@ -41,7 +41,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -59,9 +59,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/access/auth-token/users/%s/relations',
+                '/access/auth-token/users/%s/relations',
                 [
-                    $this->host,
                     $userModel->getUid(),
                 ],
             ),

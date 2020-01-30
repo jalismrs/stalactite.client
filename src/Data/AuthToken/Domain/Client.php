@@ -41,7 +41,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -62,12 +62,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/auth-token/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/auth-token/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -108,7 +103,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -129,12 +124,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/auth-token/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/auth-token/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -177,7 +167,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -198,12 +188,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/auth-token/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/auth-token/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -245,7 +230,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -268,9 +253,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/auth-token/domains/%s',
+                '/data/auth-token/domains/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),

@@ -38,7 +38,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -59,12 +59,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/auth-token/posts',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/auth-token/posts',
             [
                 'headers' => [
                     'X-API-TOKEN' => (string)$jwt
@@ -103,7 +98,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -126,9 +121,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/auth-token/posts/%s',
+                '/data/auth-token/posts/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),
@@ -167,7 +161,7 @@ class Client extends
     {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
-            $this->userAgent
+            $this->getUserAgent()
         );
 
         $schema = new JsonSchema();
@@ -189,9 +183,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/auth-token/posts/%s/users',
+                '/data/auth-token/posts/%s/users',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),

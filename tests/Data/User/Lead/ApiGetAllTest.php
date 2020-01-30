@@ -42,9 +42,8 @@ class ApiGetAllTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -70,7 +69,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $response = $mockAPIClient->getAllLeads(
+        $response = $mockClient->getAllLeads(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );
@@ -99,9 +98,8 @@ class ApiGetAllTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -126,7 +124,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $mockAPIClient->getAllLeads(
+        $mockClient->getAllLeads(
             ModelFactory::getTestableUser(),
             'fake user jwt'
         );

@@ -57,12 +57,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -119,9 +114,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/data/domains/%s',
+                '/data/domains/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),
@@ -173,12 +167,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -234,12 +223,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/data/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -303,12 +287,7 @@ class Client extends
         );
 
         $response = $this->post(
-            vsprintf(
-                '%s/data/domains',
-                [
-                    $this->host,
-                ],
-            ),
+            '/data/domains',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -369,9 +348,8 @@ class Client extends
 
         $response = $this->put(
             vsprintf(
-                '%s/data/domains/%s',
+                '/data/domains/%s',
                 [
-                    $this->host,
                     $domainModel->getUid(),
                 ],
             ),
@@ -426,9 +404,8 @@ class Client extends
 
         $response = $this->delete(
             vsprintf(
-                '%s/data/domains/%s',
+                '/data/domains/%s',
                 [
-                    $this->host,
                     $uid,
                 ],
             ),

@@ -35,9 +35,8 @@ class ApiDeleteTest extends
      */
     public function testDelete(): void
     {
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -53,7 +52,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $response = $mockAPIClient->deleteDomain(
+        $response = $mockClient->deleteDomain(
             ModelFactory::getTestableDomain()
                 ->getUid(),
             'fake user jwt'
@@ -76,9 +75,8 @@ class ApiDeleteTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockAPIClient = new Client(
-            'http://fakeHost',
-            null,
+        $mockClient = new Client('http://fakeHost');
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -95,7 +93,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $mockAPIClient->deleteDomain(
+        $mockClient->deleteDomain(
             ModelFactory::getTestableDomain()
                 ->getUid(),
             'fake user jwt'

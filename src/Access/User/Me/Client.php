@@ -62,12 +62,7 @@ class Client extends
         );
 
         $response = $this->get(
-            vsprintf(
-                '%s/access/users/me/relations',
-                [
-                    $this->host,
-                ],
-            ),
+            '/access/users/me/relations',
             [
                 'headers' => [
                     'X-API-TOKEN' => $jwt
@@ -126,9 +121,8 @@ class Client extends
 
         $response = $this->get(
             vsprintf(
-                '%s/access/users/me/access/%s',
+                '/access/users/me/access/%s',
                 [
-                    $this->host,
                     $domainModel->getUid(),
                 ],
             ),
