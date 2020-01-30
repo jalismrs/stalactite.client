@@ -17,28 +17,51 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 trait ServiceTestTrait
 {
     /**
-     * checkClients
+     * checkServices
      *
      * @static
      *
      * @param AbstractService $mockService
-     * @param AbstractService $client1
-     * @param AbstractService $client2
+     * @param AbstractService $mockService1
+     * @param AbstractService $mockService2
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    private static function checkClients(
+    private static function checkServices(
         AbstractService $mockService,
-        AbstractService $client1,
-        AbstractService $client2
+        AbstractService $mockService1,
+        AbstractService $mockService2
     ) : void {
-        self::assertSame($mockService->getHost(), $client1->getHost());
-        self::assertSame($mockService->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($mockService->getLogger(), $client1->getLogger());
-        self::assertSame($mockService->getUserAgent(), $client1->getUserAgent());
-        self::assertSame($client1, $client2);
+        self::assertSame(
+            $mockService
+                ->getHost(),
+            $mockService1
+                ->getHost()
+        );
+        self::assertSame(
+            $mockService
+                ->getHttpClient(),
+            $mockService1
+                ->getHttpClient()
+        );
+        self::assertSame(
+            $mockService
+                ->getLogger(),
+            $mockService1
+                ->getLogger()
+        );
+        self::assertSame(
+            $mockService
+                ->getUserAgent(),
+            $mockService1
+                ->getUserAgent()
+        );
+        self::assertSame(
+            $mockService1,
+            $mockService2
+        );
     }
 }

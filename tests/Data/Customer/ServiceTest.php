@@ -40,13 +40,13 @@ class ServiceTest extends
         );
         $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockService->me();
-        $client2 = $mockService->me();
+        $mockService1 = $mockService->me();
+        $mockService2 = $mockService->me();
 
-        self::checkClients(
+        self::checkServices(
             $mockService,
-            $client1,
-            $client2
+            $mockService1,
+            $mockService2
         );
     }
 }

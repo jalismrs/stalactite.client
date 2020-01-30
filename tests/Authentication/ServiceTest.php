@@ -40,13 +40,13 @@ class ServiceTest extends
         );
         $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockService->trustedApps();
-        $client2 = $mockService->trustedApps();
+        $mockService1 = $mockService->trustedApps();
+        $mockService2 = $mockService->trustedApps();
 
-        self::checkClients(
+        self::checkServices(
             $mockService,
-            $client1,
-            $client2
+            $mockService1,
+            $mockService2
         );
     }
 }

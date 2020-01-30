@@ -39,13 +39,13 @@ class ServiceTest extends
         );
         $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockService->access();
-        $client2 = $mockService->access();
+        $mockService1 = $mockService->access();
+        $mockService2 = $mockService->access();
 
-        self::checkClients(
+        self::checkServices(
             $mockService,
-            $client1,
-            $client2
+            $mockService1,
+            $mockService2
         );
     }
 
@@ -68,13 +68,13 @@ class ServiceTest extends
         );
         $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockService->authentication();
-        $client2 = $mockService->authentication();
+        $mockService1 = $mockService->authentication();
+        $mockService2 = $mockService->authentication();
 
-        self::checkClients(
+        self::checkServices(
             $mockService,
-            $client1,
-            $client2
+            $mockService1,
+            $mockService2
         );
     }
 
@@ -97,13 +97,13 @@ class ServiceTest extends
         );
         $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockService->data();
-        $client2 = $mockService->data();
+        $mockService1 = $mockService->data();
+        $mockService2 = $mockService->data();
 
-        self::checkClients(
+        self::checkServices(
             $mockService,
-            $client1,
-            $client2
+            $mockService1,
+            $mockService2
         );
     }
 }
