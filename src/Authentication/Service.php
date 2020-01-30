@@ -10,7 +10,7 @@ use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppClient;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Lcobucci\JWT\Parser;
@@ -48,12 +48,12 @@ class Service extends
     /**
      * trustedApp
      *
-     * @return TrustedAppClient
+     * @return TrustedAppService
      */
-    public function trustedApps() : TrustedAppClient
+    public function trustedApps() : TrustedAppService
     {
         if (null === $this->serviceTrustedApp) {
-            $this->serviceTrustedApp = new TrustedAppClient($this->getClient());
+            $this->serviceTrustedApp = new TrustedAppService($this->getClient());
         }
         
         return $this->serviceTrustedApp;

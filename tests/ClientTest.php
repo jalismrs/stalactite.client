@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Service;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -14,11 +13,11 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
- * AbstractServiceTest
+ * ClientTest
  *
- * @package Test
+ * @package Jalismrs\Stalactite\Client\Tests
  */
-class AbstractServiceTest extends
+class ClientTest extends
     TestCase
 {
     /**
@@ -31,15 +30,12 @@ class AbstractServiceTest extends
      */
     public function testHost() : void
     {
-        $host        = 'http://fakeHost';
-        $mockClient  = new Client($host);
-        $mockService = new Service($mockClient);
+        $host       = 'http://fakeHost';
+        $mockClient = new Client($host);
         
         self::assertSame(
             $host,
-            $mockService
-                ->getClient()
-                ->getHost()
+            $mockClient->getHost()
         );
     }
     
@@ -53,13 +49,10 @@ class AbstractServiceTest extends
      */
     public function testDefaultUserAgent() : void
     {
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $mockClient = new Client('http://fakeHost');
         
         self::assertNull(
-            $mockService
-                ->getClient()
-                ->getUserAgent()
+            $mockClient->getUserAgent()
         );
     }
     
@@ -73,21 +66,16 @@ class AbstractServiceTest extends
      */
     public function testUserAgent() : void
     {
-        $userAgent   = 'fake user agent';
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $userAgent  = 'fake user agent';
+        $mockClient = new Client('http://fakeHost');
         $mockClient->setUserAgent($userAgent);
         
         self::assertIsString(
-            $mockService
-                ->getClient()
-                ->getUserAgent()
+            $mockClient->getUserAgent()
         );
         self::assertSame(
             $userAgent,
-            $mockService
-                ->getClient()
-                ->getUserAgent()
+            $mockClient->getUserAgent()
         );
     }
     
@@ -101,16 +89,13 @@ class AbstractServiceTest extends
      */
     public function testHttpClient() : void
     {
-        $httpClient  = new MockHttpClient();
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $httpClient = new MockHttpClient();
+        $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient($httpClient);
         
         self::assertSame(
             $httpClient,
-            $mockService
-                ->getClient()
-                ->getHttpClient()
+            $mockClient->getHttpClient()
         );
     }
     
@@ -125,10 +110,12 @@ class AbstractServiceTest extends
      */
     public function testDefaultLogger() : void
     {
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $mockClient = new Client('http://fakeHost');
         
-        self::assertInstanceOf(NullLogger::class, $mockService->getLogger());
+        self::assertInstanceOf(
+            NullLogger::class,
+            $mockClient->getLogger()
+        );
     }
     
     /**
@@ -141,11 +128,13 @@ class AbstractServiceTest extends
      */
     public function testLogger() : void
     {
-        $logger      = new TestLogger();
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $logger     = new TestLogger();
+        $mockClient = new Client('http://fakeHost');
         $mockClient->setLogger($logger);
         
-        self::assertSame($logger, $mockService->getLogger());
+        self::assertSame(
+            $logger,
+            $mockClient->getLogger()
+        );
     }
 }

@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostClient;
+use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -69,15 +69,16 @@ class Service extends
 
         return $this->serviceMe;
     }
-
+    
     /**
-     * post
+     * posts
      *
+     * @return PostService
      */
-    public function posts(): PostClient
+    public function posts(): PostService
     {
         if (null === $this->servicePost) {
-            $this->servicePost = new PostClient($this->getClient());
+            $this->servicePost = new PostService($this->getClient());
         }
 
         return $this->servicePost;
