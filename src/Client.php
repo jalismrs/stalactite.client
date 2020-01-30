@@ -13,7 +13,7 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use function array_merge_recursive;
+use function array_replace_recursive;
 use function json_encode;
 
 /**
@@ -192,23 +192,14 @@ final class Client
      *
      * @return HttpClientInterface
      */
-    private function createDefaultHttpClient() : HttpClientInterface {
+    private function createDefaultHttpClient() : HttpClientInterface
+    {
         return HttpClient::create(
-            array_merge_recursive(
-                [
-                    'base_uri' => $this->host,
-                    'headers'  => [
-                        'Content-Type' => 'application/json',
-                    ],
+            [
+                'headers'  => [
+                    'Content-Type' => 'application/json',
                 ],
-                null === $this->userAgent
-                    ? []
-                    : [
-                    'headers' => [
-                        'User-Agent' => $this->userAgent,
-                    ],
-                ]
-            )
+            ]
         );
     }
     
@@ -367,7 +358,16 @@ final class Client
                 ->request(
                     $method,
                     $url,
-                    $options
+                    array_replace_recursive(
+                        null === $this->userAgent
+                            ? []
+                            : [
+                            'headers' => [
+                                'User-Agent' => $this->userAgent,
+                            ],
+                        ],
+                        $options
+                    )
                 );
         } catch (Throwable $throwable) {
             $exception = new ClientException(
