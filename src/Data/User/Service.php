@@ -78,10 +78,6 @@ class Service extends
     {
         if (null === $this->servicePost) {
             $this->servicePost = new PostClient($this->getClient());
-            $this->servicePost
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
         }
 
         return $this->servicePost;

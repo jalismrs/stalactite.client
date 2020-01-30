@@ -106,17 +106,6 @@ abstract class AbstractService
     }
     
     /**
-     * getUserAgent
-     *
-     * @return null|string
-     */
-    public function getUserAgent() : ?string
-    {
-        return $this->getClient()
-                    ->getUserAgent();
-    }
-    
-    /**
      * setUserAgent
      *
      * @param string|null $userAgent

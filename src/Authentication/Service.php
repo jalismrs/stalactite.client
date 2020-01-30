@@ -54,10 +54,6 @@ class Service extends
     {
         if (null === $this->serviceTrustedApp) {
             $this->serviceTrustedApp = new TrustedAppClient($this->getClient());
-            $this->serviceTrustedApp
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
         }
         
         return $this->serviceTrustedApp;

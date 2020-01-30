@@ -57,8 +57,10 @@ trait ServiceTestTrait
         );
         self::assertSame(
             $mockService
+                ->getClient()
                 ->getUserAgent(),
             $mockService1
+                ->getClient()
                 ->getUserAgent()
         );
         self::assertSame(
