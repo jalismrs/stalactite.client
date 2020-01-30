@@ -45,8 +45,8 @@ class ApiAddCustomerRelationTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -70,7 +70,7 @@ class ApiAddCustomerRelationTest extends
             )
         );
 
-        $response = $mockClient->addCustomerRelation(
+        $response = $mockService->addCustomerRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'
@@ -94,8 +94,8 @@ class ApiAddCustomerRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -113,7 +113,7 @@ class ApiAddCustomerRelationTest extends
             )
         );
 
-        $mockClient->addCustomerRelation(
+        $mockService->addCustomerRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableCustomer(),
             'fake user jwt'

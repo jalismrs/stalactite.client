@@ -49,9 +49,9 @@ class JwtValidationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
         
-        $mockClient = new Service('invalidHost');
+        $mockService = new Service('invalidHost');
         
-        $mockClient->getRSAPublicKey();
+        $mockService->getRSAPublicKey();
     }
     
     /**
@@ -291,8 +291,8 @@ class JwtValidationTest extends
         string $token,
         string $publicKey
     ) : void {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse($publicKey)
@@ -300,7 +300,7 @@ class JwtValidationTest extends
             )
         );
         
-        $response = $mockClient->validate($token);
+        $response = $mockService->validate($token);
         
         self::assertTrue($response);
     }

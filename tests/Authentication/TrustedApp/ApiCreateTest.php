@@ -44,8 +44,8 @@ class ApiCreateTest extends
     {
         $serializer = Serializer::getInstance();
         
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -70,7 +70,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockClient->createTrustedApp(
+        $response = $mockService->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -97,8 +97,8 @@ class ApiCreateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -115,7 +115,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockClient->createTrustedApp(
+        $mockService->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

@@ -45,8 +45,8 @@ class ApiGetAccessClearanceTest extends
     {
         $serializer = Serializer::getInstance();
         
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -70,7 +70,7 @@ class ApiGetAccessClearanceTest extends
             )
         );
         
-        $response = $mockClient->getAccessClearance(
+        $response = $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
@@ -96,8 +96,8 @@ class ApiGetAccessClearanceTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -115,7 +115,7 @@ class ApiGetAccessClearanceTest extends
             )
         );
         
-        $mockClient->getAccessClearance(
+        $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );

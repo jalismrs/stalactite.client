@@ -34,8 +34,8 @@ class LoginTest extends
      */
     public function testSchemaValidationOnLogin(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -63,7 +63,7 @@ class LoginTest extends
         );
 
         // assert valid return and response content
-        $response = $mockClient->login(
+        $response = $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -72,7 +72,7 @@ class LoginTest extends
         self::assertIsString($response->getData()['jwt']);
 
         // assert valid return and response content
-        $response = $mockClient->login(
+        $response = $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -95,8 +95,8 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
     
-        $mockClient = new Service('invalidHost');
-        $mockClient->login(
+        $mockService = new Service('invalidHost');
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -116,8 +116,8 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse('invalid API response')
@@ -125,7 +125,7 @@ class LoginTest extends
             )
         );
 
-        $mockClient->login(
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -145,8 +145,8 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -163,7 +163,7 @@ class LoginTest extends
             )
         );
 
-        $mockClient->login(
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );

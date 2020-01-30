@@ -44,8 +44,8 @@ class ApiGetTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiGetTest extends
             )
         );
 
-        $response = $mockClient->getMe(
+        $response = $mockService->getMe(
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -97,8 +97,8 @@ class ApiGetTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -125,7 +125,7 @@ class ApiGetTest extends
             )
         );
 
-        $mockClient->getMe(
+        $mockService->getMe(
             'fake user jwt'
         );
     }

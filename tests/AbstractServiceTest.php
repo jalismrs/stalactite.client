@@ -30,10 +30,10 @@ class AbstractServiceTest extends
      */
     public function testHost() : void
     {
-        $host       = 'http://fakeHost';
-        $mockClient = new Service($host);
+        $host        = 'http://fakeHost';
+        $mockService = new Service($host);
         
-        self::assertSame($host, $mockClient->getHost());
+        self::assertSame($host, $mockService->getHost());
     }
     
     /**
@@ -46,9 +46,9 @@ class AbstractServiceTest extends
      */
     public function testDefaultUserAgent() : void
     {
-        $mockClient = new Service('http://fakeHost');
+        $mockService = new Service('http://fakeHost');
         
-        self::assertNull($mockClient->getUserAgent());
+        self::assertNull($mockService->getUserAgent());
     }
     
     /**
@@ -61,12 +61,12 @@ class AbstractServiceTest extends
      */
     public function testUserAgent() : void
     {
-        $userAgent  = 'fake user agent';
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setUserAgent($userAgent);
+        $userAgent   = 'fake user agent';
+        $mockService = new Service('http://fakeHost');
+        $mockService->setUserAgent($userAgent);
         
-        self::assertIsString($mockClient->getUserAgent());
-        self::assertSame($userAgent, $mockClient->getUserAgent());
+        self::assertIsString($mockService->getUserAgent());
+        self::assertSame($userAgent, $mockService->getUserAgent());
     }
     
     /**
@@ -79,11 +79,11 @@ class AbstractServiceTest extends
      */
     public function testHttpClient() : void
     {
-        $mockHttpClient = new MockHttpClient();
-        $mockClient     = new Service('http://fakeHost');
-        $mockClient->setHttpClient($mockHttpClient);
+        $httpClient  = new MockHttpClient();
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient($httpClient);
         
-        self::assertSame($mockHttpClient, $mockClient->getHttpClient());
+        self::assertSame($httpClient, $mockService->getHttpClient());
     }
     
     /**
@@ -97,9 +97,9 @@ class AbstractServiceTest extends
      */
     public function testDefaultLogger() : void
     {
-        $mockClient = new Service('http://fakeHost');
+        $mockService = new Service('http://fakeHost');
         
-        self::assertInstanceOf(NullLogger::class, $mockClient->getLogger());
+        self::assertInstanceOf(NullLogger::class, $mockService->getLogger());
     }
     
     /**
@@ -112,10 +112,10 @@ class AbstractServiceTest extends
      */
     public function testLogger() : void
     {
-        $logger     = new TestLogger();
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setLogger($logger);
+        $logger      = new TestLogger();
+        $mockService = new Service('http://fakeHost');
+        $mockService->setLogger($logger);
         
-        self::assertSame($logger, $mockClient->getLogger());
+        self::assertSame($logger, $mockService->getLogger());
     }
 }

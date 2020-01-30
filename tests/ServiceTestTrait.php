@@ -21,7 +21,7 @@ trait ServiceTestTrait
      *
      * @static
      *
-     * @param AbstractService $mockClient
+     * @param AbstractService $mockService
      * @param AbstractService $client1
      * @param AbstractService $client2
      *
@@ -31,14 +31,14 @@ trait ServiceTestTrait
      * @throws InvalidArgumentException
      */
     private static function checkClients(
-        AbstractService $mockClient,
+        AbstractService $mockService,
         AbstractService $client1,
         AbstractService $client2
     ) : void {
-        self::assertSame($mockClient->getHost(), $client1->getHost());
-        self::assertSame($mockClient->getHttpClient(), $client1->getHttpClient());
-        self::assertSame($mockClient->getLogger(), $client1->getLogger());
-        self::assertSame($mockClient->getUserAgent(), $client1->getUserAgent());
+        self::assertSame($mockService->getHost(), $client1->getHost());
+        self::assertSame($mockService->getHttpClient(), $client1->getHttpClient());
+        self::assertSame($mockService->getLogger(), $client1->getLogger());
+        self::assertSame($mockService->getUserAgent(), $client1->getUserAgent());
         self::assertSame($client1, $client2);
     }
 }

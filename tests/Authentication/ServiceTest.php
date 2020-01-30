@@ -31,20 +31,20 @@ class ServiceTest extends
      */
     public function testTrustedApp(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient()
         );
-        $mockClient->setLogger(
+        $mockService->setLogger(
             new TestLogger()
         );
-        $mockClient->setUserAgent('fake user agent');
+        $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockClient->trustedApps();
-        $client2 = $mockClient->trustedApps();
+        $client1 = $mockService->trustedApps();
+        $client2 = $mockService->trustedApps();
 
         self::checkClients(
-            $mockClient,
+            $mockService,
             $client1,
             $client2
         );

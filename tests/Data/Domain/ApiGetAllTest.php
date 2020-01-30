@@ -42,8 +42,8 @@ class ApiGetAllTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $response = $mockClient->getAllDomains(
+        $response = $mockService->getAllDomains(
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -97,8 +97,8 @@ class ApiGetAllTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -123,7 +123,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $mockClient->getAllDomains(
+        $mockService->getAllDomains(
             'fake user jwt'
         );
     }

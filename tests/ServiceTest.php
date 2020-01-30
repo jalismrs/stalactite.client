@@ -30,20 +30,20 @@ class ServiceTest extends
      */
     public function testAccess(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient()
         );
-        $mockClient->setLogger(
+        $mockService->setLogger(
             new TestLogger()
         );
-        $mockClient->setUserAgent('fake user agent');
+        $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockClient->access();
-        $client2 = $mockClient->access();
+        $client1 = $mockService->access();
+        $client2 = $mockService->access();
 
         self::checkClients(
-            $mockClient,
+            $mockService,
             $client1,
             $client2
         );
@@ -59,20 +59,20 @@ class ServiceTest extends
      */
     public function testAuthentication(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient()
         );
-        $mockClient->setLogger(
+        $mockService->setLogger(
             new TestLogger()
         );
-        $mockClient->setUserAgent('fake user agent');
+        $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockClient->authentication();
-        $client2 = $mockClient->authentication();
+        $client1 = $mockService->authentication();
+        $client2 = $mockService->authentication();
 
         self::checkClients(
-            $mockClient,
+            $mockService,
             $client1,
             $client2
         );
@@ -88,20 +88,20 @@ class ServiceTest extends
      */
     public function testData(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient()
         );
-        $mockClient->setLogger(
+        $mockService->setLogger(
             new TestLogger()
         );
-        $mockClient->setUserAgent('fake user agent');
+        $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockClient->data();
-        $client2 = $mockClient->data();
+        $client1 = $mockService->data();
+        $client2 = $mockService->data();
 
         self::checkClients(
-            $mockClient,
+            $mockService,
             $client1,
             $client2
         );

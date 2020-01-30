@@ -31,20 +31,20 @@ class ServiceTest extends
      */
     public function testMe(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient()
         );
-        $mockClient->setLogger(
+        $mockService->setLogger(
             new TestLogger()
         );
-        $mockClient->setUserAgent('fake user agent');
+        $mockService->setUserAgent('fake user agent');
 
-        $client1 = $mockClient->me();
-        $client2 = $mockClient->me();
+        $client1 = $mockService->me();
+        $client2 = $mockService->me();
 
         self::checkClients(
-            $mockClient,
+            $mockService,
             $client1,
             $client2
         );

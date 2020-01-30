@@ -42,8 +42,8 @@ class ApiGetAllTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $response = $mockClient->getAllCustomers(
+        $response = $mockService->getAllCustomers(
             'fake API auth token'
         );
         self::assertTrue($response->isSuccess());
@@ -98,8 +98,8 @@ class ApiGetAllTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -124,7 +124,7 @@ class ApiGetAllTest extends
             )
         );
 
-        $mockClient->getAllCustomers(
+        $mockService->getAllCustomers(
             'fake API auth token'
         );
     }

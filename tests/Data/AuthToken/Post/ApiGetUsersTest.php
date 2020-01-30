@@ -42,8 +42,8 @@ class ApiGetUsersTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -69,7 +69,7 @@ class ApiGetUsersTest extends
             )
         );
 
-        $response = $mockClient->getUsers(
+        $response = $mockService->getUsers(
             ModelFactory::getTestablePost()
                 ->getUid(),
             'fake API auth token'
@@ -96,8 +96,8 @@ class ApiGetUsersTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -115,7 +115,7 @@ class ApiGetUsersTest extends
             )
         );
 
-        $mockClient->getUsers(
+        $mockService->getUsers(
             ModelFactory::getTestablePost()
                 ->getUid(),
             'fake API auth token'

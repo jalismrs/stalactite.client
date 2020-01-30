@@ -41,8 +41,8 @@ class ApiDeleteTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -66,7 +66,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $response = $mockClient->deleteUser(
+        $response = $mockService->deleteUser(
             ModelFactory::getTestableUser()
                 ->getUid(),
             'fake user jwt'
@@ -89,8 +89,8 @@ class ApiDeleteTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -107,7 +107,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $mockClient->deleteUser(
+        $mockService->deleteUser(
             ModelFactory::getTestableUser()
                 ->getUid(),
             'fake user jwt'

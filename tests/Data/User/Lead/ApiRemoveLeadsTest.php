@@ -31,8 +31,8 @@ class ApiRemoveLeadsTest extends
      */
     public function testRemoveLeads(): void
     {
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -48,7 +48,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $response = $mockClient->removeLeads(
+        $response = $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -70,8 +70,8 @@ class ApiRemoveLeadsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -88,7 +88,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockClient->removeLeads(
+        $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -107,8 +107,8 @@ class ApiRemoveLeadsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -124,7 +124,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockClient->removeLeads(
+        $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 'not a lead'

@@ -42,8 +42,8 @@ class ApiGetByNameAndApiKeyTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -71,7 +71,7 @@ class ApiGetByNameAndApiKeyTest extends
 
         $domainModel = ModelFactory::getTestableDomain();
 
-        $response = $mockClient->getByNameAndApiKey(
+        $response = $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
             'fake API auth token'
@@ -101,8 +101,8 @@ class ApiGetByNameAndApiKeyTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Service('http://fakeHost');
-        $mockClient->setHttpClient(
+        $mockService = new Service('http://fakeHost');
+        $mockService->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -129,7 +129,7 @@ class ApiGetByNameAndApiKeyTest extends
 
         $domainModel = ModelFactory::getTestableDomain();
 
-        $mockClient->getByNameAndApiKey(
+        $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
             'fake API auth token'
