@@ -250,7 +250,9 @@ class Service extends
             ]
         );
         
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             '/auth/login',
             [
                 'json' => [

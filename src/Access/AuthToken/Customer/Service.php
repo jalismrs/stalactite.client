@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken\Customer;
 
@@ -26,7 +26,7 @@ class Service extends
      * deleteRelationsByCustomer
      *
      * @param Customer $customerModel
-     * @param string $apiAuthToken
+     * @param string   $apiAuthToken
      *
      * @return Response
      *
@@ -37,43 +37,44 @@ class Service extends
     public function deleteRelationsByCustomer(
         Customer $customerModel,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
-        $response = $this->delete(
-            vsprintf(
-                '/access/auth-token/customers/%s/relations',
+        
+        $response = $this
+            ->getClient()
+            ->delete(
+                vsprintf(
+                    '/access/auth-token/customers/%s/relations',
+                    [
+                        $customerModel->getUid(),
+                    ],
+                ),
                 [
-                    $customerModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
-
+                $schema
+            );
+        
         return (new Response(
             $response['success'],
             $response['error']

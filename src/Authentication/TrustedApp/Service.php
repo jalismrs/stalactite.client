@@ -60,7 +60,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/auth/trustedApps',
             [
                 'headers' => [
@@ -116,7 +118,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/auth/trustedApps/%s',
                 [
@@ -170,7 +174,9 @@ class Service extends
             ]
         );
 
-        $response = $this->put(
+        $response = $this
+            ->getClient()
+            ->put(
             vsprintf(
                 '/auth/trustedApps/%s',
                 [
@@ -244,7 +250,9 @@ class Service extends
             ]
         );
 
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             '/auth/trustedApps',
             [
                 'headers' => [
@@ -300,7 +308,9 @@ class Service extends
             ]
         );
 
-        $response = $this->delete(
+        $response = $this
+            ->getClient()
+            ->delete(
             vsprintf(
                 '/auth/trustedApps/%s',
                 [
@@ -360,7 +370,9 @@ class Service extends
             ]
         );
 
-        $response = $this->put(
+        $response = $this
+            ->getClient()
+            ->put(
             vsprintf(
                 '/auth/trustedApps/%s/authToken/reset',
                 [

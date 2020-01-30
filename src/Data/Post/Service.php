@@ -59,7 +59,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/posts',
             [
                 'headers' => [
@@ -118,7 +120,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/data/posts/%s',
                 [
@@ -180,7 +184,9 @@ class Service extends
             ]
         );
 
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             '/data/posts',
             [
                 'headers' => [
@@ -240,7 +246,9 @@ class Service extends
             ]
         );
 
-        $response = $this->put(
+        $response = $this
+            ->getClient()
+            ->put(
             vsprintf(
                 '/data/posts/%s',
                 [
@@ -299,7 +307,9 @@ class Service extends
             ]
         );
 
-        $response = $this->delete(
+        $response = $this
+            ->getClient()
+            ->delete(
             vsprintf(
                 '/data/posts/%s',
                 [
@@ -351,7 +361,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/data/posts/%s/users',
                 [

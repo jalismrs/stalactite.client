@@ -54,7 +54,9 @@ class Service extends
             ]
         );
         
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/users/me',
             [
                 'headers' => [
@@ -105,7 +107,9 @@ class Service extends
             ]
         );
         
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             '/data/users/me',
             [
                 'headers' => [

@@ -50,7 +50,9 @@ class Service extends
             ]
         );
         
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/customers/me',
             [
                 'headers' => [

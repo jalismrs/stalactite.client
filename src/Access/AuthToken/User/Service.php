@@ -59,7 +59,9 @@ class Service extends
             ]
         );
 
-        $response = $this->delete(
+        $response = $this
+            ->getClient()
+            ->delete(
             vsprintf(
                 '/access/auth-token/users/%s/relations',
                 [

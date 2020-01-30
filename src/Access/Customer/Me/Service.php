@@ -63,7 +63,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/access/customers/me/relations',
             [
                 'headers' => [
@@ -121,7 +123,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/access/customers/me/access/%s',
                 [

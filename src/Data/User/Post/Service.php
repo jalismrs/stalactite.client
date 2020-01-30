@@ -61,7 +61,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/data/users/%s/posts',
                 [
@@ -123,7 +125,9 @@ class Service extends
             ]
         );
 
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             vsprintf(
                 '/data/users/%s/posts',
                 [
@@ -183,7 +187,9 @@ class Service extends
             ]
         );
 
-        $response = $this->delete(
+        $response = $this
+            ->getClient()
+            ->delete(
             vsprintf(
                 '/data/users/%s/posts',
                 [

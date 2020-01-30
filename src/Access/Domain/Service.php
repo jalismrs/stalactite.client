@@ -88,7 +88,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/access/domains/%s/relations',
                 [
@@ -168,7 +170,9 @@ class Service extends
             ]
         );
 
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             vsprintf(
                 '/access/domains/%s/relations/users',
                 [
@@ -234,7 +238,9 @@ class Service extends
             ]
         );
 
-        $response = $this->post(
+        $response = $this
+            ->getClient()
+            ->post(
             vsprintf(
                 '/access/domains/%s/relations/customers',
                 [

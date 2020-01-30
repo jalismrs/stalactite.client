@@ -63,7 +63,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/auth-token/domains',
             [
                 'headers' => [
@@ -127,7 +129,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/auth-token/domains',
             [
                 'headers' => [
@@ -193,7 +197,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             '/data/auth-token/domains',
             [
                 'headers' => [
@@ -259,7 +265,9 @@ class Service extends
             ]
         );
 
-        $response = $this->get(
+        $response = $this
+            ->getClient()
+            ->get(
             vsprintf(
                 '/data/auth-token/domains/%s',
                 [
