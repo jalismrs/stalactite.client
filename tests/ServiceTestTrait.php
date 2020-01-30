@@ -45,8 +45,10 @@ trait ServiceTestTrait
         );
         self::assertSame(
             $mockService
+                ->getClient()
                 ->getHttpClient(),
             $mockService1
+                ->getClient()
                 ->getHttpClient()
         );
         self::assertSame(

@@ -83,6 +83,7 @@ class Service extends
                 ->getHost();
             
             return $this
+                ->getClient()
                 ->getHttpClient()
                 ->request(
                     'GET',

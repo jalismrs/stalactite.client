@@ -106,7 +106,12 @@ class AbstractServiceTest extends
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient($httpClient);
         
-        self::assertSame($httpClient, $mockService->getHttpClient());
+        self::assertSame(
+            $httpClient,
+            $mockService
+                ->getClient()
+                ->getHttpClient()
+        );
     }
     
     /**

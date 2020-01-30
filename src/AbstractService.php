@@ -56,15 +56,6 @@ abstract class AbstractService
     }
     
     /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient() : HttpClientInterface
-    {
-        return $this->getClient()
-                    ->getHttpClient();
-    }
-    
-    /**
      * getLogger
      *
      * @return LoggerInterface
