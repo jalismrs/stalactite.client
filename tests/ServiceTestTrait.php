@@ -37,8 +37,10 @@ trait ServiceTestTrait
     ) : void {
         self::assertSame(
             $mockService
+                ->getClient()
                 ->getHost(),
             $mockService1
+                ->getClient()
                 ->getHost()
         );
         self::assertSame(

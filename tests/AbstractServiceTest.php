@@ -32,10 +32,15 @@ class AbstractServiceTest extends
     public function testHost() : void
     {
         $host        = 'http://fakeHost';
-        $mockClient = new Client($host);
+        $mockClient  = new Client($host);
         $mockService = new Service($mockClient);
         
-        self::assertSame($host, $mockService->getHost());
+        self::assertSame(
+            $host,
+            $mockService
+                ->getClient()
+                ->getHost()
+        );
     }
     
     /**
@@ -48,7 +53,7 @@ class AbstractServiceTest extends
      */
     public function testDefaultUserAgent() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         
         self::assertNull($mockService->getUserAgent());
@@ -65,7 +70,7 @@ class AbstractServiceTest extends
     public function testUserAgent() : void
     {
         $userAgent   = 'fake user agent';
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockService->setUserAgent($userAgent);
         
@@ -84,7 +89,7 @@ class AbstractServiceTest extends
     public function testHttpClient() : void
     {
         $httpClient  = new MockHttpClient();
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockService->setHttpClient($httpClient);
         
@@ -102,7 +107,7 @@ class AbstractServiceTest extends
      */
     public function testDefaultLogger() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         
         self::assertInstanceOf(NullLogger::class, $mockService->getLogger());
@@ -119,7 +124,7 @@ class AbstractServiceTest extends
     public function testLogger() : void
     {
         $logger      = new TestLogger();
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockService->setLogger($logger);
         

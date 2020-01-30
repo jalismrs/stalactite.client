@@ -56,17 +56,6 @@ abstract class AbstractService
     }
     
     /**
-     * getHost
-     *
-     * @return string
-     */
-    public function getHost() : string
-    {
-        return $this->getClient()
-                    ->getHost();
-    }
-    
-    /**
      * @return HttpClientInterface
      */
     public function getHttpClient() : HttpClientInterface

@@ -82,11 +82,15 @@ class Service extends
     {
         //TODO: uniformize
         try {
+            $host = $this
+                ->getClient()
+                ->getHost();
+            
             return $this
                 ->getHttpClient()
                 ->request(
                     'GET',
-                    $this->getHost() . '/auth/publicKey'
+                    "{$host}/auth/publicKey"
                 )
                 ->getContent();
         } catch (Throwable $throwable) {
