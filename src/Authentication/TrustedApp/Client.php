@@ -211,8 +211,6 @@ class Client extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @noinspection PhpUnusedLocalVariableInspection
-     * @noinspection PhpUnusedLocalVariableInspection
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,

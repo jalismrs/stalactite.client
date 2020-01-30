@@ -21,7 +21,6 @@ use Lcobucci\JWT\ValidationData;
 use OutOfBoundsException;
 use Throwable;
 use function in_array;
-use function vsprintf;
 
 /**
  * Client
