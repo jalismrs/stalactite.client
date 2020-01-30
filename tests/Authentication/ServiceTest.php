@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +32,8 @@ class ServiceTest extends
      */
     public function testTrustedApp(): void
     {
-        $mockService = new Service('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient()
         );

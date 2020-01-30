@@ -21,7 +21,6 @@ use Lcobucci\JWT\ValidationData;
 use OutOfBoundsException;
 use Throwable;
 use function in_array;
-use function vsprintf;
 
 /**
  * Service
@@ -54,7 +53,7 @@ class Service extends
     public function trustedApps() : TrustedAppClient
     {
         if (null === $this->serviceTrustedApp) {
-            $this->serviceTrustedApp = new TrustedAppClient($this->getHost());
+            $this->serviceTrustedApp = new TrustedAppClient($this->getClient());
             $this->serviceTrustedApp
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
@@ -96,9 +95,10 @@ class Service extends
                 ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
     }
@@ -126,9 +126,10 @@ class Service extends
                 ClientException::INVALID_JWT_STRING,
                 $throwable
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -141,9 +142,10 @@ class Service extends
                 'Invalid JWT structure',
                 ClientException::INVALID_JWT_STRUCTURE
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -152,9 +154,10 @@ class Service extends
                 'Expired JWT',
                 ClientException::EXPIRED_JWT
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -163,9 +166,10 @@ class Service extends
                 'Invalid JWT user type',
                 ClientException::INVALID_JWT_USER_TYPE
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -174,9 +178,10 @@ class Service extends
                 'Invalid JWT issuer',
                 ClientException::INVALID_JWT_ISSUER
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
         
@@ -192,9 +197,10 @@ class Service extends
                 ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY,
                 $exception
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         } catch (Throwable $throwable) { // other exceptions result in an invalid token / signature
             $exception = new ClientException(
@@ -202,9 +208,10 @@ class Service extends
                 ClientException::INVALID_JWT_SIGNATURE,
                 $throwable
             );
-    
-            $this->getLogger()->error($exception);
-    
+            
+            $this->getLogger()
+                 ->error($exception);
+            
             throw $exception;
         }
     }

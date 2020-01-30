@@ -50,11 +50,7 @@ class Service extends
     public function leads(): Lead\Service
     {
         if (null === $this->serviceLead) {
-            $this->serviceLead = new Lead\Service($this->getHost());
-            $this->serviceLead
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceLead = new Lead\Service($this->getClient());
         }
 
         return $this->serviceLead;
@@ -68,11 +64,7 @@ class Service extends
     public function me(): Me\Service
     {
         if (null === $this->serviceMe) {
-            $this->serviceMe = new Me\Service($this->getHost());
-            $this->serviceMe
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceMe = new Me\Service($this->getClient());
         }
 
         return $this->serviceMe;
@@ -85,7 +77,7 @@ class Service extends
     public function posts(): PostClient
     {
         if (null === $this->servicePost) {
-            $this->servicePost = new PostClient($this->getHost());
+            $this->servicePost = new PostClient($this->getClient());
             $this->servicePost
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())

@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\User\Me\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -41,8 +42,9 @@ class ApiGetRelationsTest extends
     public function testGetRelations(): void
     {
         $serializer = Serializer::getInstance();
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
@@ -99,8 +101,9 @@ class ApiGetRelationsTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $serializer = Serializer::getInstance();
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [

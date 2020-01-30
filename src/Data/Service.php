@@ -31,11 +31,7 @@ class Service extends
     public function authToken(): AuthToken\Service
     {
         if (null === $this->serviceAuthToken) {
-            $this->serviceAuthToken = new AuthToken\Service($this->getHost());
-            $this->serviceAuthToken
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceAuthToken = new AuthToken\Service($this->getClient());
         }
 
         return $this->serviceAuthToken;
@@ -49,11 +45,7 @@ class Service extends
     public function customers(): Customer\Service
     {
         if (null === $this->serviceCustomer) {
-            $this->serviceCustomer = new Customer\Service($this->getHost());
-            $this->serviceCustomer
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceCustomer = new Customer\Service($this->getClient());
         }
 
         return $this->serviceCustomer;
@@ -67,11 +59,7 @@ class Service extends
     public function domains(): Domain\Service
     {
         if (null === $this->serviceDomain) {
-            $this->serviceDomain = new Domain\Service($this->getHost());
-            $this->serviceDomain
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceDomain = new Domain\Service($this->getClient());
         }
 
         return $this->serviceDomain;
@@ -85,11 +73,7 @@ class Service extends
     public function posts(): Post\Service
     {
         if (null === $this->servicePost) {
-            $this->servicePost = new Post\Service($this->getHost());
-            $this->servicePost
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->servicePost = new Post\Service($this->getClient());
         }
 
         return $this->servicePost;
@@ -103,11 +87,7 @@ class Service extends
     public function users(): User\Service
     {
         if (null === $this->serviceUser) {
-            $this->serviceUser = new User\Service($this->getHost());
-            $this->serviceUser
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceUser = new User\Service($this->getClient());
         }
 
         return $this->serviceUser;

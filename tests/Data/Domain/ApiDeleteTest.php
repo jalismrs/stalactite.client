@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -35,7 +36,8 @@ class ApiDeleteTest extends
      */
     public function testDelete(): void
     {
-        $mockService = new Service('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
@@ -74,8 +76,9 @@ class ApiDeleteTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [

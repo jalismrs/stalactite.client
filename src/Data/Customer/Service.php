@@ -41,11 +41,7 @@ class Service extends
     public function me(): Me\Service
     {
         if (null === $this->serviceMe) {
-            $this->serviceMe = new Me\Service($this->getHost());
-            $this->serviceMe
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceMe = new Me\Service($this->getClient());
         }
 
         return $this->serviceMe;

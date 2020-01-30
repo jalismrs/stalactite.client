@@ -311,16 +311,18 @@ final class Client
         array $options,
         JsonSchema $schema
     ) : array {
+        $url = "{$this->host}{$endpoint}";
+        
         try {
             $this->getLogger()
                  ->debug(
                      json_encode(
                          [
                              $method,
-                             "{$this->host}{$endpoint}",
+                             $url,
                              $options,
                          ],
-                         JSON_THROW_ON_ERROR, 512
+                         JSON_THROW_ON_ERROR
                      )
                  );
             
@@ -328,7 +330,7 @@ final class Client
                 ->getHttpClient()
                 ->request(
                     $method,
-                    "{$this->host}{$endpoint}",
+                    $url,
                     $options
                 );
         } catch (Throwable $throwable) {

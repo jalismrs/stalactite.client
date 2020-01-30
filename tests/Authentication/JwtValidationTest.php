@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
@@ -49,7 +50,8 @@ class JwtValidationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
         
-        $mockService = new Service('invalidHost');
+        $mockClient = new Client('invalidHost');
+        $mockService = new Service($mockClient);
         
         $mockService->getRSAPublicKey();
     }
@@ -291,7 +293,8 @@ class JwtValidationTest extends
         string $token,
         string $publicKey
     ) : void {
-        $mockService = new Service('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [

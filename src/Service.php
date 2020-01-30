@@ -29,11 +29,7 @@ class Service extends
     public function access(): Access\Service
     {
         if (null === $this->serviceAccess) {
-            $this->serviceAccess = new Access\Service($this->getHost());
-            $this->serviceAccess
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceAccess = new Access\Service($this->getClient());
         }
 
         return $this->serviceAccess;
@@ -47,11 +43,7 @@ class Service extends
     public function authentication(): Authentication\Service
     {
         if (null === $this->serviceAuthentication) {
-            $this->serviceAuthentication = new Authentication\Service($this->getHost());
-            $this->serviceAuthentication
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceAuthentication = new Authentication\Service($this->getClient());
         }
 
         return $this->serviceAuthentication;
@@ -65,11 +57,7 @@ class Service extends
     public function data(): Data\Service
     {
         if (null === $this->serviceData) {
-            $this->serviceData = new Data\Service($this->getHost());
-            $this->serviceData
-                ->setHttpClient($this->getHttpClient())
-                ->setLogger($this->getLogger())
-                ->setUserAgent($this->getUserAgent());
+            $this->serviceData = new Data\Service($this->getClient());
         }
 
         return $this->serviceData;

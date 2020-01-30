@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -31,7 +32,8 @@ class ApiRemovePostsTest extends
      */
     public function testRemovePosts(): void
     {
-        $mockService = new Service('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
@@ -69,8 +71,9 @@ class ApiRemovePostsTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
@@ -106,8 +109,9 @@ class ApiRemovePostsTest extends
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {
         $this->expectException(InvalidArgumentException::class);
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [

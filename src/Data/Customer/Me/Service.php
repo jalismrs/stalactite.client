@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer\Me;
 
@@ -12,7 +12,6 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use function vsprintf;
 
 /**
  * Service
@@ -32,26 +31,25 @@ class Service extends
      */
     public function getMe(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'me'      => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this->get(
             '/data/customers/me',
             [
@@ -61,7 +59,7 @@ class Service extends
             ],
             $schema
         );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

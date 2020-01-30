@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
@@ -41,8 +42,9 @@ class ApiGetByNameAndApiKeyTest extends
     public function testGetByNameAndApiKey(): void
     {
         $serializer = Serializer::getInstance();
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
@@ -100,8 +102,9 @@ class ApiGetByNameAndApiKeyTest extends
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
         $serializer = Serializer::getInstance();
-
-        $mockService = new Service('http://fakeHost');
+    
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockService->setHttpClient(
             new MockHttpClient(
                 [
