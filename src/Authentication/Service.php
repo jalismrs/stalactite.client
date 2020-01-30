@@ -97,7 +97,8 @@ class Service extends
                 $throwable
             );
             
-            $this->getLogger()
+            $this
+                ->getLogger()
                  ->error($exception);
             
             throw $exception;

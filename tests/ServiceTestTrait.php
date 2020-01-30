@@ -36,35 +36,10 @@ trait ServiceTestTrait
         AbstractService $mockService2
     ) : void {
         self::assertSame(
-            $mockService
-                ->getClient()
-                ->getHost(),
-            $mockService1
-                ->getClient()
-                ->getHost()
+            $mockService->getClient(),
+            $mockService1->getClient()
         );
-        self::assertSame(
-            $mockService
-                ->getClient()
-                ->getHttpClient(),
-            $mockService1
-                ->getClient()
-                ->getHttpClient()
-        );
-        self::assertSame(
-            $mockService
-                ->getLogger(),
-            $mockService1
-                ->getLogger()
-        );
-        self::assertSame(
-            $mockService
-                ->getClient()
-                ->getUserAgent(),
-            $mockService1
-                ->getClient()
-                ->getUserAgent()
-        );
+        
         self::assertSame(
             $mockService1,
             $mockService2

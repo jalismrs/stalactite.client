@@ -3,10 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Psr\Log\LoggerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * AbstractService
