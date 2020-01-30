@@ -9,6 +9,8 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -25,8 +27,11 @@ class UserTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCommon(): void
     {
@@ -40,15 +45,18 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupMain
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMain(): void
     {
@@ -92,15 +100,18 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupMin
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMin(): void
     {
@@ -128,15 +139,18 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupCreate
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCreate(): void
     {
@@ -162,15 +176,18 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupUpdate
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupUpdate(): void
     {
@@ -196,15 +213,18 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupUpdateMe
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupUpdateMe(): void
     {

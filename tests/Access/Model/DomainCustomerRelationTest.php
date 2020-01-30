@@ -9,6 +9,8 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
+use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -25,8 +27,11 @@ class DomainCustomerRelationTest extends
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCommon(): void
     {
@@ -40,15 +45,18 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupMain
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMain(): void
     {
@@ -87,15 +95,18 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupIgnoreDomain
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupIgnoreDomain(): void
     {
@@ -129,15 +140,18 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * testGroupMainIgnoreCustomer
      *
      * @return void
      *
      * @throws ExpectationFailedException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws MappingException
+     * @throws SerializerException
+     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMainIgnoreCustomer(): void
     {
