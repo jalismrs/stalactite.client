@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 /**
  * ModelFactory
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access
+ * @package Jalismrs\Stalactite\Service\Tests\Access
  */
 abstract class ModelFactory
 {

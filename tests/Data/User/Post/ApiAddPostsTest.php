@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\User\Post\Client;
+use Jalismrs\Stalactite\Client\Data\User\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddPostsTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
+ * @package Jalismrs\Stalactite\Service\Tests\Data\User\Post
  */
 class ApiAddPostsTest extends
     TestCase
@@ -32,7 +32,7 @@ class ApiAddPostsTest extends
      */
     public function testAddPosts(): void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -71,7 +71,7 @@ class ApiAddPostsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -108,7 +108,7 @@ class ApiAddPostsTest extends
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

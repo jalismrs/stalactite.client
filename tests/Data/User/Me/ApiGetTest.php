@@ -7,7 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\User\Me\Client;
+use Jalismrs\Stalactite\Client\Data\User\Me\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me
+ * @package Jalismrs\Stalactite\Service\Tests\Data\User\Me
  */
 class ApiGetTest extends
     TestCase
@@ -44,7 +44,7 @@ class ApiGetTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -97,7 +97,7 @@ class ApiGetTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

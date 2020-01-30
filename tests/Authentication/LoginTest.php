@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Client;
+use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * LoginTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication
  */
 class LoginTest extends
     TestCase
@@ -34,7 +34,7 @@ class LoginTest extends
      */
     public function testSchemaValidationOnLogin(): void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -95,7 +95,7 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
     
-        $mockClient = new Client('invalidHost');
+        $mockClient = new Service('invalidHost');
         $mockClient->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
@@ -116,7 +116,7 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -145,7 +145,7 @@ class LoginTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

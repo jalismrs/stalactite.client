@@ -18,7 +18,7 @@ use function array_replace_recursive;
 /**
  * Serializer
  *
- * @package Jalismrs\Stalactite\Client\Util
+ * @package Jalismrs\Stalactite\Service\Util
  */
 final class Serializer
 {

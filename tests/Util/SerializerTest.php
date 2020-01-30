@@ -12,7 +12,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * SerializerTest
  *
- * @package Jalismrs\Stalactite\Client\Tests
+ * @package Jalismrs\Stalactite\Service\Tests
  */
 class SerializerTest extends
     TestCase

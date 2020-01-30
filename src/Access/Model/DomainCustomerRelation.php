@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 /**
  * DomainCustomerRelation
  *
- * @package Jalismrs\Stalactite\Client\Access\Model
+ * @package Jalismrs\Stalactite\Service\Access\Model
  */
 class DomainCustomerRelation extends
     DomainRelation

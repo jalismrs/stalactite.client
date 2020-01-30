@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\AuthToken\Customer\Client;
+use Jalismrs\Stalactite\Client\Access\AuthToken\Customer\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteRelationsByCustomerTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Access\AuthToken\Customer
+ * @packageJalismrs\Stalactite\Service\Tests\Access\AuthToken\Customer
  */
 class ApiDeleteRelationsByCustomerTest extends
     TestCase
@@ -35,7 +35,7 @@ class ApiDeleteRelationsByCustomerTest extends
      */
     public function testDeleteRelationsByCustomer(): void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -74,7 +74,7 @@ class ApiDeleteRelationsByCustomerTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

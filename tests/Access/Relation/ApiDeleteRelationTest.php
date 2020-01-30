@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\Relation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\Relation\Client;
+use Jalismrs\Stalactite\Client\Access\Relation\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteRelationTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access\Relation
+ * @package Jalismrs\Stalactite\Service\Tests\Access\Relation
  */
 class ApiDeleteRelationTest extends
     TestCase
@@ -35,7 +35,7 @@ class ApiDeleteRelationTest extends
      */
     public function testDeleteRelation(): void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -74,7 +74,7 @@ class ApiDeleteRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

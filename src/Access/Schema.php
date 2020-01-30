@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 /**
  * Schema
  *
- * @package Jalismrs\Stalactite\Client\Access
+ * @package Jalismrs\Stalactite\Service\Access
  */
 abstract class Schema
 {

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * TrustedAppTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access
+ * @package Jalismrs\Stalactite\Service\Tests\Access
  */
 class TrustedAppTest extends
     TestCase

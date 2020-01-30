@@ -8,7 +8,7 @@ namespace Jalismrs\Stalactite\Client;
  *
  * Wrapper class for API responses
  *
- * @package Jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Service
  */
 class Response
 {

@@ -8,7 +8,7 @@ use RuntimeException;
 /**
  * ClientException
  *
- * @package Jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Service
  */
 class ClientException extends
     RuntimeException

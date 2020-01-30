@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 /**
  * TrustedApp
  *
- * @package Jalismrs\Stalactite\Client\Authentication\Model
+ * @package Jalismrs\Stalactite\Service\Authentication\Model
  */
 class TrustedApp extends
     AbstractModel

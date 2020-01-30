@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetAllTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication\TrustedApp
  */
 class ApiGetAllTest extends
     TestCase
@@ -42,7 +42,7 @@ class ApiGetAllTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -95,7 +95,7 @@ class ApiGetAllTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

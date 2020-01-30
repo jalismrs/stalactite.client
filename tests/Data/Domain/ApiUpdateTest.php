@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Domain\Client;
+use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiUpdateTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data\Domain
+ * @packageJalismrs\Stalactite\Service\Tests\Data\Domain
  */
 class ApiUpdateTest extends
     TestCase
@@ -37,7 +37,7 @@ class ApiUpdateTest extends
      */
     public function testUpdate(): void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -77,7 +77,7 @@ class ApiUpdateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

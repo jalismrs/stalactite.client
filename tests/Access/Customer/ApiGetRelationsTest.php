@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\Customer\Client;
+use Jalismrs\Stalactite\Client\Access\Customer\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetRelationsTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access\Customer
+ * @package Jalismrs\Stalactite\Service\Tests\Access\Customer
  */
 class ApiGetRelationsTest extends
     TestCase
@@ -43,7 +43,7 @@ class ApiGetRelationsTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -103,7 +103,7 @@ class ApiGetRelationsTest extends
 
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

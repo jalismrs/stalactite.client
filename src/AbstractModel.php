@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client;
 /**
  * AbstractModel
  *
- * @package Jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Service
  */
 abstract class AbstractModel
 {

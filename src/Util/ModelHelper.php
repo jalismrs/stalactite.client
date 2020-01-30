@@ -13,7 +13,7 @@ use function is_object;
 /**
  * ModelHelper
  *
- * @package Jalismrs\Stalactite\Client\Util
+ * @package Jalismrs\Stalactite\Service\Util
  */
 final class ModelHelper
 {

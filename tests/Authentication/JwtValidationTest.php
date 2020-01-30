@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
-use Jalismrs\Stalactite\Client\Authentication\Client;
+use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * JwtValidationTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication
  */
 class JwtValidationTest extends
     TestCase
@@ -49,7 +49,7 @@ class JwtValidationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
         
-        $mockClient = new Client('invalidHost');
+        $mockClient = new Service('invalidHost');
         
         $mockClient->getRSAPublicKey();
     }
@@ -72,7 +72,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             (string)(new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time)
@@ -104,7 +104,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             (string)(new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time)
@@ -136,7 +136,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             'a' . (new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time)
@@ -200,7 +200,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             (string)(new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time - 2000)
@@ -232,7 +232,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             (string)(new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time)
@@ -264,7 +264,7 @@ class JwtValidationTest extends
         
         $this->checkToken(
             (string)(new Builder())
-                ->issuedBy(Client::JWT_ISSUER)
+                ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
                 ->issuedAt($time)
@@ -291,7 +291,7 @@ class JwtValidationTest extends
         string $token,
         string $publicKey
     ) : void {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\Domain\Client;
+use Jalismrs\Stalactite\Client\Access\Domain\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiAddUserRelationTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access\Domain
+ * @package Jalismrs\Stalactite\Service\Tests\Access\Domain
  */
 class ApiAddUserRelationTest extends
     TestCase
@@ -45,7 +45,7 @@ class ApiAddUserRelationTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -94,7 +94,7 @@ class ApiAddUserRelationTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

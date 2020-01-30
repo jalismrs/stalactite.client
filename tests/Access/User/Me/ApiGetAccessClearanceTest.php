@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\User\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\Access\User\Me\Client;
+use Jalismrs\Stalactite\Client\Access\User\Me\Service;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetAccessClearanceTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Access\User\Me
+ * @packageJalismrs\Stalactite\Service\Tests\Access\User\Me
  */
 class ApiGetAccessClearanceTest extends
     TestCase
@@ -45,7 +45,7 @@ class ApiGetAccessClearanceTest extends
     {
         $serializer = Serializer::getInstance();
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -96,7 +96,7 @@ class ApiGetAccessClearanceTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $mockClient = new Client('http://fakeHost');
+        $mockClient = new Service('http://fakeHost');
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [

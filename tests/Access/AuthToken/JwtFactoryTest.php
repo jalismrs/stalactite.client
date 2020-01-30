@@ -15,7 +15,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * JwtFactoryTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Access\AuthToken
+ * @package Jalismrs\Stalactite\Service\Tests\Access\AuthToken
  */
 class JwtFactoryTest extends
     TestCase
