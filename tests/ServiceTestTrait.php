@@ -11,7 +11,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * ServiceTestTrait
  *
- * @package Test
+ * @package Jalismrs\Stalactite\Client\Tests
  * @mixin TestCase
  */
 trait ServiceTestTrait
