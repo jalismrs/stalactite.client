@@ -37,7 +37,7 @@ class LoginTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -121,7 +121,7 @@ class LoginTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse('invalid API response')
@@ -151,7 +151,7 @@ class LoginTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(

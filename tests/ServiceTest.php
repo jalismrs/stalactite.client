@@ -33,13 +33,13 @@ class ServiceTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
-        $mockService->setLogger(
+        $mockClient->setLogger(
             new TestLogger()
         );
-        $mockService->setUserAgent('fake user agent');
+        $mockClient->setUserAgent('fake user agent');
 
         $mockService1 = $mockService->access();
         $mockService2 = $mockService->access();
@@ -63,13 +63,13 @@ class ServiceTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
-        $mockService->setLogger(
+        $mockClient->setLogger(
             new TestLogger()
         );
-        $mockService->setUserAgent('fake user agent');
+        $mockClient->setUserAgent('fake user agent');
 
         $mockService1 = $mockService->authentication();
         $mockService2 = $mockService->authentication();
@@ -93,13 +93,13 @@ class ServiceTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
-        $mockService->setLogger(
+        $mockClient->setLogger(
             new TestLogger()
         );
-        $mockService->setUserAgent('fake user agent');
+        $mockClient->setUserAgent('fake user agent');
 
         $mockService1 = $mockService->data();
         $mockService2 = $mockService->data();

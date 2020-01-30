@@ -48,7 +48,7 @@ class ApiGetAccessClearanceTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -100,7 +100,7 @@ class ApiGetAccessClearanceTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(

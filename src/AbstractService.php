@@ -65,21 +65,6 @@ abstract class AbstractService
     }
     
     /**
-     * setHttpClient
-     *
-     * @param HttpClientInterface $httpClient
-     *
-     * @return $this
-     */
-    public function setHttpClient(HttpClientInterface $httpClient) : self
-    {
-        $this->getClient()
-             ->setHttpClient($httpClient);
-        
-        return $this;
-    }
-    
-    /**
      * getLogger
      *
      * @return LoggerInterface
@@ -88,36 +73,6 @@ abstract class AbstractService
     {
         return $this->getClient()
                     ->getLogger();
-    }
-    
-    /**
-     * setLogger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
-    public function setLogger(LoggerInterface $logger) : self
-    {
-        $this->getClient()
-             ->setLogger($logger);
-        
-        return $this;
-    }
-    
-    /**
-     * setUserAgent
-     *
-     * @param string|null $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent(?string $userAgent) : self
-    {
-        $this->getClient()
-             ->setUserAgent($userAgent);
-        
-        return $this;
     }
     
     /*

@@ -35,7 +35,7 @@ class ApiAddLeadsTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -75,7 +75,7 @@ class ApiAddLeadsTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
@@ -113,7 +113,7 @@ class ApiAddLeadsTest extends
     
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(

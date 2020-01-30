@@ -34,13 +34,13 @@ class ServiceTest extends
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient(
+        $mockClient->setHttpClient(
             new MockHttpClient()
         );
-        $mockService->setLogger(
+        $mockClient->setLogger(
             new TestLogger()
         );
-        $mockService->setUserAgent('fake user agent');
+        $mockClient->setUserAgent('fake user agent');
 
         $mockService1 = $mockService->trustedApps();
         $mockService2 = $mockService->trustedApps();

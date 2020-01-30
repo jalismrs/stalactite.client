@@ -76,7 +76,7 @@ class AbstractServiceTest extends
         $userAgent   = 'fake user agent';
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setUserAgent($userAgent);
+        $mockClient->setUserAgent($userAgent);
         
         self::assertIsString(
             $mockService
@@ -104,7 +104,7 @@ class AbstractServiceTest extends
         $httpClient  = new MockHttpClient();
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setHttpClient($httpClient);
+        $mockClient->setHttpClient($httpClient);
         
         self::assertSame($httpClient, $mockService->getHttpClient());
     }
@@ -139,7 +139,7 @@ class AbstractServiceTest extends
         $logger      = new TestLogger();
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockService->setLogger($logger);
+        $mockClient->setLogger($logger);
         
         self::assertSame($logger, $mockService->getLogger());
     }
