@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken\User;
 
@@ -41,11 +41,9 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId(): void
+    public function testGetByEmailAndGoogleId() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -54,15 +52,17 @@ class ApiGetByEmailAndGoogleIdTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'user' => $serializer->normalize(
-                                    ModelFactory::getTestableUser(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'user'    => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableUser(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,7 +70,7 @@ class ApiGetByEmailAndGoogleIdTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getByEmailAndGoogleId(
             'goodmorning@hello.hi',
             '0123456789',
@@ -83,7 +83,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             $response->getData()['user']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId
      *
@@ -93,12 +93,12 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId(): void
+    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -107,8 +107,8 @@ class ApiGetByEmailAndGoogleIdTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'user' => []
+                                'error'   => null,
+                                'user'    => []
                                 // invalid user
                             ],
                             JSON_THROW_ON_ERROR
@@ -117,7 +117,7 @@ class ApiGetByEmailAndGoogleIdTest extends
                 ]
             )
         );
-
+        
         $mockService->getByEmailAndGoogleId(
             'goodmorning@hello.hi',
             '0123456789',

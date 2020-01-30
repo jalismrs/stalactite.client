@@ -43,9 +43,7 @@ class ApiCreateTest extends
      */
     public function testCreate() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -55,15 +53,17 @@ class ApiCreateTest extends
                             [
                                 'success'    => true,
                                 'error'      => null,
-                                'trustedApp' => $serializer->normalize(
-                                    ModelFactory::getTestableTrustedApp(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                            'reset',
-                                        ],
-                                    ]
-                                ),
+                                'trustedApp' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableTrustedApp(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                                'reset',
+                                            ],
+                                        ]
+                                    ),
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -98,8 +98,8 @@ class ApiCreateTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(

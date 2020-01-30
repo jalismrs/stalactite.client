@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 
@@ -41,11 +41,9 @@ class ApiResetAuthTokenTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testResetAuthToken(): void
+    public function testResetAuthToken() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -53,16 +51,18 @@ class ApiResetAuthTokenTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
-                                'trustedApp' => $serializer->normalize(
-                                    ModelFactory::getTestableTrustedApp(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                ),
+                                'success'    => true,
+                                'error'      => null,
+                                'trustedApp' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableTrustedApp(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    ),
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,7 +70,7 @@ class ApiResetAuthTokenTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->resetAuthToken(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
@@ -82,7 +82,7 @@ class ApiResetAuthTokenTest extends
             $response->getData()['trustedApp']
         );
     }
-
+    
     /**
      * testThrowOnResetAuthToken
      *
@@ -93,12 +93,12 @@ class ApiResetAuthTokenTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnResetAuthToken(): void
+    public function testThrowOnResetAuthToken() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -107,7 +107,7 @@ class ApiResetAuthTokenTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => false
+                                'error'   => false
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -115,7 +115,7 @@ class ApiResetAuthTokenTest extends
                 ]
             )
         );
-
+        
         $mockService->resetAuthToken(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'

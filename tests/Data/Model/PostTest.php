@@ -30,7 +30,7 @@ class PostTest extends
      */
     public function testGroupCommon(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestablePost();
 
@@ -52,7 +52,7 @@ class PostTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestablePost();
 
@@ -87,7 +87,7 @@ class PostTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestablePost();
 
@@ -121,7 +121,7 @@ class PostTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestablePost();
 

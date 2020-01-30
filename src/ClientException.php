@@ -27,11 +27,6 @@ class ClientException extends
      */
     public const CLIENT_TRANSPORT = 1;
 
-    /**
-     * Invalid parameter passed to the API client
-     */
-    public const INVALID_PARAMETER_PASSED_TO_CLIENT = 2;
-
     ////////////////////////////
     /** Authentication Error **/
     ////////////////////////////

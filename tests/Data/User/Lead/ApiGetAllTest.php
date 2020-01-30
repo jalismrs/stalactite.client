@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 
@@ -39,11 +39,9 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetAll(): void
+    public function testGetAll() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -52,16 +50,18 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'leads' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestablePost(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                'error'   => null,
+                                'leads'   => [
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestablePost(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -70,7 +70,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getAllLeads(
             ModelFactory::getTestableUser(),
             'fake user jwt'
@@ -82,7 +82,7 @@ class ApiGetAllTest extends
             $response->getData()['leads']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetAll
      *
@@ -93,14 +93,12 @@ class ApiGetAllTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGetAll(): void
+    public function testThrowOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -109,15 +107,17 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'leads' => $serializer->normalize(
-                                    ModelFactory::getTestablePost(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'leads'   => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestablePost(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -126,7 +126,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $mockService->getAllLeads(
             ModelFactory::getTestableUser(),
             'fake user jwt'

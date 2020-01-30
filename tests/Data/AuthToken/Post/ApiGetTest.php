@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken\Post;
 
@@ -41,11 +41,9 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGet(): void
+    public function testGet() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -54,15 +52,17 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => $serializer->normalize(
-                                    ModelFactory::getTestablePost(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'post'    => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestablePost(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,10 +70,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getPost(
             ModelFactory::getTestablePost()
-                ->getUid(),
+                        ->getUid(),
             'fake API auth token'
         );
         self::assertTrue($response->isSuccess());
@@ -83,7 +83,7 @@ class ApiGetTest extends
             $response->getData()['post']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGet
      *
@@ -93,12 +93,12 @@ class ApiGetTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGet(): void
+    public function testThrowExceptionOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -107,8 +107,8 @@ class ApiGetTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => []
+                                'error'   => null,
+                                'post'    => []
                                 // invalid Post
                             ],
                             JSON_THROW_ON_ERROR
@@ -117,10 +117,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $mockService->getPost(
             ModelFactory::getTestablePost()
-                ->getUid(),
+                        ->getUid(),
             'fake API auth token'
         );
     }

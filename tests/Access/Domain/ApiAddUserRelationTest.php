@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\Domain;
 
@@ -42,11 +42,9 @@ class ApiAddUserRelationTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testAddUserRelation(): void
+    public function testAddUserRelation() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -54,16 +52,18 @@ class ApiAddUserRelationTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
-                                'relation' => $serializer->normalize(
-                                    ModelFactory::getTestableDomainUserRelation(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'success'  => true,
+                                'error'    => null,
+                                'relation' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableDomainUserRelation(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -71,7 +71,7 @@ class ApiAddUserRelationTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->addUserRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableUser(),
@@ -81,7 +81,7 @@ class ApiAddUserRelationTest extends
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainUserRelation::class, $response->getData()['relation']);
     }
-
+    
     /**
      * testThrowOnInvalidResponseAddUserRelation
      *
@@ -91,12 +91,12 @@ class ApiAddUserRelationTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseAddUserRelation(): void
+    public function testThrowOnInvalidResponseAddUserRelation() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -104,8 +104,8 @@ class ApiAddUserRelationTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'  => true,
+                                'error'    => null,
                                 'relation' => []
                                 // wrong type
                             ],
@@ -115,7 +115,7 @@ class ApiAddUserRelationTest extends
                 ]
             )
         );
-
+        
         $mockService->addUserRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableUser(),

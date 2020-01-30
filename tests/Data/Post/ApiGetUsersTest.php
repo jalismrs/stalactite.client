@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
@@ -39,11 +39,9 @@ class ApiGetUsersTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetUsers(): void
+    public function testGetUsers() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -52,16 +50,18 @@ class ApiGetUsersTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'users' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestableUser(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                'error'   => null,
+                                'users'   => [
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableUser(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -70,10 +70,10 @@ class ApiGetUsersTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getUsers(
             ModelFactory::getTestablePost()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -83,7 +83,7 @@ class ApiGetUsersTest extends
             $response->getData()['users']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetUsers
      *
@@ -93,12 +93,12 @@ class ApiGetUsersTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetUsers(): void
+    public function testThrowExceptionOnInvalidResponseGetUsers() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -107,8 +107,8 @@ class ApiGetUsersTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'users' => null
+                                'error'   => null,
+                                'users'   => null
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -117,10 +117,10 @@ class ApiGetUsersTest extends
                 ]
             )
         );
-
+        
         $mockService->getUsers(
             ModelFactory::getTestablePost()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
     }

@@ -6,6 +6,8 @@ namespace Jalismrs\Stalactite\Client;
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
@@ -34,12 +36,16 @@ final class Client
      */
     private $logger;
     /**
+     * @var Serializer
+     */
+    private $serializer;
+    /**
      * @var null|string
      */
     private $userAgent;
     
     /**
-     * AbstractService constructor.
+     * Client constructor.
      *
      * @param string $host
      */
@@ -128,6 +134,60 @@ final class Client
     }
     
     /**
+     * getSerializer
+     *
+     * @return Serializer
+     *
+     * @throws SerializerException
+     */
+    public function getSerializer() : Serializer
+    {
+        if (null === $this->serializer) {
+            try {
+                $this->serializer = new Serializer();
+            } catch (Throwable $throwable) {
+                throw new SerializerException(
+                    'Error while instantiating the serializer',
+                    null,
+                    $throwable
+                );
+            }
+        }
+        
+        return $this->serializer;
+    }
+    
+    /**
+     * getUserAgent
+     *
+     * @return null|string
+     */
+    public function getUserAgent() : ?string
+    {
+        return $this->userAgent;
+    }
+    
+    /**
+     * setUserAgent
+     *
+     * @param string|null $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent(?string $userAgent) : self
+    {
+        $this->userAgent = $userAgent;
+        
+        return $this;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * default factories -------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    
+    /**
      * createDefaultHttpClient
      *
      * @return HttpClientInterface
@@ -160,30 +220,6 @@ final class Client
     private function createDefaultLogger() : LoggerInterface
     {
         return new NullLogger();
-    }
-    
-    /**
-     * getUserAgent
-     *
-     * @return null|string
-     */
-    public function getUserAgent() : ?string
-    {
-        return $this->userAgent;
-    }
-    
-    /**
-     * setUserAgent
-     *
-     * @param string|null $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent(?string $userAgent) : self
-    {
-        $this->userAgent = $userAgent;
-        
-        return $this;
     }
     
     /*

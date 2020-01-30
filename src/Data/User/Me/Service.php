@@ -13,7 +13,6 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
@@ -57,14 +56,14 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/data/users/me',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                '/data/users/me',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
+                ],
+                $schema
+            );
         
         return new Response(
             $response['success'],
@@ -110,23 +109,25 @@ class Service extends
         $response = $this
             ->getClient()
             ->post(
-            '/data/users/me',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
+                '/data/users/me',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ],
+                    'json'    => $this
+                        ->getClient()
+                        ->getSerializer()
+                        ->normalize(
+                            $userModel,
+                            [
+                                AbstractNormalizer::GROUPS => [
+                                    'updateMe',
+                                ],
+                            ]
+                        )
                 ],
-                'json'    => Serializer::getInstance()
-                                       ->normalize(
-                                           $userModel,
-                                           [
-                                               AbstractNormalizer::GROUPS => [
-                                                   'updateMe',
-                                               ],
-                                           ]
-                                       )
-            ],
-            $schema
-        );
+                $schema
+            );
         
         return (new Response(
             $response['success'],

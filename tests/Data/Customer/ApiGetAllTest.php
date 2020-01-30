@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
@@ -10,7 +10,6 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -39,11 +38,9 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetAll(): void
+    public function testGetAll() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -51,17 +48,19 @@ class ApiGetAllTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'   => true,
+                                'error'     => null,
                                 'customers' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestableCustomer(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableCustomer(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -70,7 +69,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getAllCustomers(
             'fake user jwt'
         );
@@ -80,9 +79,9 @@ class ApiGetAllTest extends
             Customer::class,
             $response->getData()['customers']
         );
-
+        
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetAll
      *
@@ -93,14 +92,12 @@ class ApiGetAllTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll(): void
+    public function testThrowExceptionOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -108,16 +105,18 @@ class ApiGetAllTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
-                                'customers' => $serializer->normalize(
-                                    ModelFactory::getTestableCustomer(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'success'   => true,
+                                'error'     => null,
+                                'customers' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableCustomer(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -126,7 +125,7 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
+        
         $mockService->getAllCustomers(
             'fake user jwt'
         );

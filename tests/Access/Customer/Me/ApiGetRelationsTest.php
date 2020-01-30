@@ -41,8 +41,6 @@ class ApiGetRelationsTest extends
      */
     public function testGetRelations(): void
     {
-        $serializer = Serializer::getInstance();
-    
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -54,7 +52,9 @@ class ApiGetRelationsTest extends
                                 'success' => true,
                                 'error' => null,
                                 'relations' => [
-                                    $serializer->normalize(
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
                                         ModelFactory::getTestableDomainCustomerRelation(),
                                         [
                                             AbstractNormalizer::GROUPS => [
@@ -100,8 +100,6 @@ class ApiGetRelationsTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
 
-        $serializer = Serializer::getInstance();
-    
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -112,7 +110,9 @@ class ApiGetRelationsTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'relations' => $serializer->normalize(
+                                'relations' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
                                     ModelFactory::getTestableDomainCustomerRelation(),
                                     [
                                         AbstractNormalizer::GROUPS => [

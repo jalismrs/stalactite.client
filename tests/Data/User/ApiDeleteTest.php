@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
@@ -38,11 +38,9 @@ class ApiDeleteTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testDelete(): void
+    public function testDelete() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -51,15 +49,17 @@ class ApiDeleteTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'user' => $serializer->normalize(
-                                    ModelFactory::getTestableUser(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'user'    => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableUser(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -67,16 +67,16 @@ class ApiDeleteTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->deleteUser(
             ModelFactory::getTestableUser()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
      * testThrowOnInvalidResponseOnDelete
      *
@@ -86,12 +86,12 @@ class ApiDeleteTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowOnInvalidResponseOnDelete(): void
+    public function testThrowOnInvalidResponseOnDelete() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -100,7 +100,7 @@ class ApiDeleteTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => false,
+                                'error'   => false,
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -109,10 +109,10 @@ class ApiDeleteTest extends
                 ]
             )
         );
-
+        
         $mockService->deleteUser(
             ModelFactory::getTestableUser()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
     }

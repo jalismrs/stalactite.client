@@ -30,7 +30,7 @@ class DomainTest extends
      */
     public function testGroupCommon(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableDomain();
 
@@ -52,7 +52,7 @@ class DomainTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableDomain();
 
@@ -88,7 +88,7 @@ class DomainTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableDomain();
 
@@ -123,7 +123,7 @@ class DomainTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableDomain();
 

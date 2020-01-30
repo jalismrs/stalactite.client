@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
@@ -41,11 +41,9 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGet(): void
+    public function testGet() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -53,16 +51,18 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
-                                'customer' => $serializer->normalize(
-                                    ModelFactory::getTestableCustomer(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'success'  => true,
+                                'error'    => null,
+                                'customer' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableCustomer(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,10 +70,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->getCustomer(
             ModelFactory::getTestableCustomer()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -83,7 +83,7 @@ class ApiGetTest extends
             $response->getData()['customer']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGet
      *
@@ -93,12 +93,12 @@ class ApiGetTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGet(): void
+    public function testThrowExceptionOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -106,8 +106,8 @@ class ApiGetTest extends
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'  => true,
+                                'error'    => null,
                                 'customer' => []
                                 // invalid customer
                             ],
@@ -117,10 +117,10 @@ class ApiGetTest extends
                 ]
             )
         );
-
+        
         $mockService->getCustomer(
             ModelFactory::getTestableCustomer()
-                ->getUid(),
+                        ->getUid(),
             'fake user jwt'
         );
     }

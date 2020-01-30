@@ -43,8 +43,6 @@ class ApiGetTest extends
      */
     public function testGet(): void
     {
-        $serializer = Serializer::getInstance();
-    
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -55,7 +53,9 @@ class ApiGetTest extends
                             [
                                 'success' => true,
                                 'error' => null,
-                                'domain' => $serializer->normalize(
+                                'domain' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
                                     ModelFactory::getTestableDomain(),
                                     [
                                         AbstractNormalizer::GROUPS => [

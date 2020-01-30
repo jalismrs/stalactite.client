@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
@@ -39,11 +39,9 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetByNameAndApiKey(): void
+    public function testGetByNameAndApiKey() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -52,16 +50,18 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
+                                'error'   => null,
                                 'domains' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestableDomain(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableDomain(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -70,9 +70,9 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-
+        
         $domainModel = ModelFactory::getTestableDomain();
-
+        
         $response = $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
@@ -85,7 +85,7 @@ class ApiGetByNameAndApiKeyTest extends
             $response->getData()['domains']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetByNameAndApiKey
      *
@@ -96,14 +96,12 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGetByNameAndApiKey(): void
+    public function testThrowOnInvalidResponseGetByNameAndApiKey() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -112,15 +110,17 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domains' => $serializer->normalize(
-                                    ModelFactory::getTestableDomain(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'domains' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableDomain(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -129,9 +129,9 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-
+        
         $domainModel = ModelFactory::getTestableDomain();
-
+        
         $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),

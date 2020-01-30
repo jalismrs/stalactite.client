@@ -30,7 +30,7 @@ class CustomerTest extends
      */
     public function testGroupCommon(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableCustomer();
 
@@ -52,7 +52,7 @@ class CustomerTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableCustomer();
 
@@ -87,7 +87,7 @@ class CustomerTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableCustomer();
 
@@ -120,7 +120,7 @@ class CustomerTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableCustomer();
 

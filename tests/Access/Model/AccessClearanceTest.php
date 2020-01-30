@@ -30,7 +30,7 @@ class AccessClearanceTest extends
      */
     public function testGroupCommon(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableAccessClearance();
 
@@ -52,7 +52,7 @@ class AccessClearanceTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = new Serializer();
 
         $model = ModelFactory::getTestableAccessClearance();
 

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
@@ -41,11 +41,9 @@ class ApiCreateTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testCreate(): void
+    public function testCreate() : void
     {
-        $serializer = Serializer::getInstance();
-    
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -54,15 +52,17 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => $serializer->normalize(
-                                    ModelFactory::getTestablePost(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'post'    => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestablePost(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,7 +70,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-
+        
         $response = $mockService->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'
@@ -82,7 +82,7 @@ class ApiCreateTest extends
             $response->getData()['post']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseCreate
      *
@@ -93,12 +93,12 @@ class ApiCreateTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowExceptionOnInvalidResponseCreate(): void
+    public function testThrowExceptionOnInvalidResponseCreate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
@@ -107,8 +107,8 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'post' => []
+                                'error'   => null,
+                                'post'    => []
                                 // invalid Post
                             ],
                             JSON_THROW_ON_ERROR
@@ -117,7 +117,7 @@ class ApiCreateTest extends
                 ]
             )
         );
-
+        
         $mockService->createPost(
             ModelFactory::getTestablePost(),
             'fake user jwt'
