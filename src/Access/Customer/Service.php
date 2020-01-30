@@ -27,7 +27,7 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private $clientMe;
+    private $serviceMe;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -40,15 +40,15 @@ class Service extends
      */
     public function me(): Me\Service
     {
-        if (null === $this->clientMe) {
-            $this->clientMe = new  Me\Service($this->getHost());
-            $this->clientMe
+        if (null === $this->serviceMe) {
+            $this->serviceMe = new  Me\Service($this->getHost());
+            $this->serviceMe
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientMe;
+        return $this->serviceMe;
     }
 
     /*

@@ -32,9 +32,9 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private $clientLead;
-    private $clientMe;
-    private $clientPost;
+    private $serviceLead;
+    private $serviceMe;
+    private $servicePost;
 
     /*
      * -------------------------------------------------------------------------
@@ -49,15 +49,15 @@ class Service extends
      */
     public function leads(): Lead\Service
     {
-        if (null === $this->clientLead) {
-            $this->clientLead = new Lead\Service($this->getHost());
-            $this->clientLead
+        if (null === $this->serviceLead) {
+            $this->serviceLead = new Lead\Service($this->getHost());
+            $this->serviceLead
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientLead;
+        return $this->serviceLead;
     }
 
     /**
@@ -67,15 +67,15 @@ class Service extends
      */
     public function me(): Me\Service
     {
-        if (null === $this->clientMe) {
-            $this->clientMe = new Me\Service($this->getHost());
-            $this->clientMe
+        if (null === $this->serviceMe) {
+            $this->serviceMe = new Me\Service($this->getHost());
+            $this->serviceMe
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientMe;
+        return $this->serviceMe;
     }
 
     /**
@@ -84,15 +84,15 @@ class Service extends
      */
     public function posts(): PostClient
     {
-        if (null === $this->clientPost) {
-            $this->clientPost = new PostClient($this->getHost());
-            $this->clientPost
+        if (null === $this->servicePost) {
+            $this->servicePost = new PostClient($this->getHost());
+            $this->servicePost
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientPost;
+        return $this->servicePost;
     }
 
     /*

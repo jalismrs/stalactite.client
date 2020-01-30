@@ -11,9 +11,9 @@ namespace Jalismrs\Stalactite\Client;
 class Service extends
     AbstractService
 {
-    private $clientAccess;
-    private $clientAuthentication;
-    private $clientData;
+    private $serviceAccess;
+    private $serviceAuthentication;
+    private $serviceData;
 
     /*
      * -------------------------------------------------------------------------
@@ -28,15 +28,15 @@ class Service extends
      */
     public function access(): Access\Service
     {
-        if (null === $this->clientAccess) {
-            $this->clientAccess = new Access\Service($this->getHost());
-            $this->clientAccess
+        if (null === $this->serviceAccess) {
+            $this->serviceAccess = new Access\Service($this->getHost());
+            $this->serviceAccess
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientAccess;
+        return $this->serviceAccess;
     }
 
     /**
@@ -46,15 +46,15 @@ class Service extends
      */
     public function authentication(): Authentication\Service
     {
-        if (null === $this->clientAuthentication) {
-            $this->clientAuthentication = new Authentication\Service($this->getHost());
-            $this->clientAuthentication
+        if (null === $this->serviceAuthentication) {
+            $this->serviceAuthentication = new Authentication\Service($this->getHost());
+            $this->serviceAuthentication
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientAuthentication;
+        return $this->serviceAuthentication;
     }
 
     /**
@@ -64,14 +64,14 @@ class Service extends
      */
     public function data(): Data\Service
     {
-        if (null === $this->clientData) {
-            $this->clientData = new Data\Service($this->getHost());
-            $this->clientData
+        if (null === $this->serviceData) {
+            $this->serviceData = new Data\Service($this->getHost());
+            $this->serviceData
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientData;
+        return $this->serviceData;
     }
 }

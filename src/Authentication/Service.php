@@ -38,7 +38,7 @@ class Service extends
         'customer'
     ];
     
-    private $clientTrustedApp;
+    private $serviceTrustedApp;
     
     /*
      * -------------------------------------------------------------------------
@@ -53,15 +53,15 @@ class Service extends
      */
     public function trustedApps() : TrustedAppClient
     {
-        if (null === $this->clientTrustedApp) {
-            $this->clientTrustedApp = new TrustedAppClient($this->getHost());
-            $this->clientTrustedApp
+        if (null === $this->serviceTrustedApp) {
+            $this->serviceTrustedApp = new TrustedAppClient($this->getHost());
+            $this->serviceTrustedApp
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
         
-        return $this->clientTrustedApp;
+        return $this->serviceTrustedApp;
     }
     
     /*

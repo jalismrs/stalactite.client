@@ -13,10 +13,10 @@ use Jalismrs\Stalactite\Client\AbstractService;
 class Service extends
     AbstractService
 {
-    private $clientCustomer;
-    private $clientDomain;
-    private $clientPost;
-    private $clientUser;
+    private $serviceCustomer;
+    private $serviceDomain;
+    private $servicePost;
+    private $serviceUser;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -29,15 +29,15 @@ class Service extends
      */
     public function customers(): Customer\Service
     {
-        if (null === $this->clientCustomer) {
-            $this->clientCustomer = new Customer\Service($this->getHost());
-            $this->clientCustomer
+        if (null === $this->serviceCustomer) {
+            $this->serviceCustomer = new Customer\Service($this->getHost());
+            $this->serviceCustomer
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientCustomer;
+        return $this->serviceCustomer;
     }
 
     /**
@@ -47,15 +47,15 @@ class Service extends
      */
     public function domains(): Domain\Service
     {
-        if (null === $this->clientDomain) {
-            $this->clientDomain = new Domain\Service($this->getHost());
-            $this->clientDomain
+        if (null === $this->serviceDomain) {
+            $this->serviceDomain = new Domain\Service($this->getHost());
+            $this->serviceDomain
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientDomain;
+        return $this->serviceDomain;
     }
 
     /**
@@ -65,15 +65,15 @@ class Service extends
      */
     public function posts(): Post\Service
     {
-        if (null === $this->clientPost) {
-            $this->clientPost = new Post\Service($this->getHost());
-            $this->clientPost
+        if (null === $this->servicePost) {
+            $this->servicePost = new Post\Service($this->getHost());
+            $this->servicePost
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientPost;
+        return $this->servicePost;
     }
 
     /**
@@ -83,14 +83,14 @@ class Service extends
      */
     public function users(): User\Service
     {
-        if (null === $this->clientUser) {
-            $this->clientUser = new User\Service($this->getHost());
-            $this->clientUser
+        if (null === $this->serviceUser) {
+            $this->serviceUser = new User\Service($this->getHost());
+            $this->serviceUser
                 ->setHttpClient($this->getHttpClient())
                 ->setLogger($this->getLogger())
                 ->setUserAgent($this->getUserAgent());
         }
 
-        return $this->clientUser;
+        return $this->serviceUser;
     }
 }
