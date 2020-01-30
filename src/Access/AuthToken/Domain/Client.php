@@ -124,7 +124,7 @@ class Client extends
                                 ],
                                 'user' => [
                                     'type' => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::USER
+                                    'schema' => DataSchema::MINIMAL_USER
                                 ]
                             ]
                         ],
