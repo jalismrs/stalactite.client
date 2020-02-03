@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain;
 
@@ -11,7 +12,6 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -181,7 +181,7 @@ class ApiGetRelationsTest extends
                 ]
             )
         );
-    
+        
         $mockService->getRelations(
             DataTestModelFactory::getTestableDomain(),
             'fake auth token jwt'
