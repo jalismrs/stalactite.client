@@ -4,9 +4,10 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Client;
+use Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
@@ -20,7 +21,13 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class ApiGetRelationsTest extends TestCase
+/**
+ * ApiGetRelationsTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain
+ */
+class ApiGetRelationsTest extends
+    TestCase
 {
     /**
      * testGetRelations
@@ -35,45 +42,48 @@ class ApiGetRelationsTest extends TestCase
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetRelations(): void
+    public function testGetRelations() : void
     {
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'   => true,
+                                'error'     => null,
                                 'relations' => [
-                                    'users' => [
-                                        $serializer->normalize(
-                                            ModelFactory::getTestableDomainUserRelation(),
-                                            [
-                                                AbstractNormalizer::GROUPS => [
-                                                    'main',
-                                                ],
-                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                                                    'domain'
-                                                ],
-                                            ]
-                                        )
+                                    'users'     => [
+                                        $mockClient
+                                            ->getSerializer()
+                                            ->normalize(
+                                                ModelFactory::getTestableDomainUserRelation(),
+                                                [
+                                                    AbstractNormalizer::GROUPS             => [
+                                                        'main',
+                                                    ],
+                                                    AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                        'domain'
+                                                    ],
+                                                ]
+                                            )
                                     ],
                                     'customers' => [
-                                        $serializer->normalize(
-                                            ModelFactory::getTestableDomainCustomerRelation(),
-                                            [
-                                                AbstractNormalizer::GROUPS => [
-                                                    'main',
-                                                ],
-                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                                                    'domain'
-                                                ],
-                                            ]
-                                        )
+                                        $mockClient
+                                            ->getSerializer()
+                                            ->normalize(
+                                                ModelFactory::getTestableDomainCustomerRelation(),
+                                                [
+                                                    AbstractNormalizer::GROUPS             => [
+                                                        'main',
+                                                    ],
+                                                    AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                        'domain'
+                                                    ],
+                                                ]
+                                            )
                                     ]
                                 ]
                             ],
@@ -83,14 +93,14 @@ class ApiGetRelationsTest extends TestCase
                 ]
             )
         );
-
-        $response = $mockClient->getRelations(
+        
+        $response = $mockService->getRelations(
             DataTestModelFactory::getTestableDomain(),
             'fake auth token jwt'
         );
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
-
+        
         static::assertIsArray($response->getData()['relations']);
         static::assertArrayHasKey(
             'users',
@@ -100,7 +110,7 @@ class ApiGetRelationsTest extends TestCase
             'customers',
             $response->getData()['relations']
         );
-
+        
         static::assertContainsOnlyInstancesOf(
             DomainUserRelation::class,
             $response->getData()['relations']['users']
@@ -110,7 +120,7 @@ class ApiGetRelationsTest extends TestCase
             $response->getData()['relations']['customers']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetRelations
      *
@@ -121,45 +131,48 @@ class ApiGetRelationsTest extends TestCase
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGetRelations(): void
+    public function testThrowOnInvalidResponseGetRelations() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'   => true,
+                                'error'     => null,
                                 'relations' => [
-                                    'users' => $serializer->normalize(
-                                        ModelFactory::getTestableDomainUserRelation(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                                                'domain'
-                                            ],
-                                        ]
-                                    ),
-                                    'customers' => $serializer->normalize(
-                                        ModelFactory::getTestableDomainCustomerRelation(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                            AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                                                'domain'
-                                            ],
-                                        ]
-                                    )
+                                    'users'     => $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableDomainUserRelation(),
+                                            [
+                                                AbstractNormalizer::GROUPS             => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
+                                                ],
+                                            ]
+                                        ),
+                                    'customers' => $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableDomainCustomerRelation(),
+                                            [
+                                                AbstractNormalizer::GROUPS             => [
+                                                    'main',
+                                                ],
+                                                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                                    'domain'
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -168,8 +181,8 @@ class ApiGetRelationsTest extends TestCase
                 ]
             )
         );
-
-        $mockClient->getRelations(
+    
+        $mockService->getRelations(
             DataTestModelFactory::getTestableDomain(),
             'fake auth token jwt'
         );
