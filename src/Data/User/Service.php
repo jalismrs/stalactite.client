@@ -115,7 +115,7 @@ class Service extends
                 ],
                 'users'   => [
                     'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::MINIMAL_USER
+                    'schema' => Schema::USER
                 ]
             ]
         );

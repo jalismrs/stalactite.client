@@ -51,7 +51,7 @@ abstract class Schema
         ],
         'user' => [
             'type' => JsonRule::OBJECT_TYPE,
-            'schema' => DataSchema::MINIMAL_USER
+            'schema' => DataSchema::USER
         ]
     ];
 }

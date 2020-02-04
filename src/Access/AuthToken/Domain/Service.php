@@ -129,7 +129,7 @@ class Service extends
                                 ],
                                 'user' => [
                                     'type'   => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::MINIMAL_USER
+                                    'schema' => DataSchema::USER
                                 ]
                             ]
                         ],
