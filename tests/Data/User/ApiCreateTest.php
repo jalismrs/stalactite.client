@@ -1,16 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\User\Client;
+use Jalismrs\Stalactite\Client\Data\User\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiCreateTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User
+ * @package Jalismrs\Stalactite\Service\Tests\Data\User
  */
 class ApiCreateTest extends
     TestCase
@@ -41,11 +41,10 @@ class ApiCreateTest extends
      * @throws SerializerException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testCreate(): void
+    public function testCreate() : void
     {
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -53,15 +52,17 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'user' => $serializer->normalize(
-                                    ModelFactory::getTestableUser(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'user'    => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableUser(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -69,8 +70,8 @@ class ApiCreateTest extends
                 ]
             )
         );
-
-        $response = $mockClient->createUser(
+        
+        $response = $mockService->createUser(
             new User(),
             'fake user jwt'
         );
@@ -81,7 +82,7 @@ class ApiCreateTest extends
             $response->getData()['user']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseOnCreate
      *
@@ -93,12 +94,13 @@ class ApiCreateTest extends
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseOnCreate(): void
+    public function testThrowOnInvalidResponseOnCreate() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -106,8 +108,8 @@ class ApiCreateTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'user' => []
+                                'error'   => null,
+                                'user'    => []
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -116,8 +118,8 @@ class ApiCreateTest extends
                 ]
             )
         );
-
-        $mockClient->createUser(
+        
+        $mockService->createUser(
             new User(),
             'fake user jwt'
         );

@@ -6,8 +6,9 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\User\Lead\Client;
+use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
  * Class ApiRemoveLeadsTest
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
+ * @package Jalismrs\Stalactite\Service\Tests\Data\User\Lead
  */
 class ApiRemoveLeadsTest extends
     TestCase
@@ -32,6 +33,7 @@ class ApiRemoveLeadsTest extends
     public function testRemoveLeads(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -48,7 +50,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $response = $mockClient->removeLeads(
+        $response = $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -69,8 +71,9 @@ class ApiRemoveLeadsTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -88,7 +91,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockClient->removeLeads(
+        $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -106,8 +109,9 @@ class ApiRemoveLeadsTest extends
     public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {
         $this->expectException(InvalidArgumentException::class);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -124,7 +128,7 @@ class ApiRemoveLeadsTest extends
             )
         );
 
-        $mockClient->removeLeads(
+        $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
                 'not a lead'

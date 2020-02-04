@@ -6,10 +6,10 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiCreateTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication\TrustedApp
  */
 class ApiCreateTest extends
     TestCase
@@ -42,9 +42,8 @@ class ApiCreateTest extends
      */
     public function testCreate() : void
     {
-        $serializer = Serializer::getInstance();
-        
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -53,15 +52,17 @@ class ApiCreateTest extends
                             [
                                 'success'    => true,
                                 'error'      => null,
-                                'trustedApp' => $serializer->normalize(
-                                    ModelFactory::getTestableTrustedApp(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                            'reset',
-                                        ],
-                                    ]
-                                ),
+                                'trustedApp' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableTrustedApp(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                                'reset',
+                                            ],
+                                        ]
+                                    ),
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,7 +71,7 @@ class ApiCreateTest extends
             )
         );
         
-        $response = $mockClient->createTrustedApp(
+        $response = $mockService->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );
@@ -97,7 +98,8 @@ class ApiCreateTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -115,7 +117,7 @@ class ApiCreateTest extends
             )
         );
         
-        $mockClient->createTrustedApp(
+        $mockService->createTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
         );

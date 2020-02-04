@@ -5,7 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\AuthToken\User\Client;
+use Jalismrs\Stalactite\Client\Access\AuthToken\User\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteRelationsByUserTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Access\AuthToken\User
+ * @packageJalismrs\Stalactite\Service\Tests\Access\AuthToken\User
  */
 class ApiDeleteRelationsByUserTest extends
     TestCase
@@ -36,6 +37,7 @@ class ApiDeleteRelationsByUserTest extends
     public function testDeleteRelationsByUser(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -52,7 +54,7 @@ class ApiDeleteRelationsByUserTest extends
             )
         );
 
-        $response = $mockClient->deleteRelationsByUser(
+        $response = $mockService->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'
         );
@@ -73,8 +75,9 @@ class ApiDeleteRelationsByUserTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -92,7 +95,7 @@ class ApiDeleteRelationsByUserTest extends
             )
         );
 
-        $mockClient->deleteRelationsByUser(
+        $mockService->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'
         );

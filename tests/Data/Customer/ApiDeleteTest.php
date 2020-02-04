@@ -5,8 +5,9 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Customer\Client;
+use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
+ * @package Jalismrs\Stalactite\Service\Tests\Data\Customer
  */
 class ApiDeleteTest extends
     TestCase
@@ -36,6 +37,7 @@ class ApiDeleteTest extends
     public function testDelete(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -52,7 +54,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $response = $mockClient->deleteCustomer(
+        $response = $mockService->deleteCustomer(
             ModelFactory::getTestableCustomer()
                 ->getUid(),
             'fake user jwt'
@@ -76,8 +78,9 @@ class ApiDeleteTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -95,7 +98,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $response = $mockClient->deleteCustomer(
+        $response = $mockService->deleteCustomer(
             ModelFactory::getTestableCustomer()
                 ->getUid(),
             'fake user jwt'

@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\AuthToken\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Client;
+use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetByNameAndApiKeyTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\AuthToken\Domain
+ * @package Jalismrs\Stalactite\Service\Tests\Data\AuthToken\Domain
  */
 class ApiGetByNameAndApiKeyTest extends
     TestCase
@@ -38,11 +38,10 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetByNameAndApiKey(): void
+    public function testGetByNameAndApiKey() : void
     {
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -50,16 +49,18 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
+                                'error'   => null,
                                 'domains' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestableDomain(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableDomain(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -68,10 +69,10 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-
+        
         $domainModel = ModelFactory::getTestableDomain();
-
-        $response = $mockClient->getByNameAndApiKey(
+        
+        $response = $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
             'fake API auth token'
@@ -83,7 +84,7 @@ class ApiGetByNameAndApiKeyTest extends
             $response->getData()['domains']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetByNameAndApiKey
      *
@@ -94,14 +95,13 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGetByNameAndApiKey(): void
+    public function testThrowOnInvalidResponseGetByNameAndApiKey() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -109,15 +109,17 @@ class ApiGetByNameAndApiKeyTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domains' => $serializer->normalize(
-                                    ModelFactory::getTestableDomain(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'domains' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableDomain(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -126,10 +128,10 @@ class ApiGetByNameAndApiKeyTest extends
                 ]
             )
         );
-
+        
         $domainModel = ModelFactory::getTestableDomain();
-
-        $mockClient->getByNameAndApiKey(
+        
+        $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
             'fake API auth token'

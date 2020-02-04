@@ -11,7 +11,7 @@ use Lcobucci\JWT\Token;
 /**
  * JwtFactory
  *
- * @package Jalismrs\Stalactite\Client\Data\AuthToken
+ * @package Jalismrs\Stalactite\Service\Data\AuthToken
  */
 class JwtFactory
 {

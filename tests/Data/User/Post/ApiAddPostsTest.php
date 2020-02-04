@@ -6,8 +6,9 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\User\Post\Client;
+use Jalismrs\Stalactite\Client\Data\User\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddPostsTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
+ * @package Jalismrs\Stalactite\Service\Tests\Data\User\Post
  */
 class ApiAddPostsTest extends
     TestCase
@@ -33,6 +34,7 @@ class ApiAddPostsTest extends
     public function testAddPosts(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -49,7 +51,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $response = $mockClient->addPosts(
+        $response = $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -70,8 +72,9 @@ class ApiAddPostsTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -89,7 +92,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $mockClient->addPosts(
+        $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -107,8 +110,9 @@ class ApiAddPostsTest extends
     public function testThrowOnInvalidPostsParameterAddPosts(): void
     {
         $this->expectException(InvalidArgumentException::class);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -125,7 +129,7 @@ class ApiAddPostsTest extends
             )
         );
 
-        $mockClient->addPosts(
+        $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [
                 'not a post'

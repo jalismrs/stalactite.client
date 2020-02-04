@@ -5,7 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\Client;
+use Jalismrs\Stalactite\Client\Authentication\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * LoginTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication
  */
 class LoginTest extends
     TestCase
@@ -35,6 +36,7 @@ class LoginTest extends
     public function testSchemaValidationOnLogin(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -63,7 +65,7 @@ class LoginTest extends
         );
 
         // assert valid return and response content
-        $response = $mockClient->login(
+        $response = $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -72,7 +74,7 @@ class LoginTest extends
         self::assertIsString($response->getData()['jwt']);
 
         // assert valid return and response content
-        $response = $mockClient->login(
+        $response = $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -96,7 +98,8 @@ class LoginTest extends
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
     
         $mockClient = new Client('invalidHost');
-        $mockClient->login(
+        $mockService = new Service($mockClient);
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -115,8 +118,9 @@ class LoginTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -125,7 +129,7 @@ class LoginTest extends
             )
         );
 
-        $mockClient->login(
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );
@@ -144,8 +148,9 @@ class LoginTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -163,7 +168,7 @@ class LoginTest extends
             )
         );
 
-        $mockClient->login(
+        $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
         );

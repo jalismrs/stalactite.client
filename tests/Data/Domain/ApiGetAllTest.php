@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Domain\Client;
+use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetAllTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data\Domain
+ * @packageJalismrs\Stalactite\Service\Tests\Data\Domain
  */
 class ApiGetAllTest extends
     TestCase
@@ -38,11 +38,10 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetAll(): void
+    public function testGetAll() : void
     {
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -50,16 +49,18 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
+                                'error'   => null,
                                 'domains' => [
-                                    $serializer->normalize(
-                                        ModelFactory::getTestableDomain(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
+                                    $mockClient
+                                        ->getSerializer()
+                                        ->normalize(
+                                            ModelFactory::getTestableDomain(),
+                                            [
+                                                AbstractNormalizer::GROUPS => [
+                                                    'main',
+                                                ],
+                                            ]
+                                        )
                                 ]
                             ],
                             JSON_THROW_ON_ERROR
@@ -68,8 +69,8 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
-        $response = $mockClient->getAllDomains(
+        
+        $response = $mockService->getAllDomains(
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -79,7 +80,7 @@ class ApiGetAllTest extends
             $response->getData()['domains']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetAll
      *
@@ -90,14 +91,13 @@ class ApiGetAllTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll(): void
+    public function testThrowExceptionOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -105,15 +105,17 @@ class ApiGetAllTest extends
                         json_encode(
                             [
                                 'success' => true,
-                                'error' => null,
-                                'domains' => $serializer->normalize(
-                                    ModelFactory::getTestableDomain(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'error'   => null,
+                                'domains' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableDomain(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                                 // invalid type
                             ],
                             JSON_THROW_ON_ERROR
@@ -122,8 +124,8 @@ class ApiGetAllTest extends
                 ]
             )
         );
-
-        $mockClient->getAllDomains(
+        
+        $mockService->getAllDomains(
             'fake user jwt'
         );
     }

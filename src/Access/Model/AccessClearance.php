@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Access\Model;
 /**
  * AccessClearance
  *
- * @package Jalismrs\Stalactite\Client\Access\Model
+ * @package Jalismrs\Stalactite\Service\Access\Model
  */
 class AccessClearance
 {

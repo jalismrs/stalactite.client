@@ -5,8 +5,9 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Domain\Client;
+use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data\Domain
+ * @packageJalismrs\Stalactite\Service\Tests\Data\Domain
  */
 class ApiDeleteTest extends
     TestCase
@@ -36,6 +37,7 @@ class ApiDeleteTest extends
     public function testDelete(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -52,7 +54,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $response = $mockClient->deleteDomain(
+        $response = $mockService->deleteDomain(
             ModelFactory::getTestableDomain()
                 ->getUid(),
             'fake user jwt'
@@ -74,8 +76,9 @@ class ApiDeleteTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -93,7 +96,7 @@ class ApiDeleteTest extends
             )
         );
 
-        $mockClient->deleteDomain(
+        $mockService->deleteDomain(
             ModelFactory::getTestableDomain()
                 ->getUid(),
             'fake user jwt'

@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 /**
  * DomainRelation
  *
- * @package Jalismrs\Stalactite\Client\Access\Model
+ * @package Jalismrs\Stalactite\Service\Access\Model
  */
 abstract class DomainRelation extends
     AbstractModel

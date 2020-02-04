@@ -6,8 +6,9 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\User\Lead\Client;
+use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiAddLeadsTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data\User\Lead
+ * @packageJalismrs\Stalactite\Service\Tests\Data\User\Lead
  */
 class ApiAddLeadsTest extends
     TestCase
@@ -33,6 +34,7 @@ class ApiAddLeadsTest extends
     public function testAddLeads(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -49,7 +51,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $response = $mockClient->addLeads(
+        $response = $mockService->addLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -70,8 +72,9 @@ class ApiAddLeadsTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -89,7 +92,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $mockClient->addLeads(
+        $mockService->addLeads(
             ModelFactory::getTestableUser(),
             [
                 ModelFactory::getTestablePost()
@@ -107,8 +110,9 @@ class ApiAddLeadsTest extends
     public function testThrowOnInvalidLeadsParameterAddLeads(): void
     {
         $this->expectException(InvalidArgumentException::class);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -125,7 +129,7 @@ class ApiAddLeadsTest extends
             )
         );
 
-        $mockClient->addLeads(
+        $mockService->addLeads(
             ModelFactory::getTestableUser(),
             [
                 'not a lead'

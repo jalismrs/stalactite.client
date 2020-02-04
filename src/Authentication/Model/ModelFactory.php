@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Authentication\Model;
 /**
  * Class ModelFactory
  *
- * @package Jalismrs\Stalactite\Client\Authentication\Model
+ * @package Jalismrs\Stalactite\Service\Authentication\Model
  * Factory to instantiate models from arrays
  */
 abstract class ModelFactory

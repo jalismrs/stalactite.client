@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Data\Customer\Client;
+use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetByEmailAndGoogleIdTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data\Customer
+ * @packageJalismrs\Stalactite\Service\Tests\Data\Customer
  */
 class ApiGetByEmailAndGoogleIdTest extends
     TestCase
@@ -40,27 +40,28 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId(): void
+    public function testGetByEmailAndGoogleId() : void
     {
-        $serializer = Serializer::getInstance();
-
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
-                                'customer' => $serializer->normalize(
-                                    ModelFactory::getTestableCustomer(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                )
+                                'success'  => true,
+                                'error'    => null,
+                                'customer' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableCustomer(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    )
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -68,10 +69,10 @@ class ApiGetByEmailAndGoogleIdTest extends
                 ]
             )
         );
-
+        
         $customerModel = ModelFactory::getTestableCustomer();
-
-        $response = $mockClient->getByEmailAndGoogleId(
+        
+        $response = $mockService->getByEmailAndGoogleId(
             $customerModel->getEmail(),
             $customerModel->getGoogleId(),
             'fake user jwt'
@@ -83,7 +84,7 @@ class ApiGetByEmailAndGoogleIdTest extends
             $response->getData()['customer']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId
      *
@@ -93,20 +94,21 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId(): void
+    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
                     new MockResponse(
                         json_encode(
                             [
-                                'success' => true,
-                                'error' => null,
+                                'success'  => true,
+                                'error'    => null,
                                 'customer' => []
                             ],
                             JSON_THROW_ON_ERROR
@@ -115,10 +117,10 @@ class ApiGetByEmailAndGoogleIdTest extends
                 ]
             )
         );
-
+        
         $customerModel = ModelFactory::getTestableCustomer();
-
-        $mockClient->getByEmailAndGoogleId(
+        
+        $mockService->getByEmailAndGoogleId(
             $customerModel->getEmail(),
             $customerModel->getGoogleId(),
             'fake user jwt'

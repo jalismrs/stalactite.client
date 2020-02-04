@@ -5,7 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Client;
+use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
+ * @packageJalismrs\Stalactite\Service\Tests\Authentication\TrustedApp
  */
 class ApiDeleteTest extends
     TestCase
@@ -36,6 +37,7 @@ class ApiDeleteTest extends
     public function testDelete(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -54,7 +56,7 @@ class ApiDeleteTest extends
 
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
 
-        $response = $mockClient->deleteTrustedApp(
+        $response = $mockService->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),
             'fake user jwt'
@@ -77,8 +79,9 @@ class ApiDeleteTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -97,7 +100,7 @@ class ApiDeleteTest extends
 
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
 
-        $mockClient->deleteTrustedApp(
+        $mockService->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),
             'fake user jwt'

@@ -6,11 +6,11 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\Access\User\Client;
+use Jalismrs\Stalactite\Client\Access\User\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetAccessClearanceTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Access\User
+ * @packageJalismrs\Stalactite\Service\Tests\Access\User
  */
 class ApiGetAccessClearanceTest extends
     TestCase
@@ -43,9 +43,8 @@ class ApiGetAccessClearanceTest extends
      */
     public function testGetAccessClearance() : void
     {
-        $serializer = Serializer::getInstance();
-        
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -54,14 +53,16 @@ class ApiGetAccessClearanceTest extends
                             [
                                 'success'   => true,
                                 'error'     => null,
-                                'clearance' => $serializer->normalize(
-                                    ModelFactory::getTestableAccessClearance(),
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'main',
-                                        ],
-                                    ]
-                                ),
+                                'clearance' => $mockClient
+                                    ->getSerializer()
+                                    ->normalize(
+                                        ModelFactory::getTestableAccessClearance(),
+                                        [
+                                            AbstractNormalizer::GROUPS => [
+                                                'main',
+                                            ],
+                                        ]
+                                    ),
                             ],
                             JSON_THROW_ON_ERROR
                         )
@@ -70,7 +71,7 @@ class ApiGetAccessClearanceTest extends
             )
         );
         
-        $response = $mockClient->getAccessClearance(
+        $response = $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );
@@ -96,7 +97,8 @@ class ApiGetAccessClearanceTest extends
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -115,7 +117,7 @@ class ApiGetAccessClearanceTest extends
             )
         );
         
-        $mockClient->getAccessClearance(
+        $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
         );

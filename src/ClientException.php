@@ -8,7 +8,7 @@ use RuntimeException;
 /**
  * ClientException
  *
- * @package Jalismrs\Stalactite\Client
+ * @package Jalismrs\Stalactite\Service
  */
 class ClientException extends
     RuntimeException
@@ -26,11 +26,6 @@ class ClientException extends
      * An error occurred while contacting an API
      */
     public const CLIENT_TRANSPORT = 1;
-
-    /**
-     * Invalid parameter passed to the API client
-     */
-    public const INVALID_PARAMETER_PASSED_TO_CLIENT = 2;
 
     ////////////////////////////
     /** Authentication Error **/

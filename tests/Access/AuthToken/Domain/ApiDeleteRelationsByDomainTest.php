@@ -5,7 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Client;
+use Jalismrs\Stalactite\Client\Access\AuthToken\Domain\Service;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -17,7 +18,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 /**
  * ApiDeleteRelationsByDomainTest
  *
- * @packageJalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain
+ * @packageJalismrs\Stalactite\Service\Tests\Access\AuthToken\Domain
  */
 class ApiDeleteRelationsByDomainTest extends
     TestCase
@@ -36,6 +37,7 @@ class ApiDeleteRelationsByDomainTest extends
     public function testDeleteRelationsByDomain(): void
     {
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -52,7 +54,7 @@ class ApiDeleteRelationsByDomainTest extends
             )
         );
 
-        $response = $mockClient->deleteRelationsByDomain(
+        $response = $mockService->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'
         );
@@ -73,8 +75,9 @@ class ApiDeleteRelationsByDomainTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
+    
         $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient(
                 [
@@ -92,7 +95,7 @@ class ApiDeleteRelationsByDomainTest extends
             )
         );
 
-        $mockClient->deleteRelationsByDomain(
+        $mockService->deleteRelationsByDomain(
             ModelFactory::getTestableDomain(),
             'fake API auth token'
         );

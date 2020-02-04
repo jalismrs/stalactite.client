@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 /**
  * Post
  *
- * @package Jalismrs\Stalactite\Client\Data\Model
+ * @package Jalismrs\Stalactite\Service\Data\Model
  */
 class Post extends
     AbstractModel

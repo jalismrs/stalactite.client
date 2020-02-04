@@ -8,7 +8,7 @@ use hunomina\Validator\Json\Rule\JsonRule;
 /**
  * Schema
  *
- * @package Jalismrs\Stalactite\Client\Authentication
+ * @package Jalismrs\Stalactite\Service\Authentication
  */
 abstract class Schema
 {

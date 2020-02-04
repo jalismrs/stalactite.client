@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory as DataModelFactory;
 /**
  * ModelFactory
  *
- * @package Jalismrs\Stalactite\Client\Access\Model
+ * @package Jalismrs\Stalactite\Service\Access\Model
  */
 abstract class ModelFactory
 {

@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 /**
  * ModelFactory
  *
- * @packageJalismrs\Stalactite\Client\Tests\Data
+ * @packageJalismrs\Stalactite\Service\Tests\Data
  */
 abstract class ModelFactory
 {
