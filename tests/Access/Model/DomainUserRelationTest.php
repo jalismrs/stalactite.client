@@ -45,7 +45,7 @@ class DomainUserRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -93,9 +93,9 @@ class DomainUserRelationTest extends
             ),
         ];
 
-        self::assertEqualsCanonicalizing($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
-    
+
     /**
      * testGroupIgnoreDomain
      *
@@ -140,7 +140,7 @@ class DomainUserRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMainIgnoreUser
      *

@@ -45,7 +45,7 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -79,28 +79,12 @@ class UserTest extends
             'lastName' => $model->getLastName(),
             'email' => $model->getEmail(),
             'googleId' => $model->getGoogleId(),
-            'admin' => $model->isAdmin(),
-            'leads' => $serializer->normalize(
-                $model->getLeads(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
-            'posts' => $serializer->normalize(
-                $model->getPosts(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
+            'admin' => $model->isAdmin()
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMin
      *
@@ -139,7 +123,7 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
@@ -176,7 +160,7 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *
@@ -213,7 +197,7 @@ class UserTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdateMe
      *
