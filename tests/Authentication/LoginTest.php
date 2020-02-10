@@ -8,16 +8,15 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
  * LoginTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Authentication
+ * @package Jalismrs\Stalactite\Service\Tests\Authentication
  */
 class LoginTest extends
     TestCase
@@ -38,29 +37,15 @@ class LoginTest extends
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error' => null,
-                                'jwt' => 'hello'
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    ),
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => false,
-                                'error' => 'An error occurred',
-                                'jwt' => null
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => true,
+                        'error' => null,
+                        'jwt' => 'hello'
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
 
@@ -72,15 +57,6 @@ class LoginTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
         self::assertIsString($response->getData()['jwt']);
-
-        // assert valid return and response content
-        $response = $mockService->login(
-            ModelFactory::getTestableTrustedApp(),
-            'fakeUserGoogleToken'
-        );
-        self::assertFalse($response->isSuccess());
-        self::assertNotNull($response->getError());
-        self::assertNull($response->getData()['jwt']);
     }
 
     /**
@@ -96,7 +72,7 @@ class LoginTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
-    
+
         $mockClient = new Client('invalidHost');
         $mockService = new Service($mockClient);
         $mockService->login(
@@ -118,15 +94,11 @@ class LoginTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
+
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse('invalid API response')
-                ]
-            )
+            MockHttpClientFactory::create('invalid API response')
         );
 
         $mockService->login(
@@ -148,23 +120,19 @@ class LoginTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
+
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => false,
-                                'error' => 'An error occurred',
-                                'invalidField' => true
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => false,
+                        'error' => 'An error occurred',
+                        'invalidField' => true
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
 
