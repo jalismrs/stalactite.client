@@ -45,7 +45,7 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -95,7 +95,7 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupIgnoreDomain
      *
@@ -140,7 +140,7 @@ class DomainCustomerRelationTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMainIgnoreCustomer
      *

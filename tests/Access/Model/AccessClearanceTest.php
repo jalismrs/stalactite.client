@@ -45,7 +45,7 @@ class AccessClearanceTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
