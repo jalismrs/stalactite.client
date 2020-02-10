@@ -13,7 +13,6 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use function array_replace_recursive;
 use function json_encode;
 
 /**
@@ -27,18 +26,22 @@ final class Client
      * @var string
      */
     private $host;
+
     /**
      * @var HttpClientInterface
      */
     private $httpClient;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var Serializer
      */
     private $serializer;
+
     /**
      * @var null|string
      */
@@ -76,6 +79,54 @@ final class Client
     public function setHost(string $host): self
     {
         $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * getSerializer
+     *
+     * @return Serializer
+     *
+     * @throws SerializerException
+     */
+    public function getSerializer(): Serializer
+    {
+        if (null === $this->serializer) {
+            try {
+                $this->serializer = new Serializer();
+            } catch (Throwable $throwable) {
+                throw new SerializerException(
+                    'Error while instantiating the serializer',
+                    null,
+                    $throwable
+                );
+            }
+        }
+
+        return $this->serializer;
+    }
+
+    /**
+     * getUserAgent
+     *
+     * @return null|string
+     */
+    public function getUserAgent(): ?string
+    {
+        return $this->userAgent;
+    }
+
+    /**
+     * setUserAgent
+     *
+     * @param string|null $userAgent
+     *
+     * @return $this
+     */
+    public function setUserAgent(?string $userAgent): self
+    {
+        $this->userAgent = $userAgent;
 
         return $this;
     }
@@ -134,79 +185,11 @@ final class Client
         return $this;
     }
 
-    /**
-     * getSerializer
-     *
-     * @return Serializer
-     *
-     * @throws SerializerException
-     */
-    public function getSerializer(): Serializer
-    {
-        if (null === $this->serializer) {
-            try {
-                $this->serializer = new Serializer();
-            } catch (Throwable $throwable) {
-                throw new SerializerException(
-                    'Error while instantiating the serializer',
-                    null,
-                    $throwable
-                );
-            }
-        }
-
-        return $this->serializer;
-    }
-
-    /**
-     * getUserAgent
-     *
-     * @return null|string
-     */
-    public function getUserAgent(): ?string
-    {
-        return $this->userAgent;
-    }
-
-    /**
-     * setUserAgent
-     *
-     * @param string|null $userAgent
-     *
-     * @return $this
-     */
-    public function setUserAgent(?string $userAgent): self
-    {
-        $this->userAgent = $userAgent;
-
-        return $this;
-    }
-
     /*
      * -------------------------------------------------------------------------
      * default factories -------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
-    /**
-     * createDefaultHttpClient
-     *
-     * @return HttpClientInterface
-     */
-    private function createDefaultHttpClient(): HttpClientInterface
-    {
-        $headers = ['Content-Type' => 'application/json'];
-
-        if ($this->userAgent) {
-            $headers['User-Agent'] = $this->userAgent;
-        }
-
-        return HttpClient::create(
-            [
-                'headers' => $headers,
-            ]
-        );
-    }
 
     /**
      * createDefaultLogger
@@ -218,37 +201,26 @@ final class Client
         return new NullLogger();
     }
 
+    /**
+     * createDefaultHttpClient
+     *
+     * @return HttpClientInterface
+     */
+    private function createDefaultHttpClient(): HttpClientInterface
+    {
+        return HttpClient::create(
+            [
+                'base_uri' => $this->host,
+                'headers' => $this->userAgent ? ['User-Agent' => $this->userAgent] : [],
+            ]
+        );
+    }
+
     /*
      * -------------------------------------------------------------------------
      * API calls ---------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
-    /**
-     * delete
-     *
-     * @param string $uri
-     * @param array $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function delete(
-        string $uri,
-        array $options,
-        JsonSchema $schema
-    ): array
-    {
-        return $this->request(
-            'DELETE',
-            $uri,
-            $options,
-            $schema
-        );
-    }
 
     /**
      * get
@@ -329,6 +301,32 @@ final class Client
     }
 
     /**
+     * delete
+     *
+     * @param string $uri
+     * @param array $options
+     * @param JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     */
+    public function delete(
+        string $uri,
+        array $options,
+        JsonSchema $schema
+    ): array
+    {
+        return $this->request(
+            'DELETE',
+            $uri,
+            $options,
+            $schema
+        );
+    }
+
+    /**
      * request
      *
      * @param string $method
@@ -356,7 +354,7 @@ final class Client
                     json_encode(
                         [
                             $method,
-                            $url,
+                            $endpoint,
                             $options,
                         ],
                         JSON_THROW_ON_ERROR
@@ -367,17 +365,8 @@ final class Client
                 ->getHttpClient()
                 ->request(
                     $method,
-                    $url,
-                    array_replace_recursive(
-                        null === $this->userAgent
-                            ? []
-                            : [
-                            'headers' => [
-                                'User-Agent' => $this->userAgent,
-                            ],
-                        ],
-                        $options
-                    )
+                    $endpoint,
+                    $options
                 );
         } catch (Throwable $throwable) {
             $exception = new ClientException(
