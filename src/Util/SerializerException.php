@@ -10,8 +10,6 @@ use RuntimeException;
  *
  * @package Jalismrs\Stalactite\Client\Util
  */
-class SerializerException extends
-    RuntimeException
+class SerializerException extends RuntimeException
 {
-
 }

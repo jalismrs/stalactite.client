@@ -54,8 +54,8 @@ class AccessClearanceTest extends
         );
 
         $expected = [
-            'accessGranted' => $model->hasAccessGranted(),
-            'accessType' => $model->getAccessType(),
+            'granted' => $model->isGranted(),
+            'type' => $model->getType(),
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
