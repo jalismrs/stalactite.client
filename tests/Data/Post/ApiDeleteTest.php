@@ -9,11 +9,10 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 /**
  * ApiDeleteTest
@@ -39,18 +38,14 @@ class ApiDeleteTest extends
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error' => null
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => true,
+                        'error' => null
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
 
@@ -76,23 +71,19 @@ class ApiDeleteTest extends
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-    
+
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error' => false
-                                // invalid type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => true,
+                        'error' => false
+                        // invalid type
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
 
