@@ -45,7 +45,7 @@ class TrustedAppTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -82,7 +82,7 @@ class TrustedAppTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupReset
      *
@@ -116,7 +116,7 @@ class TrustedAppTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
@@ -151,7 +151,7 @@ class TrustedAppTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *

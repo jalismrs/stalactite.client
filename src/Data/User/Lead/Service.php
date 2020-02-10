@@ -64,19 +64,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/data/users/%s/leads',
+                vsprintf(
+                    '/data/users/%s/leads',
+                    [
+                        $userModel->getUid(),
+                    ],
+                ),
                 [
-                    $userModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -128,25 +128,25 @@ class Service extends
         $response = $this
             ->getClient()
             ->post(
-            vsprintf(
-                '/data/users/%s/leads',
+                vsprintf(
+                    '/data/users/%s/leads',
+                    [
+                        $userModel->getUid(),
+                    ],
+                ),
                 [
-                    $userModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ],
+                    'json' => [
+                        'leads' => ModelHelper::getUids(
+                            $leadModels,
+                            Post::class
+                        )
+                    ],
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ],
-                'json' => [
-                    'leads' => ModelHelper::getUids(
-                        $leadModels,
-                        Post::class
-                    )
-                ],
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return (new Response(
             $response['success'],
@@ -190,25 +190,25 @@ class Service extends
         $response = $this
             ->getClient()
             ->delete(
-            vsprintf(
-                '/data/users/%s/leads',
+                vsprintf(
+                    '/data/users/%s/leads',
+                    [
+                        $userModel->getUid(),
+                    ],
+                ),
                 [
-                    $userModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ],
+                    'json' => [
+                        'leads' => ModelHelper::getUids(
+                            $leadModels,
+                            Post::class
+                        )
+                    ],
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ],
-                'json' => [
-                    'leads' => ModelHelper::getUids(
-                        $leadModels,
-                        Post::class
-                    )
-                ],
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return (new Response(
             $response['success'],

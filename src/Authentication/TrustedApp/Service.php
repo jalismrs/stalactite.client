@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
@@ -40,24 +40,25 @@ class Service extends
      */
     public function getAllTrustedApps(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'     => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'       => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApps' => [
-                    'type'   => JsonRule::LIST_TYPE,
+                    'type' => JsonRule::LIST_TYPE,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->get(
@@ -69,13 +70,13 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'trustedApps' => array_map(
-                    static function($trustedApp) {
+                    static function ($trustedApp) {
                         return ModelFactory::createTrustedApp($trustedApp);
                     },
                     $response['trustedApps']
@@ -83,7 +84,7 @@ class Service extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $jwt
@@ -96,25 +97,26 @@ class Service extends
     public function getTrustedApp(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::TRUSTED_APP,
-                    'null'   => true
+                    'null' => true
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->get(
@@ -131,7 +133,7 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -140,12 +142,12 @@ class Service extends
             ]
         );
     }
-    
+
     /**
      * updateTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      * @throws ClientException
@@ -156,20 +158,21 @@ class Service extends
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->put(
@@ -183,7 +186,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => $this
+                    'json' => $this
                         ->getClient()
                         ->getSerializer()
                         ->normalize(
@@ -197,18 +200,18 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * createTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -220,20 +223,21 @@ class Service extends
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => array_merge(
                         Schema::TRUSTED_APP,
                         [
@@ -245,7 +249,7 @@ class Service extends
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->post(
@@ -254,7 +258,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => $this
+                    'json' => $this
                         ->getClient()
                         ->getSerializer()
                         ->normalize(
@@ -268,7 +272,7 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -277,7 +281,7 @@ class Service extends
             ]
         );
     }
-    
+
     /**
      * @param string $uid
      * @param string $resetToken
@@ -292,20 +296,21 @@ class Service extends
         string $uid,
         string $resetToken,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->delete(
@@ -319,24 +324,24 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => [
+                    'json' => [
                         'resetToken' => $resetToken,
                     ]
                 ],
                 $schema
             );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * resetAuthToken
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -348,25 +353,26 @@ class Service extends
     public function resetAuthToken(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'    => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'      => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->put(
@@ -380,7 +386,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => $this
+                    'json' => $this
                         ->getClient()
                         ->getSerializer()
                         ->normalize(
@@ -394,7 +400,7 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Me;
 
@@ -34,25 +34,26 @@ class Service extends
      */
     public function getMe(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me'      => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'me' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->get(
@@ -64,7 +65,7 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
@@ -75,11 +76,11 @@ class Service extends
             ]
         );
     }
-    
+
     /**
      * updateMe
      *
-     * @param User   $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -92,20 +93,21 @@ class Service extends
     public function updateMe(
         User $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->post(
@@ -114,7 +116,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => $this
+                    'json' => $this
                         ->getClient()
                         ->getSerializer()
                         ->normalize(
@@ -128,7 +130,7 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return (new Response(
             $response['success'],
             $response['error']

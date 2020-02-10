@@ -45,7 +45,7 @@ class PostTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -83,7 +83,7 @@ class PostTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
@@ -120,7 +120,7 @@ class PostTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *

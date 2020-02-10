@@ -66,14 +66,14 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/data/auth-token/domains',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
+                '/data/auth-token/domains',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
+                ],
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -132,18 +132,18 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/data/auth-token/domains',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
+                '/data/auth-token/domains',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ],
+                    'query' => [
+                        'name' => $name,
+                        'apiKey' => $apiKey
+                    ]
                 ],
-                'query' => [
-                    'name' => $name,
-                    'apiKey' => $apiKey
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -200,17 +200,17 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/data/auth-token/domains',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
+                '/data/auth-token/domains',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ],
+                    'query' => [
+                        'name' => $name
+                    ]
                 ],
-                'query' => [
-                    'name' => $name
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -268,19 +268,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/data/auth-token/domains/%s',
+                vsprintf(
+                    '/data/auth-token/domains/%s',
+                    [
+                        $uid,
+                    ],
+                ),
                 [
-                    $uid,
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],

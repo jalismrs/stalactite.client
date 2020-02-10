@@ -45,7 +45,7 @@ class CustomerTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupMain
      *
@@ -83,7 +83,7 @@ class CustomerTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupCreate
      *
@@ -119,7 +119,7 @@ class CustomerTest extends
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * testGroupUpdate
      *

@@ -54,19 +54,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->delete(
-            vsprintf(
-                '/access/relations/%s',
+                vsprintf(
+                    '/access/relations/%s',
+                    [
+                        $domainRelationModel->getUid(),
+                    ],
+                ),
                 [
-                    $domainRelationModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return (new Response(
             $response['success'],

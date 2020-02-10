@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -28,17 +28,17 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testHost() : void
+    public function testHost(): void
     {
-        $host       = 'http://fakeHost';
+        $host = 'http://fakeHost';
         $mockClient = new Client($host);
-        
+
         self::assertSame(
             $host,
             $mockClient->getHost()
         );
     }
-    
+
     /**
      * testUserAgent
      *
@@ -47,15 +47,15 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testDefaultUserAgent() : void
+    public function testDefaultUserAgent(): void
     {
         $mockClient = new Client('http://fakeHost');
-        
+
         self::assertNull(
             $mockClient->getUserAgent()
         );
     }
-    
+
     /**
      * testUserAgent
      *
@@ -64,12 +64,12 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testUserAgent() : void
+    public function testUserAgent(): void
     {
-        $userAgent  = 'fake user agent';
+        $userAgent = 'fake user agent';
         $mockClient = new Client('http://fakeHost');
         $mockClient->setUserAgent($userAgent);
-        
+
         self::assertIsString(
             $mockClient->getUserAgent()
         );
@@ -78,7 +78,7 @@ class ClientTest extends
             $mockClient->getUserAgent()
         );
     }
-    
+
     /**
      * testHttpClient
      *
@@ -87,18 +87,18 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testHttpClient() : void
+    public function testHttpClient(): void
     {
         $httpClient = new MockHttpClient();
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient($httpClient);
-        
+
         self::assertSame(
             $httpClient,
             $mockClient->getHttpClient()
         );
     }
-    
+
     /**
      * testDefaultLogger
      *
@@ -108,16 +108,16 @@ class ClientTest extends
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function testDefaultLogger() : void
+    public function testDefaultLogger(): void
     {
         $mockClient = new Client('http://fakeHost');
-        
+
         self::assertInstanceOf(
             NullLogger::class,
             $mockClient->getLogger()
         );
     }
-    
+
     /**
      * testLogger
      *
@@ -126,12 +126,12 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testLogger() : void
+    public function testLogger(): void
     {
-        $logger     = new TestLogger();
+        $logger = new TestLogger();
         $mockClient = new Client('http://fakeHost');
         $mockClient->setLogger($logger);
-        
+
         self::assertSame(
             $logger,
             $mockClient->getLogger()

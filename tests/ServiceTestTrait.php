@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -34,12 +34,13 @@ trait ServiceTestTrait
         AbstractService $mockService,
         AbstractService $mockService1,
         AbstractService $mockService2
-    ) : void {
+    ): void
+    {
         self::assertSame(
             $mockService->getClient(),
             $mockService1->getClient()
         );
-        
+
         self::assertSame(
             $mockService1,
             $mockService2
