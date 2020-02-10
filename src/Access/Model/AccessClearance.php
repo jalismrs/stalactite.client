@@ -14,45 +14,45 @@ class AccessClearance
     public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
 
-    /** @var bool $accessGranted */
-    private $accessGranted;
+    /** @var bool $granted */
+    private $granted;
 
-    /** @var string|null $accessType */
-    private $accessType;
+    /** @var string|null $type */
+    private $type;
 
     /**
      * AccessClearance constructor.
      *
-     * @param bool $accessGranted
-     * @param string|null $accessType
+     * @param bool $granted
+     * @param string|null $type
      */
     public function __construct(
-        bool $accessGranted = false,
-        string $accessType = null
+        bool $granted = false,
+        string $type = null
     )
     {
-        $this->accessGranted = $accessGranted;
-        $this->accessType = $accessType ?? self::NO_ACCESS;
+        $this->granted = $granted;
+        $this->type = $type ?? self::NO_ACCESS;
     }
 
     /**
      * @return bool
      */
-    public function hasAccessGranted(): bool
+    public function isGranted(): bool
     {
-        return $this->accessGranted;
+        return $this->granted;
     }
 
     /**
      * setAccessGranted
      *
-     * @param bool $accessGranted
+     * @param bool $granted
      *
      * @return $this
      */
-    public function setAccessGranted(bool $accessGranted): self
+    public function setGranted(bool $granted): self
     {
-        $this->accessGranted = $accessGranted;
+        $this->granted = $granted;
 
         return $this;
     }
@@ -60,19 +60,19 @@ class AccessClearance
     /**
      * @return string|null
      */
-    public function getAccessType(): ?string
+    public function getType(): ?string
     {
-        return $this->accessType;
+        return $this->type;
     }
 
     /**
-     * @param string|null $accessType
+     * @param string|null $type
      *
      * @return AccessClearance
      */
-    public function setAccessType(?string $accessType): self
+    public function setType(?string $type): self
     {
-        $this->accessType = $accessType;
+        $this->type = $type;
 
         return $this;
     }
@@ -82,7 +82,7 @@ class AccessClearance
      */
     public function hasUserAccessGranted(): bool
     {
-        return $this->hasAccessGranted() && $this->accessType === self::USER_ACCESS;
+        return $this->isGranted() && $this->type === self::USER_ACCESS;
     }
 
     /**
@@ -90,6 +90,6 @@ class AccessClearance
      */
     public function hasAdminAccessGranted(): bool
     {
-        return $this->hasAccessGranted() && $this->accessType === self::ADMIN_ACCESS;
+        return $this->isGranted() && $this->type === self::ADMIN_ACCESS;
     }
 }

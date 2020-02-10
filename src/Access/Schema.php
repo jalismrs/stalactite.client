@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access;
 
 use hunomina\Validator\Json\Rule\JsonRule;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 
 /**
@@ -14,15 +15,15 @@ use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 abstract class Schema
 {
     public const ACCESS_CLEARANCE = [
-        'accessGranted' => [
+        'granted' => [
             'type' => JsonRule::BOOLEAN_TYPE
         ],
-        'accessType' => [
+        'type' => [
             'type' => JsonRule::STRING_TYPE,
             'null' => true,
             'enum' => [
-                'user',
-                'admin'
+                AccessClearance::USER_ACCESS,
+                AccessClearance::ADMIN_ACCESS
             ]
         ]
     ];
