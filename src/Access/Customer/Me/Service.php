@@ -66,14 +66,14 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/access/customers/me/relations',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                '/access/customers/me/relations',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
+                ],
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -126,19 +126,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/access/customers/me/access/%s',
+                vsprintf(
+                    '/access/customers/me/access/%s',
+                    [
+                        $domainModel->getUid(),
+                    ],
+                ),
                 [
-                    $domainModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],

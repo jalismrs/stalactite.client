@@ -21,7 +21,7 @@ class ServiceTest extends
     TestCase
 {
     use ServiceTestTrait;
-    
+
     /**
      * testCustomer
      *
@@ -41,17 +41,17 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-        
+
         $mockService1 = $mockService->customers();
         $mockService2 = $mockService->customers();
-        
+
         self::checkServices(
             $mockService,
             $mockService1,
             $mockService2
         );
     }
-    
+
     /**
      * testDomainDefault
      *

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
@@ -10,12 +10,11 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -38,40 +37,36 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws SerializerException
      * @throws InvalidArgumentException
      */
-    public function testGetByNameAndApiKey() : void
+    public function testGetByNameAndApiKey(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => null,
-                                'domains' => [
-                                    $mockClient
-                                        ->getSerializer()
-                                        ->normalize(
-                                            ModelFactory::getTestableDomain(),
-                                            [
-                                                AbstractNormalizer::GROUPS => [
-                                                    'main',
-                                                ],
-                                            ]
-                                        )
-                                ]
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => true,
+                        'error' => null,
+                        'domains' => [
+                            $mockClient
+                                ->getSerializer()
+                                ->normalize(
+                                    ModelFactory::getTestableDomain(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
+                        ]
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
-        
+
         $domainModel = ModelFactory::getTestableDomain();
-        
+
         $response = $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),
@@ -84,7 +79,7 @@ class ApiGetByNameAndApiKeyTest extends
             $response->getData()['domains']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseGetByNameAndApiKey
      *
@@ -95,42 +90,38 @@ class ApiGetByNameAndApiKeyTest extends
      * @throws InvalidSchemaException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGetByNameAndApiKey() : void
+    public function testThrowOnInvalidResponseGetByNameAndApiKey(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
-            new MockHttpClient(
-                [
-                    new MockResponse(
-                        json_encode(
-                            [
-                                'success' => true,
-                                'error'   => null,
-                                'domains' => $mockClient
-                                    ->getSerializer()
-                                    ->normalize(
-                                        ModelFactory::getTestableDomain(),
-                                        [
-                                            AbstractNormalizer::GROUPS => [
-                                                'main',
-                                            ],
-                                        ]
-                                    )
-                                // invalid type
-                            ],
-                            JSON_THROW_ON_ERROR
-                        )
-                    )
-                ]
+            MockHttpClientFactory::create(
+                json_encode(
+                    [
+                        'success' => true,
+                        'error' => null,
+                        'domains' => $mockClient
+                            ->getSerializer()
+                            ->normalize(
+                                ModelFactory::getTestableDomain(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
+                        // invalid type
+                    ],
+                    JSON_THROW_ON_ERROR
+                )
             )
         );
-        
+
         $domainModel = ModelFactory::getTestableDomain();
-        
+
         $mockService->getByNameAndApiKey(
             $domainModel->getName(),
             $domainModel->getApiKey(),

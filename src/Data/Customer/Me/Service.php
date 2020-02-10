@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer\Me;
 
@@ -31,37 +31,38 @@ class Service extends
      */
     public function getMe(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me'      => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
+                'me' => [
+                    'type' => JsonRule::OBJECT_TYPE,
+                    'null' => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->get(
-            '/data/customers/me',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
-        
+                '/data/customers/me',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
+                ],
+                $schema
+            );
+
         return new Response(
             $response['success'],
             $response['error'],

@@ -63,14 +63,14 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            '/data/auth-token/posts',
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
+                '/data/auth-token/posts',
+                [
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
+                ],
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -128,19 +128,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/data/auth-token/posts/%s',
+                vsprintf(
+                    '/data/auth-token/posts/%s',
+                    [
+                        $uid,
+                    ],
+                ),
                 [
-                    $uid,
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -194,19 +194,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/data/auth-token/posts/%s/users',
+                vsprintf(
+                    '/data/auth-token/posts/%s/users',
+                    [
+                        $uid,
+                    ],
+                ),
                 [
-                    $uid,
+                    'headers' => [
+                        'X-API-TOKEN' => (string)$jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => (string)$jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],

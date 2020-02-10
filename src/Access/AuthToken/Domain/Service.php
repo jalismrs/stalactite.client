@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken\Domain;
 
@@ -41,27 +41,28 @@ class Service extends
     public function deleteRelationsByDomain(
         Domain $domainModel,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'   => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->delete(
@@ -78,13 +79,13 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-    
+
     /**
      * getRelations
      *
@@ -100,47 +101,48 @@ class Service extends
     public function getRelations(
         Domain $domainModel,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success'   => [
+                'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error'     => [
+                'error' => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
+                    'type' => JsonRule::OBJECT_TYPE,
                     'schema' => [
-                        'users'     => [
-                            'type'   => JsonRule::LIST_TYPE,
+                        'users' => [
+                            'type' => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'  => [
+                                'uid' => [
                                     'type' => JsonRule::STRING_TYPE
                                 ],
                                 'user' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'type' => JsonRule::OBJECT_TYPE,
                                     'schema' => DataSchema::USER
                                 ]
                             ]
                         ],
                         'customers' => [
-                            'type'   => JsonRule::LIST_TYPE,
+                            'type' => JsonRule::LIST_TYPE,
                             'schema' => [
-                                'uid'      => [
+                                'uid' => [
                                     'type' => JsonRule::STRING_TYPE
                                 ],
                                 'customer' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'type' => JsonRule::OBJECT_TYPE,
                                     'schema' => DataSchema::CUSTOMER
                                 ]
                             ]
@@ -149,7 +151,7 @@ class Service extends
                 ]
             ]
         );
-        
+
         $response = $this
             ->getClient()
             ->get(
@@ -166,26 +168,26 @@ class Service extends
                 ],
                 $schema
             );
-        
+
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelation {
+                    'users' => array_map(
+                        static function (array $relation) use ($domainModel): DomainUserRelation {
                             $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
                             $domainUserRelationModel->setDomain($domainModel);
-                            
+
                             return $domainUserRelationModel;
                         },
                         $response['relations']['users']
                     ),
                     'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                        static function (array $relation) use ($domainModel): DomainCustomerRelation {
                             $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
                             $domainCustomerRelation->setDomain($domainModel);
-                            
+
                             return $domainCustomerRelation;
                         },
                         $response['relations']['customers']

@@ -91,19 +91,19 @@ class Service extends
         $response = $this
             ->getClient()
             ->get(
-            vsprintf(
-                '/access/domains/%s/relations',
+                vsprintf(
+                    '/access/domains/%s/relations',
+                    [
+                        $domainModel->getUid(),
+                    ],
+                ),
                 [
-                    $domainModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ]
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ]
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -173,22 +173,22 @@ class Service extends
         $response = $this
             ->getClient()
             ->post(
-            vsprintf(
-                '/access/domains/%s/relations/users',
+                vsprintf(
+                    '/access/domains/%s/relations/users',
+                    [
+                        $domainModel->getUid(),
+                    ],
+                ),
                 [
-                    $domainModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ],
+                    'json' => [
+                        'user' => $userModel->getUid(),
+                    ],
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ],
-                'json' => [
-                    'user' => $userModel->getUid(),
-                ],
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
@@ -241,22 +241,22 @@ class Service extends
         $response = $this
             ->getClient()
             ->post(
-            vsprintf(
-                '/access/domains/%s/relations/customers',
+                vsprintf(
+                    '/access/domains/%s/relations/customers',
+                    [
+                        $domainModel->getUid(),
+                    ],
+                ),
                 [
-                    $domainModel->getUid(),
+                    'headers' => [
+                        'X-API-TOKEN' => $jwt
+                    ],
+                    'json' => [
+                        'customer' => $customerModel->getUid(),
+                    ],
                 ],
-            ),
-            [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt
-                ],
-                'json' => [
-                    'customer' => $customerModel->getUid(),
-                ],
-            ],
-            $schema
-        );
+                $schema
+            );
 
         return new Response(
             $response['success'],
