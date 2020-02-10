@@ -16,7 +16,7 @@
     "hunomina/json-data-validator": "1.10.*",
     "lcobucci/jwt": "3.3.*",
     "symfony/config": ">=4.4 <6",
-    "symfony/contracts": "^2",
+    "symfony/contracts": ">=1.1.7 <3",
     "symfony/http-client": ">=4.4 <6",
     "symfony/property-access": ">=4.4 <6",
     "symfony/serializer": ">=4.4 <6"

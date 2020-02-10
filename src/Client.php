@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
@@ -43,7 +43,7 @@ final class Client
      * @var null|string
      */
     private $userAgent;
-    
+
     /**
      * Client constructor.
      *
@@ -51,20 +51,21 @@ final class Client
      */
     public function __construct(
         string $host
-    ) {
+    )
+    {
         $this->host = $host;
     }
-    
+
     /**
      * getHost
      *
      * @return string
      */
-    public function getHost() : string
+    public function getHost(): string
     {
         return $this->host;
     }
-    
+
     /**
      * setHost
      *
@@ -72,25 +73,25 @@ final class Client
      *
      * @return $this
      */
-    public function setHost(string $host) : self
+    public function setHost(string $host): self
     {
         $this->host = $host;
-        
+
         return $this;
     }
-    
+
     /**
      * @return HttpClientInterface
      */
-    public function getHttpClient() : HttpClientInterface
+    public function getHttpClient(): HttpClientInterface
     {
         if (null === $this->httpClient) {
             $this->httpClient = $this->createDefaultHttpClient();
         }
-        
+
         return $this->httpClient;
     }
-    
+
     /**
      * setHttpClient
      *
@@ -98,27 +99,27 @@ final class Client
      *
      * @return $this
      */
-    public function setHttpClient(HttpClientInterface $httpClient) : self
+    public function setHttpClient(HttpClientInterface $httpClient): self
     {
         $this->httpClient = $httpClient;
-        
+
         return $this;
     }
-    
+
     /**
      * getLogger
      *
      * @return LoggerInterface
      */
-    public function getLogger() : LoggerInterface
+    public function getLogger(): LoggerInterface
     {
         if (null === $this->logger) {
             $this->logger = $this->createDefaultLogger();
         }
-        
+
         return $this->logger;
     }
-    
+
     /**
      * setLogger
      *
@@ -126,13 +127,13 @@ final class Client
      *
      * @return $this
      */
-    public function setLogger(LoggerInterface $logger) : self
+    public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
-        
+
         return $this;
     }
-    
+
     /**
      * getSerializer
      *
@@ -140,7 +141,7 @@ final class Client
      *
      * @throws SerializerException
      */
-    public function getSerializer() : Serializer
+    public function getSerializer(): Serializer
     {
         if (null === $this->serializer) {
             try {
@@ -153,20 +154,20 @@ final class Client
                 );
             }
         }
-        
+
         return $this->serializer;
     }
-    
+
     /**
      * getUserAgent
      *
      * @return null|string
      */
-    public function getUserAgent() : ?string
+    public function getUserAgent(): ?string
     {
         return $this->userAgent;
     }
-    
+
     /**
      * setUserAgent
      *
@@ -174,56 +175,60 @@ final class Client
      *
      * @return $this
      */
-    public function setUserAgent(?string $userAgent) : self
+    public function setUserAgent(?string $userAgent): self
     {
         $this->userAgent = $userAgent;
-        
+
         return $this;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * default factories -------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * createDefaultHttpClient
      *
      * @return HttpClientInterface
      */
-    private function createDefaultHttpClient() : HttpClientInterface
+    private function createDefaultHttpClient(): HttpClientInterface
     {
+        $headers = ['Content-Type' => 'application/json'];
+
+        if ($this->userAgent) {
+            $headers['User-Agent'] = $this->userAgent;
+        }
+
         return HttpClient::create(
             [
-                'headers'  => [
-                    'Content-Type' => 'application/json',
-                ],
+                'headers' => $headers,
             ]
         );
     }
-    
+
     /**
      * createDefaultLogger
      *
      * @return LoggerInterface
      */
-    private function createDefaultLogger() : LoggerInterface
+    private function createDefaultLogger(): LoggerInterface
     {
         return new NullLogger();
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API calls ---------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * delete
      *
-     * @param string     $uri
-     * @param array      $options
+     * @param string $uri
+     * @param array $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -235,7 +240,8 @@ final class Client
         string $uri,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'DELETE',
             $uri,
@@ -243,12 +249,12 @@ final class Client
             $schema
         );
     }
-    
+
     /**
      * get
      *
-     * @param string     $endpoint
-     * @param array      $options
+     * @param string $endpoint
+     * @param array $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -260,7 +266,8 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'GET',
             $endpoint,
@@ -268,12 +275,12 @@ final class Client
             $schema
         );
     }
-    
+
     /**
      * post
      *
-     * @param string     $endpoint
-     * @param array      $options
+     * @param string $endpoint
+     * @param array $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -285,7 +292,8 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'POST',
             $endpoint,
@@ -293,12 +301,12 @@ final class Client
             $schema
         );
     }
-    
+
     /**
      * put
      *
-     * @param string     $endpoint
-     * @param array      $options
+     * @param string $endpoint
+     * @param array $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -310,7 +318,8 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         return $this->request(
             'PUT',
             $endpoint,
@@ -318,13 +327,13 @@ final class Client
             $schema
         );
     }
-    
+
     /**
      * request
      *
-     * @param string     $method
-     * @param string     $endpoint
-     * @param array      $options
+     * @param string $method
+     * @param string $endpoint
+     * @param array $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -337,22 +346,23 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ) : array {
+    ): array
+    {
         $url = "{$this->host}{$endpoint}";
-        
+
         try {
             $this->getLogger()
-                 ->debug(
-                     json_encode(
-                         [
-                             $method,
-                             $url,
-                             $options,
-                         ],
-                         JSON_THROW_ON_ERROR
-                     )
-                 );
-            
+                ->debug(
+                    json_encode(
+                        [
+                            $method,
+                            $url,
+                            $options,
+                        ],
+                        JSON_THROW_ON_ERROR
+                    )
+                );
+
             $response = $this
                 ->getHttpClient()
                 ->request(
@@ -375,20 +385,20 @@ final class Client
                 ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
-            
+
             $this->getLogger()
-                 ->error($exception);
-            
+                ->error($exception);
+
             throw $exception;
         }
-        
+
         $data = new JsonData();
         try {
             $content = $response->getContent(false);
-            
+
             $this->getLogger()
-                 ->debug($content);
-            
+                ->debug($content);
+
             $data->setData($content);
         } catch (Throwable $throwable) {
             $exception = new ClientException(
@@ -396,38 +406,38 @@ final class Client
                 ClientException::INVALID_API_RESPONSE,
                 $throwable
             );
-            
+
             $this->getLogger()
-                 ->error($exception);
-            
+                ->error($exception);
+
             throw $exception;
         }
-        
+
         if (!$schema->validate($data)) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
             );
-            
+
             $this->getLogger()
-                 ->error($exception);
-            
+                ->error($exception);
+
             throw $exception;
         }
-        
+
         $response = $data->getData();
         if (null === $response) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
             );
-            
+
             $this->getLogger()
-                 ->error($exception);
-            
+                ->error($exception);
+
             throw $exception;
         }
-        
+
         return $response;
     }
 }
