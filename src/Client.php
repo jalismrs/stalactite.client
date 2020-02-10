@@ -346,7 +346,9 @@ final class Client
         JsonSchema $schema
     ): array
     {
-        $url = "{$this->host}{$endpoint}";
+        if (isset($options['json'])) {
+            $options['headers']['Content-Type'] = 'application/json';
+        }
 
         try {
             $this->getLogger()
