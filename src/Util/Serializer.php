@@ -36,13 +36,18 @@ final class Serializer
     private $serializer;
 
     /**
+     * @var self
+     */
+    private static $instance;
+
+    /**
      * Serializer constructor.
      *
      * @throws InvalidArgumentException
      * @throws LogicException
      * @throws MappingException
      */
-    public function __construct()
+    private function __construct()
     {
         $this->serializer = new SerializerObject(
             [
@@ -56,6 +61,23 @@ final class Serializer
                 new JsonEncoder()
             ]
         );
+    }
+
+    /**
+     * @return static
+     * @throws SerializerException
+     */
+    public static function getInstance(): self
+    {
+        try {
+            if (!(self::$instance instanceof self)) {
+                self::$instance = new self();
+            }
+        } catch (Throwable $t) {
+            throw new SerializerException('Error while instantiating ' . self::class, 0, $t);
+        }
+
+        return self::$instance;
     }
 
     /**
