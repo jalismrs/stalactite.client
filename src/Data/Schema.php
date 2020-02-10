@@ -54,7 +54,7 @@ abstract class Schema
         ]
     ];
 
-    public const MINIMAL_USER = [
+    public const USER = [
         'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
@@ -91,36 +91,6 @@ abstract class Schema
         ],
         'allowAccess' => [
             'type' => JsonRule::BOOLEAN_TYPE
-        ]
-    ];
-
-    public const USER = [
-        'uid' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'firstName' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'lastName' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'email' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'googleId' => [
-            'type' => JsonRule::STRING_TYPE,
-            'null' => true
-        ],
-        'admin' => [
-            'type' => JsonRule::BOOLEAN_TYPE
-        ],
-        'posts' => [
-            'type' => JsonRule::LIST_TYPE,
-            'schema' => self::POST
-        ],
-        'leads' => [
-            'type' => JsonRule::LIST_TYPE,
-            'schema' => self::POST
         ]
     ];
 }

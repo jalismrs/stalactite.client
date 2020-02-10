@@ -178,12 +178,6 @@
             <group>update</group>
             <group>updateMe</group>
         </attribute>
-        <attribute name="leads">
-            <group>main</group>
-        </attribute>
-        <attribute name="posts">
-            <group>main</group>
-        </attribute>
         <attribute name="uid">
             <group>main</group>
             <group>min</group>
