@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
@@ -116,9 +117,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => $this
-                        ->getClient()
-                        ->getSerializer()
+                    'json' => Serializer::getInstance()
                         ->normalize(
                             $userModel,
                             [

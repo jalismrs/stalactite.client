@@ -9,8 +9,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -22,24 +20,15 @@ class AccessClearanceTest extends
     TestCase
 {
     /**
-     * testGroupCommon
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCommon(): void
     {
-        $serializer = new Serializer();
-
         $model = ModelFactory::getTestableAccessClearance();
 
-        $actual = $serializer->normalize($model);
+        $actual = Serializer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -47,24 +36,15 @@ class AccessClearanceTest extends
     }
 
     /**
-     * testGroupMain
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMain(): void
     {
-        $serializer = new Serializer();
-
         $model = ModelFactory::getTestableAccessClearance();
 
-        $actual = $serializer->normalize(
+        $actual = Serializer::getInstance()->normalize(
             $model,
             [
                 AbstractNormalizer::GROUPS => [

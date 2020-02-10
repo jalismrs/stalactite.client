@@ -9,8 +9,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -22,24 +20,15 @@ class UserTest extends
     TestCase
 {
     /**
-     * testGroupCommon
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCommon(): void
     {
-        $serializer = new Serializer();
-
         $model = ModelFactory::getTestableUser();
 
-        $actual = $serializer->normalize($model);
+        $actual = Serializer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -47,20 +36,13 @@ class UserTest extends
     }
 
     /**
-     * testGroupMain
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMain(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -86,20 +68,13 @@ class UserTest extends
     }
 
     /**
-     * testGroupMin
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMin(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -125,20 +100,13 @@ class UserTest extends
     }
 
     /**
-     * testGroupCreate
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCreate(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -162,20 +130,13 @@ class UserTest extends
     }
 
     /**
-     * testGroupUpdate
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupUpdate(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -199,20 +160,13 @@ class UserTest extends
     }
 
     /**
-     * testGroupUpdateMe
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupUpdateMe(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 

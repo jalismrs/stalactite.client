@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -50,8 +51,7 @@ class ApiAddUserRelationTest extends
                     [
                         'success' => true,
                         'error' => null,
-                        'relation' => $mockClient
-                            ->getSerializer()
+                        'relation' => Serializer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableDomainUserRelation(),
                                 [

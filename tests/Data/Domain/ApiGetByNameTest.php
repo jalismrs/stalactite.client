@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -48,8 +49,7 @@ class ApiGetByNameTest extends
                         'success' => true,
                         'error' => null,
                         'domains' => [
-                            $mockClient
-                                ->getSerializer()
+                            Serializer::getInstance()
                                 ->normalize(
                                     ModelFactory::getTestableDomain(),
                                     [
@@ -101,8 +101,7 @@ class ApiGetByNameTest extends
                     [
                         'success' => true,
                         'error' => null,
-                        'domains' => $mockClient
-                            ->getSerializer()
+                        'domains' => Serializer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableDomain(),
                                 [
