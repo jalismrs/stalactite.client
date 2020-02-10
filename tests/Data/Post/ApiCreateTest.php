@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -49,8 +50,7 @@ class ApiCreateTest extends
                     [
                         'success' => true,
                         'error' => null,
-                        'post' => $mockClient
-                            ->getSerializer()
+                        'post' => Serializer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestablePost(),
                                 [

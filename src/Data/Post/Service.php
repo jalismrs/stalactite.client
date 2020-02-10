@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
@@ -191,9 +192,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => $this
-                        ->getClient()
-                        ->getSerializer()
+                    'json' => Serializer::getInstance()
                         ->normalize(
                             $postModel,
                             [
@@ -261,9 +260,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => $this
-                        ->getClient()
-                        ->getSerializer()
+                    'json' => Serializer::getInstance()
                         ->normalize(
                             $postModel,
                             [

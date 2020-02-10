@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -53,8 +54,7 @@ class ApiGetRelationsTest extends
                         'error' => null,
                         'relations' => [
                             'users' => [
-                                $mockClient
-                                    ->getSerializer()
+                                Serializer::getInstance()
                                     ->normalize(
                                         ModelFactory::getTestableDomainUserRelation(),
                                         [
@@ -68,8 +68,7 @@ class ApiGetRelationsTest extends
                                     )
                             ],
                             'customers' => [
-                                $mockClient
-                                    ->getSerializer()
+                                Serializer::getInstance()
                                     ->normalize(
                                         ModelFactory::getTestableDomainCustomerRelation(),
                                         [
@@ -140,8 +139,7 @@ class ApiGetRelationsTest extends
                         'success' => true,
                         'error' => null,
                         'relations' => [
-                            'users' => $mockClient
-                                ->getSerializer()
+                            'users' => Serializer::getInstance()
                                 ->normalize(
                                     ModelFactory::getTestableDomainUserRelation(),
                                     [
@@ -153,8 +151,7 @@ class ApiGetRelationsTest extends
                                         ],
                                     ]
                                 ),
-                            'customers' => $mockClient
-                                ->getSerializer()
+                            'customers' => Serializer::getInstance()
                                 ->normalize(
                                     ModelFactory::getTestableDomainCustomerRelation(),
                                     [

@@ -9,8 +9,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\MappingException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -22,24 +20,15 @@ class TrustedAppTest extends
     TestCase
 {
     /**
-     * testGroupCommon
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCommon(): void
     {
-        $serializer = new Serializer();
-
         $model = ModelFactory::getTestableTrustedApp();
 
-        $actual = $serializer->normalize($model);
+        $actual = Serializer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -47,20 +36,13 @@ class TrustedAppTest extends
     }
 
     /**
-     * testGroupMain
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupMain(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -84,20 +66,13 @@ class TrustedAppTest extends
     }
 
     /**
-     * testGroupReset
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupReset(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -118,20 +93,13 @@ class TrustedAppTest extends
     }
 
     /**
-     * testGroupCreate
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupCreate(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -153,20 +121,13 @@ class TrustedAppTest extends
     }
 
     /**
-     * testGroupUpdate
-     *
-     * @return void
-     *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws MappingException
      * @throws SerializerException
-     * @throws \Symfony\Component\Serializer\Exception\InvalidArgumentException
      */
     public function testGroupUpdate(): void
     {
-        $serializer = new Serializer();
+        $serializer = Serializer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 

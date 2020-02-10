@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Service;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -46,8 +47,7 @@ class ApiDeleteTest extends
                     [
                         'success' => true,
                         'error' => null,
-                        'user' => $mockClient
-                            ->getSerializer()
+                        'user' => Serializer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableUser(),
                                 [

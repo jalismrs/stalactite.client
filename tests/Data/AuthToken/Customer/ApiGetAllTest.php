@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\AuthToken\Customer\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -48,8 +49,7 @@ class ApiGetAllTest extends
                         'success' => true,
                         'error' => null,
                         'customers' => [
-                            $mockClient
-                                ->getSerializer()
+                            Serializer::getInstance()
                                 ->normalize(
                                     ModelFactory::getTestableCustomer(),
                                     [
@@ -100,8 +100,7 @@ class ApiGetAllTest extends
                     [
                         'success' => true,
                         'error' => null,
-                        'customers' => $mockClient
-                            ->getSerializer()
+                        'customers' => Serializer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableCustomer(),
                                 [
