@@ -6,8 +6,6 @@ namespace Jalismrs\Stalactite\Client;
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
@@ -36,11 +34,6 @@ final class Client
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var Serializer
-     */
-    private $serializer;
 
     /**
      * @var null|string
@@ -81,30 +74,6 @@ final class Client
         $this->host = $host;
 
         return $this;
-    }
-
-    /**
-     * getSerializer
-     *
-     * @return Serializer
-     *
-     * @throws SerializerException
-     */
-    public function getSerializer(): Serializer
-    {
-        if (null === $this->serializer) {
-            try {
-                $this->serializer = new Serializer();
-            } catch (Throwable $throwable) {
-                throw new SerializerException(
-                    'Error while instantiating the serializer',
-                    null,
-                    $throwable
-                );
-            }
-        }
-
-        return $this->serializer;
     }
 
     /**
