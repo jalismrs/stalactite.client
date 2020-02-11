@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
@@ -18,7 +18,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
-use function vsprintf;
 
 /**
  * Service
@@ -28,6 +27,46 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ALL_CONFIGURATION          = [
+        'endpoint' => '/auth/trustedApps',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION              = [
+        'endpoint' => '/auth/trustedApps/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_UPDATE_CONFIGURATION           = [
+        'endpoint'      => '/auth/trustedApps/%s',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
+            ],
+        ],
+    ];
+    private const REQUEST_CREATE_CONFIGURATION           = [
+        'endpoint'      => '/auth/trustedApps',
+        'method'        => 'POST',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ],
+    ];
+    private const REQUEST_DELETE_CONFIGURATION           = [
+        'endpoint' => '/auth/trustedApps/%s',
+        'method'   => 'DELETE',
+    ];
+    private const REQUEST_RESET_AUTH_TOKEN_CONFIGURATION = [
+        'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'reset',
+            ],
+        ],
+    ];
+    
     /**
      * getAllTrustedApps
      *
@@ -38,32 +77,33 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAllTrustedApps(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'     => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'       => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApps' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/auth/trustedApps',
+            ->request2(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -71,13 +111,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'trustedApps' => array_map(
-                    static function ($trustedApp) {
+                    static function($trustedApp) {
                         return ModelFactory::createTrustedApp($trustedApp);
                     },
                     $response['trustedApps']
@@ -85,48 +125,49 @@ class Service extends
             ]
         );
     }
-
+    
     /**
+     * getTrustedApp
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getTrustedApp(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'    => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type' => JsonRule::OBJECT_TYPE,
+                    'type'   => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::TRUSTED_APP,
-                    'null' => true
+                    'null'   => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/auth/trustedApps/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request2(
+                self::REQUEST_GET_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -134,7 +175,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -143,12 +184,12 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * updateTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $jwt
+     * @param string     $jwt
      *
      * @return Response
      * @throws ClientException
@@ -159,58 +200,55 @@ class Service extends
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->put(
-                vsprintf(
-                    '/auth/trustedApps/%s',
-                    [
-                        $trustedAppModel->getUid(),
-                    ],
-                ),
+            ->request2(
+                self::REQUEST_UPDATE_CONFIGURATION,
+                [
+                    $trustedAppModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $trustedAppModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'update',
-                                ],
-                            ]
-                        ),
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $trustedAppModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'update',
+                                                   ],
+                                               ]
+                                           ),
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * createTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $jwt
+     * @param string     $jwt
      *
      * @return Response
      *
@@ -222,21 +260,20 @@ class Service extends
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'    => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => array_merge(
                         Schema::TRUSTED_APP,
                         [
@@ -248,28 +285,29 @@ class Service extends
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                '/auth/trustedApps',
+            ->request2(
+                self::REQUEST_CREATE_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $trustedAppModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'create',
-                                ],
-                            ]
-                        ),
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $trustedAppModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'create',
+                                                   ],
+                                               ]
+                                           ),
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -278,67 +316,68 @@ class Service extends
             ]
         );
     }
-
+    
     /**
+     * deleteTrustedApp
+     *
      * @param string $uid
      * @param string $resetToken
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function deleteTrustedApp(
         string $uid,
         string $resetToken,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/auth/trustedApps/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request2(
+                self::REQUEST_DELETE_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => [
+                    'json'    => [
                         'resetToken' => $resetToken,
                     ]
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * resetAuthToken
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $jwt
+     * @param string     $jwt
      *
      * @return Response
      *
@@ -350,52 +389,41 @@ class Service extends
     public function resetAuthToken(
         TrustedApp $trustedAppModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'    => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'      => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'trustedApp' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::TRUSTED_APP
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->put(
-                vsprintf(
-                    '/auth/trustedApps/%s/authToken/reset',
-                    [
-                        $trustedAppModel->getUid(),
-                    ],
-                ),
+            ->request2(
+                self::REQUEST_RESET_AUTH_TOKEN_CONFIGURATION,
+                [
+                    $trustedAppModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $trustedAppModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'reset',
-                                ],
-                            ]
-                        )
+                    'json'    => $trustedAppModel
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

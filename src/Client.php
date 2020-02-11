@@ -1,17 +1,20 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Schema\JsonSchema;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
+use function array_merge_recursive;
 use function json_encode;
+use function vsprintf;
 
 /**
  * Client
@@ -24,22 +27,22 @@ final class Client
      * @var string
      */
     private $host;
-
+    
     /**
      * @var HttpClientInterface
      */
     private $httpClient;
-
+    
     /**
      * @var LoggerInterface
      */
     private $logger;
-
+    
     /**
      * @var null|string
      */
     private $userAgent;
-
+    
     /**
      * Client constructor.
      *
@@ -47,21 +50,20 @@ final class Client
      */
     public function __construct(
         string $host
-    )
-    {
+    ) {
         $this->host = $host;
     }
-
+    
     /**
      * getHost
      *
      * @return string
      */
-    public function getHost(): string
+    public function getHost() : string
     {
         return $this->host;
     }
-
+    
     /**
      * setHost
      *
@@ -69,23 +71,23 @@ final class Client
      *
      * @return $this
      */
-    public function setHost(string $host): self
+    public function setHost(string $host) : self
     {
         $this->host = $host;
-
+        
         return $this;
     }
-
+    
     /**
      * getUserAgent
      *
      * @return null|string
      */
-    public function getUserAgent(): ?string
+    public function getUserAgent() : ?string
     {
         return $this->userAgent;
     }
-
+    
     /**
      * setUserAgent
      *
@@ -93,109 +95,18 @@ final class Client
      *
      * @return $this
      */
-    public function setUserAgent(?string $userAgent): self
+    public function setUserAgent(?string $userAgent) : self
     {
         $this->userAgent = $userAgent;
-
+        
         return $this;
     }
-
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient(): HttpClientInterface
-    {
-        if (null === $this->httpClient) {
-            $this->httpClient = $this->createDefaultHttpClient();
-        }
-
-        return $this->httpClient;
-    }
-
-    /**
-     * setHttpClient
-     *
-     * @param HttpClientInterface $httpClient
-     *
-     * @return $this
-     */
-    public function setHttpClient(HttpClientInterface $httpClient): self
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
-    }
-
-    /**
-     * getLogger
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger(): LoggerInterface
-    {
-        if (null === $this->logger) {
-            $this->logger = $this->createDefaultLogger();
-        }
-
-        return $this->logger;
-    }
-
-    /**
-     * setLogger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
-    public function setLogger(LoggerInterface $logger): self
-    {
-        $this->logger = $logger;
-
-        return $this;
-    }
-
-    /*
-     * -------------------------------------------------------------------------
-     * default factories -------------------------------------------------------
-     * -------------------------------------------------------------------------
-     */
-
-    /**
-     * createDefaultLogger
-     *
-     * @return LoggerInterface
-     */
-    private function createDefaultLogger(): LoggerInterface
-    {
-        return new NullLogger();
-    }
-
-    /**
-     * createDefaultHttpClient
-     *
-     * @return HttpClientInterface
-     */
-    private function createDefaultHttpClient(): HttpClientInterface
-    {
-        return HttpClient::create(
-            [
-                'base_uri' => $this->host,
-                'headers' => $this->userAgent ? ['User-Agent' => $this->userAgent] : [],
-            ]
-        );
-    }
-
-    /*
-     * -------------------------------------------------------------------------
-     * API calls ---------------------------------------------------------------
-     * -------------------------------------------------------------------------
-     */
-
+    
     /**
      * get
      *
-     * @param string $endpoint
-     * @param array $options
+     * @param string     $endpoint
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -207,8 +118,7 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         return $this->request(
             'GET',
             $endpoint,
@@ -216,91 +126,13 @@ final class Client
             $schema
         );
     }
-
-    /**
-     * post
-     *
-     * @param string $endpoint
-     * @param array $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function post(
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ): array
-    {
-        return $this->request(
-            'POST',
-            $endpoint,
-            $options,
-            $schema
-        );
-    }
-
-    /**
-     * put
-     *
-     * @param string $endpoint
-     * @param array $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function put(
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ): array
-    {
-        return $this->request(
-            'PUT',
-            $endpoint,
-            $options,
-            $schema
-        );
-    }
-
-    /**
-     * delete
-     *
-     * @param string $uri
-     * @param array $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function delete(
-        string $uri,
-        array $options,
-        JsonSchema $schema
-    ): array
-    {
-        return $this->request(
-            'DELETE',
-            $uri,
-            $options,
-            $schema
-        );
-    }
-
+    
     /**
      * request
      *
-     * @param string $method
-     * @param string $endpoint
-     * @param array $options
+     * @param string     $method
+     * @param string     $endpoint
+     * @param array      $options
      * @param JsonSchema $schema
      *
      * @return array
@@ -313,25 +145,24 @@ final class Client
         string $endpoint,
         array $options,
         JsonSchema $schema
-    ): array
-    {
+    ) : array {
         if (isset($options['json'])) {
             $options['headers']['Content-Type'] = 'application/json';
         }
-
+        
         try {
             $this->getLogger()
-                ->debug(
-                    json_encode(
-                        [
-                            $method,
-                            $endpoint,
-                            $options,
-                        ],
-                        JSON_THROW_ON_ERROR
-                    )
-                );
-
+                 ->debug(
+                     json_encode(
+                         [
+                             $method,
+                             $endpoint,
+                             $options,
+                         ],
+                         JSON_THROW_ON_ERROR
+                     )
+                 );
+            
             $response = $this
                 ->getHttpClient()
                 ->request(
@@ -345,20 +176,20 @@ final class Client
                 ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
-
+            
             $this->getLogger()
-                ->error($exception);
-
+                 ->error($exception);
+            
             throw $exception;
         }
-
+        
         $data = new JsonData();
         try {
             $content = $response->getContent(false);
-
+            
             $this->getLogger()
-                ->debug($content);
-
+                 ->debug($content);
+            
             $data->setData($content);
         } catch (Throwable $throwable) {
             $exception = new ClientException(
@@ -366,38 +197,328 @@ final class Client
                 ClientException::INVALID_API_RESPONSE,
                 $throwable
             );
-
+            
             $this->getLogger()
-                ->error($exception);
-
+                 ->error($exception);
+            
             throw $exception;
         }
-
+        
         if (!$schema->validate($data)) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
             );
-
+            
             $this->getLogger()
-                ->error($exception);
-
+                 ->error($exception);
+            
             throw $exception;
         }
-
+        
         $response = $data->getData();
         if (null === $response) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
             );
-
+            
             $this->getLogger()
-                ->error($exception);
-
+                 ->error($exception);
+            
             throw $exception;
         }
-
+        
         return $response;
+    }
+    
+    /**
+     * getLogger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger() : LoggerInterface
+    {
+        if (null === $this->logger) {
+            $this->logger = $this->createDefaultLogger();
+        }
+        
+        return $this->logger;
+    }
+    
+    /**
+     * setLogger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return $this
+     */
+    public function setLogger(LoggerInterface $logger) : self
+    {
+        $this->logger = $logger;
+        
+        return $this;
+    }
+    
+    /**
+     * createDefaultLogger
+     *
+     * @return LoggerInterface
+     */
+    private function createDefaultLogger() : LoggerInterface
+    {
+        return new NullLogger();
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * default factories -------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    
+    /**
+     * @return HttpClientInterface
+     */
+    public function getHttpClient() : HttpClientInterface
+    {
+        if (null === $this->httpClient) {
+            $this->httpClient = $this->createDefaultHttpClient();
+        }
+        
+        return $this->httpClient;
+    }
+    
+    /**
+     * setHttpClient
+     *
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
+    public function setHttpClient(HttpClientInterface $httpClient) : self
+    {
+        $this->httpClient = $httpClient;
+        
+        return $this;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * API calls ---------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    
+    /**
+     * createDefaultHttpClient
+     *
+     * @return HttpClientInterface
+     */
+    private function createDefaultHttpClient() : HttpClientInterface
+    {
+        return HttpClient::create(
+            [
+                'base_uri' => $this->host,
+                'headers'  => $this->userAgent
+                    ? ['User-Agent' => $this->userAgent]
+                    : [],
+            ]
+        );
+    }
+    
+    /**
+     * request2
+     *
+     * @param array      $configuration
+     * @param array      $uriDatas
+     * @param array      $options
+     * @param JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     * @throws Util\SerializerException
+     */
+    public function request2(
+        array $configuration,
+        array $uriDatas,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        if (isset($options['json'])) {
+            $options = array_replace_recursive(
+                $options,
+                [
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                    ],
+                ]
+            );
+            
+            $options['json'] = Serializer::getInstance()
+                                         ->normalize(
+                                             $options['json'],
+                                             $configuration['normalization'] ?? []
+                                         );
+        }
+        
+        $uri = vsprintf(
+            $configuration['endpoint'],
+            $uriDatas
+        );
+        
+        try {
+            $this->getLogger()
+                 ->debug(
+                     'API call',
+                     [
+                         'configuration' => $configuration,
+                         'uriDatas'      => $uriDatas,
+                         'options'       => $options,
+                     ]
+                 );
+            
+            $response = $this
+                ->getHttpClient()
+                ->request(
+                    $configuration['method'],
+                    $uri,
+                    $options
+                );
+        } catch (Throwable $throwable) {
+            $exception = new ClientException(
+                'Error while contacting Stalactite API',
+                ClientException::CLIENT_TRANSPORT,
+                $throwable
+            );
+            
+            $this->getLogger()
+                 ->error($exception);
+            
+            throw $exception;
+        }
+        
+        $data = new JsonData();
+        try {
+            $content = $response->getContent(false);
+            
+            $this->getLogger()
+                 ->debug($content);
+            
+            $data->setData($content);
+        } catch (Throwable $throwable) {
+            $exception = new ClientException(
+                'Invalid json response from Stalactite API',
+                ClientException::INVALID_API_RESPONSE,
+                $throwable
+            );
+            
+            $this->getLogger()
+                 ->error($exception);
+            
+            throw $exception;
+        }
+        
+        if (!$schema->validate($data)) {
+            $exception = new ClientException(
+                'Invalid response from Stalactite API: ' . $schema->getLastError(),
+                ClientException::INVALID_API_RESPONSE
+            );
+            
+            $this->getLogger()
+                 ->error($exception);
+            
+            throw $exception;
+        }
+        
+        $response = $data->getData();
+        if (null === $response) {
+            $exception = new ClientException(
+                'Invalid response from Stalactite API: response is null',
+                ClientException::INVALID_API_RESPONSE
+            );
+            
+            $this->getLogger()
+                 ->error($exception);
+            
+            throw $exception;
+        }
+        
+        return $response;
+    }
+    
+    /**
+     * post
+     *
+     * @param string     $endpoint
+     * @param array      $options
+     * @param JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     */
+    public function post(
+        string $endpoint,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'POST',
+            $endpoint,
+            $options,
+            $schema
+        );
+    }
+    
+    /**
+     * put
+     *
+     * @param string     $endpoint
+     * @param array      $options
+     * @param JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     */
+    public function put(
+        string $endpoint,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'PUT',
+            $endpoint,
+            $options,
+            $schema
+        );
+    }
+    
+    /**
+     * delete
+     *
+     * @param string     $uri
+     * @param array      $options
+     * @param JsonSchema $schema
+     *
+     * @return array
+     *
+     * @throws ClientException
+     * @throws InvalidDataTypeException
+     */
+    public function delete(
+        string $uri,
+        array $options,
+        JsonSchema $schema
+    ) : array {
+        return $this->request(
+            'DELETE',
+            $uri,
+            $options,
+            $schema
+        );
     }
 }
