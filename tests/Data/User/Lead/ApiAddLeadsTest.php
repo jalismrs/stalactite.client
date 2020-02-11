@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * ApiAddLeadsTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Data\User\Lead
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
  */
 class ApiAddLeadsTest extends
     TestCase

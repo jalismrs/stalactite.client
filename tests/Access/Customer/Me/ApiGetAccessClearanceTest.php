@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetAccessClearanceTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Access\Customer\Me
+ * @package Jalismrs\Stalactite\Client\Tests\Access\Customer\Me
  */
 class ApiGetAccessClearanceTest extends
     TestCase

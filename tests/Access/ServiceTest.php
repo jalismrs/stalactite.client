@@ -15,7 +15,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * ServiceTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Access
+ * @package Jalismrs\Stalactite\Client\Tests\Access
  */
 class ServiceTest extends
     TestCase

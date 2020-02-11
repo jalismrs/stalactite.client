@@ -33,10 +33,10 @@ class ApiGetAllTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
      */
     public function testGetAll(): void
     {

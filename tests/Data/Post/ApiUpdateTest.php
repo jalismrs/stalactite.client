@@ -18,7 +18,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * ApiUpdateTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Data\Post
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Post
  */
 class ApiUpdateTest extends
     TestCase

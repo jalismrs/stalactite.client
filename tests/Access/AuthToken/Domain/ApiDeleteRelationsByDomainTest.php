@@ -17,7 +17,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * ApiDeleteRelationsByDomainTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Access\AuthToken\Domain
+ * @package Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Domain
  */
 class ApiDeleteRelationsByDomainTest extends
     TestCase

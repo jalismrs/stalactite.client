@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiResetAuthTokenTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Authentication\TrustedApp
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
  */
 class ApiResetAuthTokenTest extends
     TestCase

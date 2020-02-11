@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Data\User
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User
  */
 class ApiGetTest extends
     TestCase

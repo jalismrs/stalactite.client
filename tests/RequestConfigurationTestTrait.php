@@ -18,7 +18,9 @@ use Symfony\Component\Validator\Exception\InvalidOptionsException;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 use Symfony\Component\Validator\Validation;
 use function assert;
+use function get_class;
 use function json_encode;
+use function vsprintf;
 
 /**
  * RequestConfigurationTestTrait
@@ -50,9 +52,19 @@ trait RequestConfigurationTestTrait
         string $name
     ) : void {
         $reflectionClass = new ReflectionClass($mockService);
+        $constant        = "REQUEST_{$name}_CONFIGURATION";
         $configuration   = $reflectionClass->getConstant("REQUEST_{$name}_CONFIGURATION");
         
-        self::assertIsArray($configuration);
+        self::assertIsArray(
+            $configuration,
+            vsprintf(
+                "Constant '%s' not found in service %s",
+                [
+                    $constant,
+                    get_class($mockService)
+                ]
+            )
+        );
         
         $validator = Validation::createValidator();
         

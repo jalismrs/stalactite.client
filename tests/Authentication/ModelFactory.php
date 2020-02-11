@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 /**
  * ModelFactory
  *
- * @packageJalismrs\Stalactite\Service\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication
  */
 abstract class ModelFactory
 {

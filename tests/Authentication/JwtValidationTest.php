@@ -18,7 +18,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * JwtValidationTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication
  */
 class JwtValidationTest extends
     TestCase

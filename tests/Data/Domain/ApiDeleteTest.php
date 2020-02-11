@@ -17,7 +17,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * ApiDeleteTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Data\Domain
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
  */
 class ApiDeleteTest extends
     TestCase
