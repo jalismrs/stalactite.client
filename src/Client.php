@@ -103,136 +103,6 @@ final class Client
     }
     
     /**
-     * get
-     *
-     * @param string     $endpoint
-     * @param array      $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function get(
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ) : array {
-        return $this->request(
-            'GET',
-            $endpoint,
-            $options,
-            $schema
-        );
-    }
-    
-    /**
-     * request
-     *
-     * @param string     $method
-     * @param string     $endpoint
-     * @param array      $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function request(
-        string $method,
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ) : array {
-        if (isset($options['json'])) {
-            $options['headers']['Content-Type'] = 'application/json';
-        }
-        
-        try {
-            $this->getLogger()
-                 ->debug(
-                     json_encode(
-                         [
-                             $method,
-                             $endpoint,
-                             $options,
-                         ],
-                         JSON_THROW_ON_ERROR
-                     )
-                 );
-            
-            $response = $this
-                ->getHttpClient()
-                ->request(
-                    $method,
-                    $endpoint,
-                    $options
-                );
-        } catch (Throwable $throwable) {
-            $exception = new ClientException(
-                'Error while contacting Stalactite API',
-                ClientException::CLIENT_TRANSPORT,
-                $throwable
-            );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
-        }
-        
-        $data = new JsonData();
-        try {
-            $content = $response->getContent(false);
-            
-            $this->getLogger()
-                 ->debug($content);
-            
-            $data->setData($content);
-        } catch (Throwable $throwable) {
-            $exception = new ClientException(
-                'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE,
-                $throwable
-            );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
-        }
-        
-        if (!$schema->validate($data)) {
-            $exception = new ClientException(
-                'Invalid response from Stalactite API: ' . $schema->getLastError(),
-                ClientException::INVALID_API_RESPONSE
-            );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
-        }
-        
-        $response = $data->getData();
-        if (null === $response) {
-            $exception = new ClientException(
-                'Invalid response from Stalactite API: response is null',
-                ClientException::INVALID_API_RESPONSE
-            );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
-        }
-        
-        return $response;
-    }
-    
-    /**
      * getLogger
      *
      * @return LoggerInterface
@@ -326,7 +196,7 @@ final class Client
     }
     
     /**
-     * request2
+     * request
      *
      * @param array      $configuration
      * @param array      $uriDatas
@@ -339,7 +209,7 @@ final class Client
      * @throws InvalidDataTypeException
      * @throws Util\SerializerException
      */
-    public function request2(
+    public function request(
         array $configuration,
         array $uriDatas,
         array $options,
@@ -445,80 +315,5 @@ final class Client
         }
         
         return $response;
-    }
-    
-    /**
-     * post
-     *
-     * @param string     $endpoint
-     * @param array      $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function post(
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ) : array {
-        return $this->request(
-            'POST',
-            $endpoint,
-            $options,
-            $schema
-        );
-    }
-    
-    /**
-     * put
-     *
-     * @param string     $endpoint
-     * @param array      $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function put(
-        string $endpoint,
-        array $options,
-        JsonSchema $schema
-    ) : array {
-        return $this->request(
-            'PUT',
-            $endpoint,
-            $options,
-            $schema
-        );
-    }
-    
-    /**
-     * delete
-     *
-     * @param string     $uri
-     * @param array      $options
-     * @param JsonSchema $schema
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws InvalidDataTypeException
-     */
-    public function delete(
-        string $uri,
-        array $options,
-        JsonSchema $schema
-    ) : array {
-        return $this->request(
-            'DELETE',
-            $uri,
-            $options,
-            $schema
-        );
     }
 }

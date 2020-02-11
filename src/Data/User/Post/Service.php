@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Post;
 
@@ -27,10 +27,23 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_ADD_POSTS_CONFIGURATION    = [
+        'endpoint' => '/data/users/%s/posts',
+        'method'   => 'POST',
+    ];
+    private const REQUEST_GET_ALL_CONFIGURATION      = [
+        'endpoint' => '/data/users/%s/posts',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_REMOVE_POSTS_CONFIGURATION = [
+        'endpoint' => '/data/users/%s/posts',
+        'method'   => 'DELETE',
+    ];
+    
     /**
      * getAllPosts
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -42,34 +55,31 @@ class Service extends
     public function getAllPosts(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'posts'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -77,13 +87,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'posts' => array_map(
-                    static function ($post) {
+                    static function($post) {
                         return ModelFactory::createPost($post);
                     },
                     $response['posts']
@@ -91,12 +101,12 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * addPosts
      *
-     * @param User $userModel
-     * @param array $postModels
+     * @param User   $userModel
+     * @param array  $postModels
      * @param string $jwt
      *
      * @return Response
@@ -110,35 +120,32 @@ class Service extends
         User $userModel,
         array $postModels,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                vsprintf(
-                    '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_ADD_POSTS_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => [
+                    'json'    => [
                         'posts' => ModelHelper::getUids(
                             $postModels,
                             Post::class
@@ -147,18 +154,18 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * removePosts
      *
-     * @param User $userModel
-     * @param array $postModels
+     * @param User   $userModel
+     * @param array  $postModels
      * @param string $jwt
      *
      * @return Response
@@ -172,35 +179,32 @@ class Service extends
         User $userModel,
         array $postModels,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_REMOVE_POSTS_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => [
+                    'json'    => [
                         'posts' => ModelHelper::getUids(
                             $postModels,
                             Post::class
@@ -209,7 +213,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']

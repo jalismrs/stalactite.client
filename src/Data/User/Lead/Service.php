@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Lead;
 
@@ -27,10 +27,23 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_ADD_LEADS_CONFIGURATION    = [
+        'endpoint' => '/data/users/%s/leads',
+        'method'   => 'POST',
+    ];
+    private const REQUEST_GET_ALL_CONFIGURATION      = [
+        'endpoint' => '/data/users/%s/leads',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_REMOVE_LEADS_CONFIGURATION = [
+        'endpoint' => '/data/users/%s/leads',
+        'method'   => 'DELETE',
+    ];
+    
     /**
      * getAll
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -42,34 +55,31 @@ class Service extends
     public function getAllLeads(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'leads' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'leads'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/users/%s/leads',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -77,13 +87,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'leads' => array_map(
-                    static function ($lead) {
+                    static function($lead) {
                         return ModelFactory::createPost($lead);
                     },
                     $response['leads']
@@ -91,12 +101,12 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * addLeads
      *
-     * @param User $userModel
-     * @param array $leadModels
+     * @param User   $userModel
+     * @param array  $leadModels
      * @param string $jwt
      *
      * @return Response
@@ -110,35 +120,32 @@ class Service extends
         User $userModel,
         array $leadModels,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                vsprintf(
-                    '/data/users/%s/leads',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_ADD_LEADS_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => [
+                    'json'    => [
                         'leads' => ModelHelper::getUids(
                             $leadModels,
                             Post::class
@@ -147,18 +154,18 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * removeLeads
      *
-     * @param User $userModel
-     * @param array $leadModels
+     * @param User   $userModel
+     * @param array  $leadModels
      * @param string $jwt
      *
      * @return Response
@@ -172,35 +179,32 @@ class Service extends
         User $userModel,
         array $leadModels,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/data/users/%s/leads',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_REMOVE_LEADS_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => [
+                    'json'    => [
                         'leads' => ModelHelper::getUids(
                             $leadModels,
                             Post::class
@@ -209,7 +213,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']

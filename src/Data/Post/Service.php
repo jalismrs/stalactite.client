@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
@@ -27,6 +27,31 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_CREATE_CONFIGURATION    = [
+        'endpoint' => '/data/posts',
+        'method'   => 'POST',
+    ];
+    private const REQUEST_DELETE_CONFIGURATION    = [
+        'endpoint' => '/data/posts/%s',
+        'method'   => 'DELETE',
+    ];
+    private const REQUEST_GET_ALL_CONFIGURATION   = [
+        'endpoint' => '/data/posts',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION       = [
+        'endpoint' => '/data/posts/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_USERS_CONFIGURATION = [
+        'endpoint' => '/data/posts/%s/users',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_UPDATE_CONFIGURATION    = [
+        'endpoint' => '/data/posts/%s',
+        'method'   => 'PUT',
+    ];
+    
     /**
      * getAll
      *
@@ -40,29 +65,29 @@ class Service extends
      */
     public function getAllPosts(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'posts'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/posts',
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -70,13 +95,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'posts' => array_map(
-                    static function ($post) {
+                    static function($post) {
                         return ModelFactory::createPost($post);
                     },
                     $response['posts']
@@ -84,7 +109,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * getPost
      *
@@ -100,35 +125,32 @@ class Service extends
     public function getPost(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'post'    => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/posts/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -136,7 +158,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -147,11 +169,11 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * createPost
      *
-     * @param Post $postModel
+     * @param Post   $postModel
      * @param string $jwt
      *
      * @return Response
@@ -164,47 +186,47 @@ class Service extends
     public function createPost(
         Post $postModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'post'    => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                '/data/posts',
+            ->request(
+                self::REQUEST_CREATE_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $postModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'create',
-                                ],
-                            ]
-                        ),
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $postModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'create',
+                                                   ],
+                                               ]
+                                           ),
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -215,11 +237,11 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * updatePost
      *
-     * @param Post $postModel
+     * @param Post   $postModel
      * @param string $jwt
      *
      * @return Response
@@ -232,53 +254,50 @@ class Service extends
     public function updatePost(
         Post $postModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->put(
-                vsprintf(
-                    '/data/posts/%s',
-                    [
-                        $postModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_UPDATE_CONFIGURATION,
+                [
+                    $postModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $postModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'update',
-                                ],
-                            ]
-                        ),
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $postModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'update',
+                                                   ],
+                                               ]
+                                           ),
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * delete
      *
@@ -294,30 +313,27 @@ class Service extends
     public function deletePost(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/data/posts/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_DELETE_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -325,13 +341,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * getUsers
      *
@@ -344,7 +360,7 @@ class Service extends
      * @throws InvalidSchemaException
      * @throws ClientException
      */
-    public function getUsers(string $uid, string $jwt): Response
+    public function getUsers(string $uid, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
@@ -352,26 +368,24 @@ class Service extends
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'users'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::USER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/posts/%s/users',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_USERS_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -379,13 +393,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'users' => array_map(
-                    static function ($user) {
+                    static function($user) {
                         return ModelFactory::createUser($user);
                     },
                     $response['users']

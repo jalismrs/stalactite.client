@@ -27,23 +27,6 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_ALL_CONFIGURATION          = [
-        'endpoint' => '/auth/trustedApps',
-        'method'   => 'GET',
-    ];
-    private const REQUEST_GET_CONFIGURATION              = [
-        'endpoint' => '/auth/trustedApps/%s',
-        'method'   => 'GET',
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION           = [
-        'endpoint'      => '/auth/trustedApps/%s',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
-            ],
-        ],
-    ];
     private const REQUEST_CREATE_CONFIGURATION           = [
         'endpoint'      => '/auth/trustedApps',
         'method'        => 'POST',
@@ -57,12 +40,29 @@ class Service extends
         'endpoint' => '/auth/trustedApps/%s',
         'method'   => 'DELETE',
     ];
+    private const REQUEST_GET_ALL_CONFIGURATION          = [
+        'endpoint' => '/auth/trustedApps',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION              = [
+        'endpoint' => '/auth/trustedApps/%s',
+        'method'   => 'GET',
+    ];
     private const REQUEST_RESET_AUTH_TOKEN_CONFIGURATION = [
         'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
         'method'        => 'PUT',
         'normalization' => [
             AbstractNormalizer::GROUPS => [
                 'reset',
+            ],
+        ],
+    ];
+    private const REQUEST_UPDATE_CONFIGURATION           = [
+        'endpoint'      => '/auth/trustedApps/%s',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
             ],
         ],
     ];
@@ -101,7 +101,7 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_GET_ALL_CONFIGURATION,
                 [],
                 [
@@ -163,7 +163,7 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_GET_CONFIGURATION,
                 [
                     $uid,
@@ -216,7 +216,7 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_UPDATE_CONFIGURATION,
                 [
                     $trustedAppModel->getUid(),
@@ -225,15 +225,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $trustedAppModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'update',
-                                                   ],
-                                               ]
-                                           ),
+                    'json'    => $trustedAppModel,
                 ],
                 $schema
             );
@@ -288,22 +280,14 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_CREATE_CONFIGURATION,
                 [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $trustedAppModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'create',
-                                                   ],
-                                               ]
-                                           ),
+                    'json'    => $trustedAppModel,
                 ],
                 $schema
             );
@@ -351,7 +335,7 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_DELETE_CONFIGURATION,
                 [
                     $uid,
@@ -410,7 +394,7 @@ class Service extends
         
         $response = $this
             ->getClient()
-            ->request2(
+            ->request(
                 self::REQUEST_RESET_AUTH_TOKEN_CONFIGURATION,
                 [
                     $trustedAppModel->getUid(),

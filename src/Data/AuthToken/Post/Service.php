@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Post;
 
@@ -24,6 +24,19 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ALL_CONFIGURATION   = [
+        'endpoint' => '/data/auth-token/posts',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION       = [
+        'endpoint' => '/data/auth-token/posts/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_USERS_CONFIGURATION = [
+        'endpoint' => '/data/auth-token/posts/%s/users',
+        'method'   => 'GET',
+    ];
+    
     /**
      * @param string $apiAuthToken
      *
@@ -34,36 +47,36 @@ class Service extends
      */
     public function getAllPosts(
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'posts' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'posts'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/auth-token/posts',
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -71,13 +84,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'posts' => array_map(
-                    static function ($post) {
+                    static function($post) {
                         return ModelFactory::createPost($post);
                     },
                     $response['posts']
@@ -85,7 +98,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -98,42 +111,39 @@ class Service extends
     public function getPost(
         string $uid,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'post' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'post'    => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::POST
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/auth-token/posts/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -141,7 +151,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -152,7 +162,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -165,41 +175,38 @@ class Service extends
     public function getUsers(
         string $uid,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'users' => [
-                    'type' => JsonRule::LIST_TYPE,
+                'users'   => [
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::USER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/auth-token/posts/%s/users',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_USERS_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -207,13 +214,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'users' => array_map(
-                    static function ($user) {
+                    static function($user) {
                         return ModelFactory::createUser($user);
                     },
                     $response['users']

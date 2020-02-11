@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer;
 
@@ -27,6 +27,31 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_CREATE_CONFIGURATION                     = [
+        'endpoint' => '/data/customers',
+        'method'   => 'POST',
+    ];
+    private const REQUEST_DELETE_CONFIGURATION                     = [
+        'endpoint' => '/data/customers/%s',
+        'method'   => 'DELETE',
+    ];
+    private const REQUEST_GET_ALL_CONFIGURATION                    = [
+        'endpoint' => '/data/customers',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
+        'endpoint' => '/data/customers',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION                        = [
+        'endpoint' => '/data/customers/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_UPDATE_CONFIGURATION                     = [
+        'endpoint' => '/data/customers/%s',
+        'method'   => 'PUT',
+    ];
+    
     private $serviceMe;
     /*
      * -------------------------------------------------------------------------
@@ -38,15 +63,15 @@ class Service extends
      *
      * @return Me\Service
      */
-    public function me(): Me\Service
+    public function me() : Me\Service
     {
         if (null === $this->serviceMe) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
-
+        
         return $this->serviceMe;
     }
-
+    
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -65,29 +90,29 @@ class Service extends
      */
     public function getAllCustomers(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customers' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/customers',
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -95,13 +120,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'customers' => array_map(
-                    static function ($customer) {
+                    static function($customer) {
                         return ModelFactory::createCustomer($customer);
                     },
                     $response['customers']
@@ -109,7 +134,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $uid
      * @param string $jwt
@@ -122,35 +147,32 @@ class Service extends
     public function getCustomer(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'  => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/customers/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -158,7 +180,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -169,7 +191,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $email
      * @param string $googleId
@@ -180,42 +202,43 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'  => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/customers',
+            ->request(
+                self::REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'query' => [
-                        'email' => $email,
+                    'query'   => [
+                        'email'    => $email,
                         'googleId' => $googleId
                     ]
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -226,12 +249,12 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * createCustomer
      *
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
@@ -243,47 +266,47 @@ class Service extends
     public function createCustomer(
         Customer $customerModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'  => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                '/data/customers',
+            ->request(
+                self::REQUEST_CREATE_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $customerModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'create',
-                                ],
-                            ]
-                        )
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $customerModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'create',
+                                                   ],
+                                               ]
+                                           )
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -294,12 +317,12 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * updateCustomer
      *
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
@@ -311,53 +334,50 @@ class Service extends
     public function updateCustomer(
         Customer $customerModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->put(
-                vsprintf(
-                    '/data/customers/%s',
-                    [
-                        $customerModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_UPDATE_CONFIGURATION,
+                [
+                    $customerModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $customerModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'update',
-                                ],
-                            ]
-                        )
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $customerModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'update',
+                                                   ],
+                                               ]
+                                           )
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
         ));
     }
-
+    
     /**
      * @param string $uid
      * @param string $jwt
@@ -370,30 +390,27 @@ class Service extends
     public function deleteCustomer(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/data/customers/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_DELETE_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -401,7 +418,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']

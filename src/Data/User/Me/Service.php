@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Me;
 
@@ -25,6 +25,15 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_CONFIGURATION    = [
+        'endpoint' => '/data/users/me',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_UPDATE_CONFIGURATION = [
+        'endpoint' => '/data/users/me',
+        'method'   => 'PUT',
+    ];
+    
     /**
      * @param string $jwt
      *
@@ -35,30 +44,30 @@ class Service extends
      */
     public function getMe(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
-                'me' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                'me'      => [
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::USER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/users/me',
+            ->request(
+                self::REQUEST_GET_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -66,7 +75,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -77,11 +86,11 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * updateMe
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -94,42 +103,42 @@ class Service extends
     public function updateMe(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->post(
-                '/data/users/me',
+            ->request(
+                self::REQUEST_UPDATE_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $userModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'updateMe',
-                                ],
-                            ]
-                        )
+                    'json'    => Serializer::getInstance()
+                                           ->normalize(
+                                               $userModel,
+                                               [
+                                                   AbstractNormalizer::GROUPS => [
+                                                       'updateMe',
+                                                   ],
+                                               ]
+                                           )
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']

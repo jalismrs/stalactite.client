@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\User;
 
@@ -27,6 +27,15 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION = [
+        'endpoint' => '/access/users/%s/access/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_RELATIONS_CONFIGURATION        = [
+        'endpoint' => '/access/users/%s/relations',
+        'method'   => 'GET',
+    ];
+    
     private $serviceMe;
     /*
      * -------------------------------------------------------------------------
@@ -38,15 +47,15 @@ class Service extends
      *
      * @return Me\Service
      */
-    public function me(): Me\Service
+    public function me() : Me\Service
     {
         if (null === $this->serviceMe) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
-
+        
         return $this->serviceMe;
     }
-
+    
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -55,7 +64,7 @@ class Service extends
     /**
      * getRelations
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -67,42 +76,39 @@ class Service extends
     public function getRelations(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid' => [
+                        'uid'    => [
                             'type' => JsonRule::STRING_TYPE
                         ],
                         'domain' => [
-                            'type' => JsonRule::OBJECT_TYPE,
+                            'type'   => JsonRule::OBJECT_TYPE,
                             'schema' => DataSchema::DOMAIN
                         ]
                     ]
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/users/%s/relations',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -110,16 +116,16 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => array_map(
-                    static function (array $relation) use ($userModel): DomainUserRelation {
+                    static function(array $relation) use ($userModel): DomainUserRelation {
                         $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
                         $domainUserRelationModel->setUser($userModel);
-
+                        
                         return $domainUserRelationModel;
                     },
                     $response['relations']
@@ -127,11 +133,11 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * getAccessClearance
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param Domain $domainModel
      * @param string $jwt
      *
@@ -145,35 +151,32 @@ class Service extends
         User $userModel,
         Domain $domainModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'clearance' => [
-                    'type' => JsonRule::OBJECT_TYPE,
+                    'type'   => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::ACCESS_CLEARANCE
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/users/%s/access/%s',
-                    [
-                        $userModel->getUid(),
-                        $domainModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION,
+                [
+                    $userModel->getUid(),
+                    $domainModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -181,7 +184,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

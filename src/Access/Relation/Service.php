@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Relation;
 
@@ -21,11 +21,16 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_DELETE_RELATION_CONFIGURATION = [
+        'endpoint' => '/access/relations/%s',
+        'method'   => 'DELETE',
+    ];
+    
     /**
      * deleteRelation
      *
      * @param DomainRelation $domainRelationModel
-     * @param string $jwt
+     * @param string         $jwt
      *
      * @return Response
      *
@@ -36,30 +41,27 @@ class Service extends
     public function deleteRelation(
         DomainRelation $domainRelationModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/access/relations/%s',
-                    [
-                        $domainRelationModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_DELETE_RELATION_CONFIGURATION,
+                [
+                    $domainRelationModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -67,7 +69,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']

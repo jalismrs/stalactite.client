@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\User\Me;
 
@@ -26,6 +26,15 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION = [
+        'endpoint' => '/access/users/me/access/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_RELATIONS_CONFIGURATION        = [
+        'endpoint' => '/access/users/me/relations',
+        'method'   => 'GET',
+    ];
+    
     /**
      * @param string $jwt
      *
@@ -34,37 +43,38 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getRelations(string $jwt): Response
+    public function getRelations(string $jwt) : Response
     {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid' => [
+                        'uid'    => [
                             'type' => JsonRule::STRING_TYPE
                         ],
                         'domain' => [
-                            'type' => JsonRule::OBJECT_TYPE,
+                            'type'   => JsonRule::OBJECT_TYPE,
                             'schema' => DataSchema::DOMAIN
                         ]
                     ]
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/access/users/me/relations',
+            ->request(
+                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -72,13 +82,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => array_map(
-                    static function (array $relation): DomainUserRelation {
+                    static function(array $relation) : DomainUserRelation {
                         return ModelFactory::createDomainUserRelation($relation);
                     },
                     $response['relations']
@@ -86,7 +96,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * getAccessClearance
      *
@@ -102,34 +112,31 @@ class Service extends
     public function getAccessClearance(
         Domain $domainModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'clearance' => [
-                    'type' => JsonRule::OBJECT_TYPE,
+                    'type'   => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::ACCESS_CLEARANCE
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/users/me/access/%s',
-                    [
-                        $domainModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION,
+                [
+                    $domainModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -137,7 +144,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

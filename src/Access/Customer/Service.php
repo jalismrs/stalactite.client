@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\Customer;
 
@@ -17,7 +17,6 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -27,6 +26,15 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION = [
+        'endpoint' => '/access/customers/%s/access/%s',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_RELATIONS_CONFIGURATION        = [
+        'endpoint' => '/access/customers/%s/relations',
+        'method'   => 'GET',
+    ];
+    
     private $serviceMe;
     /*
      * -------------------------------------------------------------------------
@@ -38,15 +46,15 @@ class Service extends
      *
      * @return Me\Service
      */
-    public function me(): Me\Service
+    public function me() : Me\Service
     {
         if (null === $this->serviceMe) {
             $this->serviceMe = new  Me\Service($this->getClient());
         }
-
+        
         return $this->serviceMe;
     }
-
+    
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -56,7 +64,7 @@ class Service extends
      * getRelations
      *
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
@@ -67,42 +75,39 @@ class Service extends
     public function getRelations(
         Customer $customerModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'relations' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => [
-                        'uid' => [
+                        'uid'    => [
                             'type' => JsonRule::STRING_TYPE
                         ],
                         'domain' => [
-                            'type' => JsonRule::OBJECT_TYPE,
+                            'type'   => JsonRule::OBJECT_TYPE,
                             'schema' => DataSchema::DOMAIN
                         ]
                     ]
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/customers/%s/relations',
-                    [
-                        $customerModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                [
+                    $customerModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -110,28 +115,28 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'relations' => array_map(
-                    static function (array $relation) use ($customerModel): DomainCustomerRelation {
+                    static function(array $relation) use ($customerModel): DomainCustomerRelation {
                         return ModelFactory::createDomainCustomerRelation($relation)
-                            ->setCustomer($customerModel);
+                                           ->setCustomer($customerModel);
                     },
                     $response['relations']
                 )
             ]
         );
     }
-
+    
     /**
      * getAccessClearance
      *
      * @param Customer $customerModel
-     * @param Domain $domainModel
-     * @param string $jwt
+     * @param Domain   $domainModel
+     * @param string   $jwt
      *
      * @return Response
      *
@@ -143,35 +148,32 @@ class Service extends
         Customer $customerModel,
         Domain $domainModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'clearance' => [
-                    'type' => JsonRule::OBJECT_TYPE,
+                    'type'   => JsonRule::OBJECT_TYPE,
                     'schema' => Schema::ACCESS_CLEARANCE
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/customers/%s/access/%s',
-                    [
-                        $customerModel->getUid(),
-                        $domainModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION,
+                [
+                    $customerModel->getUid(),
+                    $domainModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => $jwt
@@ -179,7 +181,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

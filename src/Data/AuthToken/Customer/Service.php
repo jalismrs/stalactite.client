@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 
@@ -24,6 +24,19 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_GET_ALL_CONFIGURATION                    = [
+        'endpoint' => '/data/auth-token/customers',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
+        'endpoint' => '/data/auth-token/customers',
+        'method'   => 'GET',
+    ];
+    private const REQUEST_GET_CONFIGURATION                        = [
+        'endpoint' => '/data/auth-token/customers/%s',
+        'method'   => 'GET',
+    ];
+    
     /**
      * getAllCustomers
      *
@@ -37,36 +50,36 @@ class Service extends
      */
     public function getAllCustomers(
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'   => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'     => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customers' => [
-                    'type' => JsonRule::LIST_TYPE,
+                    'type'   => JsonRule::LIST_TYPE,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/auth-token/customers',
+            ->request(
+                self::REQUEST_GET_ALL_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -74,13 +87,13 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
             [
                 'customers' => array_map(
-                    static function ($customer) {
+                    static function($customer) {
                         return ModelFactory::createCustomer($customer);
                     },
                     $response['customers']
@@ -88,7 +101,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $email
      * @param string $googleId
@@ -103,49 +116,49 @@ class Service extends
         string $email,
         string $googleId,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'  => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                '/data/auth-token/customers',
+            ->request(
+                self::REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION,
+                [],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ],
-                    'query' => [
-                        'email' => $email,
+                    'query'   => [
+                        'email'    => $email,
                         'googleId' => $googleId
                     ]
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],
@@ -156,7 +169,7 @@ class Service extends
             ]
         );
     }
-
+    
     /**
      * @param string $uid
      * @param string $apiAuthToken
@@ -169,42 +182,39 @@ class Service extends
     public function getCustomer(
         string $uid,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
-                'success' => [
+                'success'  => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'    => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ],
                 'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
+                    'type'   => JsonRule::OBJECT_TYPE,
+                    'null'   => true,
                     'schema' => Schema::CUSTOMER
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/auth-token/customers/%s',
-                    [
-                        $uid,
-                    ],
-                ),
+            ->request(
+                self::REQUEST_GET_CONFIGURATION,
+                [
+                    $uid,
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -212,7 +222,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return new Response(
             $response['success'],
             $response['error'],

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken\Customer;
 
@@ -22,11 +22,16 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
+    private const REQUEST_DELETE_RELATIONS_BY_CUSTOMER_CONFIGURATION = [
+        'endpoint' => '/access/auth-token/customers/%s/relations',
+        'method'   => 'DELETE',
+    ];
+    
     /**
      * deleteRelationsByCustomer
      *
      * @param Customer $customerModel
-     * @param string $apiAuthToken
+     * @param string   $apiAuthToken
      *
      * @return Response
      *
@@ -37,37 +42,34 @@ class Service extends
     public function deleteRelationsByCustomer(
         Customer $customerModel,
         string $apiAuthToken
-    ): Response
-    {
+    ) : Response {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-
+        
         $schema = new JsonSchema();
         $schema->setSchema(
             [
                 'success' => [
                     'type' => JsonRule::BOOLEAN_TYPE
                 ],
-                'error' => [
+                'error'   => [
                     'type' => JsonRule::STRING_TYPE,
                     'null' => true
                 ]
             ]
         );
-
+        
         $response = $this
             ->getClient()
-            ->delete(
-                vsprintf(
-                    '/access/auth-token/customers/%s/relations',
-                    [
-                        $customerModel->getUid(),
-                    ],
-                ),
+            ->request(
+                self::REQUEST_DELETE_RELATIONS_BY_CUSTOMER_CONFIGURATION,
+                [
+                    $customerModel->getUid(),
+                ],
                 [
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
@@ -75,7 +77,7 @@ class Service extends
                 ],
                 $schema
             );
-
+        
         return (new Response(
             $response['success'],
             $response['error']
