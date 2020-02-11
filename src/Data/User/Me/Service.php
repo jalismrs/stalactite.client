@@ -13,7 +13,6 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
@@ -30,8 +29,13 @@ class Service extends
         'method'   => 'GET',
     ];
     private const REQUEST_UPDATE_CONFIGURATION = [
-        'endpoint' => '/data/users/me',
-        'method'   => 'PUT',
+        'endpoint'      => '/data/users/me',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
+            ],
+        ],
     ];
     
     /**
@@ -126,15 +130,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $userModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'updateMe',
-                                                   ],
-                                               ]
-                                           )
+                    'json'    => $userModel
                 ],
                 $schema
             );

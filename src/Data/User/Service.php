@@ -22,7 +22,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
-use function vsprintf;
 
 /**
  * Service
@@ -33,8 +32,13 @@ class Service extends
     AbstractService
 {
     private const REQUEST_CREATE_CONFIGURATION                     = [
-        'endpoint' => '/data/users',
-        'method'   => 'POST',
+        'endpoint'      => '/data/users',
+        'method'        => 'POST',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ],
     ];
     private const REQUEST_DELETE_CONFIGURATION                     = [
         'endpoint' => '/data/users/%s',
@@ -53,8 +57,13 @@ class Service extends
         'method'   => 'GET',
     ];
     private const REQUEST_UPDATE_CONFIGURATION                     = [
-        'endpoint' => '/data/users/%s',
-        'method'   => 'PUT',
+        'endpoint'      => '/data/users/%s',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
+            ],
+        ],
     ];
     
     private $serviceLead;
@@ -407,15 +416,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $userModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'update',
-                                                   ],
-                                               ]
-                                           ),
+                    'json'    => $userModel,
                 ],
                 $schema
             );

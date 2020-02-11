@@ -13,11 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -28,8 +26,13 @@ class Service extends
     AbstractService
 {
     private const REQUEST_CREATE_CONFIGURATION                  = [
-        'endpoint' => '/data/domains',
-        'method'   => 'POST',
+        'endpoint'      => '/data/domains',
+        'method'        => 'POST',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ],
     ];
     private const REQUEST_DELETE_CONFIGURATION                  = [
         'endpoint' => '/data/domains/%s',
@@ -52,8 +55,13 @@ class Service extends
         'method'   => 'GET',
     ];
     private const REQUEST_UPDATE_CONFIGURATION                  = [
-        'endpoint' => '/data/domains/%s',
-        'method'   => 'PUT',
+        'endpoint'      => '/data/domains/%s',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
+            ],
+        ],
     ];
     
     /**
@@ -330,15 +338,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $domainModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'create',
-                                                   ],
-                                               ]
-                                           )
+                    'json'    => $domainModel,
                 ],
                 $schema
             );
@@ -395,15 +395,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $domainModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'update',
-                                                   ],
-                                               ]
-                                           )
+                    'json'    => $domainModel,
                 ],
                 $schema
             );

@@ -13,7 +13,6 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;

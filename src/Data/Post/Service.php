@@ -13,11 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -28,8 +26,13 @@ class Service extends
     AbstractService
 {
     private const REQUEST_CREATE_CONFIGURATION    = [
-        'endpoint' => '/data/posts',
-        'method'   => 'POST',
+        'endpoint'      => '/data/posts',
+        'method'        => 'POST',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ],
     ];
     private const REQUEST_DELETE_CONFIGURATION    = [
         'endpoint' => '/data/posts/%s',
@@ -48,8 +51,13 @@ class Service extends
         'method'   => 'GET',
     ];
     private const REQUEST_UPDATE_CONFIGURATION    = [
-        'endpoint' => '/data/posts/%s',
-        'method'   => 'PUT',
+        'endpoint'      => '/data/posts/%s',
+        'method'        => 'PUT',
+        'normalization' => [
+            AbstractNormalizer::GROUPS => [
+                'update',
+            ],
+        ],
     ];
     
     /**
@@ -214,15 +222,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $postModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'create',
-                                                   ],
-                                               ]
-                                           ),
+                    'json'    => $postModel,
                 ],
                 $schema
             );
@@ -279,15 +279,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ],
-                    'json'    => Serializer::getInstance()
-                                           ->normalize(
-                                               $postModel,
-                                               [
-                                                   AbstractNormalizer::GROUPS => [
-                                                       'update',
-                                                   ],
-                                               ]
-                                           ),
+                    'json'    => $postModel,
                 ],
                 $schema
             );
