@@ -29,10 +29,30 @@ class Service extends
     private const REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION = [
         'endpoint' => '/access/customers/%s/access/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'clearance' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'schema' => Schema::ACCESS_CLEARANCE
+            ]
+        ],
     ];
     private const REQUEST_GET_RELATIONS_CONFIGURATION        = [
         'endpoint' => '/access/customers/%s/relations',
         'method'   => 'GET',
+        'schema'   => [
+            'relations' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => [
+                    'uid'    => [
+                        'type' => JsonRule::STRING_TYPE
+                    ],
+                    'domain' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'schema' => DataSchema::DOMAIN
+                    ]
+                ]
+            ]
+        ],
     ];
     
     private $serviceMe;
@@ -76,31 +96,6 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'   => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relations' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => [
-                        'uid'    => [
-                            'type' => JsonRule::STRING_TYPE
-                        ],
-                        'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'schema' => DataSchema::DOMAIN
-                        ]
-                    ]
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -112,8 +107,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -149,23 +143,6 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'   => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'clearance' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'schema' => Schema::ACCESS_CLEARANCE
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -178,8 +155,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

@@ -12,7 +12,6 @@ use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Response;
-use function vsprintf;
 
 /**
  * Service
@@ -50,19 +49,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -74,8 +60,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return (new Response(

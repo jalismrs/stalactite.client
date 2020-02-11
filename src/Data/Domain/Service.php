@@ -28,6 +28,13 @@ class Service extends
     private const REQUEST_CREATE_CONFIGURATION                  = [
         'endpoint'      => '/data/domains',
         'method'        => 'POST',
+        'schema'        => [
+            'domain' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
         'normalization' => [
             AbstractNormalizer::GROUPS => [
                 'create',
@@ -41,18 +48,43 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION                 = [
         'endpoint' => '/data/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_NAME_AND_API_KEY_CONFIGURATION = [
         'endpoint' => '/data/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_NAME_CONFIGURATION             = [
         'endpoint' => '/data/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION                     = [
         'endpoint' => '/data/domains/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'domain' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_UPDATE_CONFIGURATION                  = [
         'endpoint'      => '/data/domains/%s',
@@ -75,23 +107,6 @@ class Service extends
     public function getAllDomains(
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -101,8 +116,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -132,24 +146,6 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -161,8 +157,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -185,25 +180,10 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByName(string $name, string $jwt) : Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
+    public function getByName(
+        string $name,
+        string $jwt
+    ) : Response {
         $response = $this
             ->getClient()
             ->request(
@@ -216,8 +196,7 @@ class Service extends
                     'query'   => [
                         'name' => $name
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -244,25 +223,11 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt) : Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
+    public function getByNameAndApiKey(
+        string $name,
+        string $apiKey,
+        string $jwt
+    ) : Response {
         $response = $this
             ->getClient()
             ->request(
@@ -276,8 +241,7 @@ class Service extends
                         'name'   => $name,
                         'apiKey' => $apiKey
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -311,24 +275,6 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -339,8 +285,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $domainModel,
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -371,19 +316,6 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -396,8 +328,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $domainModel,
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -419,19 +350,6 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -443,8 +361,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return (new Response(

@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Client\Data\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\ClientException;
@@ -34,6 +33,13 @@ class Service extends
     private const REQUEST_CREATE_CONFIGURATION                     = [
         'endpoint'      => '/data/users',
         'method'        => 'POST',
+        'schema'        => [
+            'user' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::USER
+            ]
+        ],
         'normalization' => [
             AbstractNormalizer::GROUPS => [
                 'create',
@@ -47,14 +53,34 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION                    = [
         'endpoint' => '/data/users',
         'method'   => 'GET',
+        'schema'   => [
+            'users' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
         'endpoint' => '/data/users',
         'method'   => 'GET',
+        'schema'   => [
+            'user' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION                        = [
         'endpoint' => '/data/users/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'user' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     private const REQUEST_UPDATE_CONFIGURATION                     = [
         'endpoint'      => '/data/users/%s',
@@ -138,23 +164,6 @@ class Service extends
     public function getAllUsers(
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -164,8 +173,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -195,24 +203,6 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -224,8 +214,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -249,26 +238,11 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt) : Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
+    public function getByEmailAndGoogleId(
+        string $email,
+        string $googleId,
+        string $jwt
+    ) : Response {
         $response = $this
             ->getClient()
             ->request(
@@ -282,8 +256,7 @@ class Service extends
                         'email'    => $email,
                         'googleId' => $googleId
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -312,24 +285,6 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -360,8 +315,7 @@ class Service extends
                             ),
                         ],
                     ),
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -392,19 +346,6 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -417,8 +358,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $userModel,
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -436,21 +376,10 @@ class Service extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      */
-    public function deleteUser(string $uid, string $jwt) : Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
+    public function deleteUser(
+        string $uid,
+        string $jwt
+    ) : Response {
         $response = $this
             ->getClient()
             ->request(
@@ -462,8 +391,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return (new Response(

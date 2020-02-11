@@ -27,18 +27,43 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION                 = [
         'endpoint' => '/data/auth-token/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_NAME_AND_API_KEY_CONFIGURATION = [
         'endpoint' => '/data/auth-token/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_NAME_CONFIGURATION             = [
         'endpoint' => '/data/auth-token/domains',
         'method'   => 'GET',
+        'schema'   => [
+            'domains' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION                     = [
         'endpoint' => '/data/auth-token/domains/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'domain'  => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::DOMAIN
+            ]
+        ],
     ];
     
     /**
@@ -62,23 +87,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -88,8 +96,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -128,23 +135,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -158,8 +148,7 @@ class Service extends
                         'name'   => $name,
                         'apiKey' => $apiKey
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -196,23 +185,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -225,8 +197,7 @@ class Service extends
                     'query'   => [
                         'name' => $name
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -263,24 +234,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domain'  => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -292,8 +245,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

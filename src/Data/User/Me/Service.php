@@ -27,6 +27,13 @@ class Service extends
     private const REQUEST_GET_CONFIGURATION    = [
         'endpoint' => '/data/users/me',
         'method'   => 'GET',
+        'schema'   => [
+            'me'      => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     private const REQUEST_UPDATE_CONFIGURATION = [
         'endpoint'      => '/data/users/me',
@@ -49,24 +56,6 @@ class Service extends
     public function getMe(
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'me'      => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -76,8 +65,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -108,19 +96,6 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -131,8 +106,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $userModel
-                ],
-                $schema
+                ]
             );
         
         return (new Response(

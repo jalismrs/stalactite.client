@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Client\Data\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -28,6 +27,13 @@ class Service extends
     private const REQUEST_CREATE_CONFIGURATION    = [
         'endpoint'      => '/data/posts',
         'method'        => 'POST',
+        'schema'        => [
+            'post' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::POST
+            ]
+        ],
         'normalization' => [
             AbstractNormalizer::GROUPS => [
                 'create',
@@ -41,14 +47,33 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION   = [
         'endpoint' => '/data/posts',
         'method'   => 'GET',
+        'schema'   => [
+            'posts' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::POST
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION       = [
         'endpoint' => '/data/posts/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'post' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::POST
+            ]
+        ],
     ];
     private const REQUEST_GET_USERS_CONFIGURATION = [
         'endpoint' => '/data/posts/%s/users',
         'method'   => 'GET',
+        'schema'   => [
+            'users' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     private const REQUEST_UPDATE_CONFIGURATION    = [
         'endpoint'      => '/data/posts/%s',
@@ -74,23 +99,6 @@ class Service extends
     public function getAllPosts(
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'posts'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -100,8 +108,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -134,24 +141,6 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -163,8 +152,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -195,24 +183,6 @@ class Service extends
         Post $postModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -223,8 +193,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $postModel,
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -255,19 +224,6 @@ class Service extends
         Post $postModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -280,8 +236,7 @@ class Service extends
                         'X-API-TOKEN' => $jwt
                     ],
                     'json'    => $postModel,
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -306,19 +261,6 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -330,8 +272,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -352,25 +293,10 @@ class Service extends
      * @throws InvalidSchemaException
      * @throws ClientException
      */
-    public function getUsers(string $uid, string $jwt) : Response
-    {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
+    public function getUsers(
+        string $uid,
+        string $jwt
+    ) : Response {
         $response = $this
             ->getClient()
             ->request(
@@ -382,8 +308,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

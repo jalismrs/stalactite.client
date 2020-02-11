@@ -41,6 +41,12 @@ class Service extends
     private const REQUEST_LOGIN_CONFIGURATION = [
         'endpoint' => '/auth/login',
         'method'   => 'POST',
+        'schema'   => [
+            'jwt'     => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true
+            ]
+        ],
     ];
     
     private $serviceTrustedApp;
@@ -248,23 +254,6 @@ class Service extends
         TrustedApp $trustedAppModel,
         string $userGoogleJwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'jwt'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -276,8 +265,7 @@ class Service extends
                         'appToken'      => $trustedAppModel->getAuthToken(),
                         'userGoogleJwt' => $userGoogleJwt,
                     ],
-                ],
-                $schema
+                ]
             );
         
         return new Response(

@@ -100,6 +100,13 @@ trait RequestConfigurationTestTrait
                                 ],
                             ]
                         ),
+                        'schema' => new Constraints\Optional(
+                            [
+                                'constraints' => [
+                                    new Constraints\Type('array'),
+                                ],
+                            ]
+                        ),
                         'normalization' => new Constraints\Optional(
                             [
                                 'constraints' => [

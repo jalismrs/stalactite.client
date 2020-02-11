@@ -24,6 +24,13 @@ class Service extends
     private const REQUEST_GET_CONFIGURATION = [
         'endpoint' => '/data/customers/me',
         'method'   => 'GET',
+        'schema'   => [
+            'me'      => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::CUSTOMER
+            ]
+        ],
     ];
     
     /**
@@ -37,24 +44,6 @@ class Service extends
     public function getMe(
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'me'      => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -64,8 +53,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

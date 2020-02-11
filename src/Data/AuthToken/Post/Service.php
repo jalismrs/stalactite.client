@@ -27,14 +27,33 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION   = [
         'endpoint' => '/data/auth-token/posts',
         'method'   => 'GET',
+        'schema'   => [
+            'posts'   => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::POST
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION       = [
         'endpoint' => '/data/auth-token/posts/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'post'    => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::POST
+            ]
+        ],
     ];
     private const REQUEST_GET_USERS_CONFIGURATION = [
         'endpoint' => '/data/auth-token/posts/%s/users',
         'method'   => 'GET',
+        'schema'   => [
+            'users'   => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::USER
+            ]
+        ],
     ];
     
     /**
@@ -55,23 +74,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'posts'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -81,8 +83,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -119,24 +120,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'post'    => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -148,8 +131,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -183,23 +165,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'users'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -211,8 +176,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

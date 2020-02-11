@@ -5,6 +5,8 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\Validator\Json\Data\JsonData;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
+use hunomina\Validator\Json\Exception\InvalidSchemaException;
+use hunomina\Validator\Json\Rule\JsonRule;
 use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Psr\Log\LoggerInterface;
@@ -12,8 +14,6 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use function array_merge_recursive;
-use function json_encode;
 use function vsprintf;
 
 /**
@@ -103,117 +103,23 @@ final class Client
     }
     
     /**
-     * getLogger
-     *
-     * @return LoggerInterface
-     */
-    public function getLogger() : LoggerInterface
-    {
-        if (null === $this->logger) {
-            $this->logger = $this->createDefaultLogger();
-        }
-        
-        return $this->logger;
-    }
-    
-    /**
-     * setLogger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
-    public function setLogger(LoggerInterface $logger) : self
-    {
-        $this->logger = $logger;
-        
-        return $this;
-    }
-    
-    /**
-     * createDefaultLogger
-     *
-     * @return LoggerInterface
-     */
-    private function createDefaultLogger() : LoggerInterface
-    {
-        return new NullLogger();
-    }
-    
-    /*
-     * -------------------------------------------------------------------------
-     * default factories -------------------------------------------------------
-     * -------------------------------------------------------------------------
-     */
-    
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient() : HttpClientInterface
-    {
-        if (null === $this->httpClient) {
-            $this->httpClient = $this->createDefaultHttpClient();
-        }
-        
-        return $this->httpClient;
-    }
-    
-    /**
-     * setHttpClient
-     *
-     * @param HttpClientInterface $httpClient
-     *
-     * @return $this
-     */
-    public function setHttpClient(HttpClientInterface $httpClient) : self
-    {
-        $this->httpClient = $httpClient;
-        
-        return $this;
-    }
-    
-    /*
-     * -------------------------------------------------------------------------
-     * API calls ---------------------------------------------------------------
-     * -------------------------------------------------------------------------
-     */
-    
-    /**
-     * createDefaultHttpClient
-     *
-     * @return HttpClientInterface
-     */
-    private function createDefaultHttpClient() : HttpClientInterface
-    {
-        return HttpClient::create(
-            [
-                'base_uri' => $this->host,
-                'headers'  => $this->userAgent
-                    ? ['User-Agent' => $this->userAgent]
-                    : [],
-            ]
-        );
-    }
-    
-    /**
      * request
      *
-     * @param array      $configuration
-     * @param array      $uriDatas
-     * @param array      $options
-     * @param JsonSchema $schema
+     * @param array $configuration
+     * @param array $uriDatas
+     * @param array $options
      *
      * @return array
      *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws Util\SerializerException
+     * @throws InvalidSchemaException
      */
     public function request(
         array $configuration,
         array $uriDatas,
-        array $options,
-        JsonSchema $schema
+        array $options
     ) : array {
         if (isset($options['json'])) {
             $options = array_replace_recursive(
@@ -289,6 +195,21 @@ final class Client
             throw $exception;
         }
         
+        $schema = new JsonSchema();
+        $schema->setSchema(
+            array_merge(
+                [
+                    'success' => [
+                        'type' => JsonRule::BOOLEAN_TYPE
+                    ],
+                    'error'   => [
+                        'type' => JsonRule::STRING_TYPE,
+                        'null' => true
+                    ],
+                ],
+                $configuration['schema'] ?? []
+            )
+        );
         if (!$schema->validate($data)) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
@@ -315,5 +236,98 @@ final class Client
         }
         
         return $response;
+    }
+    
+    /**
+     * getLogger
+     *
+     * @return LoggerInterface
+     */
+    public function getLogger() : LoggerInterface
+    {
+        if (null === $this->logger) {
+            $this->logger = $this->createDefaultLogger();
+        }
+        
+        return $this->logger;
+    }
+    
+    /**
+     * setLogger
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return $this
+     */
+    public function setLogger(LoggerInterface $logger) : self
+    {
+        $this->logger = $logger;
+        
+        return $this;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * default factories -------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    
+    /**
+     * createDefaultLogger
+     *
+     * @return LoggerInterface
+     */
+    private function createDefaultLogger() : LoggerInterface
+    {
+        return new NullLogger();
+    }
+    
+    /**
+     * @return HttpClientInterface
+     */
+    public function getHttpClient() : HttpClientInterface
+    {
+        if (null === $this->httpClient) {
+            $this->httpClient = $this->createDefaultHttpClient();
+        }
+        
+        return $this->httpClient;
+    }
+    
+    /*
+     * -------------------------------------------------------------------------
+     * API calls ---------------------------------------------------------------
+     * -------------------------------------------------------------------------
+     */
+    
+    /**
+     * setHttpClient
+     *
+     * @param HttpClientInterface $httpClient
+     *
+     * @return $this
+     */
+    public function setHttpClient(HttpClientInterface $httpClient) : self
+    {
+        $this->httpClient = $httpClient;
+        
+        return $this;
+    }
+    
+    /**
+     * createDefaultHttpClient
+     *
+     * @return HttpClientInterface
+     */
+    private function createDefaultHttpClient() : HttpClientInterface
+    {
+        return HttpClient::create(
+            [
+                'base_uri' => $this->host,
+                'headers'  => $this->userAgent
+                    ? ['User-Agent' => $this->userAgent]
+                    : [],
+            ]
+        );
     }
 }

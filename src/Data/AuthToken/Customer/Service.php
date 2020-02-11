@@ -27,14 +27,34 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION                    = [
         'endpoint' => '/data/auth-token/customers',
         'method'   => 'GET',
+        'schema'   => [
+            'customers' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::CUSTOMER
+            ]
+        ],
     ];
     private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
         'endpoint' => '/data/auth-token/customers',
         'method'   => 'GET',
+        'schema'   => [
+            'customer' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::CUSTOMER
+            ]
+        ],
     ];
     private const REQUEST_GET_CONFIGURATION                        = [
         'endpoint' => '/data/auth-token/customers/%s',
         'method'   => 'GET',
+        'schema'   => [
+            'customer' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::CUSTOMER
+            ]
+        ],
     ];
     
     /**
@@ -58,23 +78,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'   => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customers' => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -84,8 +87,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -124,24 +126,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'  => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'    => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -155,8 +139,7 @@ class Service extends
                         'email'    => $email,
                         'googleId' => $googleId
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -190,24 +173,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'  => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'    => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customer' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -219,8 +184,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

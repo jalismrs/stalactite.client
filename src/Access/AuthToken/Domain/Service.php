@@ -16,7 +16,6 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
-use function vsprintf;
 
 /**
  * Service
@@ -33,6 +32,37 @@ class Service extends
     private const REQUEST_GET_RELATIONS_CONFIGURATION              = [
         'endpoint' => '/access/auth-token/domains/%s/relations',
         'method'   => 'GET',
+        'schema'   => [
+            'relations' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'schema' => [
+                    'users'     => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => [
+                            'uid'  => [
+                                'type' => JsonRule::STRING_TYPE
+                            ],
+                            'user' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => DataSchema::USER
+                            ]
+                        ]
+                    ],
+                    'customers' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => [
+                            'uid'      => [
+                                'type' => JsonRule::STRING_TYPE
+                            ],
+                            'customer' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => DataSchema::CUSTOMER
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ];
     
     /**
@@ -58,19 +88,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -82,8 +99,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => (string)$jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -115,48 +131,6 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'   => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relations' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'schema' => [
-                        'users'     => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => [
-                                'uid'  => [
-                                    'type' => JsonRule::STRING_TYPE
-                                ],
-                                'user' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::USER
-                                ]
-                            ]
-                        ],
-                        'customers' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => [
-                                'uid'      => [
-                                    'type' => JsonRule::STRING_TYPE
-                                ],
-                                'customer' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::CUSTOMER
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -168,8 +142,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(

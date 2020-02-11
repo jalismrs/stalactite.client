@@ -32,14 +32,59 @@ class Service extends
     private const REQUEST_ADD_CUSTOMER_RELATION_CONFIGURATION = [
         'endpoint' => '/access/domains/%s/relations/customers',
         'method'   => 'POST',
+        'schema'   => [
+            'relation' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::DOMAIN_CUSTOMER_RELATION
+            ]
+        ],
     ];
     private const REQUEST_ADD_USER_RELATION_CONFIGURATION     = [
         'endpoint' => '/access/domains/%s/relations/users',
         'method'   => 'POST',
+        'schema'   => [
+            'relation' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'null'   => true,
+                'schema' => Schema::DOMAIN_USER_RELATION
+            ]
+        ],
     ];
     private const REQUEST_GET_RELATIONS_CONFIGURATION         = [
         'endpoint' => '/access/domains/%s/relations',
         'method'   => 'GET',
+        'schema'   => [
+            'relations' => [
+                'type'   => JsonRule::OBJECT_TYPE,
+                'schema' => [
+                    'users'     => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => [
+                            'uid'  => [
+                                'type' => JsonRule::STRING_TYPE
+                            ],
+                            'user' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => DataSchema::USER
+                            ]
+                        ]
+                    ],
+                    'customers' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => [
+                            'uid'      => [
+                                'type' => JsonRule::STRING_TYPE
+                            ],
+                            'customer' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => DataSchema::CUSTOMER
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
     ];
     
     /**
@@ -58,48 +103,6 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'   => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'     => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relations' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'schema' => [
-                        'users'     => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => [
-                                'uid'  => [
-                                    'type' => JsonRule::STRING_TYPE
-                                ],
-                                'user' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::USER
-                                ]
-                            ]
-                        ],
-                        'customers' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => [
-                                'uid'      => [
-                                    'type' => JsonRule::STRING_TYPE
-                                ],
-                                'customer' => [
-                                    'type'   => JsonRule::OBJECT_TYPE,
-                                    'schema' => DataSchema::CUSTOMER
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -111,8 +114,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -161,24 +163,6 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'  => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'    => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relation' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::DOMAIN_USER_RELATION
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -193,8 +177,7 @@ class Service extends
                     'json'    => [
                         'user' => $userModel->getUid(),
                     ],
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -226,24 +209,6 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success'  => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'    => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relation' => [
-                    'type'   => JsonRule::OBJECT_TYPE,
-                    'null'   => true,
-                    'schema' => Schema::DOMAIN_CUSTOMER_RELATION
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -258,8 +223,7 @@ class Service extends
                     'json'    => [
                         'customer' => $customerModel->getUid(),
                     ],
-                ],
-                $schema
+                ]
             );
         
         return new Response(

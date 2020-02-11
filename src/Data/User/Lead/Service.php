@@ -34,6 +34,12 @@ class Service extends
     private const REQUEST_GET_ALL_CONFIGURATION      = [
         'endpoint' => '/data/users/%s/leads',
         'method'   => 'GET',
+        'schema'   => [
+            'leads'   => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Schema::POST
+            ]
+        ],
     ];
     private const REQUEST_REMOVE_LEADS_CONFIGURATION = [
         'endpoint' => '/data/users/%s/leads',
@@ -56,23 +62,6 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'leads'   => [
-                    'type'   => JsonRule::LIST_TYPE,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -84,8 +73,7 @@ class Service extends
                     'headers' => [
                         'X-API-TOKEN' => $jwt
                     ]
-                ],
-                $schema
+                ]
             );
         
         return new Response(
@@ -121,19 +109,6 @@ class Service extends
         array $leadModels,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -151,8 +126,7 @@ class Service extends
                             Post::class
                         )
                     ],
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
@@ -180,19 +154,6 @@ class Service extends
         array $leadModels,
         string $jwt
     ) : Response {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error'   => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-        
         $response = $this
             ->getClient()
             ->request(
@@ -210,8 +171,7 @@ class Service extends
                             Post::class
                         )
                     ],
-                ],
-                $schema
+                ]
             );
         
         return (new Response(
