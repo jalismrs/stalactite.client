@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 
@@ -41,39 +42,43 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'getAccessClearance' => [
-                'endpoint'   => '/access/users/%s/access/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'clearance' => ModelFactory::createAccessClearance($response['clearance']),
-                    ];
-                },
-                'validation' => [
-                    'clearance' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'schema' => Schema::ACCESS_CLEARANCE,
-                    ],
-                ],
-            ],
-            'getRelations'       => [
-                'endpoint'   => '/access/users/%s/relations',
-                'method'     => 'GET',
-                'validation' => [
-                    'relations' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => [
-                            'uid'    => [
-                                'type' => JsonRule::STRING_TYPE,
-                            ],
-                            'domain' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::DOMAIN,
+            'getAccessClearance' => (new RequestConfiguration(
+                '/access/users/%s/access/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'clearance' => ModelFactory::createAccessClearance($response['clearance']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'clearance' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'schema' => Schema::ACCESS_CLEARANCE,
+                        ],
+                    ]
+                ),
+            'getRelations'       => (new RequestConfiguration(
+                '/access/users/%s/relations'
+            ))
+                ->setValidation(
+                    [
+                        'relations' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => [
+                                'uid'    => [
+                                    'type' => JsonRule::STRING_TYPE,
+                                ],
+                                'domain' => [
+                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'schema' => DataSchema::DOMAIN,
+                                ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]
+                ),
         ];
     }
     
@@ -117,24 +122,29 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $this->requestConfigurations['getRelations']['response'] = static function(array $response) use ($userModel) : array {
-            return [
-                'relations' => array_map(
-                    static function(array $relation) use ($userModel): DomainUserRelation {
-                        $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                        $domainUserRelationModel->setUser($userModel);
-            
-                        return $domainUserRelationModel;
-                    },
-                    $response['relations']
-                ),
-            ];
-        };
+        $requestConfiguration = $this->requestConfigurations['getRelations'];
+        assert($requestConfiguration instanceof RequestConfiguration);
+        
+        $requestConfiguration->setResponse(
+            static function(array $response) use ($userModel) : array {
+                return [
+                    'relations' => array_map(
+                        static function(array $relation) use ($userModel): DomainUserRelation {
+                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                            $domainUserRelationModel->setUser($userModel);
+                            
+                            return $domainUserRelationModel;
+                        },
+                        $response['relations']
+                    ),
+                ];
+            }
+        );
         
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getRelations'],
+                $requestConfiguration,
                 [
                     $userModel->getUid(),
                 ],

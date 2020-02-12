@@ -14,7 +14,6 @@ use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
-use function vsprintf;
 
 /**
  * Client
@@ -105,19 +104,19 @@ final class Client
     /**
      * request
      *
-     * @param array $configuration
-     * @param array $uriDatas
-     * @param array $options
+     * @param RequestConfiguration $requestConfiguration
+     * @param array                $uriDatas
+     * @param array                $options
      *
-     * @return array
+     * @return Response
      *
      * @throws ClientException
      * @throws InvalidDataTypeException
-     * @throws Util\SerializerException
      * @throws InvalidSchemaException
+     * @throws Util\SerializerException
      */
     public function request(
-        array $configuration,
+        RequestConfiguration $requestConfiguration,
         array $uriDatas,
         array $options
     ) : Response {
@@ -134,30 +133,26 @@ final class Client
             $options['json'] = Serializer::getInstance()
                                          ->normalize(
                                              $options['json'],
-                                             $configuration['normalization'] ?? []
+                                             $requestConfiguration->getNormalization() ?? []
                                          );
         }
         
-        $uri = vsprintf(
-            $configuration['endpoint'],
-            $uriDatas
-        );
+        $uri = $requestConfiguration->getUri($uriDatas);
         
         try {
             $this->getLogger()
                  ->debug(
                      'API call',
                      [
-                         'configuration' => $configuration,
-                         'uriDatas'      => $uriDatas,
-                         'options'       => $options,
+                         'uriDatas' => $uriDatas,
+                         'options'  => $options,
                      ]
                  );
             
             $response = $this
                 ->getHttpClient()
                 ->request(
-                    $configuration['method'],
+                    $requestConfiguration->getMethod(),
                     $uri,
                     $options
                 );
@@ -207,7 +202,7 @@ final class Client
                         'null' => true
                     ],
                 ],
-                $configuration['validation'] ?? []
+                $requestConfiguration->getValidation() ?? []
             )
         );
         if (!$schema->validate($jsonData)) {
@@ -223,7 +218,7 @@ final class Client
         }
         
         $data = $jsonData->getData();
-        if (null === $data) {
+        if ($data === null) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
@@ -235,12 +230,14 @@ final class Client
             throw $exception;
         }
         
+        $response = $requestConfiguration->getResponse();
+        
         return new Response(
             $data['success'],
             $data['error'],
-            isset($configuration['response'])
-                ? $configuration['response']($data)
-                : null
+            $response === null
+                ? null
+                : $response($data)
         );
     }
     

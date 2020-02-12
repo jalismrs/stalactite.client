@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -39,111 +40,131 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'create'         => [
-                'endpoint'      => '/auth/trustedApps',
-                'method'        => 'POST',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                    ];
-                },
-                'validation'    => [
-                    'trustedApp' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => array_merge(
-                            Schema::TRUSTED_APP,
-                            [
-                                'resetToken' => [
-                                    'type' => JsonRule::STRING_TYPE
-                                ],
-                            ]
-                        ),
-                    ],
-                ],
-            ],
-            'delete'         => [
-                'endpoint' => '/auth/trustedApps/%s',
-                'method'   => 'DELETE',
-            ],
-            'getAll'         => [
-                'endpoint'   => '/auth/trustedApps',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'trustedApps' => array_map(
-                            static function($trustedApp) {
-                                return ModelFactory::createTrustedApp($trustedApp);
-                            },
-                            $response['trustedApps']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'trustedApps' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::TRUSTED_APP,
-                    ],
-                ],
-            ],
-            'get'            => [
-                'endpoint'   => '/auth/trustedApps/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                    ];
-                },
-                'validation' => [
-                    'trustedApp' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'schema' => Schema::TRUSTED_APP,
-                        'null'   => true,
-                    ],
-                ],
-            ],
-            'resetAuthToken' => [
-                'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'reset',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                    ];
-                },
-                'validation'    => [
-                    'success'    => [
-                        'type' => JsonRule::BOOLEAN_TYPE,
-                    ],
-                    'error'      => [
-                        'type' => JsonRule::STRING_TYPE,
-                        'null' => true,
-                    ],
-                    'trustedApp' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::TRUSTED_APP,
-                    ],
-                ],
-            ],
-            'update'         => [
-                'endpoint'      => '/auth/trustedApps/%s',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'create'         => (new RequestConfiguration(
+                '/auth/trustedApps'
+            ))
+                ->setMethod('POST')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'trustedApp' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => array_merge(
+                                Schema::TRUSTED_APP,
+                                [
+                                    'resetToken' => [
+                                        'type' => JsonRule::STRING_TYPE
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ]
+                ),
+            'delete'         => (new RequestConfiguration(
+                '/auth/trustedApps/%s'
+            ))
+                ->setMethod('DELETE'),
+            'getAll'         => (new RequestConfiguration(
+                '/auth/trustedApps'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'trustedApps' => array_map(
+                                static function($trustedApp) {
+                                    return ModelFactory::createTrustedApp($trustedApp);
+                                },
+                                $response['trustedApps']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'trustedApps' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::TRUSTED_APP,
+                        ],
+                    ]
+                ),
+            'get'            => (new RequestConfiguration(
+                '/auth/trustedApps/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'trustedApp' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'schema' => Schema::TRUSTED_APP,
+                            'null'   => true,
+                        ],
+                    ]
+                ),
+            'resetAuthToken' => (new RequestConfiguration(
+                '/auth/trustedApps/%s/authToken/reset'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'reset',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'success'    => [
+                            'type' => JsonRule::BOOLEAN_TYPE,
+                        ],
+                        'error'      => [
+                            'type' => JsonRule::STRING_TYPE,
+                            'null' => true,
+                        ],
+                        'trustedApp' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::TRUSTED_APP,
+                        ],
+                    ]
+                ),
+            'update'         => (new RequestConfiguration(
+                '/auth/trustedApps/%s'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

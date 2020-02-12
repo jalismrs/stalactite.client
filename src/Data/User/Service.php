@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -48,98 +49,115 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'create'                => [
-                'endpoint'      => '/data/users',
-                'method'        => 'POST',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'user' => null === $response['user']
-                            ? null
-                            : ModelFactory::createUser($response['user']),
-                    ];
-                },
-                'validation'    => [
-                    'user' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'delete'                => [
-                'endpoint' => '/data/users/%s',
-                'method'   => 'DELETE',
-            ],
-            'getAll'                => [
-                'endpoint'   => '/data/users',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'users' => array_map(
-                            static function($user) {
-                                return ModelFactory::createUser($user);
-                            },
-                            $response['users']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'users' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'getByEmailAndGoogleId' => [
-                'endpoint'   => '/data/users',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'user' => null === $response['user']
-                            ? null
-                            : ModelFactory::createUser($response['user']),
-                    ];
-                },
-                'validation' => [
-                    'user' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'get'                   => [
-                'endpoint'   => '/data/users/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'user' => $response['user'] === null
-                            ? null
-                            : ModelFactory::createUser($response['user']),
-                    ];
-                },
-                'validation' => [
-                    'user' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'update'                => [
-                'endpoint'      => '/data/users/%s',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'create'                => (new RequestConfiguration(
+                '/data/users'
+            ))
+                ->setMethod('POST')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'user' => $response['user'] === null
+                                ? null
+                                : ModelFactory::createUser($response['user']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'user' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'delete'                => (new RequestConfiguration(
+                '/data/users/%s'
+            ))
+                ->setMethod('DELETE'),
+            'getAll'                => (new RequestConfiguration(
+                '/data/users'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'users' => array_map(
+                                static function($user) {
+                                    return ModelFactory::createUser($user);
+                                },
+                                $response['users']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'users' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'getByEmailAndGoogleId' => (new RequestConfiguration(
+                '/data/users'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'user' => $response['user'] === null
+                                ? null
+                                : ModelFactory::createUser($response['user']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'user' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'get'                   => (new RequestConfiguration(
+                '/data/users/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'user' => $response['user'] === null
+                                ? null
+                                : ModelFactory::createUser($response['user']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'user' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'update'                => (new RequestConfiguration(
+                '/data/users/%s'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

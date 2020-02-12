@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 
@@ -36,62 +37,71 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'getAll'                => [
-                'endpoint'   => '/data/auth-token/customers',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customers' => array_map(
-                            static function($customer) {
-                                return ModelFactory::createCustomer($customer);
-                            },
-                            $response['customers']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'customers' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'getByEmailAndGoogleId' => [
-                'endpoint'   => '/data/auth-token/customers',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customer' => $response['customer'] === null
-                            ? null
-                            : ModelFactory::createCustomer($response['customer']),
-                    ];
-                },
-                'validation' => [
-                    'customer' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'get'                   => [
-                'endpoint'   => '/data/auth-token/customers/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customer' => $response['customer'] === null
-                            ? null
-                            : ModelFactory::createCustomer($response['customer']),
-                    ];
-                },
-                'validation' => [
-                    'customer' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
+            'getAll'                => (new RequestConfiguration(
+                '/data/auth-token/customers'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customers' => array_map(
+                                static function($customer) {
+                                    return ModelFactory::createCustomer($customer);
+                                },
+                                $response['customers']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customers' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'getByEmailAndGoogleId' => (new RequestConfiguration(
+                '/data/auth-token/customers'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customer' => $response['customer'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['customer']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customer' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'get'                   => (new RequestConfiguration(
+                '/data/auth-token/customers/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customer' => $response['customer'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['customer']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customer' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
         ];
     }
     
@@ -115,7 +125,7 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-    
+        
         return $this
             ->getClient()
             ->request(
@@ -150,7 +160,7 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-    
+        
         return $this
             ->getClient()
             ->request(
@@ -187,7 +197,7 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-    
+        
         return $this
             ->getClient()
             ->request(

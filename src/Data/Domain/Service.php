@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -38,120 +39,140 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'create'             => [
-                'endpoint'      => '/data/domains',
-                'method'        => 'POST',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'domain' => null === $response['domain']
-                            ? null
-                            : ModelFactory::createDomain($response['domain']),
-                    ];
-                },
-                'validation'    => [
-                    'domain' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::DOMAIN,
-                    ],
-                ],
-            ],
-            'delete'             => [
-                'endpoint' => '/data/domains/%s',
-                'method'   => 'DELETE',
-            ],
-            'getAll'             => [
-                'endpoint'   => '/data/domains',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'domains' => array_map(
-                            static function($domain) {
-                                return ModelFactory::createDomain($domain);
-                            },
-                            $response['domains']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'domains' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::DOMAIN,
-                    ],
-                ],
-            ],
-            'getByNameAndApiKey' => [
-                'endpoint'   => '/data/domains',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'domains' => array_map(
-                            static function($domain) {
-                                return ModelFactory::createDomain($domain);
-                            },
-                            $response['domains']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'domains' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::DOMAIN,
-                    ],
-                ],
-            ],
-            'getByName'          => [
-                'endpoint'   => '/data/domains',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'domains' => array_map(
-                            static function($domain) {
-                                return ModelFactory::createDomain($domain);
-                            },
-                            $response['domains']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'domains' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::DOMAIN,
-                    ],
-                ],
-            ],
-            'get'                => [
-                'endpoint'   => '/data/domains/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'domain' => null === $response['domain']
-                            ? null
-                            : ModelFactory::createDomain($response['domain']),
-                    ];
-                },
-                'validation' => [
-                    'domain' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::DOMAIN,
-                    ],
-                ],
-            ],
-            'update'             => [
-                'endpoint'      => '/data/domains/%s',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'create'             => (new RequestConfiguration(
+                '/data/domains'
+            ))
+                ->setMethod('POST')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'domain' => $response['domain'] === null
+                                ? null
+                                : ModelFactory::createDomain($response['domain']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'domain' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::DOMAIN,
+                        ],
+                    ]
+                ),
+            'delete'             => (new RequestConfiguration(
+                '/data/domains/%s'
+            ))
+                ->setMethod('DELETE'),
+            'getAll'             => (new RequestConfiguration(
+                '/data/domains'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'domains' => array_map(
+                                static function($domain) {
+                                    return ModelFactory::createDomain($domain);
+                                },
+                                $response['domains']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'domains' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::DOMAIN,
+                        ],
+                    ]
+                ),
+            'getByNameAndApiKey' => (new RequestConfiguration(
+                '/data/domains'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'domains' => array_map(
+                                static function($domain) {
+                                    return ModelFactory::createDomain($domain);
+                                },
+                                $response['domains']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'domains' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::DOMAIN,
+                        ],
+                    ]
+                ),
+            'getByName'          => (new RequestConfiguration(
+                '/data/domains'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'domains' => array_map(
+                                static function($domain) {
+                                    return ModelFactory::createDomain($domain);
+                                },
+                                $response['domains']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'domains' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::DOMAIN,
+                        ],
+                    ]
+                ),
+            'get'                => (new RequestConfiguration(
+                '/data/domains/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'domain' => $response['domain'] === null
+                                ? null
+                                : ModelFactory::createDomain($response['domain']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'domain' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::DOMAIN,
+                        ],
+                    ]
+                ),
+            'update'             => (new RequestConfiguration(
+                '/data/domains/%s'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

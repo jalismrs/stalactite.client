@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -40,105 +41,120 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'create'                => [
-                'endpoint'      => '/data/customers',
-                'method'        => 'POST',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customer' => null === $response['customer']
-                            ? null
-                            : ModelFactory::createCustomer($response['customer']),
-                    ];
-                },
-                'validation'    => [
-                    'customer' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'delete'                => [
-                'endpoint' => '/data/customers/%s',
-                'method'   => 'DELETE',
-            ],
-            'getAll'                => [
-                'endpoint'   => '/data/customers',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customers' => array_map(
-                            static function($customer) {
-                                return ModelFactory::createCustomer($customer);
-                            },
-                            $response['customers']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'customers' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'getByEmailAndGoogleId' => [
-                'endpoint'   => '/data/customers',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customer' => $response['customer'] === null
-                            ? null
-                            : ModelFactory::createCustomer($response['customer']),
-                    ];
-                },
-                'validation' => [
-                    'success'  => [
-                        'type' => JsonRule::BOOLEAN_TYPE,
-                    ],
-                    'error'    => [
-                        'type' => JsonRule::STRING_TYPE,
-                        'null' => true,
-                    ],
-                    'customer' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'get'                   => [
-                'endpoint'   => '/data/customers/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'customer' => null === $response['customer']
-                            ? null
-                            : ModelFactory::createCustomer($response['customer']),
-                    ];
-                },
-                'validation' => [
-                    'customer' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
-            'update'                => [
-                'endpoint'      => '/data/customers/%s',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'create'                => (new RequestConfiguration(
+                '/data/customers'
+            ))
+                ->setMethod('POST')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customer' => $response['customer'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['customer']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customer' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'delete'                => (new RequestConfiguration(
+                '/data/customers/%s'
+            ))
+                ->setMethod('DELETE'),
+            'getAll'                => (new RequestConfiguration('/data/customers'))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customers' => array_map(
+                                static function($customer) {
+                                    return ModelFactory::createCustomer($customer);
+                                },
+                                $response['customers']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customers' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'getByEmailAndGoogleId' => (new RequestConfiguration(
+                '/data/customers'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customer' => $response['customer'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['customer']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'success'  => [
+                            'type' => JsonRule::BOOLEAN_TYPE,
+                        ],
+                        'error'    => [
+                            'type' => JsonRule::STRING_TYPE,
+                            'null' => true,
+                        ],
+                        'customer' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'get'                   => (new RequestConfiguration(
+                '/data/customers/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'customer' => $response['customer'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['customer']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'customer' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
+            'update'                => (new RequestConfiguration(
+                '/data/customers/%s'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

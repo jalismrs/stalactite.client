@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
 
@@ -38,49 +39,55 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'getAccessClearance' => [
-                'endpoint'   => '/access/users/me/access/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'clearance' => ModelFactory::createAccessClearance($response['clearance']),
-                    ];
-                },
-                'validation' => [
-                    'clearance' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'schema' => Schema::ACCESS_CLEARANCE,
-                    ],
-                ],
-            ],
-            'getRelations'       => [
-                'endpoint'   => '/access/users/me/relations',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'relations' => array_map(
-                            static function(array $relation) : DomainUserRelation {
-                                return ModelFactory::createDomainUserRelation($relation);
-                            },
-                            $response['relations']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'relations' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => [
-                            'uid'    => [
-                                'type' => JsonRule::STRING_TYPE,
-                            ],
-                            'domain' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::DOMAIN,
+            'getAccessClearance' => (new RequestConfiguration(
+                '/access/users/me/access/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'clearance' => ModelFactory::createAccessClearance($response['clearance']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'clearance' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'schema' => Schema::ACCESS_CLEARANCE,
+                        ],
+                    ]
+                ),
+            'getRelations'       => (new RequestConfiguration(
+                '/access/users/me/relations'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'relations' => array_map(
+                                static function(array $relation) : DomainUserRelation {
+                                    return ModelFactory::createDomainUserRelation($relation);
+                                },
+                                $response['relations']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'relations' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => [
+                                'uid'    => [
+                                    'type' => JsonRule::STRING_TYPE,
+                                ],
+                                'domain' => [
+                                    'type'   => JsonRule::OBJECT_TYPE,
+                                    'schema' => DataSchema::DOMAIN,
+                                ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]
+                ),
         ];
     }
     

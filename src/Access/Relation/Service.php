@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainRelation;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
@@ -32,10 +33,10 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'deleteRelation' => [
-                'endpoint' => '/access/relations/%s',
-                'method'   => 'DELETE',
-            ],
+            'deleteRelation' => (new RequestConfiguration(
+                '/access/relations/%s'
+            ))
+                ->setMethod('DELETE'),
         ];
     }
     

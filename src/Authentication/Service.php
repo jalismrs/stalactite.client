@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Lcobucci\JWT\Parser;
@@ -53,21 +54,25 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'login' => [
-                'endpoint'   => '/auth/login',
-                'method'     => 'POST',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'jwt' => $response['jwt'],
-                    ];
-                },
-                'validation' => [
-                    'jwt' => [
-                        'type' => JsonRule::STRING_TYPE,
-                        'null' => true,
-                    ],
-                ],
-            ],
+            'login' => (new RequestConfiguration(
+                '/auth/login'
+            ))
+                ->setMethod('POST')
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'jwt' => $response['jwt'],
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'jwt' => [
+                            'type' => JsonRule::STRING_TYPE,
+                            'null' => true,
+                        ],
+                    ]
+                ),
         ];
     }
     

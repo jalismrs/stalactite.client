@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
@@ -39,34 +40,37 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'addPosts'    => [
-                'endpoint' => '/data/users/%s/posts',
-                'method'   => 'POST',
-            ],
-            'getAll'      => [
-                'endpoint'   => '/data/users/%s/posts',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'posts' => array_map(
-                            static function($post) {
-                                return ModelFactory::createPost($post);
-                            },
-                            $response['posts']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'posts' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::POST,
-                    ],
-                ],
-            ],
-            'removePosts' => [
-                'endpoint' => '/data/users/%s/posts',
-                'method'   => 'DELETE',
-            ],
+            'addPosts'    => (new RequestConfiguration(
+                '/data/users/%s/posts'
+            ))
+                ->setMethod('POST'),
+            'getAll'      => (new RequestConfiguration(
+                '/data/users/%s/posts'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'posts' => array_map(
+                                static function($post) {
+                                    return ModelFactory::createPost($post);
+                                },
+                                $response['posts']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'posts' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::POST,
+                        ],
+                    ]
+                ),
+            'removePosts' => (new RequestConfiguration(
+                '/data/users/%s/posts'
+            ))
+                ->setMethod('DELETE'),
         ];
     }
     

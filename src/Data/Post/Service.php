@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -38,100 +39,117 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'create'   => [
-                'endpoint'      => '/data/posts',
-                'method'        => 'POST',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
-                'response'   => static function(array $response) : array {
-                    return [
-                        'post' => $response['post'] === null
-                            ? null
-                            : ModelFactory::createPost($response['post']),
-                    ];
-                },
-                'validation'    => [
-                    'post' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::POST,
-                    ],
-                ],
-            ],
-            'delete'   => [
-                'endpoint' => '/data/posts/%s',
-                'method'   => 'DELETE',
-            ],
-            'getAll'   => [
-                'endpoint'   => '/data/posts',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'posts' => array_map(
-                            static function($post) {
-                                return ModelFactory::createPost($post);
-                            },
-                            $response['posts']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'posts' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::POST,
-                    ],
-                ],
-            ],
-            'get'      => [
-                'endpoint'   => '/data/posts/%s',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'post' => null === $response['post']
-                            ? null
-                            : ModelFactory::createPost($response['post']),
-                    ];
-                },
-                'validation' => [
-                    'post' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::POST,
-                    ],
-                ],
-            ],
-            'getUsers' => [
-                'endpoint'   => '/data/posts/%s/users',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'users' => array_map(
-                            static function($user) {
-                                return ModelFactory::createUser($user);
-                            },
-                            $response['users']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'users' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'update'   => [
-                'endpoint'      => '/data/posts/%s',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'create'   => (new RequestConfiguration(
+                '/data/posts'
+            ))
+                ->setMethod('POST')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'create',
+                        ],
+                    ]
+                )
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'post' => $response['post'] === null
+                                ? null
+                                : ModelFactory::createPost($response['post']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'post' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::POST,
+                        ],
+                    ]
+                ),
+            'delete'   => (new RequestConfiguration(
+                '/data/posts/%s'
+            ))
+                ->setMethod('DELETE'),
+            'getAll'   => (new RequestConfiguration(
+                '/data/posts'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'posts' => array_map(
+                                static function($post) {
+                                    return ModelFactory::createPost($post);
+                                },
+                                $response['posts']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'posts' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::POST,
+                        ],
+                    ]
+                ),
+            'get'      => (new RequestConfiguration(
+                '/data/posts/%s'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'post' => $response['post'] === null
+                                ? null
+                                : ModelFactory::createPost($response['post']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'post' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::POST,
+                        ],
+                    ]
+                ),
+            'getUsers' => (new RequestConfiguration(
+                '/data/posts/%s/users'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'users' => array_map(
+                                static function($user) {
+                                    return ModelFactory::createUser($user);
+                                },
+                                $response['users']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'users' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'update'   => (new RequestConfiguration(
+                '/data/posts/%s'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

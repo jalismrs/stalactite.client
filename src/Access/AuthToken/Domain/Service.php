@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
@@ -38,45 +39,46 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'deleteRelationsByDomain' => [
-                'endpoint' => '/access/auth-token/domains/%s/relations',
-                'method'   => 'DELETE',
-            ],
-            'getRelations'            => [
-                'endpoint'   => '/access/auth-token/domains/%s/relations',
-                'method'     => 'GET',
-                'validation' => [
-                    'relations' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'schema' => [
-                            'users'     => [
-                                'type'   => JsonRule::LIST_TYPE,
-                                'schema' => [
-                                    'uid'  => [
-                                        'type' => JsonRule::STRING_TYPE,
-                                    ],
-                                    'user' => [
-                                        'type'   => JsonRule::OBJECT_TYPE,
-                                        'schema' => DataSchema::USER,
+            'deleteRelationsByDomain' => (new RequestConfiguration(
+                '/access/auth-token/domains/%s/relations'
+            ))
+                ->setMethod('DELETE'),
+            'getRelations'            => (new RequestConfiguration(
+                '/access/auth-token/domains/%s/relations'
+            ))
+                ->setValidation(
+                    [
+                        'relations' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'schema' => [
+                                'users'   => [
+                                    'type'   => JsonRule::LIST_TYPE,
+                                    'schema' => [
+                                        'uid'  => [
+                                            'type' => JsonRule::STRING_TYPE,
+                                        ],
+                                        'user' => [
+                                            'type'   => JsonRule::OBJECT_TYPE,
+                                            'schema' => DataSchema::USER,
+                                        ],
                                     ],
                                 ],
-                            ],
-                            'customers' => [
-                                'type'   => JsonRule::LIST_TYPE,
-                                'schema' => [
-                                    'uid'      => [
-                                        'type' => JsonRule::STRING_TYPE
-                                    ],
-                                    'customer' => [
-                                        'type'   => JsonRule::OBJECT_TYPE,
-                                        'schema' => DataSchema::CUSTOMER,
+                                'customers' => [
+                                    'type'   => JsonRule::LIST_TYPE,
+                                    'schema' => [
+                                        'uid'    => [
+                                            'type' => JsonRule::STRING_TYPE
+                                        ],
+                                        'customer' => [
+                                            'type'   => JsonRule::OBJECT_TYPE,
+                                            'schema' => DataSchema::CUSTOMER,
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ],
+                    ]
+                ),
         ];
     }
     
@@ -102,7 +104,7 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-    
+        
         return $this
             ->getClient()
             ->request(
@@ -140,36 +142,41 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-    
-        $this->requestConfigurations['getRelations']['response'] = static function(array $response) use ($domainModel) : array {
-            return [
-                'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelation {
-                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                            $domainUserRelationModel->setDomain($domainModel);
-                
-                            return $domainUserRelationModel;
-                        },
-                        $response['relations']['users']
-                    ),
-                    'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
-                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                            $domainCustomerRelation->setDomain($domainModel);
-                
-                            return $domainCustomerRelation;
-                        },
-                        $response['relations']['customers']
-                    )
-                ],
-            ];
-        };
-    
+        
+        $requestConfiguration = $this->requestConfigurations['getRelations'];
+        assert($requestConfiguration instanceof RequestConfiguration);
+        
+        $requestConfiguration->setResponse(
+            static function(array $response) use ($domainModel) : array {
+                return [
+                    'relations' => [
+                        'users'     => array_map(
+                            static function(array $relation) use ($domainModel): DomainUserRelation {
+                                $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                                $domainUserRelationModel->setDomain($domainModel);
+                                
+                                return $domainUserRelationModel;
+                            },
+                            $response['relations']['users']
+                        ),
+                        'customers' => array_map(
+                            static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                                $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                                $domainCustomerRelation->setDomain($domainModel);
+                                
+                                return $domainCustomerRelation;
+                            },
+                            $response['relations']['customers']
+                        )
+                    ],
+                ];
+            }
+        );
+        
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getRelations'],
+                $requestConfiguration,
                 [
                     $domainModel->getUid(),
                 ],

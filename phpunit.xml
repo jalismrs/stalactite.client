@@ -25,7 +25,6 @@
             <directory>tests/Access</directory>
             <directory>tests/Api/Access</directory>
             <directory>tests/Model/Access</directory>
-            <directory>tests/RequestConfiguration/Access</directory>
             <directory>tests/Service/Access</directory>
         </testsuite>
         <testsuite
@@ -34,7 +33,6 @@
             <directory>tests/Authentication</directory>
             <directory>tests/Api/Authentication</directory>
             <directory>tests/Model/Authentication</directory>
-            <directory>tests/RequestConfiguration/Authentication</directory>
             <directory>tests/Service/Authentication</directory>
         </testsuite>
         <testsuite
@@ -43,7 +41,6 @@
             <directory>tests/Data</directory>
             <directory>tests/Api/Data</directory>
             <directory>tests/Model/Data</directory>
-            <directory>tests/RequestConfiguration/Data</directory>
             <directory>tests/Service/Data</directory>
         </testsuite>
         <testsuite
@@ -52,19 +49,59 @@
             <directory>tests/Api</directory>
         </testsuite>
         <testsuite
+                name="api-access"
+        >
+            <directory>tests/Api/Access</directory>
+        </testsuite>
+        <testsuite
+                name="api-authentication"
+        >
+            <directory>tests/Api/Authentication</directory>
+        </testsuite>
+        <testsuite
+                name="api-data"
+        >
+            <directory>tests/Api/Data</directory>
+        </testsuite>
+        <testsuite
                 name="model"
         >
             <directory>tests/Model</directory>
         </testsuite>
         <testsuite
-                name="request-configuration"
+                name="model-access"
         >
-            <directory>tests/RequestConfiguration</directory>
+            <directory>tests/Model/Access</directory>
+        </testsuite>
+        <testsuite
+                name="model-authentication"
+        >
+            <directory>tests/Model/Authentication</directory>
+        </testsuite>
+        <testsuite
+                name="model-data"
+        >
+            <directory>tests/Model/Data</directory>
         </testsuite>
         <testsuite
                 name="service"
         >
             <directory>tests/Service</directory>
+        </testsuite>
+        <testsuite
+                name="service-access"
+        >
+            <directory>tests/Service/Access</directory>
+        </testsuite>
+        <testsuite
+                name="service-authentication"
+        >
+            <directory>tests/Service/Authentication</directory>
+        </testsuite>
+        <testsuite
+                name="service-data"
+        >
+            <directory>tests/Service/Data</directory>
         </testsuite>
         <testsuite
                 name="util"
@@ -75,6 +112,11 @@
                 name="client"
         >
             <file>tests/ClientTest.php</file>
+        </testsuite>
+        <testsuite
+                name="request-configuration"
+        >
+            <file>tests/RequestConfigurationTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

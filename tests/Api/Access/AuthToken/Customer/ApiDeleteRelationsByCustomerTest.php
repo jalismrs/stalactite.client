@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Access\AuthToken\Customer;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Access\AuthToken\Customer;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;

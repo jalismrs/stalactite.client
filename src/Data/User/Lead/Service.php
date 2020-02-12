@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
@@ -39,34 +40,37 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'addLeads'    => [
-                'endpoint' => '/data/users/%s/leads',
-                'method'   => 'POST',
-            ],
-            'getAll'      => [
-                'endpoint'   => '/data/users/%s/leads',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'leads' => array_map(
-                            static function($lead) {
-                                return ModelFactory::createPost($lead);
-                            },
-                            $response['leads']
-                        ),
-                    ];
-                },
-                'validation' => [
-                    'leads' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => Schema::POST,
-                    ],
-                ],
-            ],
-            'removeLeads' => [
-                'endpoint' => '/data/users/%s/leads',
-                'method'   => 'DELETE',
-            ],
+            'addLeads'    => (new RequestConfiguration(
+                '/data/users/%s/leads'
+            ))
+                ->setMethod('POST'),
+            'getAll'      => (new RequestConfiguration(
+                '/data/users/%s/leads'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'leads' => array_map(
+                                static function($lead) {
+                                    return ModelFactory::createPost($lead);
+                                },
+                                $response['leads']
+                            ),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'leads' => [
+                            'type'   => JsonRule::LIST_TYPE,
+                            'schema' => Schema::POST,
+                        ],
+                    ]
+                ),
+            'removeLeads' => (new RequestConfiguration(
+                '/data/users/%s/leads'
+            ))
+                ->setMethod('DELETE'),
         ];
     }
     

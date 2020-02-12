@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
@@ -33,10 +34,10 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'deleteRelationsByUser' => [
-                'endpoint' => '/access/auth-token/users/%s/relations',
-                'method'   => 'DELETE',
-            ],
+            'deleteRelationsByUser' => (new RequestConfiguration(
+                '/access/auth-token/users/%s/relations'
+            ))
+                ->setMethod('DELETE'),
         ];
     }
     

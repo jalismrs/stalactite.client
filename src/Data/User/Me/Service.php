@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -37,33 +38,38 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'get'    => [
-                'endpoint'   => '/data/users/me',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'me' => null === $response['me']
-                            ? null
-                            : ModelFactory::createUser($response['me']),
-                    ];
-                },
-                'validation' => [
-                    'me' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::USER,
-                    ],
-                ],
-            ],
-            'update' => [
-                'endpoint'      => '/data/users/me',
-                'method'        => 'PUT',
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'update',
-                    ],
-                ],
-            ],
+            'get'    => (new RequestConfiguration(
+                '/data/users/me'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'me' => $response['me'] === null
+                                ? null
+                                : ModelFactory::createUser($response['me']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'me' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::USER,
+                        ],
+                    ]
+                ),
+            'update' => (new RequestConfiguration(
+                '/data/users/me'
+            ))
+                ->setMethod('PUT')
+                ->setNormalization(
+                    [
+                        AbstractNormalizer::GROUPS => [
+                            'update',
+                        ],
+                    ]
+                ),
         ];
     }
     

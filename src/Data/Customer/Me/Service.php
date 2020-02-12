@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 
 /**
@@ -34,24 +35,27 @@ class Service extends
         );
         
         $this->requestConfigurations = [
-            'get' => [
-                'endpoint'   => '/data/customers/me',
-                'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-                        'me' => null === $response['me']
-                            ? null
-                            : ModelFactory::createCustomer($response['me']),
-                    ];
-                },
-                'validation' => [
-                    'me' => [
-                        'type'   => JsonRule::OBJECT_TYPE,
-                        'null'   => true,
-                        'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-            ],
+            'get' => (new RequestConfiguration(
+                '/data/customers/me'
+            ))
+                ->setResponse(
+                    static function(array $response) : array {
+                        return [
+                            'me' => $response['me'] === null
+                                ? null
+                                : ModelFactory::createCustomer($response['me']),
+                        ];
+                    }
+                )
+                ->setValidation(
+                    [
+                        'me' => [
+                            'type'   => JsonRule::OBJECT_TYPE,
+                            'null'   => true,
+                            'schema' => Schema::CUSTOMER,
+                        ],
+                    ]
+                ),
         ];
     }
     
