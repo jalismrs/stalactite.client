@@ -80,11 +80,6 @@ class Service extends
             'getRelations'        => [
                 'endpoint'   => '/access/domains/%s/relations',
                 'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-    
-                    ];
-                },
                 'validation' => [
                     'relations' => [
                         'type'   => JsonRule::OBJECT_TYPE,

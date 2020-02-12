@@ -59,11 +59,6 @@ class Service extends
             'getRelations'       => [
                 'endpoint'   => '/access/customers/%s/relations',
                 'method'     => 'GET',
-                'response'   => static function(array $response) : array {
-                    return [
-    
-                    ];
-                },
                 'validation' => [
                     'relations' => [
                         'type'   => JsonRule::LIST_TYPE,
