@@ -23,23 +23,48 @@
                 name="access"
         >
             <directory>tests/Access</directory>
+            <directory>tests/Api/Access</directory>
+            <directory>tests/Model/Access</directory>
+            <directory>tests/RequestConfiguration/Access</directory>
+            <directory>tests/Service/Access</directory>
         </testsuite>
         <testsuite
                 name="authentication"
         >
             <directory>tests/Authentication</directory>
+            <directory>tests/Api/Authentication</directory>
+            <directory>tests/Model/Authentication</directory>
+            <directory>tests/RequestConfiguration/Authentication</directory>
+            <directory>tests/Service/Authentication</directory>
         </testsuite>
         <testsuite
                 name="data"
         >
             <directory>tests/Data</directory>
+            <directory>tests/Api/Data</directory>
+            <directory>tests/Model/Data</directory>
+            <directory>tests/RequestConfiguration/Data</directory>
+            <directory>tests/Service/Data</directory>
+        </testsuite>
+        <testsuite
+                name="api"
+        >
+            <directory>tests/Api</directory>
         </testsuite>
         <testsuite
                 name="model"
         >
-            <directory>tests/Access/Model</directory>
-            <directory>tests/Authentication/Model</directory>
-            <directory>tests/Data/Model</directory>
+            <directory>tests/Model</directory>
+        </testsuite>
+        <testsuite
+                name="request-configuration"
+        >
+            <directory>tests/RequestConfiguration</directory>
+        </testsuite>
+        <testsuite
+                name="service"
+        >
+            <directory>tests/Service</directory>
         </testsuite>
         <testsuite
                 name="util"
@@ -47,9 +72,9 @@
             <directory>tests/Util</directory>
         </testsuite>
         <testsuite
-                name="abstract"
+                name="client"
         >
-            <file>tests/AbstractClientTest.php</file>
+            <file>tests/ClientTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
