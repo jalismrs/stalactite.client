@@ -42,7 +42,7 @@ class Service extends
             'create'         => [
                 'endpoint'      => '/auth/trustedApps',
                 'method'        => 'POST',
-                'schema'        => [
+                'validation'    => [
                     'trustedApp' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -67,9 +67,9 @@ class Service extends
                 'method'   => 'DELETE',
             ],
             'getAll'         => [
-                'endpoint' => '/auth/trustedApps',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/auth/trustedApps',
+                'method'     => 'GET',
+                'validation' => [
                     'trustedApps' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::TRUSTED_APP,
@@ -77,9 +77,9 @@ class Service extends
                 ],
             ],
             'get'            => [
-                'endpoint' => '/auth/trustedApps/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/auth/trustedApps/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'trustedApp' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => Schema::TRUSTED_APP,
@@ -90,7 +90,7 @@ class Service extends
             'resetAuthToken' => [
                 'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
                 'method'        => 'PUT',
-                'schema'        => [
+                'validation'    => [
                     'success'    => [
                         'type' => JsonRule::BOOLEAN_TYPE,
                     ],

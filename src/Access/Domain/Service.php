@@ -42,9 +42,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'addCustomerRelation' => [
-                'endpoint' => '/access/domains/%s/relations/customers',
-                'method'   => 'POST',
-                'schema'   => [
+                'endpoint'   => '/access/domains/%s/relations/customers',
+                'method'     => 'POST',
+                'validation' => [
                     'relation' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -53,9 +53,9 @@ class Service extends
                 ],
             ],
             'addUserRelation'     => [
-                'endpoint' => '/access/domains/%s/relations/users',
-                'method'   => 'POST',
-                'schema'   => [
+                'endpoint'   => '/access/domains/%s/relations/users',
+                'method'     => 'POST',
+                'validation' => [
                     'relation' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -64,9 +64,9 @@ class Service extends
                 ],
             ],
             'getRelations'        => [
-                'endpoint' => '/access/domains/%s/relations',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/access/domains/%s/relations',
+                'method'     => 'GET',
+                'validation' => [
                     'relations' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => [

@@ -207,7 +207,7 @@ final class Client
                         'null' => true
                     ],
                 ],
-                $configuration['schema'] ?? []
+                $configuration['validation'] ?? []
             )
         );
         if (!$schema->validate($data)) {

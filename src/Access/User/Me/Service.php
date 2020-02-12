@@ -39,9 +39,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'getAccessClearance' => [
-                'endpoint' => '/access/users/me/access/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/access/users/me/access/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'clearance' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => Schema::ACCESS_CLEARANCE,
@@ -49,9 +49,9 @@ class Service extends
                 ],
             ],
             'getRelations'       => [
-                'endpoint' => '/access/users/me/relations',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/access/users/me/relations',
+                'method'     => 'GET',
+                'validation' => [
                     'relations' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => [

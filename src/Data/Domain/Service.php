@@ -41,7 +41,7 @@ class Service extends
             'create'             => [
                 'endpoint'      => '/data/domains',
                 'method'        => 'POST',
-                'schema'        => [
+                'validation'    => [
                     'domain' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -59,9 +59,9 @@ class Service extends
                 'method'   => 'DELETE',
             ],
             'getAll'             => [
-                'endpoint' => '/data/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -69,9 +69,9 @@ class Service extends
                 ],
             ],
             'getByNameAndApiKey' => [
-                'endpoint' => '/data/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -79,9 +79,9 @@ class Service extends
                 ],
             ],
             'getByName'          => [
-                'endpoint' => '/data/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -89,9 +89,9 @@ class Service extends
                 ],
             ],
             'get'                => [
-                'endpoint' => '/data/domains/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/domains/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'domain' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,

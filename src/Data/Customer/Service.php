@@ -43,7 +43,7 @@ class Service extends
             'create'                => [
                 'endpoint'      => '/data/customers',
                 'method'        => 'POST',
-                'schema'        => [
+                'validation'    => [
                     'customer' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -61,9 +61,9 @@ class Service extends
                 'method'   => 'DELETE',
             ],
             'getAll'                => [
-                'endpoint' => '/data/customers',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/customers',
+                'method'     => 'GET',
+                'validation' => [
                     'customers' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::CUSTOMER,
@@ -71,9 +71,9 @@ class Service extends
                 ],
             ],
             'getByEmailAndGoogleId' => [
-                'endpoint' => '/data/customers',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/customers',
+                'method'     => 'GET',
+                'validation' => [
                     'success'  => [
                         'type' => JsonRule::BOOLEAN_TYPE,
                     ],
@@ -89,9 +89,9 @@ class Service extends
                 ],
             ],
             'get'                   => [
-                'endpoint' => '/data/customers/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/customers/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'customer' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,

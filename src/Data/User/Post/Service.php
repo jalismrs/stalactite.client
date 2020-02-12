@@ -44,9 +44,9 @@ class Service extends
                 'method'   => 'POST',
             ],
             'getAll'      => [
-                'endpoint' => '/data/users/%s/posts',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/users/%s/posts',
+                'method'     => 'GET',
+                'validation' => [
                     'posts' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::POST,

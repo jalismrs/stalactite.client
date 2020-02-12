@@ -37,9 +37,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'getAll'                => [
-                'endpoint' => '/data/auth-token/users',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/users',
+                'method'     => 'GET',
+                'validation' => [
                     'users' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::USER,
@@ -47,9 +47,9 @@ class Service extends
                 ],
             ],
             'getByEmailAndGoogleId' => [
-                'endpoint' => '/data/auth-token/users',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/users',
+                'method'     => 'GET',
+                'validation' => [
                     'user' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -58,9 +58,9 @@ class Service extends
                 ],
             ],
             'get'                   => [
-                'endpoint' => '/data/auth-token/users/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/users/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'user' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,

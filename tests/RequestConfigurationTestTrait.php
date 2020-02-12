@@ -108,7 +108,7 @@ trait RequestConfigurationTestTrait
                                 ],
                             ]
                         ),
-                        'schema'        => new Constraints\Optional(
+                        'validation'    => new Constraints\Optional(
                             [
                                 'constraints' => [
                                     new Constraints\Type('array'),

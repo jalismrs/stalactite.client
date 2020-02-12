@@ -35,9 +35,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'get' => [
-                'endpoint' => '/data/customers/me',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/customers/me',
+                'method'     => 'GET',
+                'validation' => [
                     'me' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,

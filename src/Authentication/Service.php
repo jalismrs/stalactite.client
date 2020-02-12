@@ -54,9 +54,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'login' => [
-                'endpoint' => '/auth/login',
-                'method'   => 'POST',
-                'schema'   => [
+                'endpoint'   => '/auth/login',
+                'method'     => 'POST',
+                'validation' => [
                     'jwt' => [
                         'type' => JsonRule::STRING_TYPE,
                         'null' => true,

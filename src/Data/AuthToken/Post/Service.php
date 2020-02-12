@@ -37,9 +37,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'getAll'   => [
-                'endpoint' => '/data/auth-token/posts',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/posts',
+                'method'     => 'GET',
+                'validation' => [
                     'posts' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::POST,
@@ -47,9 +47,9 @@ class Service extends
                 ],
             ],
             'get'      => [
-                'endpoint' => '/data/auth-token/posts/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/posts/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'post' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -58,9 +58,9 @@ class Service extends
                 ],
             ],
             'getUsers' => [
-                'endpoint' => '/data/auth-token/posts/%s/users',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/posts/%s/users',
+                'method'     => 'GET',
+                'validation' => [
                     'users' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::USER,

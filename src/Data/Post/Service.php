@@ -41,7 +41,7 @@ class Service extends
             'create'   => [
                 'endpoint'      => '/data/posts',
                 'method'        => 'POST',
-                'schema'        => [
+                'validation'    => [
                     'post' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -59,9 +59,9 @@ class Service extends
                 'method'   => 'DELETE',
             ],
             'getAll'   => [
-                'endpoint' => '/data/posts',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/posts',
+                'method'     => 'GET',
+                'validation' => [
                     'posts' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::POST,
@@ -69,9 +69,9 @@ class Service extends
                 ],
             ],
             'get'      => [
-                'endpoint' => '/data/posts/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/posts/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'post' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
@@ -80,9 +80,9 @@ class Service extends
                 ],
             ],
             'getUsers' => [
-                'endpoint' => '/data/posts/%s/users',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/posts/%s/users',
+                'method'     => 'GET',
+                'validation' => [
                     'users' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::USER,

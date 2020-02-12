@@ -44,9 +44,9 @@ class Service extends
                 'method'   => 'POST',
             ],
             'getAll'      => [
-                'endpoint' => '/data/users/%s/leads',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/users/%s/leads',
+                'method'     => 'GET',
+                'validation' => [
                     'leads' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::POST,

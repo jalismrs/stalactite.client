@@ -43,9 +43,9 @@ class Service extends
                 'method'   => 'DELETE',
             ],
             'getRelations'            => [
-                'endpoint' => '/access/auth-token/domains/%s/relations',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/access/auth-token/domains/%s/relations',
+                'method'     => 'GET',
+                'validation' => [
                     'relations' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => [

@@ -37,9 +37,9 @@ class Service extends
         
         $this->requestConfigurations = [
             'getAll'             => [
-                'endpoint' => '/data/auth-token/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -47,9 +47,9 @@ class Service extends
                 ],
             ],
             'getByNameAndApiKey' => [
-                'endpoint' => '/data/auth-token/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -57,9 +57,9 @@ class Service extends
                 ],
             ],
             'getByName'          => [
-                'endpoint' => '/data/auth-token/domains',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/domains',
+                'method'     => 'GET',
+                'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
                         'schema' => Schema::DOMAIN,
@@ -67,9 +67,9 @@ class Service extends
                 ],
             ],
             'get'                => [
-                'endpoint' => '/data/auth-token/domains/%s',
-                'method'   => 'GET',
-                'schema'   => [
+                'endpoint'   => '/data/auth-token/domains/%s',
+                'method'     => 'GET',
+                'validation' => [
                     'domain' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
