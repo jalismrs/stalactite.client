@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -30,6 +31,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -177,12 +180,16 @@ class Service extends
     }
     
     /**
+     * getAllDomains
+     *
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAllDomains(
         string $jwt
@@ -201,13 +208,17 @@ class Service extends
     }
     
     /**
+     * getDomain
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getDomain(
         string $uid,
@@ -229,13 +240,17 @@ class Service extends
     }
     
     /**
+     * getByName
+     *
      * @param string $name
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getByName(
         string $name,
@@ -258,14 +273,18 @@ class Service extends
     }
     
     /**
+     * getByNameAndApiKey
+     *
      * @param string $name
      * @param string $apiKey
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getByNameAndApiKey(
         string $name,
@@ -354,13 +373,17 @@ class Service extends
     }
     
     /**
+     * deleteDomain
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function deleteDomain(
         string $uid,

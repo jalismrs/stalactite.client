@@ -14,9 +14,11 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use function array_map;
 
 /**
@@ -31,6 +33,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -85,6 +89,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAllPosts(
         User $userModel,
@@ -115,9 +120,10 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws InvalidArgumentException
+     * @throws SerializerException
      */
     public function addPosts(
         User $userModel,
@@ -155,9 +161,10 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws InvalidArgumentException
+     * @throws SerializerException
      */
     public function removePosts(
         User $userModel,

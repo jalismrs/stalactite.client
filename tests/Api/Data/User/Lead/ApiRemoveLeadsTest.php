@@ -9,8 +9,10 @@ use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +24,17 @@ class ApiRemoveLeadsTest extends
     TestCase
 {
     /**
+     * testRemoveLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemoveLeads(): void
@@ -55,12 +63,18 @@ class ApiRemoveLeadsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
+     * testThrowOnInvalidResponseRemoveLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseRemoveLeads(): void
     {
@@ -90,12 +104,18 @@ class ApiRemoveLeadsTest extends
             'fake user jwt'
         );
     }
-
+    
     /**
+     * testThrowOnInvalidPostsParameterRemoveLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {

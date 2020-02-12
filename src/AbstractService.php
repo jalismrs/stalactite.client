@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
@@ -20,7 +20,7 @@ abstract class AbstractService
      * @var Client
      */
     private $client;
-
+    
     /**
      * AbstractService constructor.
      *
@@ -28,29 +28,28 @@ abstract class AbstractService
      */
     public function __construct(
         Client $client
-    )
-    {
+    ) {
         $this->client = $client;
     }
-
-    /**
-     * getClient
-     *
-     * @return Client
-     */
-    public function getClient(): Client
-    {
-        return $this->client;
-    }
-
+    
     /**
      * getLogger
      *
      * @return LoggerInterface
      */
-    public function getLogger(): LoggerInterface
+    public function getLogger() : LoggerInterface
     {
         return $this->getClient()
-            ->getLogger();
+                    ->getLogger();
+    }
+    
+    /**
+     * getClient
+     *
+     * @return Client
+     */
+    public function getClient() : Client
+    {
+        return $this->client;
     }
 }

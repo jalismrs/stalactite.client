@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -35,10 +36,11 @@ class ApiResetAuthTokenTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testResetAuthToken(): void
     {
@@ -76,7 +78,7 @@ class ApiResetAuthTokenTest extends
             $response->getData()['trustedApp']
         );
     }
-
+    
     /**
      * testThrowOnResetAuthToken
      *
@@ -86,6 +88,7 @@ class ApiResetAuthTokenTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowOnResetAuthToken(): void
     {

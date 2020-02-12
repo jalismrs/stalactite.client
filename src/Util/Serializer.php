@@ -73,8 +73,12 @@ final class Serializer
             if (!(self::$instance instanceof self)) {
                 self::$instance = new self();
             }
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while instantiating ' . self::class, null, $t);
+        } catch (Throwable $throwable) {
+            throw new SerializerException(
+                'Error while instantiating ' . self::class,
+                $throwable->getCode(),
+                $throwable
+            );
         }
 
         return self::$instance;

@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Access\Customer\Service;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -36,10 +37,11 @@ class ApiGetAccessClearanceTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testGetAccessClearance(): void
     {
@@ -78,7 +80,7 @@ class ApiGetAccessClearanceTest extends
             $response->getData()['clearance']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetAccessClearance
      *
@@ -87,6 +89,8 @@ class ApiGetAccessClearanceTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseGetAccessClearance(): void
     {

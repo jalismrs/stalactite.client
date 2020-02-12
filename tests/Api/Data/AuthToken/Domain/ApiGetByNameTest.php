@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -33,10 +34,11 @@ class ApiGetByNameTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testGetByName(): void
     {
@@ -77,7 +79,7 @@ class ApiGetByNameTest extends
             $response->getData()['domains']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseGetByName
      *
@@ -87,6 +89,7 @@ class ApiGetByNameTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowOnInvalidResponseGetByName(): void
     {

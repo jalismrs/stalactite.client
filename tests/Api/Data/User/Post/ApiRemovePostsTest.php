@@ -9,8 +9,10 @@ use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +24,17 @@ class ApiRemovePostsTest extends
     TestCase
 {
     /**
+     * testRemovePosts
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemovePosts(): void
@@ -55,12 +63,18 @@ class ApiRemovePostsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
+     * testThrowOnInvalidResponseRemovePosts
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseRemovePosts(): void
     {
@@ -90,12 +104,18 @@ class ApiRemovePostsTest extends
             'fake user jwt'
         );
     }
-
+    
     /**
+     * testThrowOnInvalidPostsParameterRemovePosts
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {

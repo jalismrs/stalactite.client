@@ -44,7 +44,7 @@ class JwtFactory
             ->expiresAt($time + self::JWT_DURATION)
             ->withClaim('challenge', $challenge);
 
-        if (null !== $userAgent) {
+        if ($userAgent !== null) {
             $builder->issuedBy($userAgent);
         }
 

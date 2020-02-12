@@ -10,7 +10,6 @@ use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use function strtoupper;
 
 /**
  * RequestConfigurationTest
@@ -255,11 +254,13 @@ class RequestConfigurationTest extends
     public function testResponseMissingReturnType() : void
     {
         $this->expectError();
-    
+        
         $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(static function(array $response) {
-            return $response;
-        });
+        $requestConfiguration->setResponse(
+            static function(array $response) {
+                return $response;
+            }
+        );
     }
     
     /**
@@ -274,9 +275,11 @@ class RequestConfigurationTest extends
         $this->expectException(RequestConfigurationException::class);
         
         $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(static function(array $response) : bool {
-            return $response === [];
-        });
+        $requestConfiguration->setResponse(
+            static function(array $response) : bool {
+                return $response === [];
+            }
+        );
     }
     
     /**
@@ -291,9 +294,11 @@ class RequestConfigurationTest extends
         $this->expectException(RequestConfigurationException::class);
         
         $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(static function(array $response, array $invalid) : array {
-            return array_merge($response, $invalid);
-        });
+        $requestConfiguration->setResponse(
+            static function(array $response, array $invalid) : array {
+                return array_merge($response, $invalid);
+            }
+        );
     }
     
     /**
@@ -308,9 +313,11 @@ class RequestConfigurationTest extends
         $this->expectError();
         
         $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(static function($response) : array {
-            return $response;
-        });
+        $requestConfiguration->setResponse(
+            static function($response) : array {
+                return $response;
+            }
+        );
     }
     
     /**
@@ -325,9 +332,11 @@ class RequestConfigurationTest extends
         $this->expectException(RequestConfigurationException::class);
         
         $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(static function(bool $response) : array {
-            return [$response];
-        });
+        $requestConfiguration->setResponse(
+            static function(bool $response) : array {
+                return [$response];
+            }
+        );
     }
     
     /**
@@ -368,7 +377,7 @@ class RequestConfigurationTest extends
     {
         $requestConfiguration = new RequestConfiguration('');
         $requestConfiguration->setValidation(null);
-    
+        
         self::assertNull($requestConfiguration->getValidation());
     }
     

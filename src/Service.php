@@ -28,21 +28,23 @@ class Service extends
      */
     public function access(): Access\Service
     {
-        if (null === $this->serviceAccess) {
+        if ($this->serviceAccess === null) {
             $this->serviceAccess = new Access\Service($this->getClient());
         }
 
         return $this->serviceAccess;
     }
-
+    
     /**
      * authentication
      *
      * @return Authentication\Service
+     *
+     * @throws Exception\RequestConfigurationException
      */
     public function authentication(): Authentication\Service
     {
-        if (null === $this->serviceAuthentication) {
+        if ($this->serviceAuthentication === null) {
             $this->serviceAuthentication = new Authentication\Service($this->getClient());
         }
 
@@ -56,7 +58,7 @@ class Service extends
      */
     public function data(): Data\Service
     {
-        if (null === $this->serviceData) {
+        if ($this->serviceData === null) {
             $this->serviceData = new Data\Service($this->getClient());
         }
 

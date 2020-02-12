@@ -248,7 +248,7 @@ final class Client
      */
     public function getLogger() : LoggerInterface
     {
-        if (null === $this->logger) {
+        if ($this->logger === null) {
             $this->logger = $this->createDefaultLogger();
         }
         
@@ -290,7 +290,7 @@ final class Client
      */
     public function getHttpClient() : HttpClientInterface
     {
-        if (null === $this->httpClient) {
+        if ($this->httpClient === null) {
             $this->httpClient = $this->createDefaultHttpClient();
         }
         

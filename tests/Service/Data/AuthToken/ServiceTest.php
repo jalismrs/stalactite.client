@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Service\Data\AuthToken;
 
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ class ServiceTest extends
     TestCase
 {
     use ServiceTestTrait;
-
+    
     /**
      * testCustomer
      *
@@ -29,6 +30,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testCustomer(): void
     {
@@ -51,7 +53,7 @@ class ServiceTest extends
             $mockService2
         );
     }
-
+    
     /**
      * testDomain
      *
@@ -59,6 +61,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testDomain(): void
     {
@@ -81,7 +84,7 @@ class ServiceTest extends
             $mockService2
         );
     }
-
+    
     /**
      * testPost
      *
@@ -89,6 +92,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testPost(): void
     {
@@ -111,7 +115,7 @@ class ServiceTest extends
             $mockService2
         );
     }
-
+    
     /**
      * testUser
      *
@@ -119,6 +123,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testUser(): void
     {

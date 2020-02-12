@@ -7,6 +7,8 @@ use Closure;
 use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionParameter;
+use function assert;
 use function count;
 use function in_array;
 use function strtoupper;
@@ -31,17 +33,17 @@ final class RequestConfiguration
     private $method = 'GET';
     
     /**
-     * @var null
+     * @var array|null
      */
-    private $normalization = null;
+    private $normalization;
     /**
-     * @var null
+     * @var Closure|null
      */
-    private $response = null;
+    private $response;
     /**
-     * @var null
+     * @var array|null
      */
-    private $validation = null;
+    private $validation;
     
     /**
      * RequestConfiguration constructor.
@@ -262,7 +264,7 @@ final class RequestConfiguration
             );
         }
         $reflectionParameter = $reflectionParameters[0];
-        assert($reflectionParameter instanceof \ReflectionParameter);
+        assert($reflectionParameter instanceof ReflectionParameter);
         
         $reflectionParameterType = $reflectionParameter->getType();
         if ($reflectionParameterType === null) {

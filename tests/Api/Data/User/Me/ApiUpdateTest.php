@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Me\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -30,10 +31,11 @@ class ApiUpdateTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testUpdate(): void
     {
@@ -58,7 +60,7 @@ class ApiUpdateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseUpdate
      *
@@ -68,6 +70,7 @@ class ApiUpdateTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseUpdate(): void
     {

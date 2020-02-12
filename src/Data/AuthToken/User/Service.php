@@ -12,8 +12,10 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use function array_map;
 
 /**
@@ -28,6 +30,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -106,12 +110,16 @@ class Service extends
     }
     
     /**
+     * getAllUsers
+     *
      * @param string $apiAuthToken
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAllUsers(
         string $apiAuthToken
@@ -137,14 +145,18 @@ class Service extends
     }
     
     /**
+     * getByEmailAndGoogleId
+     *
      * @param string $email
      * @param string $googleId
      * @param string $apiAuthToken
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -176,13 +188,17 @@ class Service extends
     }
     
     /**
+     * getUser
+     *
      * @param string $uid
      * @param string $apiAuthToken
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getUser(
         string $uid,

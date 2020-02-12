@@ -11,8 +11,10 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 
 /**
  * Service
@@ -26,6 +28,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -60,12 +64,16 @@ class Service extends
     }
     
     /**
+     * getMe
+     *
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getMe(
         string $jwt

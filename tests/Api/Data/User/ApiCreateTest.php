@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -35,10 +36,11 @@ class ApiCreateTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws InvalidArgumentException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testCreate(): void
@@ -77,17 +79,18 @@ class ApiCreateTest extends
             $response->getData()['user']
         );
     }
-
+    
     /**
      * testThrowOnInvalidResponseOnCreate
      *
      * @return void
      *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws InvalidArgumentException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowOnInvalidResponseOnCreate(): void
     {

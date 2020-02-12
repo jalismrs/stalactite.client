@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data;
 
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 
 /**
  * Service
@@ -30,63 +31,71 @@ class Service extends
      */
     public function authToken(): AuthToken\Service
     {
-        if (null === $this->serviceAuthToken) {
+        if ($this->serviceAuthToken === null) {
             $this->serviceAuthToken = new AuthToken\Service($this->getClient());
         }
 
         return $this->serviceAuthToken;
     }
-
+    
     /**
-     * customer
+     * customers
      *
      * @return Customer\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function customers(): Customer\Service
     {
-        if (null === $this->serviceCustomer) {
+        if ($this->serviceCustomer === null) {
             $this->serviceCustomer = new Customer\Service($this->getClient());
         }
 
         return $this->serviceCustomer;
     }
-
+    
     /**
-     * domain
+     * domains
      *
      * @return Domain\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function domains(): Domain\Service
     {
-        if (null === $this->serviceDomain) {
+        if ($this->serviceDomain === null) {
             $this->serviceDomain = new Domain\Service($this->getClient());
         }
 
         return $this->serviceDomain;
     }
-
+    
     /**
-     * post
+     * posts
      *
      * @return Post\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function posts(): Post\Service
     {
-        if (null === $this->servicePost) {
+        if ($this->servicePost === null) {
             $this->servicePost = new Post\Service($this->getClient());
         }
 
         return $this->servicePost;
     }
-
+    
     /**
-     * user
+     * users
      *
      * @return User\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function users(): User\Service
     {
-        if (null === $this->serviceUser) {
+        if ($this->serviceUser === null) {
             $this->serviceUser = new User\Service($this->getClient());
         }
 

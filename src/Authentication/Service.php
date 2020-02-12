@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -45,6 +46,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -83,13 +86,15 @@ class Service extends
      */
     
     /**
-     * trustedApp
+     * trustedApps
      *
      * @return TrustedAppService
+     *
+     * @throws RequestConfigurationException
      */
     public function trustedApps() : TrustedAppService
     {
-        if (null === $this->serviceTrustedApp) {
+        if ($this->serviceTrustedApp === null) {
             $this->serviceTrustedApp = new TrustedAppService($this->getClient());
         }
         

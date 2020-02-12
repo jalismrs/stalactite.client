@@ -8,8 +8,10 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -32,6 +34,8 @@ class ApiDeleteTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testDelete(): void
     {
@@ -60,7 +64,7 @@ class ApiDeleteTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
      * testThrowOnDelete
      *
@@ -69,6 +73,8 @@ class ApiDeleteTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnDelete(): void
     {

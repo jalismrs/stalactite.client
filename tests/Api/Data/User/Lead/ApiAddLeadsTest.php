@@ -9,8 +9,10 @@ use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -23,11 +25,17 @@ class ApiAddLeadsTest extends
     TestCase
 {
     /**
+     * testAddLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAddLeads(): void
@@ -56,12 +64,18 @@ class ApiAddLeadsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-
+    
     /**
+     * testThrowOnInvalidResponseAddLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidResponseAddLeads(): void
     {
@@ -91,12 +105,18 @@ class ApiAddLeadsTest extends
             'fake user jwt'
         );
     }
-
+    
     /**
+     * testThrowOnInvalidLeadsParameterAddLeads
+     *
+     * @return void
+     *
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testThrowOnInvalidLeadsParameterAddLeads(): void
     {

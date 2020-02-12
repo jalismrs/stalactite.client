@@ -8,7 +8,9 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -31,6 +33,8 @@ class LoginTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testSchemaValidationOnLogin(): void
     {
@@ -58,7 +62,7 @@ class LoginTest extends
         self::assertNull($response->getError());
         self::assertIsString($response->getData()['jwt']);
     }
-
+    
     /**
      * testExceptionThrownOnInvalidAPIHost
      *
@@ -67,6 +71,8 @@ class LoginTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testExceptionThrownOnInvalidAPIHost(): void
     {
@@ -80,7 +86,7 @@ class LoginTest extends
             'fakeUserGoogleToken'
         );
     }
-
+    
     /**
      * testExceptionThrownOnInvalidAPIResponse
      *
@@ -89,6 +95,8 @@ class LoginTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testExceptionThrownOnInvalidAPIResponse(): void
     {
@@ -106,7 +114,7 @@ class LoginTest extends
             'fakeUserGoogleToken'
         );
     }
-
+    
     /**
      * testExceptionThrownOnInvalidAPIResponseContent
      *
@@ -115,6 +123,8 @@ class LoginTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function testExceptionThrownOnInvalidAPIResponseContent(): void
     {

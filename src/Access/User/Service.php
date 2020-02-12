@@ -15,9 +15,12 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Util\SerializerException;
 use function array_map;
+use function assert;
 
 /**
  * Service
@@ -33,6 +36,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -91,10 +96,12 @@ class Service extends
      * me
      *
      * @return Me\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function me() : Me\Service
     {
-        if (null === $this->serviceMe) {
+        if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
         
@@ -117,6 +124,8 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws RequestConfigurationException
+     * @throws SerializerException
      */
     public function getRelations(
         User $userModel,
@@ -168,6 +177,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAccessClearance(
         User $userModel,

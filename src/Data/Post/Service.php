@@ -12,6 +12,7 @@ use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -30,6 +31,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -154,15 +157,16 @@ class Service extends
     }
     
     /**
-     * getAll
+     * getAllPosts
      *
      * @param string $jwt
      *
      * @return Response
      *
+     * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
+     * @throws SerializerException
      */
     public function getAllPosts(
         string $jwt
@@ -191,6 +195,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getPost(
         string $uid,
@@ -276,16 +281,17 @@ class Service extends
     }
     
     /**
-     * delete
+     * deletePost
      *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
      *
+     * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
+     * @throws SerializerException
      */
     public function deletePost(
         string $uid,
@@ -314,9 +320,10 @@ class Service extends
      *
      * @return Response
      *
+     * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws ClientException
+     * @throws SerializerException
      */
     public function getUsers(
         string $uid,

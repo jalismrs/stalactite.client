@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Post\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -35,10 +36,11 @@ class ApiGetTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testGet(): void
     {
@@ -77,7 +79,7 @@ class ApiGetTest extends
             $response->getData()['post']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGet
      *
@@ -86,6 +88,8 @@ class ApiGetTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseGet(): void
     {

@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Access\Domain\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -36,10 +37,11 @@ class ApiAddCustomerRelationTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testAddCustomerRelation(): void
     {
@@ -75,7 +77,7 @@ class ApiAddCustomerRelationTest extends
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainCustomerRelation::class, $response->getData()['relation']);
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseAddCustomerRelation
      *
@@ -84,6 +86,8 @@ class ApiAddCustomerRelationTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseAddCustomerRelation(): void
     {

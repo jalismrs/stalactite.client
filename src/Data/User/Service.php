@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\RequestConfiguration;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
@@ -40,6 +41,8 @@ class Service extends
      * Service constructor.
      *
      * @param Client $client
+     *
+     * @throws RequestConfigurationException
      */
     public function __construct(
         Client $client
@@ -168,13 +171,15 @@ class Service extends
      */
     
     /**
-     * lead
+     * leads
      *
      * @return Lead\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function leads() : Lead\Service
     {
-        if (null === $this->serviceLead) {
+        if ($this->serviceLead === null) {
             $this->serviceLead = new Lead\Service($this->getClient());
         }
         
@@ -185,10 +190,12 @@ class Service extends
      * me
      *
      * @return Me\Service
+     *
+     * @throws RequestConfigurationException
      */
     public function me() : Me\Service
     {
-        if (null === $this->serviceMe) {
+        if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
         
@@ -199,10 +206,12 @@ class Service extends
      * posts
      *
      * @return PostService
+     *
+     * @throws RequestConfigurationException
      */
     public function posts() : PostService
     {
-        if (null === $this->servicePost) {
+        if ($this->servicePost === null) {
             $this->servicePost = new PostService($this->getClient());
         }
         
@@ -225,6 +234,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getAllUsers(
         string $jwt
@@ -243,13 +253,17 @@ class Service extends
     }
     
     /**
+     * getUser
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getUser(
         string $uid,
@@ -271,14 +285,18 @@ class Service extends
     }
     
     /**
+     * getByEmailAndGoogleId
+     *
      * @param string $email
      * @param string $googleId
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -385,13 +403,17 @@ class Service extends
     }
     
     /**
+     * deleteUser
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
      */
     public function deleteUser(
         string $uid,

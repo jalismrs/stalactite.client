@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Post\Service;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -33,10 +34,11 @@ class ApiGetUsersTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testGetUsers(): void
     {
@@ -77,7 +79,7 @@ class ApiGetUsersTest extends
             $response->getData()['users']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetUsers
      *
@@ -86,6 +88,8 @@ class ApiGetUsersTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
+     * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseGetUsers(): void
     {

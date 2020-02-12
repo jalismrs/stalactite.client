@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
@@ -36,13 +37,14 @@ class JwtValidationTest extends
     {
         return file_get_contents(self::TEST_RSA_PUBLIC_KEY);
     }
-
+    
     /**
      * testTransportExceptionThrownOnRSAPublicKeyFetching
      *
      * @return void
      *
      * @throws ClientException
+     * @throws RequestConfigurationException
      */
     public function testTransportExceptionThrownOnRSAPublicKeyFetching(): void
     {
@@ -54,16 +56,17 @@ class JwtValidationTest extends
 
         $mockService->getRSAPublicKey();
     }
-
+    
     /**
      * testValidToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testValidToken(): void
     {
@@ -83,16 +86,17 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * testInvalidPublicKeyToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testInvalidPublicKeyToken(): void
     {
@@ -115,16 +119,17 @@ class JwtValidationTest extends
             'invalid public key'
         );
     }
-
+    
     /**
      * testInvalidToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testInvalidToken(): void
     {
@@ -136,16 +141,17 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * testWrongIssuerToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testWrongIssuerToken(): void
     {
@@ -168,16 +174,17 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * testExpiredToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testExpiredToken(): void
     {
@@ -200,16 +207,17 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * testInvalidUserTypeToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testInvalidUserTypeToken(): void
     {
@@ -232,16 +240,17 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * testInvalidJwtStructureMissingClaimToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     public function testInvalidJwtStructureMissingClaimToken(): void
     {
@@ -263,7 +272,7 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-
+    
     /**
      * checkToken
      *
@@ -273,9 +282,10 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     * @throws RequestConfigurationException
      */
     private function checkToken(
         string $token,

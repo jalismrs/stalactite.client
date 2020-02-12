@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Access\Customer\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -34,10 +35,11 @@ class ApiGetRelationsTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
      */
     public function testGetRelations(): void
     {
@@ -81,7 +83,7 @@ class ApiGetRelationsTest extends
             $response->getData()['relations']
         );
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseGetRelations
      *
@@ -91,6 +93,7 @@ class ApiGetRelationsTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestConfigurationException
      */
     public function testThrowExceptionOnInvalidResponseGetRelations(): void
     {
