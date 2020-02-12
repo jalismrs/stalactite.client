@@ -104,6 +104,11 @@
             <directory>tests/Service/Data</directory>
         </testsuite>
         <testsuite
+                name="service-entry"
+        >
+            <file>tests/Service/ServiceTest.php</file>
+        </testsuite>
+        <testsuite
                 name="util"
         >
             <directory>tests/Util</directory>
