@@ -159,6 +159,22 @@ class RequestConfigurationTest extends
     }
     
     /**
+     * testMethod
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testNormalizationNull() : void
+    {
+        $requestConfiguration = new RequestConfiguration('');
+        $requestConfiguration->setNormalization(null);
+        
+        self::assertNull($requestConfiguration->getNormalization());
+    }
+    
+    /**
      * testNormalizationDefault
      *
      * @return void
@@ -195,6 +211,23 @@ class RequestConfigurationTest extends
             $response,
             $requestConfiguration->getResponse()
         );
+    }
+    
+    /**
+     * testResponseNull
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestConfigurationException
+     */
+    public function testResponseNull() : void
+    {
+        $requestConfiguration = new RequestConfiguration('');
+        $requestConfiguration->setResponse(null);
+        
+        self::assertNull($requestConfiguration->getResponse());
     }
     
     /**
@@ -321,6 +354,22 @@ class RequestConfigurationTest extends
             $validation,
             $requestConfiguration->getValidation()
         );
+    }
+    
+    /**
+     * testMethod
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testValidationNull() : void
+    {
+        $requestConfiguration = new RequestConfiguration('');
+        $requestConfiguration->setValidation(null);
+    
+        self::assertNull($requestConfiguration->getValidation());
     }
     
     /**

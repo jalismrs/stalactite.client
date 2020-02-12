@@ -163,13 +163,15 @@ final class RequestConfiguration
     /**
      * setNormalization
      *
-     * @param array $normalization
+     * @param array|null $normalization
      *
      * @return $this
      */
-    public function setNormalization(array $normalization) : self
+    public function setNormalization(?array $normalization) : self
     {
-        self::validateNormalization($normalization);
+        if ($normalization !== null) {
+            self::validateNormalization($normalization);
+        }
         
         $this->normalization = $normalization;
         
@@ -201,15 +203,17 @@ final class RequestConfiguration
     /**
      * setResponse
      *
-     * @param Closure $response
+     * @param Closure|null $response
      *
      * @return $this
      *
      * @throws RequestConfigurationException
      */
-    public function setResponse(Closure $response) : self
+    public function setResponse(?Closure $response) : self
     {
-        self::validateResponse($response);
+        if ($response !== null) {
+            self::validateResponse($response);
+        }
         
         $this->response = $response;
         
@@ -286,13 +290,15 @@ final class RequestConfiguration
     /**
      * setValidation
      *
-     * @param array $validation
+     * @param array|null $validation
      *
      * @return $this
      */
-    public function setValidation(array $validation) : self
+    public function setValidation(?array $validation) : self
     {
-        self::validateValidation($validation);
+        if ($validation !== null) {
+            self::validateValidation($validation);
+        }
         
         $this->validation = $validation;
         
