@@ -102,8 +102,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['deleteRelationsByDomain'],
@@ -116,11 +116,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -145,8 +140,33 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        $this->requestConfigurations['getRelations']['response'] = static function(array $response) use ($domainModel) : array {
+            return [
+                'relations' => [
+                    'users'     => array_map(
+                        static function(array $relation) use ($domainModel): DomainUserRelation {
+                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                            $domainUserRelationModel->setDomain($domainModel);
+                
+                            return $domainUserRelationModel;
+                        },
+                        $response['relations']['users']
+                    ),
+                    'customers' => array_map(
+                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                            $domainCustomerRelation->setDomain($domainModel);
+                
+                            return $domainCustomerRelation;
+                        },
+                        $response['relations']['customers']
+                    )
+                ],
+            ];
+        };
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getRelations'],
@@ -159,32 +179,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelation {
-                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                            $domainUserRelationModel->setDomain($domainModel);
-                            
-                            return $domainUserRelationModel;
-                        },
-                        $response['relations']['users']
-                    ),
-                    'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
-                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                            $domainCustomerRelation->setDomain($domainModel);
-                            
-                            return $domainCustomerRelation;
-                        },
-                        $response['relations']['customers']
-                    )
-                ]
-            ]
-        );
     }
 }

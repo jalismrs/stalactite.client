@@ -56,6 +56,11 @@ class Service extends
             'login' => [
                 'endpoint'   => '/auth/login',
                 'method'     => 'POST',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'jwt' => $response['jwt'],
+                    ];
+                },
                 'validation' => [
                     'jwt' => [
                         'type' => JsonRule::STRING_TYPE,
@@ -269,7 +274,7 @@ class Service extends
         TrustedApp $trustedAppModel,
         string $userGoogleJwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['login'],
@@ -282,13 +287,5 @@ class Service extends
                     ],
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'jwt' => $response['jwt']
-            ]
-        );
     }
 }

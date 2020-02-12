@@ -44,6 +44,13 @@ class Service extends
             'addCustomerRelation' => [
                 'endpoint'   => '/access/domains/%s/relations/customers',
                 'method'     => 'POST',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'relation' => $response['relation'] === null
+                            ? null
+                            : ModelFactory::createDomainCustomerRelation($response['relation']),
+                    ];
+                },
                 'validation' => [
                     'relation' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -55,6 +62,13 @@ class Service extends
             'addUserRelation'     => [
                 'endpoint'   => '/access/domains/%s/relations/users',
                 'method'     => 'POST',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'relation' => $response['relation'] === null
+                            ? null
+                            : ModelFactory::createDomainUserRelation($response['relation']),
+                    ];
+                },
                 'validation' => [
                     'relation' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -66,6 +80,11 @@ class Service extends
             'getRelations'        => [
                 'endpoint'   => '/access/domains/%s/relations',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+    
+                    ];
+                },
                 'validation' => [
                     'relations' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -117,7 +136,32 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $response = $this
+        $this->requestConfigurations['getRelations']['response'] = static function(array $response) use ($domainModel) : array {
+            return [
+                'relations' => [
+                    'users'     => array_map(
+                        static function(array $relation) use ($domainModel): DomainUserRelation {
+                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                            $domainUserRelationModel->setDomain($domainModel);
+                
+                            return $domainUserRelationModel;
+                        },
+                        $response['relations']['users']
+                    ),
+                    'customers' => array_map(
+                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                            $domainCustomerRelation->setDomain($domainModel);
+                
+                            return $domainCustomerRelation;
+                        },
+                        $response['relations']['customers']
+                    )
+                ],
+            ];
+        };
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getRelations'],
@@ -130,33 +174,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelation {
-                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                            $domainUserRelationModel->setDomain($domainModel);
-                            
-                            return $domainUserRelationModel;
-                        },
-                        $response['relations']['users']
-                    ),
-                    'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
-                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                            $domainCustomerRelation->setDomain($domainModel);
-                            
-                            return $domainCustomerRelation;
-                        },
-                        $response['relations']['customers']
-                    )
-                ]
-            ]
-        );
     }
     
     /**
@@ -177,7 +194,7 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['addUserRelation'],
@@ -193,16 +210,6 @@ class Service extends
                     ],
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relation' => null === $response['relation']
-                    ? null
-                    : ModelFactory::createDomainUserRelation($response['relation']),
-            ]
-        );
     }
     
     /**
@@ -223,7 +230,7 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['addCustomerRelation'],
@@ -239,15 +246,5 @@ class Service extends
                     ],
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relation' => null === $response['relation']
-                    ? null
-                    : ModelFactory::createDomainCustomerRelation($response['relation']),
-            ]
-        );
     }
 }

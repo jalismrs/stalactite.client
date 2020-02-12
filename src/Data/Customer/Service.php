@@ -43,16 +43,23 @@ class Service extends
             'create'                => [
                 'endpoint'      => '/data/customers',
                 'method'        => 'POST',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
+                'response'   => static function(array $response) : array {
+                    return [
+                        'customer' => null === $response['customer']
+                            ? null
+                            : ModelFactory::createCustomer($response['customer']),
+                    ];
+                },
                 'validation'    => [
                     'customer' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
                         'schema' => Schema::CUSTOMER,
-                    ],
-                ],
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
                     ],
                 ],
             ],
@@ -63,6 +70,16 @@ class Service extends
             'getAll'                => [
                 'endpoint'   => '/data/customers',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'customers' => array_map(
+                            static function($customer) {
+                                return ModelFactory::createCustomer($customer);
+                            },
+                            $response['customers']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'customers' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -73,6 +90,13 @@ class Service extends
             'getByEmailAndGoogleId' => [
                 'endpoint'   => '/data/customers',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'customer' => $response['customer'] === null
+                            ? null
+                            : ModelFactory::createCustomer($response['customer']),
+                    ];
+                },
                 'validation' => [
                     'success'  => [
                         'type' => JsonRule::BOOLEAN_TYPE,
@@ -91,6 +115,13 @@ class Service extends
             'get'                   => [
                 'endpoint'   => '/data/customers/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'customer' => null === $response['customer']
+                            ? null
+                            : ModelFactory::createCustomer($response['customer']),
+                    ];
+                },
                 'validation' => [
                     'customer' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -149,7 +180,7 @@ class Service extends
     public function getAllCustomers(
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -160,19 +191,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customers' => array_map(
-                    static function($customer) {
-                        return ModelFactory::createCustomer($customer);
-                    },
-                    $response['customers']
-                )
-            ]
-        );
     }
     
     /**
@@ -188,7 +206,7 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -201,16 +219,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customer' => null === $response['customer']
-                    ? null
-                    : ModelFactory::createCustomer($response['customer']),
-            ]
-        );
     }
     
     /**
@@ -228,7 +236,7 @@ class Service extends
         string $googleId,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getByEmailAndGoogleId'],
@@ -243,16 +251,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customer' => null === $response['customer']
-                    ? null
-                    : ModelFactory::createCustomer($response['customer']),
-            ]
-        );
     }
     
     /**
@@ -272,7 +270,7 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['create'],
@@ -284,16 +282,6 @@ class Service extends
                     'json'    => $customerModel,
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customer' => null === $response['customer']
-                    ? null
-                    : ModelFactory::createCustomer($response['customer']),
-            ]
-        );
     }
     
     /**
@@ -313,7 +301,7 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['update'],
@@ -327,11 +315,6 @@ class Service extends
                     'json'    => $customerModel,
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -347,7 +330,7 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['delete'],
@@ -360,10 +343,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

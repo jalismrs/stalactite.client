@@ -44,6 +44,11 @@ class Service extends
             'getAccessClearance' => [
                 'endpoint'   => '/access/customers/%s/access/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'clearance' => ModelFactory::createAccessClearance($response['clearance']),
+                    ];
+                },
                 'validation' => [
                     'clearance' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -54,6 +59,11 @@ class Service extends
             'getRelations'       => [
                 'endpoint'   => '/access/customers/%s/relations',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+    
+                    ];
+                },
                 'validation' => [
                     'relations' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -112,7 +122,19 @@ class Service extends
         Customer $customerModel,
         string $jwt
     ) : Response {
-        $response = $this
+        $this->requestConfigurations['getRelations']['response'] = static function(array $response) use ($customerModel) : array {
+            return [
+                'relations' => array_map(
+                    static function(array $relation) use ($customerModel): DomainCustomerRelation {
+                        return ModelFactory::createDomainCustomerRelation($relation)
+                                           ->setCustomer($customerModel);
+                    },
+                    $response['relations']
+                ),
+            ];
+        };
+        
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getRelations'],
@@ -125,20 +147,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relations' => array_map(
-                    static function(array $relation) use ($customerModel): DomainCustomerRelation {
-                        return ModelFactory::createDomainCustomerRelation($relation)
-                                           ->setCustomer($customerModel);
-                    },
-                    $response['relations']
-                )
-            ]
-        );
     }
     
     /**
@@ -159,7 +167,7 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAccessClearance'],
@@ -173,13 +181,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
-            ]
-        );
     }
 }

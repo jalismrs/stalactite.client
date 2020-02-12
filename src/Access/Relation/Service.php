@@ -55,7 +55,7 @@ class Service extends
         DomainRelation $domainRelationModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['deleteRelation'],
@@ -68,10 +68,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

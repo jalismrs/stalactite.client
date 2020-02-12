@@ -39,6 +39,16 @@ class Service extends
             'getAll'   => [
                 'endpoint'   => '/data/auth-token/posts',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'posts' => array_map(
+                            static function($post) {
+                                return ModelFactory::createPost($post);
+                            },
+                            $response['posts']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'posts' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -49,6 +59,13 @@ class Service extends
             'get'      => [
                 'endpoint'   => '/data/auth-token/posts/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'post' => null === $response['post']
+                            ? null
+                            : ModelFactory::createPost($response['post']),
+                    ];
+                },
                 'validation' => [
                     'post' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -60,6 +77,16 @@ class Service extends
             'getUsers' => [
                 'endpoint'   => '/data/auth-token/posts/%s/users',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'users' => array_map(
+                            static function($user) {
+                                return ModelFactory::createUser($user);
+                            },
+                            $response['users']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'users' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -87,8 +114,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -99,19 +126,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'posts' => array_map(
-                    static function($post) {
-                        return ModelFactory::createPost($post);
-                    },
-                    $response['posts']
-                )
-            ]
-        );
     }
     
     /**
@@ -133,8 +147,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -147,16 +161,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'post' => null === $response['post']
-                    ? null
-                    : ModelFactory::createPost($response['post']),
-            ]
-        );
     }
     
     /**
@@ -178,8 +182,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getUsers'],
@@ -192,18 +196,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'users' => array_map(
-                    static function($user) {
-                        return ModelFactory::createUser($user);
-                    },
-                    $response['users']
-                )
-            ]
-        );
     }
 }

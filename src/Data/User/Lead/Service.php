@@ -46,6 +46,16 @@ class Service extends
             'getAll'      => [
                 'endpoint'   => '/data/users/%s/leads',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'leads' => array_map(
+                            static function($lead) {
+                                return ModelFactory::createPost($lead);
+                            },
+                            $response['leads']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'leads' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -76,7 +86,7 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -89,19 +99,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'leads' => array_map(
-                    static function($lead) {
-                        return ModelFactory::createPost($lead);
-                    },
-                    $response['leads']
-                )
-            ]
-        );
     }
     
     /**
@@ -123,7 +120,7 @@ class Service extends
         array $leadModels,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['addLeads'],
@@ -142,11 +139,6 @@ class Service extends
                     ],
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -168,7 +160,7 @@ class Service extends
         array $leadModels,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['removeLeads'],
@@ -187,10 +179,5 @@ class Service extends
                     ],
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

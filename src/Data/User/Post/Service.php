@@ -46,6 +46,16 @@ class Service extends
             'getAll'      => [
                 'endpoint'   => '/data/users/%s/posts',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'posts' => array_map(
+                            static function($post) {
+                                return ModelFactory::createPost($post);
+                            },
+                            $response['posts']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'posts' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -76,7 +86,7 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -89,19 +99,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'posts' => array_map(
-                    static function($post) {
-                        return ModelFactory::createPost($post);
-                    },
-                    $response['posts']
-                )
-            ]
-        );
     }
     
     /**
@@ -123,7 +120,7 @@ class Service extends
         array $postModels,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['addPosts'],
@@ -142,11 +139,6 @@ class Service extends
                     ],
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -168,7 +160,7 @@ class Service extends
         array $postModels,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['removePosts'],
@@ -187,10 +179,5 @@ class Service extends
                     ],
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

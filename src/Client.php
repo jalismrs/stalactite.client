@@ -120,7 +120,7 @@ final class Client
         array $configuration,
         array $uriDatas,
         array $options
-    ) : array {
+    ) : Response {
         if (isset($options['json'])) {
             $options = array_replace_recursive(
                 $options,
@@ -174,14 +174,14 @@ final class Client
             throw $exception;
         }
         
-        $data = new JsonData();
+        $jsonData = new JsonData();
         try {
             $content = $response->getContent(false);
             
             $this->getLogger()
                  ->debug($content);
             
-            $data->setData($content);
+            $jsonData->setData($content);
         } catch (Throwable $throwable) {
             $exception = new ClientException(
                 'Invalid json response from Stalactite API',
@@ -210,7 +210,7 @@ final class Client
                 $configuration['validation'] ?? []
             )
         );
-        if (!$schema->validate($data)) {
+        if (!$schema->validate($jsonData)) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: ' . $schema->getLastError(),
                 ClientException::INVALID_API_RESPONSE
@@ -222,8 +222,8 @@ final class Client
             throw $exception;
         }
         
-        $response = $data->getData();
-        if (null === $response) {
+        $data = $jsonData->getData();
+        if (null === $data) {
             $exception = new ClientException(
                 'Invalid response from Stalactite API: response is null',
                 ClientException::INVALID_API_RESPONSE
@@ -235,7 +235,13 @@ final class Client
             throw $exception;
         }
         
-        return $response;
+        return new Response(
+            $data['success'],
+            $data['error'],
+            isset($configuration['response'])
+                ? $configuration['response']($data)
+                : null
+        );
     }
     
     /**

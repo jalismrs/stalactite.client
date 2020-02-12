@@ -42,6 +42,16 @@ class Service extends
             'create'         => [
                 'endpoint'      => '/auth/trustedApps',
                 'method'        => 'POST',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
+                'response'   => static function(array $response) : array {
+                    return [
+                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                    ];
+                },
                 'validation'    => [
                     'trustedApp' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -56,11 +66,6 @@ class Service extends
                         ),
                     ],
                 ],
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
-                    ],
-                ],
             ],
             'delete'         => [
                 'endpoint' => '/auth/trustedApps/%s',
@@ -69,6 +74,16 @@ class Service extends
             'getAll'         => [
                 'endpoint'   => '/auth/trustedApps',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'trustedApps' => array_map(
+                            static function($trustedApp) {
+                                return ModelFactory::createTrustedApp($trustedApp);
+                            },
+                            $response['trustedApps']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'trustedApps' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -79,6 +94,11 @@ class Service extends
             'get'            => [
                 'endpoint'   => '/auth/trustedApps/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                    ];
+                },
                 'validation' => [
                     'trustedApp' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -90,6 +110,16 @@ class Service extends
             'resetAuthToken' => [
                 'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
                 'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'reset',
+                    ],
+                ],
+                'response'   => static function(array $response) : array {
+                    return [
+                        'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                    ];
+                },
                 'validation'    => [
                     'success'    => [
                         'type' => JsonRule::BOOLEAN_TYPE,
@@ -102,11 +132,6 @@ class Service extends
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
                         'schema' => Schema::TRUSTED_APP,
-                    ],
-                ],
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'reset',
                     ],
                 ],
             ],
@@ -137,7 +162,7 @@ class Service extends
     public function getAllTrustedApps(
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -148,19 +173,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'trustedApps' => array_map(
-                    static function($trustedApp) {
-                        return ModelFactory::createTrustedApp($trustedApp);
-                    },
-                    $response['trustedApps']
-                )
-            ]
-        );
     }
     
     /**
@@ -180,7 +192,7 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -193,14 +205,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
-            ]
-        );
     }
     
     /**
@@ -219,7 +223,7 @@ class Service extends
         TrustedApp $trustedAppModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['update'],
@@ -233,11 +237,6 @@ class Service extends
                     'json'    => $trustedAppModel,
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -257,7 +256,7 @@ class Service extends
         TrustedApp $trustedAppModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['create'],
@@ -269,14 +268,6 @@ class Service extends
                     'json'    => $trustedAppModel,
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
-            ]
-        );
     }
     
     /**
@@ -298,7 +289,7 @@ class Service extends
         string $resetToken,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['delete'],
@@ -314,11 +305,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -338,7 +324,7 @@ class Service extends
         TrustedApp $trustedAppModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['resetAuthToken'],
@@ -352,13 +338,5 @@ class Service extends
                     'json'    => $trustedAppModel
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp'])
-            ]
-        );
     }
 }

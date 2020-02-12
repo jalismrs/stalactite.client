@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
+use Closure;
 use Jalismrs\Stalactite\Client\AbstractService;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -108,13 +109,6 @@ trait RequestConfigurationTestTrait
                                 ],
                             ]
                         ),
-                        'validation'    => new Constraints\Optional(
-                            [
-                                'constraints' => [
-                                    new Constraints\Type('array'),
-                                ],
-                            ]
-                        ),
                         'normalization' => new Constraints\Optional(
                             [
                                 'constraints' => [
@@ -158,6 +152,33 @@ trait RequestConfigurationTestTrait
                                             ],
                                         ]
                                     ),
+                                ],
+                            ]
+                        ),
+                        'response'      => new Constraints\Optional(
+                            [
+                                'constraints' => [
+                                    new Constraints\Type(
+                                        [
+                                            'type' => Closure::class,
+                                        ]
+                                    ),
+                                ],
+                            ]
+                        ),
+                        'validation'    => new Constraints\Optional(
+                            [
+                                'constraints' => [
+                                    new Constraints\Type(
+                                        [
+                                            'type' => 'array',
+                                        ]
+                                    ),
+                                    new Constraints\Count(
+                                        [
+                                            'min' => 1,
+                                        ]
+                                    )
                                 ],
                             ]
                         ),

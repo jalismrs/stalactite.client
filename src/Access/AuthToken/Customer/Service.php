@@ -62,8 +62,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['deleteRelationsByCustomer'],
@@ -76,10 +76,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

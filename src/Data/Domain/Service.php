@@ -41,16 +41,23 @@ class Service extends
             'create'             => [
                 'endpoint'      => '/data/domains',
                 'method'        => 'POST',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
+                'response'   => static function(array $response) : array {
+                    return [
+                        'domain' => null === $response['domain']
+                            ? null
+                            : ModelFactory::createDomain($response['domain']),
+                    ];
+                },
                 'validation'    => [
                     'domain' => [
                         'type'   => JsonRule::OBJECT_TYPE,
                         'null'   => true,
                         'schema' => Schema::DOMAIN,
-                    ],
-                ],
-                'normalization' => [
-                    AbstractNormalizer::GROUPS => [
-                        'create',
                     ],
                 ],
             ],
@@ -61,6 +68,16 @@ class Service extends
             'getAll'             => [
                 'endpoint'   => '/data/domains',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'domains' => array_map(
+                            static function($domain) {
+                                return ModelFactory::createDomain($domain);
+                            },
+                            $response['domains']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -71,6 +88,16 @@ class Service extends
             'getByNameAndApiKey' => [
                 'endpoint'   => '/data/domains',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'domains' => array_map(
+                            static function($domain) {
+                                return ModelFactory::createDomain($domain);
+                            },
+                            $response['domains']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -81,6 +108,16 @@ class Service extends
             'getByName'          => [
                 'endpoint'   => '/data/domains',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'domains' => array_map(
+                            static function($domain) {
+                                return ModelFactory::createDomain($domain);
+                            },
+                            $response['domains']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'domains' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -91,6 +128,13 @@ class Service extends
             'get'                => [
                 'endpoint'   => '/data/domains/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'domain' => null === $response['domain']
+                            ? null
+                            : ModelFactory::createDomain($response['domain']),
+                    ];
+                },
                 'validation' => [
                     'domain' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -122,7 +166,7 @@ class Service extends
     public function getAllDomains(
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -133,19 +177,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
     
     /**
@@ -161,7 +192,7 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -174,16 +205,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domain' => null === $response['domain']
-                    ? null
-                    : ModelFactory::createDomain($response['domain']),
-            ]
-        );
     }
     
     /**
@@ -199,7 +220,7 @@ class Service extends
         string $name,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getByName'],
@@ -213,19 +234,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
     
     /**
@@ -243,7 +251,7 @@ class Service extends
         string $apiKey,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getByNameAndApiKey'],
@@ -258,19 +266,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
     
     /**
@@ -290,7 +285,7 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['create'],
@@ -302,16 +297,6 @@ class Service extends
                     'json'    => $domainModel,
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domain' => null === $response['domain']
-                    ? null
-                    : ModelFactory::createDomain($response['domain']),
-            ]
-        );
     }
     
     /**
@@ -331,7 +316,7 @@ class Service extends
         Domain $domainModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['update'],
@@ -345,11 +330,6 @@ class Service extends
                     'json'    => $domainModel,
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
     
     /**
@@ -365,7 +345,7 @@ class Service extends
         string $uid,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['delete'],
@@ -378,10 +358,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

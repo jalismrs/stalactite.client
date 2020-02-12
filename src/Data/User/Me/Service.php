@@ -40,6 +40,13 @@ class Service extends
             'get'    => [
                 'endpoint'   => '/data/users/me',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'me' => null === $response['me']
+                            ? null
+                            : ModelFactory::createUser($response['me']),
+                    ];
+                },
                 'validation' => [
                     'me' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -71,7 +78,7 @@ class Service extends
     public function getMe(
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -82,16 +89,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'me' => null === $response['me']
-                    ? null
-                    : ModelFactory::createUser($response['me']),
-            ]
-        );
     }
     
     /**
@@ -111,7 +108,7 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
-        $response = $this
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['update'],
@@ -123,10 +120,5 @@ class Service extends
                     'json'    => $userModel
                 ]
             );
-        
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

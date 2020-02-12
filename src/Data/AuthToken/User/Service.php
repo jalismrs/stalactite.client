@@ -39,6 +39,16 @@ class Service extends
             'getAll'                => [
                 'endpoint'   => '/data/auth-token/users',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'users' => array_map(
+                            static function($user) {
+                                return ModelFactory::createUser($user);
+                            },
+                            $response['users']
+                        ),
+                    ];
+                },
                 'validation' => [
                     'users' => [
                         'type'   => JsonRule::LIST_TYPE,
@@ -49,6 +59,13 @@ class Service extends
             'getByEmailAndGoogleId' => [
                 'endpoint'   => '/data/auth-token/users',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'user' => $response['user'] === null
+                            ? null
+                            : ModelFactory::createUser($response['user']),
+                    ];
+                },
                 'validation' => [
                     'user' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -60,6 +77,13 @@ class Service extends
             'get'                   => [
                 'endpoint'   => '/data/auth-token/users/%s',
                 'method'     => 'GET',
+                'response'   => static function(array $response) : array {
+                    return [
+                        'user' => null === $response['user']
+                            ? null
+                            : ModelFactory::createUser($response['user']),
+                    ];
+                },
                 'validation' => [
                     'user' => [
                         'type'   => JsonRule::OBJECT_TYPE,
@@ -88,8 +112,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getAll'],
@@ -100,19 +124,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'users' => array_map(
-                    static function($user) {
-                        return ModelFactory::createUser($user);
-                    },
-                    $response['users']
-                )
-            ]
-        );
     }
     
     /**
@@ -136,8 +147,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['getByEmailAndGoogleId'],
@@ -152,16 +163,6 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'user' => null === $response['user']
-                    ? null
-                    : ModelFactory::createUser($response['user']),
-            ]
-        );
     }
     
     /**
@@ -183,8 +184,8 @@ class Service extends
                 ->getClient()
                 ->getUserAgent()
         );
-        
-        $response = $this
+    
+        return $this
             ->getClient()
             ->request(
                 $this->requestConfigurations['get'],
@@ -197,15 +198,5 @@ class Service extends
                     ]
                 ]
             );
-        
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'user' => null === $response['user']
-                    ? null
-                    : ModelFactory::createUser($response['user']),
-            ]
-        );
     }
 }
