@@ -7,6 +7,7 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
@@ -24,66 +25,81 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    private const REQUEST_CREATE_CONFIGURATION    = [
-        'endpoint'      => '/data/posts',
-        'method'        => 'POST',
-        'schema'        => [
-            'post' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::POST
-            ]
-        ],
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'create',
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'create'   => [
+                'endpoint'      => '/data/posts',
+                'method'        => 'POST',
+                'schema'        => [
+                    'post' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
             ],
-        ],
-    ];
-    private const REQUEST_DELETE_CONFIGURATION    = [
-        'endpoint' => '/data/posts/%s',
-        'method'   => 'DELETE',
-    ];
-    private const REQUEST_GET_ALL_CONFIGURATION   = [
-        'endpoint' => '/data/posts',
-        'method'   => 'GET',
-        'schema'   => [
-            'posts' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::POST
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION       = [
-        'endpoint' => '/data/posts/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'post' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::POST
-            ]
-        ],
-    ];
-    private const REQUEST_GET_USERS_CONFIGURATION = [
-        'endpoint' => '/data/posts/%s/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'users' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION    = [
-        'endpoint'      => '/data/posts/%s',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
+            'delete'   => [
+                'endpoint' => '/data/posts/%s',
+                'method'   => 'DELETE',
             ],
-        ],
-    ];
+            'getAll'   => [
+                'endpoint' => '/data/posts',
+                'method'   => 'GET',
+                'schema'   => [
+                    'posts' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+            ],
+            'get'      => [
+                'endpoint' => '/data/posts/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'post' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+            ],
+            'getUsers' => [
+                'endpoint' => '/data/posts/%s/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'users' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'update'   => [
+                'endpoint'      => '/data/posts/%s',
+                'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * getAll
@@ -102,7 +118,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -144,7 +160,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],
@@ -186,7 +202,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_CREATE_CONFIGURATION,
+                $this->requestConfigurations['create'],
                 [],
                 [
                     'headers' => [
@@ -227,7 +243,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_UPDATE_CONFIGURATION,
+                $this->requestConfigurations['update'],
                 [
                     $postModel->getUid(),
                 ],
@@ -264,7 +280,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_CONFIGURATION,
+                $this->requestConfigurations['delete'],
                 [
                     $uid,
                 ],
@@ -300,7 +316,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_USERS_CONFIGURATION,
+                $this->requestConfigurations['getUsers'],
                 [
                     $uid,
                 ],

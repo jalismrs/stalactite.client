@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'DELETE_RELATIONS_BY_CUSTOMER'
+            'deleteRelationsByCustomer'
         );
     }
 }

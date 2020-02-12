@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'DELETE_RELATIONS_BY_DOMAIN'
+            'deleteRelationsByDomain'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_RELATIONS'
+            'getRelations'
         );
     }
 }

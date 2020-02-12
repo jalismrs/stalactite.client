@@ -6,11 +6,11 @@ namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -26,79 +26,101 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    private const REQUEST_CREATE_CONFIGURATION           = [
-        'endpoint'      => '/auth/trustedApps',
-        'method'        => 'POST',
-        'schema'        => [
-            'trustedApp' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::TRUSTED_APP_FULL
-            ]
-        ],
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'create',
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'create'         => [
+                'endpoint'      => '/auth/trustedApps',
+                'method'        => 'POST',
+                'schema'        => [
+                    'trustedApp' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => array_merge(
+                            Schema::TRUSTED_APP,
+                            [
+                                'resetToken' => [
+                                    'type' => JsonRule::STRING_TYPE
+                                ],
+                            ]
+                        ),
+                    ],
+                ],
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
             ],
-        ],
-    ];
-    private const REQUEST_DELETE_CONFIGURATION           = [
-        'endpoint' => '/auth/trustedApps/%s',
-        'method'   => 'DELETE',
-    ];
-    private const REQUEST_GET_ALL_CONFIGURATION          = [
-        'endpoint' => '/auth/trustedApps',
-        'method'   => 'GET',
-        'schema'   => [
-            'trustedApps' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::TRUSTED_APP
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION              = [
-        'endpoint' => '/auth/trustedApps/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'trustedApp' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'schema' => Schema::TRUSTED_APP,
-                'null'   => true
-            ]
-        ],
-    ];
-    private const REQUEST_RESET_AUTH_TOKEN_CONFIGURATION = [
-        'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
-        'method'        => 'PUT',
-        'schema'        => [
-            'success'    => [
-                'type' => JsonRule::BOOLEAN_TYPE
+            'delete'         => [
+                'endpoint' => '/auth/trustedApps/%s',
+                'method'   => 'DELETE',
             ],
-            'error'      => [
-                'type' => JsonRule::STRING_TYPE,
-                'null' => true
+            'getAll'         => [
+                'endpoint' => '/auth/trustedApps',
+                'method'   => 'GET',
+                'schema'   => [
+                    'trustedApps' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::TRUSTED_APP,
+                    ],
+                ],
             ],
-            'trustedApp' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::TRUSTED_APP
-            ]
-        ],
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'reset',
+            'get'            => [
+                'endpoint' => '/auth/trustedApps/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'trustedApp' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'schema' => Schema::TRUSTED_APP,
+                        'null'   => true,
+                    ],
+                ],
             ],
-        ],
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION           = [
-        'endpoint'      => '/auth/trustedApps/%s',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
+            'resetAuthToken' => [
+                'endpoint'      => '/auth/trustedApps/%s/authToken/reset',
+                'method'        => 'PUT',
+                'schema'        => [
+                    'success'    => [
+                        'type' => JsonRule::BOOLEAN_TYPE,
+                    ],
+                    'error'      => [
+                        'type' => JsonRule::STRING_TYPE,
+                        'null' => true,
+                    ],
+                    'trustedApp' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::TRUSTED_APP,
+                    ],
+                ],
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'reset',
+                    ],
+                ],
             ],
-        ],
-    ];
+            'update'         => [
+                'endpoint'      => '/auth/trustedApps/%s',
+                'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * getAllTrustedApps
@@ -118,7 +140,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -161,7 +183,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],
@@ -200,7 +222,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_UPDATE_CONFIGURATION,
+                $this->requestConfigurations['update'],
                 [
                     $trustedAppModel->getUid(),
                 ],
@@ -238,7 +260,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_CREATE_CONFIGURATION,
+                $this->requestConfigurations['create'],
                 [],
                 [
                     'headers' => [
@@ -279,7 +301,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_CONFIGURATION,
+                $this->requestConfigurations['delete'],
                 [
                     $uid,
                 ],
@@ -319,7 +341,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_RESET_AUTH_TOKEN_CONFIGURATION,
+                $this->requestConfigurations['resetAuthToken'],
                 [
                     $trustedAppModel->getUid(),
                 ],

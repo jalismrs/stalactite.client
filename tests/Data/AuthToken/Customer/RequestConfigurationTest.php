@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_ALL'
+            'getAll'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_BY_EMAIL_AND_GOOGLE_ID'
+            'getByEmailAndGoogleId'
         );
     }
     
@@ -89,7 +89,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET'
+            'get'
         );
     }
 }

@@ -6,15 +6,14 @@ namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -24,38 +23,53 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_ALL_CONFIGURATION                    = [
-        'endpoint' => '/data/auth-token/customers',
-        'method'   => 'GET',
-        'schema'   => [
-            'customers' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::CUSTOMER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
-        'endpoint' => '/data/auth-token/customers',
-        'method'   => 'GET',
-        'schema'   => [
-            'customer' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::CUSTOMER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION                        = [
-        'endpoint' => '/data/auth-token/customers/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'customer' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::CUSTOMER
-            ]
-        ],
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'getAll'                => [
+                'endpoint' => '/data/auth-token/customers',
+                'method'   => 'GET',
+                'schema'   => [
+                    'customers' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::CUSTOMER,
+                    ],
+                ],
+            ],
+            'getByEmailAndGoogleId' => [
+                'endpoint' => '/data/auth-token/customers',
+                'method'   => 'GET',
+                'schema'   => [
+                    'customer' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::CUSTOMER,
+                    ],
+                ],
+            ],
+            'get'                   => [
+                'endpoint' => '/data/auth-token/customers/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'customer' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::CUSTOMER,
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * getAllCustomers
@@ -81,7 +95,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -129,7 +143,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION,
+                $this->requestConfigurations['getByEmailAndGoogleId'],
                 [],
                 [
                     'headers' => [
@@ -176,7 +190,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],

@@ -6,11 +6,11 @@ namespace Jalismrs\Stalactite\Client\Authentication;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\SerializerException;
@@ -38,18 +38,33 @@ class Service extends
         'customer'
     ];
     
-    private const REQUEST_LOGIN_CONFIGURATION = [
-        'endpoint' => '/auth/login',
-        'method'   => 'POST',
-        'schema'   => [
-            'jwt'     => [
-                'type' => JsonRule::STRING_TYPE,
-                'null' => true
-            ]
-        ],
-    ];
-    
     private $serviceTrustedApp;
+    
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'login' => [
+                'endpoint' => '/auth/login',
+                'method'   => 'POST',
+                'schema'   => [
+                    'jwt' => [
+                        'type' => JsonRule::STRING_TYPE,
+                        'null' => true,
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /*
      * -------------------------------------------------------------------------
@@ -257,7 +272,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_LOGIN_CONFIGURATION,
+                $this->requestConfigurations['login'],
                 [],
                 [
                     'json' => [

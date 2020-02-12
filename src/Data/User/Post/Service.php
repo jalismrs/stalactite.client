@@ -6,9 +6,9 @@ namespace Jalismrs\Stalactite\Client\Data\User\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
@@ -17,7 +17,6 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -27,24 +26,39 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private const REQUEST_ADD_POSTS_CONFIGURATION    = [
-        'endpoint' => '/data/users/%s/posts',
-        'method'   => 'POST',
-    ];
-    private const REQUEST_GET_ALL_CONFIGURATION      = [
-        'endpoint' => '/data/users/%s/posts',
-        'method'   => 'GET',
-        'schema'   => [
-            'posts'   => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::POST
-            ]
-        ],
-    ];
-    private const REQUEST_REMOVE_POSTS_CONFIGURATION = [
-        'endpoint' => '/data/users/%s/posts',
-        'method'   => 'DELETE',
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'addPosts'    => [
+                'endpoint' => '/data/users/%s/posts',
+                'method'   => 'POST',
+            ],
+            'getAll'      => [
+                'endpoint' => '/data/users/%s/posts',
+                'method'   => 'GET',
+                'schema'   => [
+                    'posts' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+            ],
+            'removePosts' => [
+                'endpoint' => '/data/users/%s/posts',
+                'method'   => 'DELETE',
+            ],
+        ];
+    }
     
     /**
      * getAllPosts
@@ -65,7 +79,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [
                     $userModel->getUid(),
                 ],
@@ -112,7 +126,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_ADD_POSTS_CONFIGURATION,
+                $this->requestConfigurations['addPosts'],
                 [
                     $userModel->getUid(),
                 ],
@@ -157,7 +171,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_REMOVE_POSTS_CONFIGURATION,
+                $this->requestConfigurations['removePosts'],
                 [
                     $userModel->getUid(),
                 ],

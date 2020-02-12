@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Client\Data\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -25,76 +25,91 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    private const REQUEST_CREATE_CONFIGURATION                  = [
-        'endpoint'      => '/data/domains',
-        'method'        => 'POST',
-        'schema'        => [
-            'domain' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::DOMAIN
-            ]
-        ],
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'create',
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'create'             => [
+                'endpoint'      => '/data/domains',
+                'method'        => 'POST',
+                'schema'        => [
+                    'domain' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::DOMAIN,
+                    ],
+                ],
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
             ],
-        ],
-    ];
-    private const REQUEST_DELETE_CONFIGURATION                  = [
-        'endpoint' => '/data/domains/%s',
-        'method'   => 'DELETE',
-    ];
-    private const REQUEST_GET_ALL_CONFIGURATION                 = [
-        'endpoint' => '/data/domains',
-        'method'   => 'GET',
-        'schema'   => [
-            'domains' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::DOMAIN
-            ]
-        ],
-    ];
-    private const REQUEST_GET_BY_NAME_AND_API_KEY_CONFIGURATION = [
-        'endpoint' => '/data/domains',
-        'method'   => 'GET',
-        'schema'   => [
-            'domains' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::DOMAIN
-            ]
-        ],
-    ];
-    private const REQUEST_GET_BY_NAME_CONFIGURATION             = [
-        'endpoint' => '/data/domains',
-        'method'   => 'GET',
-        'schema'   => [
-            'domains' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::DOMAIN
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION                     = [
-        'endpoint' => '/data/domains/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'domain' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::DOMAIN
-            ]
-        ],
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION                  = [
-        'endpoint'      => '/data/domains/%s',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
+            'delete'             => [
+                'endpoint' => '/data/domains/%s',
+                'method'   => 'DELETE',
             ],
-        ],
-    ];
+            'getAll'             => [
+                'endpoint' => '/data/domains',
+                'method'   => 'GET',
+                'schema'   => [
+                    'domains' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::DOMAIN,
+                    ],
+                ],
+            ],
+            'getByNameAndApiKey' => [
+                'endpoint' => '/data/domains',
+                'method'   => 'GET',
+                'schema'   => [
+                    'domains' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::DOMAIN,
+                    ],
+                ],
+            ],
+            'getByName'          => [
+                'endpoint' => '/data/domains',
+                'method'   => 'GET',
+                'schema'   => [
+                    'domains' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::DOMAIN,
+                    ],
+                ],
+            ],
+            'get'                => [
+                'endpoint' => '/data/domains/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'domain' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::DOMAIN,
+                    ],
+                ],
+            ],
+            'update'             => [
+                'endpoint'      => '/data/domains/%s',
+                'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $jwt
@@ -110,7 +125,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -149,7 +164,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],
@@ -187,7 +202,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_BY_NAME_CONFIGURATION,
+                $this->requestConfigurations['getByName'],
                 [],
                 [
                     'headers' => [
@@ -231,7 +246,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_BY_NAME_AND_API_KEY_CONFIGURATION,
+                $this->requestConfigurations['getByNameAndApiKey'],
                 [],
                 [
                     'headers' => [
@@ -278,7 +293,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_CREATE_CONFIGURATION,
+                $this->requestConfigurations['create'],
                 [],
                 [
                     'headers' => [
@@ -319,7 +334,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_UPDATE_CONFIGURATION,
+                $this->requestConfigurations['update'],
                 [
                     $domainModel->getUid(),
                 ],
@@ -353,7 +368,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_CONFIGURATION,
+                $this->requestConfigurations['delete'],
                 [
                     $uid,
                 ],

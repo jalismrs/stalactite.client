@@ -6,15 +6,14 @@ namespace Jalismrs\Stalactite\Client\Data\AuthToken\Post;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -24,37 +23,52 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_ALL_CONFIGURATION   = [
-        'endpoint' => '/data/auth-token/posts',
-        'method'   => 'GET',
-        'schema'   => [
-            'posts'   => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::POST
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION       = [
-        'endpoint' => '/data/auth-token/posts/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'post'    => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::POST
-            ]
-        ],
-    ];
-    private const REQUEST_GET_USERS_CONFIGURATION = [
-        'endpoint' => '/data/auth-token/posts/%s/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'users'   => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'getAll'   => [
+                'endpoint' => '/data/auth-token/posts',
+                'method'   => 'GET',
+                'schema'   => [
+                    'posts' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+            ],
+            'get'      => [
+                'endpoint' => '/data/auth-token/posts/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'post' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::POST,
+                    ],
+                ],
+            ],
+            'getUsers' => [
+                'endpoint' => '/data/auth-token/posts/%s/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'users' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $apiAuthToken
@@ -77,7 +91,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -123,7 +137,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],
@@ -168,7 +182,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_USERS_CONFIGURATION,
+                $this->requestConfigurations['getUsers'],
                 [
                     $uid,
                 ],

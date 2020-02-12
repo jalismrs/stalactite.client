@@ -5,10 +5,9 @@ namespace Jalismrs\Stalactite\Client\Access\AuthToken\User;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Response;
@@ -21,10 +20,25 @@ use Jalismrs\Stalactite\Client\Response;
 class Service extends
     AbstractService
 {
-    private const REQUEST_DELETE_RELATIONS_BY_USER_CONFIGURATION = [
-        'endpoint' => '/access/auth-token/users/%s/relations',
-        'method'   => 'DELETE',
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'deleteRelationsByUser' => [
+                'endpoint' => '/access/auth-token/users/%s/relations',
+                'method'   => 'DELETE',
+            ],
+        ];
+    }
     
     /**
      * deleteRelationsByUser
@@ -52,7 +66,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_RELATIONS_BY_USER_CONFIGURATION,
+                $this->requestConfigurations['deleteRelationsByUser'],
                 [
                     $userModel->getUid(),
                 ],

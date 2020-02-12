@@ -6,11 +6,11 @@ namespace Jalismrs\Stalactite\Client\Access\User\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
@@ -25,34 +25,49 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION = [
-        'endpoint' => '/access/users/me/access/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'clearance' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'schema' => Schema::ACCESS_CLEARANCE
-            ]
-        ],
-    ];
-    private const REQUEST_GET_RELATIONS_CONFIGURATION        = [
-        'endpoint' => '/access/users/me/relations',
-        'method'   => 'GET',
-        'schema'   => [
-            'relations' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => [
-                    'uid'    => [
-                        'type' => JsonRule::STRING_TYPE
-                    ],
-                    'domain' => [
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'getAccessClearance' => [
+                'endpoint' => '/access/users/me/access/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'clearance' => [
                         'type'   => JsonRule::OBJECT_TYPE,
-                        'schema' => DataSchema::DOMAIN
-                    ]
-                ]
-            ]
-        ],
-    ];
+                        'schema' => Schema::ACCESS_CLEARANCE,
+                    ],
+                ],
+            ],
+            'getRelations'       => [
+                'endpoint' => '/access/users/me/relations',
+                'method'   => 'GET',
+                'schema'   => [
+                    'relations' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => [
+                            'uid'    => [
+                                'type' => JsonRule::STRING_TYPE,
+                            ],
+                            'domain' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => DataSchema::DOMAIN,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $jwt
@@ -68,7 +83,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                $this->requestConfigurations['getRelations'],
                 [],
                 [
                     'headers' => [
@@ -110,7 +125,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ACCESS_CLEARANCE_CONFIGURATION,
+                $this->requestConfigurations['getAccessClearance'],
                 [
                     $domainModel->getUid(),
                 ],

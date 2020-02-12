@@ -26,22 +26,4 @@ abstract class Schema
             'type' => JsonRule::STRING_TYPE
         ]
     ];
-    
-    public const TRUSTED_APP_FULL = [
-        'uid'                 => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'name'                => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'authToken'           => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'googleOAuthClientId' => [
-            'type' => JsonRule::STRING_TYPE
-        ],
-        'resetToken'          => [
-            'type' => JsonRule::STRING_TYPE
-        ]
-    ];
 }

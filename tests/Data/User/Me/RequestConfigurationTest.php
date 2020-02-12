@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET'
+            'get'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'UPDATE'
+            'update'
         );
     }
 }

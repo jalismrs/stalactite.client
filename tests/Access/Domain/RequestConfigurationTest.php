@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'ADD_CUSTOMER_RELATION'
+            'addCustomerRelation'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'ADD_USER_RELATION'
+            'addUserRelation'
         );
     }
     
@@ -89,7 +89,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_RELATIONS'
+            'getRelations'
         );
     }
 }

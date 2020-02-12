@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'CREATE'
+            'create'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'DELETE'
+            'delete'
         );
     }
     
@@ -89,7 +89,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_ALL'
+            'getAll'
         );
     }
     
@@ -112,7 +112,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET'
+            'get'
         );
     }
     
@@ -135,7 +135,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'RESET_AUTH_TOKEN'
+            'resetAuthToken'
         );
     }
     
@@ -158,7 +158,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'UPDATE'
+            'update'
         );
     }
 }

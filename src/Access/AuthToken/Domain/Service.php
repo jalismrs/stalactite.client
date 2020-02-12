@@ -6,12 +6,12 @@ namespace Jalismrs\Stalactite\Client\Access\AuthToken\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
@@ -25,45 +25,60 @@ use Jalismrs\Stalactite\Client\Response;
 class Service extends
     AbstractService
 {
-    private const REQUEST_DELETE_RELATIONS_BY_DOMAIN_CONFIGURATION = [
-        'endpoint' => '/access/auth-token/domains/%s/relations',
-        'method'   => 'DELETE',
-    ];
-    private const REQUEST_GET_RELATIONS_CONFIGURATION              = [
-        'endpoint' => '/access/auth-token/domains/%s/relations',
-        'method'   => 'GET',
-        'schema'   => [
-            'relations' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'schema' => [
-                    'users'     => [
-                        'type'   => JsonRule::LIST_TYPE,
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'deleteRelationsByDomain' => [
+                'endpoint' => '/access/auth-token/domains/%s/relations',
+                'method'   => 'DELETE',
+            ],
+            'getRelations'            => [
+                'endpoint' => '/access/auth-token/domains/%s/relations',
+                'method'   => 'GET',
+                'schema'   => [
+                    'relations' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => [
-                            'uid'  => [
-                                'type' => JsonRule::STRING_TYPE
+                            'users'     => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => [
+                                    'uid'  => [
+                                        'type' => JsonRule::STRING_TYPE,
+                                    ],
+                                    'user' => [
+                                        'type'   => JsonRule::OBJECT_TYPE,
+                                        'schema' => DataSchema::USER,
+                                    ],
+                                ],
                             ],
-                            'user' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::USER
-                            ]
-                        ]
+                            'customers' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => [
+                                    'uid'      => [
+                                        'type' => JsonRule::STRING_TYPE
+                                    ],
+                                    'customer' => [
+                                        'type'   => JsonRule::OBJECT_TYPE,
+                                        'schema' => DataSchema::CUSTOMER,
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
-                    'customers' => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => [
-                            'uid'      => [
-                                'type' => JsonRule::STRING_TYPE
-                            ],
-                            'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::CUSTOMER
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ],
-    ];
+                ],
+            ],
+        ];
+    }
     
     /**
      * deleteRelationsByDomain
@@ -91,7 +106,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_RELATIONS_BY_DOMAIN_CONFIGURATION,
+                $this->requestConfigurations['deleteRelationsByDomain'],
                 [
                     $domainModel->getUid(),
                 ],
@@ -134,7 +149,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                $this->requestConfigurations['getRelations'],
                 [
                     $domainModel->getUid(),
                 ],

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\AbstractService;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -41,6 +42,7 @@ trait RequestConfigurationTestTrait
      * @return void
      *
      * @throws ConstraintDefinitionException
+     * @throws Exception
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws InvalidOptionsException
@@ -52,24 +54,30 @@ trait RequestConfigurationTestTrait
         string $name
     ) : void {
         $reflectionClass = new ReflectionClass($mockService);
-        $constant        = "REQUEST_{$name}_CONFIGURATION";
-        $configuration   = $reflectionClass->getConstant("REQUEST_{$name}_CONFIGURATION");
         
-        self::assertIsArray(
-            $configuration,
+        $reflectionProperty = $reflectionClass->getProperty('requestConfigurations');
+        $reflectionProperty->setAccessible(true);
+        
+        $requestConfigurations = $reflectionProperty->getValue($mockService);
+        
+        self::assertArrayHasKey(
+            $name,
+            $requestConfigurations,
             vsprintf(
-                "Constant '%s' not found in service %s",
+                "RequestConfiguration '%s' not found in service %s",
                 [
-                    $constant,
+                    $name,
                     get_class($mockService)
                 ]
             )
         );
         
+        $requestConfiguration = $requestConfigurations[$name];
+        
         $validator = Validation::createValidator();
         
         $errors = $validator->validate(
-            $configuration,
+            $requestConfiguration,
             new Constraints\Collection(
                 [
                     'fields' => [
@@ -100,7 +108,7 @@ trait RequestConfigurationTestTrait
                                 ],
                             ]
                         ),
-                        'schema' => new Constraints\Optional(
+                        'schema'        => new Constraints\Optional(
                             [
                                 'constraints' => [
                                     new Constraints\Type('array'),

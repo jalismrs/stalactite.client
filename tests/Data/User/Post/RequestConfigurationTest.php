@@ -43,7 +43,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'ADD_POSTS'
+            'addPosts'
         );
     }
     
@@ -66,7 +66,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'GET_ALL'
+            'getAll'
         );
     }
     
@@ -89,7 +89,7 @@ class RequestConfigurationTest extends
         
         self::checkRequestConfigration(
             $mockService,
-            'REMOVE_POSTS'
+            'removePosts'
         );
     }
 }

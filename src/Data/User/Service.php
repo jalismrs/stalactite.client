@@ -8,6 +8,7 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
@@ -30,71 +31,86 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    private const REQUEST_CREATE_CONFIGURATION                     = [
-        'endpoint'      => '/data/users',
-        'method'        => 'POST',
-        'schema'        => [
-            'user' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'create',
-            ],
-        ],
-    ];
-    private const REQUEST_DELETE_CONFIGURATION                     = [
-        'endpoint' => '/data/users/%s',
-        'method'   => 'DELETE',
-    ];
-    private const REQUEST_GET_ALL_CONFIGURATION                    = [
-        'endpoint' => '/data/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'users' => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
-        'endpoint' => '/data/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'user' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION                        = [
-        'endpoint' => '/data/users/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'user' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION                     = [
-        'endpoint'      => '/data/users/%s',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
-            ],
-        ],
-    ];
-    
     private $serviceLead;
     private $serviceMe;
     private $servicePost;
+    
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'create'                => [
+                'endpoint'      => '/data/users',
+                'method'        => 'POST',
+                'schema'        => [
+                    'user' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ],
+            ],
+            'delete'                => [
+                'endpoint' => '/data/users/%s',
+                'method'   => 'DELETE',
+            ],
+            'getAll'                => [
+                'endpoint' => '/data/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'users' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'getByEmailAndGoogleId' => [
+                'endpoint' => '/data/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'user' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'get'                   => [
+                'endpoint' => '/data/users/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'user' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'update'                => [
+                'endpoint'      => '/data/users/%s',
+                'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /*
      * -------------------------------------------------------------------------
@@ -167,7 +183,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -206,7 +222,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],
@@ -246,7 +262,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION,
+                $this->requestConfigurations['getByEmailAndGoogleId'],
                 [],
                 [
                     'headers' => [
@@ -288,7 +304,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_CREATE_CONFIGURATION,
+                $this->requestConfigurations['create'],
                 [],
                 [
                     'headers' => [
@@ -349,7 +365,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_UPDATE_CONFIGURATION,
+                $this->requestConfigurations['update'],
                 [
                     $userModel->getUid(),
                 ],
@@ -383,7 +399,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_CONFIGURATION,
+                $this->requestConfigurations['delete'],
                 [
                     $uid,
                 ],

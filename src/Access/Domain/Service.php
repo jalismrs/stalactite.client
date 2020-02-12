@@ -6,12 +6,12 @@ namespace Jalismrs\Stalactite\Client\Access\Domain;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
@@ -19,7 +19,6 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -29,63 +28,78 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private const REQUEST_ADD_CUSTOMER_RELATION_CONFIGURATION = [
-        'endpoint' => '/access/domains/%s/relations/customers',
-        'method'   => 'POST',
-        'schema'   => [
-            'relation' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::DOMAIN_CUSTOMER_RELATION
-            ]
-        ],
-    ];
-    private const REQUEST_ADD_USER_RELATION_CONFIGURATION     = [
-        'endpoint' => '/access/domains/%s/relations/users',
-        'method'   => 'POST',
-        'schema'   => [
-            'relation' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::DOMAIN_USER_RELATION
-            ]
-        ],
-    ];
-    private const REQUEST_GET_RELATIONS_CONFIGURATION         = [
-        'endpoint' => '/access/domains/%s/relations',
-        'method'   => 'GET',
-        'schema'   => [
-            'relations' => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'schema' => [
-                    'users'     => [
-                        'type'   => JsonRule::LIST_TYPE,
-                        'schema' => [
-                            'uid'  => [
-                                'type' => JsonRule::STRING_TYPE
-                            ],
-                            'user' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::USER
-                            ]
-                        ]
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'addCustomerRelation' => [
+                'endpoint' => '/access/domains/%s/relations/customers',
+                'method'   => 'POST',
+                'schema'   => [
+                    'relation' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::DOMAIN_CUSTOMER_RELATION,
                     ],
-                    'customers' => [
-                        'type'   => JsonRule::LIST_TYPE,
+                ],
+            ],
+            'addUserRelation'     => [
+                'endpoint' => '/access/domains/%s/relations/users',
+                'method'   => 'POST',
+                'schema'   => [
+                    'relation' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::DOMAIN_USER_RELATION,
+                    ],
+                ],
+            ],
+            'getRelations'        => [
+                'endpoint' => '/access/domains/%s/relations',
+                'method'   => 'GET',
+                'schema'   => [
+                    'relations' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
                         'schema' => [
-                            'uid'      => [
-                                'type' => JsonRule::STRING_TYPE
+                            'users'     => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => [
+                                    'uid'  => [
+                                        'type' => JsonRule::STRING_TYPE,
+                                    ],
+                                    'user' => [
+                                        'type'   => JsonRule::OBJECT_TYPE,
+                                        'schema' => DataSchema::USER,
+                                    ],
+                                ],
                             ],
-                            'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'schema' => DataSchema::CUSTOMER
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ],
-    ];
+                            'customers' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => [
+                                    'uid'      => [
+                                        'type' => JsonRule::STRING_TYPE,
+                                    ],
+                                    'customer' => [
+                                        'type'   => JsonRule::OBJECT_TYPE,
+                                        'schema' => DataSchema::CUSTOMER,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * getRelations
@@ -106,7 +120,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_RELATIONS_CONFIGURATION,
+                $this->requestConfigurations['getRelations'],
                 [
                     $domainModel->getUid(),
                 ],
@@ -166,7 +180,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_ADD_USER_RELATION_CONFIGURATION,
+                $this->requestConfigurations['addUserRelation'],
                 [
                     $domainModel->getUid(),
                 ],
@@ -212,7 +226,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_ADD_CUSTOMER_RELATION_CONFIGURATION,
+                $this->requestConfigurations['addCustomerRelation'],
                 [
                     $domainModel->getUid(),
                 ],

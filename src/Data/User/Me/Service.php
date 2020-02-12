@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Client\Data\User\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
@@ -24,26 +24,41 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_CONFIGURATION    = [
-        'endpoint' => '/data/users/me',
-        'method'   => 'GET',
-        'schema'   => [
-            'me'      => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_UPDATE_CONFIGURATION = [
-        'endpoint'      => '/data/users/me',
-        'method'        => 'PUT',
-        'normalization' => [
-            AbstractNormalizer::GROUPS => [
-                'update',
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'get'    => [
+                'endpoint' => '/data/users/me',
+                'method'   => 'GET',
+                'schema'   => [
+                    'me' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
             ],
-        ],
-    ];
+            'update' => [
+                'endpoint'      => '/data/users/me',
+                'method'        => 'PUT',
+                'normalization' => [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $jwt
@@ -59,7 +74,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [],
                 [
                     'headers' => [
@@ -99,7 +114,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_UPDATE_CONFIGURATION,
+                $this->requestConfigurations['update'],
                 [],
                 [
                     'headers' => [

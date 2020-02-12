@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Client\Data\Customer\Me;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
@@ -21,17 +21,32 @@ use Jalismrs\Stalactite\Client\Response;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_CONFIGURATION = [
-        'endpoint' => '/data/customers/me',
-        'method'   => 'GET',
-        'schema'   => [
-            'me'      => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::CUSTOMER
-            ]
-        ],
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'get' => [
+                'endpoint' => '/data/customers/me',
+                'method'   => 'GET',
+                'schema'   => [
+                    'me' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::CUSTOMER,
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $jwt
@@ -47,7 +62,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [],
                 [
                     'headers' => [

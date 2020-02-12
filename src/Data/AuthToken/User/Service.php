@@ -6,8 +6,8 @@ namespace Jalismrs\Stalactite\Client\Data\AuthToken\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -23,38 +23,53 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    private const REQUEST_GET_ALL_CONFIGURATION                    = [
-        'endpoint' => '/data/auth-token/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'users'   => [
-                'type'   => JsonRule::LIST_TYPE,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION = [
-        'endpoint' => '/data/auth-token/users',
-        'method'   => 'GET',
-        'schema'   => [
-            'user'    => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
-    private const REQUEST_GET_CONFIGURATION                        = [
-        'endpoint' => '/data/auth-token/users/%s',
-        'method'   => 'GET',
-        'schema'   => [
-            'user'    => [
-                'type'   => JsonRule::OBJECT_TYPE,
-                'null'   => true,
-                'schema' => Schema::USER
-            ]
-        ],
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'getAll'                => [
+                'endpoint' => '/data/auth-token/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'users' => [
+                        'type'   => JsonRule::LIST_TYPE,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'getByEmailAndGoogleId' => [
+                'endpoint' => '/data/auth-token/users',
+                'method'   => 'GET',
+                'schema'   => [
+                    'user' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+            'get'                   => [
+                'endpoint' => '/data/auth-token/users/%s',
+                'method'   => 'GET',
+                'schema'   => [
+                    'user' => [
+                        'type'   => JsonRule::OBJECT_TYPE,
+                        'null'   => true,
+                        'schema' => Schema::USER,
+                    ],
+                ],
+            ],
+        ];
+    }
     
     /**
      * @param string $apiAuthToken
@@ -77,7 +92,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_ALL_CONFIGURATION,
+                $this->requestConfigurations['getAll'],
                 [],
                 [
                     'headers' => [
@@ -125,7 +140,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_BY_EMAIL_AND_GOOGLE_ID_CONFIGURATION,
+                $this->requestConfigurations['getByEmailAndGoogleId'],
                 [],
                 [
                     'headers' => [
@@ -172,7 +187,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_GET_CONFIGURATION,
+                $this->requestConfigurations['get'],
                 [
                     $uid,
                 ],

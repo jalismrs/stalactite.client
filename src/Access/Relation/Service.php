@@ -5,13 +5,11 @@ namespace Jalismrs\Stalactite\Client\Access\Relation;
 
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainRelation;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Response;
-use function vsprintf;
 
 /**
  * Service
@@ -21,10 +19,25 @@ use function vsprintf;
 class Service extends
     AbstractService
 {
-    private const REQUEST_DELETE_RELATION_CONFIGURATION = [
-        'endpoint' => '/access/relations/%s',
-        'method'   => 'DELETE',
-    ];
+    /**
+     * Service constructor.
+     *
+     * @param Client $client
+     */
+    public function __construct(
+        Client $client
+    ) {
+        parent::__construct(
+            $client
+        );
+        
+        $this->requestConfigurations = [
+            'deleteRelation' => [
+                'endpoint' => '/access/relations/%s',
+                'method'   => 'DELETE',
+            ],
+        ];
+    }
     
     /**
      * deleteRelation
@@ -45,7 +58,7 @@ class Service extends
         $response = $this
             ->getClient()
             ->request(
-                self::REQUEST_DELETE_RELATION_CONFIGURATION,
+                $this->requestConfigurations['deleteRelation'],
                 [
                     $domainRelationModel->getUid(),
                 ],
