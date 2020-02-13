@@ -13,10 +13,6 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractService
 {
     /**
-     * @var array
-     */
-    protected $requests = [];
-    /**
      * @var Client
      */
     private $client;

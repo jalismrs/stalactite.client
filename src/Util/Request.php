@@ -182,8 +182,8 @@ final class Request
     private static function validateUriParameters(array $uriParameters) : void
     {
         foreach ($uriParameters as $uriParameter) {
-            if (!is_scalar($uriParameters)) {
-                $type = gettype($uriParameters);
+            if (!is_scalar($uriParameter)) {
+                $type = gettype($uriParameter);
                 throw new TypeError(
                     "Expected a scalar value, received '{$type}'"
                 );
