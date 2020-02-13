@@ -270,44 +270,12 @@ final class Request
      * @param $json
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setJson($json) : self
     {
-        if ($json !== null) {
-            try {
-                self::validateJson($json);
-                
-                $throwable = null;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting JSON',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
-            }
-        }
-        
         $this->json = $json;
         
         return $this;
-    }
-    
-    /**
-     * validateJson
-     *
-     * @static
-     *
-     * @param $json
-     *
-     * @return void
-     */
-    private static function validateJson($json) : void
-    {
-    
     }
     
     /**
@@ -326,44 +294,12 @@ final class Request
      * @param array|null $queryParameters
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setQueryParameters(?array $queryParameters) : self
     {
-        if ($queryParameters !== null) {
-            try {
-                self::validateQueryParameters($queryParameters);
-                
-                $throwable = null;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting query parameters',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
-            }
-        }
-        
         $this->queryParameters = $queryParameters;
         
         return $this;
-    }
-    
-    /**
-     * validateQueryParameters
-     *
-     * @static
-     *
-     * @param array $queryParameters
-     *
-     * @return void
-     */
-    private static function validateQueryParameters(array $queryParameters) : void
-    {
-    
     }
     
     /**
@@ -379,47 +315,15 @@ final class Request
     /**
      * setJwt
      *
-     * @param string $jwt
+     * @param string|null $jwt
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setJwt(?string $jwt) : self
     {
-        if ($jwt !== null) {
-            try {
-                self::validateJwt($jwt);
-                
-                $throwable = null;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting JWT',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
-            }
-        }
-        
         $this->jwt = $jwt;
         
         return $this;
-    }
-    
-    /**
-     * validateJwt
-     *
-     * @static
-     *
-     * @param string $jwt
-     *
-     * @return void
-     */
-    private static function validateJwt(string $jwt) : void
-    {
-    
     }
     
     /**
@@ -438,42 +342,12 @@ final class Request
      * @param array|null $normalization
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setNormalization(?array $normalization) : self
     {
-        if ($normalization !== null) {
-            try {
-                self::validateNormalization($normalization);
-                
-                $throwable = null;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting normalization',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
-            }
-        }
-        
         $this->normalization = $normalization;
         
         return $this;
-    }
-    
-    /**
-     * validateNormalization
-     *
-     * @param array $normlization
-     *
-     * @return void
-     */
-    private static function validateNormalization(array $normlization) : void
-    {
-    
     }
     
     /**
@@ -599,44 +473,12 @@ final class Request
      * @param array|null $validation
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setValidation(?array $validation) : self
     {
-        if ($validation !== null) {
-            try {
-                self::validateValidation($validation);
-                
-                $throwable = null;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting validation',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
-            }
-        }
-        
         $this->validation = $validation;
         
         return $this;
-    }
-    
-    /**
-     * validateValidation
-     *
-     * @static
-     *
-     * @param array $validation
-     *
-     * @return void
-     */
-    private static function validateValidation(array $validation) : void
-    {
-    
     }
     
     /**
@@ -655,41 +497,11 @@ final class Request
      * @param array $options
      *
      * @return $this
-     *
-     * @throws RequestException
      */
     public function setOptions(array $options) : self
     {
-        try {
-            self::validateOptions($options);
-            
-            $throwable = null;
-        } finally {
-            if ($throwable instanceof Throwable) {
-                throw new RequestException(
-                    'error while setting options',
-                    $throwable->getCode(),
-                    $throwable
-                );
-            }
-        }
-        
         $this->options = $options;
         
         return $this;
-    }
-    
-    /**
-     * validateOptions
-     *
-     * @static
-     *
-     * @param array $options
-     *
-     * @return void
-     */
-    private static function validateOptions(array $options) : void
-    {
-    
     }
 }
