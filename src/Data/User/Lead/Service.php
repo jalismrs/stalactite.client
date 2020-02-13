@@ -103,7 +103,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/users/%s/leads'
+                    '/data/users/%s/leads',
+                    'POST'
                 ))
                     ->setJson(
                         [
@@ -114,7 +115,6 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setMethod('POST')
                     ->setUriParameters(
                         [
                             $userModel->getUid(),
@@ -147,7 +147,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/users/%s/leads'
+                    '/data/users/%s/leads',
+                    'DELETE'
                 ))
                     ->setJson(
                         [
@@ -158,7 +159,6 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $userModel->getUid(),

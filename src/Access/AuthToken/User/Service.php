@@ -49,10 +49,10 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/access/auth-token/users/%s/relations'
+                    '/access/auth-token/users/%s/relations',
+                    'DELETE'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $userModel->getUid(),

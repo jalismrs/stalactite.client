@@ -88,11 +88,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/users/me'
+                    '/data/users/me',
+                    'PUT'
                 ))
                     ->setJson($userModel)
                     ->setJwt($jwt)
-                    ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [

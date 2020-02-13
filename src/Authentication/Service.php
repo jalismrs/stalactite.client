@@ -249,7 +249,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/auth/login'
+                    '/auth/login',
+                    'POST'
                 ))
                     ->setJson(
                         [
@@ -258,7 +259,6 @@ class Service extends
                             'userGoogleJwt' => $userGoogleJwt,
                         ]
                     )
-                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [

@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -28,6 +27,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testEndpoint() : void
     {
@@ -82,8 +82,10 @@ class RequestTest extends
     {
         $method = 'POST';
         
-        $request = new Request('');
-        $request->setMethod($method);
+        $request = new Request(
+            '',
+            $method
+        );
         
         self::assertSame(
             $method,
@@ -98,6 +100,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testMethodDefault() : void
     {
@@ -120,8 +123,10 @@ class RequestTest extends
     {
         $this->expectException(RequestException::class);
         
-        $request = new Request('');
-        $request->setMethod('PSOT');
+        $request = new Request(
+            '',
+            'PSOT'
+        );
     }
     
     /**
@@ -135,8 +140,10 @@ class RequestTest extends
     {
         $this->expectError();
         
-        $request = new Request('');
-        $request->setMethod('put');
+        $request = new Request(
+            '',
+            'put'
+        );
     }
     
     /**
@@ -189,6 +196,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testJsonDefault() : void
     {
@@ -243,6 +251,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testJwtDefault() : void
     {
@@ -301,6 +310,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testQueryParametersDefault() : void
     {
@@ -359,6 +369,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testNormalizationDefault() : void
     {
@@ -395,9 +406,9 @@ class RequestTest extends
      *
      * @return void
      *
-     * @throws Exception
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testOptionsDefault() : void
     {
@@ -448,12 +459,13 @@ class RequestTest extends
     }
     
     /**
-     * testValidationDefault
+     * testResponseDefault
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testResponseDefault() : void
     {
@@ -588,6 +600,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testUriParametersDefault() : void
     {
@@ -687,6 +700,7 @@ class RequestTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testValidationDefault() : void
     {

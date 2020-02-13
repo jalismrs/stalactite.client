@@ -41,10 +41,10 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/access/relations/%s'
+                    '/access/relations/%s',
+                    'DELETE'
                 ))
                     ->setJwt($jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $domainRelationModel->getUid(),

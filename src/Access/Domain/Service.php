@@ -145,7 +145,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/access/domains/%s/relations/users'
+                    '/access/domains/%s/relations/users',
+                    'POST'
                 ))
                     ->setJson(
                         [
@@ -153,7 +154,6 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -203,7 +203,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/access/domains/%s/relations/customers'
+                    '/access/domains/%s/relations/customers',
+                    'POST'
                 ))
                     ->setJson(
                         [
@@ -211,7 +212,6 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [

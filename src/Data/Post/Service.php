@@ -141,11 +141,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/posts'
+                    '/data/posts',
+                    'POST'
                 ))
                     ->setJson($postModel)
                     ->setJwt($jwt)
-                    ->setMethod('POST')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
@@ -195,11 +195,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/posts/%s'
+                    '/data/posts/%s',
+                    'PUT'
                 ))
                     ->setJson($postModel)
                     ->setJwt($jwt)
-                    ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
@@ -236,10 +236,10 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/data/posts/%s'
+                    '/data/posts/%s',
+                    'DELETE'
                 ))
                     ->setJwt($jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $uid,

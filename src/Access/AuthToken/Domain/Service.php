@@ -55,10 +55,10 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/access/auth-token/domains/%s/relations'
+                    '/access/auth-token/domains/%s/relations',
+                    'DELETE'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $domainModel->getUid(),

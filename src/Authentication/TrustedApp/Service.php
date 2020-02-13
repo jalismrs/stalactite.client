@@ -139,11 +139,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/auth/trustedApps/%s'
+                    '/auth/trustedApps/%s',
+                    'PUT'
                 ))
                     ->setJson($trustedAppModel)
                     ->setJwt($jwt)
-                    ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
@@ -180,11 +180,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/auth/trustedApps'
+                    '/auth/trustedApps',
+                    'POST'
                 ))
                     ->setJson($trustedAppModel)
                     ->setJwt($jwt)
-                    ->setMethod('POST')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
@@ -241,7 +241,8 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/auth/trustedApps/%s'
+                    '/auth/trustedApps/%s',
+                    'DELETE'
                 ))
                     ->setJson(
                         [
@@ -249,7 +250,6 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setMethod('DELETE')
                     ->setUriParameters(
                         [
                             $uid,
@@ -279,11 +279,11 @@ class Service extends
             ->getClient()
             ->request(
                 (new Request(
-                    '/auth/trustedApps/%s/authToken/reset'
+                    '/auth/trustedApps/%s/authToken/reset',
+                    'PUT'
                 ))
                     ->setJson($trustedAppModel)
                     ->setJwt($jwt)
-                    ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [

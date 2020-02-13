@@ -46,7 +46,7 @@ final class Request
     /**
      * @var string
      */
-    private $method = 'GET';
+    private $method;
     /**
      * @var array|null
      */
@@ -75,12 +75,32 @@ final class Request
     /**
      * Request constructor.
      *
-     * @param string $endpoint
+     * @param string      $endpoint
+     * @param string|null $method
+     *
+     * @throws RequestException
      */
     public function __construct(
-        string $endpoint
+        string $endpoint,
+        string $method = null
     ) {
         $this->endpoint = $endpoint;
+    
+        try {
+            $this->method = self::validateMethod($method ?? 'GET');
+        
+            $throwable = null;
+        } catch (OutOfBoundsException $outOfBoundsException) {
+            $throwable = $outOfBoundsException;
+        } finally {
+            if ($throwable instanceof Throwable) {
+                throw new RequestException(
+                    'error while setting method',
+                    $throwable->getCode(),
+                    $throwable
+                );
+            }
+        }
     }
     
     /**
@@ -161,14 +181,14 @@ final class Request
      */
     private static function validateUriParameters(array $uriParameters) : void
     {
-        foreach ($uriParameters as $uriParameters) {
+        foreach ($uriParameters as $uriParameter) {
             if (!is_scalar($uriParameters)) {
                 $type = gettype($uriParameters);
                 throw new TypeError(
                     "Expected a scalar value, received '{$type}'"
                 );
             }
-            if (is_bool($uriParameters)) {
+            if (is_bool($uriParameter)) {
                 trigger_error(
                     'boolean value in discouraged, prefer int',
                     E_USER_WARNING
@@ -188,49 +208,17 @@ final class Request
     }
     
     /**
-     * setMethod
-     *
-     * @param string $method
-     *
-     * @return $this
-     *
-     * @throws RequestException
-     */
-    public function setMethod(string $method) : self
-    {
-        try {
-            self::validateMethod($method);
-            
-            $throwable = null;
-        } catch (OutOfBoundsException $outOfBoundsException) {
-            $throwable = $outOfBoundsException;
-        } finally {
-            if ($throwable instanceof Throwable) {
-                throw new RequestException(
-                    'error while setting method',
-                    $throwable->getCode(),
-                    $throwable
-                );
-            }
-        }
-        
-        $this->method = strtoupper($method);
-        
-        return $this;
-    }
-    
-    /**
      * validateMethod
      *
      * @static
      *
      * @param string $method
      *
-     * @return void
+     * @return string
      *
      * @throws OutOfBoundsException
      */
-    private static function validateMethod(string $method) : void
+    private static function validateMethod(string $method) : string
     {
         $methods = [
             'GET',
@@ -259,7 +247,11 @@ final class Request
                     "Invalid HTTP method '{$method}'"
                 );
             }
+            
+            $method = $methodUpper;
         }
+        
+        return $method;
     }
     
     /**
