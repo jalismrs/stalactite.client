@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +32,7 @@ class LoginTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testSchemaValidationOnLogin() : void
     {
@@ -67,6 +69,7 @@ class LoginTest extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testExceptionThrownOnInvalidAPIHost() : void
     {
@@ -89,6 +92,7 @@ class LoginTest extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testExceptionThrownOnInvalidAPIResponse() : void
     {
@@ -115,6 +119,7 @@ class LoginTest extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testExceptionThrownOnInvalidAPIResponseContent() : void
     {

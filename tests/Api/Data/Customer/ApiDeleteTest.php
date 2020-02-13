@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -32,6 +33,7 @@ class ApiDeleteTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testDelete() : void
     {
@@ -68,6 +70,7 @@ class ApiDeleteTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testThrowExceptionOnInvalidResponseDelete() : void
     {

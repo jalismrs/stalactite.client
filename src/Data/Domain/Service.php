@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -32,8 +33,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllDomains(
         string $jwt
@@ -77,8 +79,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getDomain(
         string $uid,
@@ -126,8 +129,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByName(
         string $name,
@@ -178,8 +182,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByNameAndApiKey(
         string $name,
@@ -231,8 +236,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function createDomain(
         Domain $domainModel,
@@ -284,8 +290,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateDomain(
         Domain $domainModel,
@@ -324,8 +331,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function deleteDomain(
         string $uid,

@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 
@@ -31,6 +32,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function deleteRelationsByCustomer(
         Customer $customerModel,

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication;
 
+use BadMethodCallException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
@@ -11,6 +12,7 @@ use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppSe
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Parser;
@@ -155,6 +157,17 @@ class Service extends
         
         try {
             return $token->verify($signer, $publicKey);
+        } catch (BadMethodCallException $badMethodCallException) {
+            $this
+                ->getLogger()
+                ->error($badMethodCallException);
+    
+            // thrown by the library on invalid key
+            throw new ClientException(
+                'Unsigned token',
+                ClientException::INVALID_JWT_SIGNATURE,
+                $badMethodCallException
+            );
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this
                 ->getLogger()
@@ -235,6 +248,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function login(
         TrustedApp $trustedAppModel,

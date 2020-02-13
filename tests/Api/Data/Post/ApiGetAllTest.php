@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -35,6 +36,7 @@ class ApiGetAllTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testGetAll() : void
     {
@@ -82,6 +84,7 @@ class ApiGetAllTest extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testThrowExceptionOnInvalidResponseGetAll() : void
     {

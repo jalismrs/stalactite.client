@@ -3,12 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
-use hunomina\Validator\Json\Data\JsonData;
-use hunomina\Validator\Json\Exception\InvalidDataException;
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -372,7 +367,7 @@ final class Client
             ->validate();
         
         if (!$isValid) {
-            $lastError = $validator->getLastError() ?? 'unknown';
+            $lastError       = $validator->getLastError() ?? 'unknown';
             $clientException = new ClientException(
                 'Invalid response from Stalactite API: ' . $lastError,
                 ClientException::INVALID_API_RESPONSE

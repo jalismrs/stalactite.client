@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -33,8 +34,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllTrustedApps(
         string $jwt
@@ -78,8 +80,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getTrustedApp(
         string $uid,
@@ -125,8 +128,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
@@ -165,8 +169,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
@@ -224,8 +229,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function deleteTrustedApp(
         string $uid,
@@ -262,8 +268,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function resetAuthToken(
         TrustedApp $trustedAppModel,

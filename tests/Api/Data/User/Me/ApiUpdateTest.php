@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Data\User\Me\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -32,6 +33,7 @@ class ApiUpdateTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testUpdate() : void
     {
@@ -65,6 +67,7 @@ class ApiUpdateTest extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testThrowExceptionOnInvalidResponseUpdate() : void
     {

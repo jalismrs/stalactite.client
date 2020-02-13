@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -32,6 +33,7 @@ class ApiRemoveLeadsTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemoveLeads() : void
@@ -70,6 +72,7 @@ class ApiRemoveLeadsTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testThrowOnInvalidResponseRemoveLeads() : void
     {
@@ -109,6 +112,7 @@ class ApiRemoveLeadsTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function testThrowOnInvalidPostsParameterRemoveLeads() : void
     {

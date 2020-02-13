@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -98,6 +99,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllUsers(
         string $jwt
@@ -143,6 +145,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getUser(
         string $uid,
@@ -193,6 +196,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -245,6 +249,7 @@ class Service extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function createUser(
         User $userModel,
@@ -320,6 +325,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateUser(
         User $userModel,
@@ -360,6 +366,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function deleteUser(
         string $uid,

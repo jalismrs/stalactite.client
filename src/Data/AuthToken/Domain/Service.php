@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
@@ -31,8 +32,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllDomains(
         string $apiAuthToken
@@ -84,8 +86,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByNameAndApiKey(
         string $name,
@@ -144,8 +147,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByName(
         string $name,
@@ -202,8 +206,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getDomain(
         string $uid,
