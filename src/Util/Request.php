@@ -7,7 +7,6 @@ use Closure;
 use ErrorException;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use OutOfBoundsException;
 use ReflectionException;
 use ReflectionFunction;
@@ -37,6 +36,14 @@ final class Request
      */
     private $endpoint;
     /**
+     * @var mixed|null
+     */
+    private $json;
+    /**
+     * @var string|null
+     */
+    private $jwt;
+    /**
      * @var string
      */
     private $method = 'GET';
@@ -49,13 +56,17 @@ final class Request
      */
     private $options = [];
     /**
+     * @var array|null
+     */
+    private $queryParameters;
+    /**
      * @var Closure|null
      */
     private $response;
     /**
      * @var array
      */
-    private $uriDatas = [];
+    private $uriParameters = [];
     /**
      * @var array|null
      */
@@ -81,7 +92,7 @@ final class Request
     {
         return vsprintf(
             $this->getEndpoint(),
-            $this->getUriDatas()
+            $this->getUriParameters()
         );
     }
     
@@ -93,6 +104,77 @@ final class Request
     public function getEndpoint() : string
     {
         return $this->endpoint;
+    }
+    
+    /**
+     * getUriParameters
+     *
+     * @return array
+     */
+    public function getUriParameters() : array
+    {
+        return $this->uriParameters;
+    }
+    
+    /**
+     * setUriParameters
+     *
+     * @param array $uriParameters
+     *
+     * @return $this
+     *
+     * @throws RequestException
+     */
+    public function setUriParameters(array $uriParameters) : self
+    {
+        try {
+            self::validateUriParameters($uriParameters);
+            
+            $throwable = null;
+        } catch (TypeError $typeError) {
+            $throwable = $typeError;
+        } finally {
+            if ($throwable instanceof Throwable) {
+                throw new RequestException(
+                    'error while setting uriParameters',
+                    $throwable->getCode(),
+                    $throwable
+                );
+            }
+        }
+        
+        $this->uriParameters = $uriParameters;
+        
+        return $this;
+    }
+    
+    /**
+     * validateUriParameters
+     *
+     * @static
+     *
+     * @param array $uriParameters
+     *
+     * @return void
+     *
+     * @throws TypeError
+     */
+    private static function validateUriParameters(array $uriParameters) : void
+    {
+        foreach ($uriParameters as $uriParameters) {
+            if (!is_scalar($uriParameters)) {
+                $type = gettype($uriParameters);
+                throw new TypeError(
+                    "Expected a scalar value, received '{$type}'"
+                );
+            }
+            if (is_bool($uriParameters)) {
+                trigger_error(
+                    'boolean value in discouraged, prefer int',
+                    E_USER_WARNING
+                );
+            }
+        }
     }
     
     /**
@@ -178,6 +260,174 @@ final class Request
                 );
             }
         }
+    }
+    
+    /**
+     * getJson
+     *
+     * @return mixed
+     */
+    public function getJson()
+    {
+        return $this->json;
+    }
+    
+    /**
+     * setJson
+     *
+     * @param $json
+     *
+     * @return $this
+     *
+     * @throws RequestException
+     */
+    public function setJson($json) : self
+    {
+        if ($json !== null) {
+            try {
+                self::validateJson($json);
+                
+                $throwable = null;
+            } finally {
+                if ($throwable instanceof Throwable) {
+                    throw new RequestException(
+                        'error while setting JSON',
+                        $throwable->getCode(),
+                        $throwable
+                    );
+                }
+            }
+        }
+        
+        $this->json = $json;
+        
+        return $this;
+    }
+    
+    /**
+     * validateJson
+     *
+     * @static
+     *
+     * @param $json
+     *
+     * @return void
+     */
+    private static function validateJson($json) : void
+    {
+    
+    }
+    
+    /**
+     * getQueryParameters
+     *
+     * @return array|null
+     */
+    public function getQueryParameters() : ?array
+    {
+        return $this->queryParameters;
+    }
+    
+    /**
+     * setQueryParameters
+     *
+     * @param array|null $queryParameters
+     *
+     * @return $this
+     *
+     * @throws RequestException
+     */
+    public function setQueryParameters(?array $queryParameters) : self
+    {
+        if ($queryParameters !== null) {
+            try {
+                self::validateQueryParameters($queryParameters);
+                
+                $throwable = null;
+            } finally {
+                if ($throwable instanceof Throwable) {
+                    throw new RequestException(
+                        'error while setting query parameters',
+                        $throwable->getCode(),
+                        $throwable
+                    );
+                }
+            }
+        }
+        
+        $this->queryParameters = $queryParameters;
+        
+        return $this;
+    }
+    
+    /**
+     * validateQueryParameters
+     *
+     * @static
+     *
+     * @param array $queryParameters
+     *
+     * @return void
+     */
+    private static function validateQueryParameters(array $queryParameters) : void
+    {
+    
+    }
+    
+    /**
+     * getJwt
+     *
+     * @return string|null
+     */
+    public function getJwt() : ?string
+    {
+        return $this->jwt;
+    }
+    
+    /**
+     * setJwt
+     *
+     * @param string $jwt
+     *
+     * @return $this
+     *
+     * @throws RequestException
+     */
+    public function setJwt(?string $jwt) : self
+    {
+        if ($jwt !== null) {
+            try {
+                self::validateJwt($jwt);
+                
+                $throwable = null;
+            } finally {
+                if ($throwable instanceof Throwable) {
+                    throw new RequestException(
+                        'error while setting JWT',
+                        $throwable->getCode(),
+                        $throwable
+                    );
+                }
+            }
+        }
+        
+        $this->jwt = $jwt;
+        
+        return $this;
+    }
+    
+    /**
+     * validateJwt
+     *
+     * @static
+     *
+     * @param string $jwt
+     *
+     * @return void
+     */
+    private static function validateJwt(string $jwt) : void
+    {
+    
     }
     
     /**
@@ -395,77 +645,6 @@ final class Request
     private static function validateValidation(array $validation) : void
     {
     
-    }
-    
-    /**
-     * getUriDatas
-     *
-     * @return array
-     */
-    public function getUriDatas() : array
-    {
-        return $this->uriDatas;
-    }
-    
-    /**
-     * setUriDatas
-     *
-     * @param array $uriDatas
-     *
-     * @return $this
-     *
-     * @throws RequestException
-     */
-    public function setUriDatas(array $uriDatas) : self
-    {
-        try {
-            self::validateUriDatas($uriDatas);
-            
-            $throwable = null;
-        } catch (TypeError $typeError) {
-            $throwable = $typeError;
-        } finally {
-            if ($throwable instanceof Throwable) {
-                throw new RequestException(
-                    'error while setting uriDatas',
-                    $throwable->getCode(),
-                    $throwable
-                );
-            }
-        }
-        
-        $this->uriDatas = $uriDatas;
-        
-        return $this;
-    }
-    
-    /**
-     * validateUriDatas
-     *
-     * @static
-     *
-     * @param array $uriDatas
-     *
-     * @return void
-     *
-     * @throws TypeError
-     */
-    private static function validateUriDatas(array $uriDatas) : void
-    {
-        foreach ($uriDatas as $uriData) {
-            if (!is_scalar($uriData)) {
-                $type = gettype($uriData);
-                throw new TypeError(
-                    "Expected a scalar value, received '{$type}'"
-                );
-            }
-            if (is_bool($uriData)) {
-                trigger_error(
-                    'boolean value in discouraged, prefer int',
-                    E_USER_WARNING
-                );
-            }
-        }
     }
     
     /**

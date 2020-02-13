@@ -57,15 +57,9 @@ class Service extends
                 (new Request(
                     '/access/auth-token/domains/%s/relations'
                 ))
+                    ->setJwt((string)$jwt)
                     ->setMethod('DELETE')
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainModel->getUid(),
                         ]
@@ -104,13 +98,7 @@ class Service extends
                 (new Request(
                     '/access/auth-token/domains/%s/relations'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) use ($domainModel) : array {
                             return [
@@ -137,7 +125,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainModel->getUid(),
                         ]

@@ -43,15 +43,9 @@ class Service extends
                 (new Request(
                     '/access/relations/%s'
                 ))
+                    ->setJwt($jwt)
                     ->setMethod('DELETE')
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainRelationModel->getUid(),
                         ]

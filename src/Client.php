@@ -191,12 +191,33 @@ final class Client
      */
     private function getRequestOptions(Request $request) : array
     {
+        $json            = $request->getJson();
+        $jwt             = $request->getJwt();
+        $queryParameters = $request->getQueryParameters();
+        
         $options = array_replace_recursive(
             $request->getOptions(),
             [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
+            ],
+            $json === null
+                ? []
+                : [
+                'json' => $json,
+            ],
+            $jwt === null
+                ? []
+                : [
+                'headers' => [
+                    'X-API-TOKEN' => $jwt,
+                ],
+            ],
+            $queryParameters === null
+                ? []
+                : [
+                'query' => $queryParameters,
             ]
         );
         

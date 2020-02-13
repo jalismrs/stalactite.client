@@ -18,8 +18,8 @@ use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
 /**
@@ -54,13 +54,7 @@ class Service extends
                 (new Request(
                     '/access/domains/%s/relations'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) use ($domainModel) : array {
                             return [
@@ -87,7 +81,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainModel->getUid(),
                         ]
@@ -153,17 +147,13 @@ class Service extends
                 (new Request(
                     '/access/domains/%s/relations/users'
                 ))
-                    ->setMethod('POST')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => [
-                                'user' => $userModel->getUid(),
-                            ],
+                            'user' => $userModel->getUid(),
                         ]
                     )
+                    ->setJwt($jwt)
+                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -173,7 +163,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainModel->getUid(),
                         ]
@@ -215,17 +205,13 @@ class Service extends
                 (new Request(
                     '/access/domains/%s/relations/customers'
                 ))
-                    ->setMethod('POST')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => [
-                                'customer' => $customerModel->getUid(),
-                            ],
+                            'customer' => $customerModel->getUid(),
                         ]
                     )
+                    ->setJwt($jwt)
+                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -235,7 +221,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $domainModel->getUid(),
                         ]

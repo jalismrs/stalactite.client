@@ -12,8 +12,8 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -47,13 +47,7 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -100,13 +94,7 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -114,7 +102,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -153,6 +141,8 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps/%s'
                 ))
+                    ->setJson($trustedAppModel)
+                    ->setJwt($jwt)
                     ->setMethod('PUT')
                     ->setNormalization(
                         [
@@ -161,15 +151,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $trustedAppModel,
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $trustedAppModel->getUid(),
                         ]
@@ -200,20 +182,14 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps'
                 ))
+                    ->setJson($trustedAppModel)
+                    ->setJwt($jwt)
                     ->setMethod('POST')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
                                 'create',
                             ],
-                        ]
-                    )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $trustedAppModel,
                         ]
                     )
                     ->setResponse(
@@ -267,18 +243,14 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps/%s'
                 ))
-                    ->setMethod('DELETE')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => [
-                                'resetToken' => $resetToken,
-                            ]
+                            'resetToken' => $resetToken,
                         ]
                     )
-                    ->setUriDatas(
+                    ->setJwt($jwt)
+                    ->setMethod('DELETE')
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -309,20 +281,14 @@ class Service extends
                 (new Request(
                     '/auth/trustedApps/%s/authToken/reset'
                 ))
+                    ->setJson($trustedAppModel)
+                    ->setJwt($jwt)
                     ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
                                 'reset',
                             ],
-                        ]
-                    )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $trustedAppModel
                         ]
                     )
                     ->setResponse(
@@ -332,7 +298,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $trustedAppModel->getUid(),
                         ]

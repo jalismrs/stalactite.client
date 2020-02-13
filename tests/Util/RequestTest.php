@@ -51,19 +51,19 @@ class RequestTest extends
      */
     public function testUri() : void
     {
-        $endpoint = '/collection1/%s/collection2/%s/details';
-        $uriDatas = [
+        $endpoint      = '/collection1/%s/collection2/%s/details';
+        $uriParameters = [
             'test',
             '51',
         ];
         
         $request = new Request($endpoint);
-        $request->setUriDatas($uriDatas);
+        $request->setUriParameters($uriParameters);
         
         self::assertSame(
             vsprintf(
                 $endpoint,
-                $uriDatas
+                $uriParameters
             ),
             $request->getUri()
         );
@@ -140,6 +140,176 @@ class RequestTest extends
     }
     
     /**
+     * testJson
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testJson() : void
+    {
+        $json = [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ];
+        
+        $request = new Request('');
+        $request->setJson($json);
+        
+        self::assertSame(
+            $json,
+            $request->getJson()
+        );
+    }
+    
+    /**
+     * testJsonNull
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testJsonNull() : void
+    {
+        $request = new Request('');
+        $request->setJson(null);
+        
+        self::assertNull($request->getJson());
+    }
+    
+    /**
+     * testJsonDefault
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testJsonDefault() : void
+    {
+        $request = new Request('');
+        
+        self::assertNull($request->getJson());
+    }
+    
+    /**
+     * testJwt
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testJwt() : void
+    {
+        $jwt = 'fake jwt';
+        
+        $request = new Request('');
+        $request->setJwt($jwt);
+        
+        self::assertSame(
+            $jwt,
+            $request->getJwt()
+        );
+    }
+    
+    /**
+     * testJwtNull
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testJwtNull() : void
+    {
+        $request = new Request('');
+        $request->setJwt(null);
+        
+        self::assertNull($request->getJwt());
+    }
+    
+    /**
+     * testJwtDefault
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testJwtDefault() : void
+    {
+        $request = new Request('');
+        
+        self::assertNull($request->getJwt());
+    }
+    
+    /**
+     * testQueryParameters
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testQueryParameters() : void
+    {
+        $queryParameters = [
+            AbstractNormalizer::GROUPS => [
+                'create',
+            ],
+        ];
+        
+        $request = new Request('');
+        $request->setQueryParameters($queryParameters);
+        
+        self::assertSame(
+            $queryParameters,
+            $request->getQueryParameters()
+        );
+    }
+    
+    /**
+     * testQueryParametersNull
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testQueryParametersNull() : void
+    {
+        $request = new Request('');
+        $request->setQueryParameters(null);
+        
+        self::assertNull($request->getQueryParameters());
+    }
+    
+    /**
+     * testQueryParametersDefault
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testQueryParametersDefault() : void
+    {
+        $request = new Request('');
+        
+        self::assertNull($request->getQueryParameters());
+    }
+    
+    /**
      * testNormalization
      *
      * @return void
@@ -205,12 +375,11 @@ class RequestTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws RequestException
-     * @throws SerializerException
      */
     public function testOptions() : void
     {
         $options = [
-            'query' => [],
+            'plop' => 'prout',
         ];
         $request = new Request('');
         $request->setOptions($options);
@@ -389,7 +558,7 @@ class RequestTest extends
     }
     
     /**
-     * testUriDatas
+     * testUriParameters
      *
      * @return void
      *
@@ -397,49 +566,49 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testUriDatas() : void
+    public function testUriParameters() : void
     {
-        $uriDatas = [
+        $uriParameters = [
             'prout',
         ];
         
         $request = new Request('');
-        $request->setUriDatas($uriDatas);
+        $request->setUriParameters($uriParameters);
         
         self::assertSame(
-            $uriDatas,
-            $request->getUriDatas()
+            $uriParameters,
+            $request->getUriParameters()
         );
     }
     
     /**
-     * testUriDatasDefault
+     * testUriParametersDefault
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testUriDatasDefault() : void
+    public function testUriParametersDefault() : void
     {
         $request = new Request('');
         
-        self::assertEmpty($request->getUriDatas());
+        self::assertEmpty($request->getUriParameters());
     }
     
     /**
-     * testUriDatasInvalidType
+     * testUriParametersInvalidType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testUriDatasInvalidType() : void
+    public function testUriParametersInvalidType() : void
     {
         $this->expectException(RequestException::class);
         
         $request = new Request('');
-        $request->setUriDatas(
+        $request->setUriParameters(
             [
                 'prout',
                 []
@@ -448,18 +617,18 @@ class RequestTest extends
     }
     
     /**
-     * testUriDatasTypeBool
+     * testUriParametersTypeBool
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testUriDatasTypeBool() : void
+    public function testUriParametersTypeBool() : void
     {
         $this->expectError();
         
         $request = new Request('');
-        $request->setUriDatas(
+        $request->setUriParameters(
             [
                 'prout',
                 true

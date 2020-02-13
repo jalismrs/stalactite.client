@@ -46,13 +46,7 @@ class Service extends
                 (new Request(
                     '/data/posts'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -99,13 +93,7 @@ class Service extends
                 (new Request(
                     '/data/posts/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -115,7 +103,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -155,20 +143,14 @@ class Service extends
                 (new Request(
                     '/data/posts'
                 ))
+                    ->setJson($postModel)
+                    ->setJwt($jwt)
                     ->setMethod('POST')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
                                 'create',
                             ],
-                        ]
-                    )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $postModel,
                         ]
                     )
                     ->setResponse(
@@ -215,6 +197,8 @@ class Service extends
                 (new Request(
                     '/data/posts/%s'
                 ))
+                    ->setJson($postModel)
+                    ->setJwt($jwt)
                     ->setMethod('PUT')
                     ->setNormalization(
                         [
@@ -223,15 +207,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $postModel,
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $postModel->getUid(),
                         ]
@@ -262,15 +238,9 @@ class Service extends
                 (new Request(
                     '/data/posts/%s'
                 ))
+                    ->setJwt($jwt)
                     ->setMethod('DELETE')
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -301,13 +271,7 @@ class Service extends
                 (new Request(
                     '/data/posts/%s/users'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -320,7 +284,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]

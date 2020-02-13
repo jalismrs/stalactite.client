@@ -80,13 +80,7 @@ class Service extends
                 (new Request(
                     '/access/users/%s/relations'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) use ($userModel) : array {
                             return [
@@ -102,7 +96,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                         ]
@@ -151,13 +145,7 @@ class Service extends
                 (new Request(
                     '/access/users/%s/access/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -165,7 +153,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                             $domainModel->getUid(),

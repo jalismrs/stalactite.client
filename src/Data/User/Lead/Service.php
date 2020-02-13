@@ -14,9 +14,9 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
 /**
@@ -50,13 +50,7 @@ class Service extends
                 (new Request(
                     '/data/users/%s/leads'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -69,7 +63,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                         ]
@@ -111,21 +105,17 @@ class Service extends
                 (new Request(
                     '/data/users/%s/leads'
                 ))
-                    ->setMethod('POST')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => [
-                                'leads' => ModelHelper::getUids(
-                                    $leadModels,
-                                    Post::class
-                                )
-                            ],
+                            'leads' => ModelHelper::getUids(
+                                $leadModels,
+                                Post::class
+                            )
                         ]
                     )
-                    ->setUriDatas(
+                    ->setJwt($jwt)
+                    ->setMethod('POST')
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                         ]
@@ -159,21 +149,17 @@ class Service extends
                 (new Request(
                     '/data/users/%s/leads'
                 ))
-                    ->setMethod('DELETE')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => [
-                                'leads' => ModelHelper::getUids(
-                                    $leadModels,
-                                    Post::class
-                                )
-                            ],
+                            'leads' => ModelHelper::getUids(
+                                $leadModels,
+                                Post::class
+                            )
                         ]
                     )
-                    ->setUriDatas(
+                    ->setJwt($jwt)
+                    ->setMethod('DELETE')
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                         ]

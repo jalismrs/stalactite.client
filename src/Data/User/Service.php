@@ -16,9 +16,9 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
@@ -117,13 +117,7 @@ class Service extends
                 (new Request(
                     '/data/users'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -170,13 +164,7 @@ class Service extends
                 (new Request(
                     '/data/users/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -186,7 +174,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -228,15 +216,11 @@ class Service extends
                 (new Request(
                     '/data/users'
                 ))
-                    ->setOptions(
+                    ->setJwt($jwt)
+                    ->setQueryParameters(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'query'   => [
-                                'email'    => $email,
-                                'googleId' => $googleId
-                            ]
+                            'email'    => $email,
+                            'googleId' => $googleId
                         ]
                     )
                     ->setResponse(
@@ -281,40 +265,36 @@ class Service extends
                 (new Request(
                     '/data/users'
                 ))
+                    ->setJson(
+                        array_merge(
+                            Serializer::getInstance()
+                                      ->normalize(
+                                          $userModel,
+                                          [
+                                              AbstractNormalizer::GROUPS => [
+                                                  'create',
+                                              ],
+                                          ]
+                                      ),
+                            [
+                                'leads' => ModelHelper::getUids(
+                                    $userModel->getLeads(),
+                                    Post::class
+                                ),
+                                'posts' => ModelHelper::getUids(
+                                    $userModel->getPosts(),
+                                    Post::class
+                                ),
+                            ],
+                        )
+                    )
+                    ->setJwt($jwt)
                     ->setMethod('POST')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
                                 'create',
                             ],
-                        ]
-                    )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => array_merge(
-                                Serializer::getInstance()
-                                          ->normalize(
-                                              $userModel,
-                                              [
-                                                  AbstractNormalizer::GROUPS => [
-                                                      'create',
-                                                  ],
-                                              ]
-                                          ),
-                                [
-                                    'leads' => ModelHelper::getUids(
-                                        $userModel->getLeads(),
-                                        Post::class
-                                    ),
-                                    'posts' => ModelHelper::getUids(
-                                        $userModel->getPosts(),
-                                        Post::class
-                                    ),
-                                ],
-                            ),
                         ]
                     )
                     ->setResponse(
@@ -361,6 +341,8 @@ class Service extends
                 (new Request(
                     '/data/users/%s'
                 ))
+                    ->setJson($userModel)
+                    ->setJwt($jwt)
                     ->setMethod('PUT')
                     ->setNormalization(
                         [
@@ -369,15 +351,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $userModel,
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $userModel->getUid(),
                         ]
@@ -408,15 +382,9 @@ class Service extends
                 (new Request(
                     '/data/users/%s'
                 ))
+                    ->setJwt($jwt)
                     ->setMethod('DELETE')
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]

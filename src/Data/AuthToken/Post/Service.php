@@ -52,13 +52,7 @@ class Service extends
                 (new Request(
                     '/data/auth-token/posts'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -112,13 +106,7 @@ class Service extends
                 (new Request(
                     '/data/auth-token/posts/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -128,7 +116,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]
@@ -175,13 +163,7 @@ class Service extends
                 (new Request(
                     '/data/auth-token/posts/%s/users'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -194,7 +176,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]

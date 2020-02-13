@@ -13,8 +13,8 @@ use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppSe
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -251,16 +251,14 @@ class Service extends
                 (new Request(
                     '/auth/login'
                 ))
-                    ->setMethod('POST')
-                    ->setOptions(
+                    ->setJson(
                         [
-                            'json' => [
-                                'appName'       => $trustedAppModel->getName(),
-                                'appToken'      => $trustedAppModel->getAuthToken(),
-                                'userGoogleJwt' => $userGoogleJwt,
-                            ],
+                            'appName'       => $trustedAppModel->getName(),
+                            'appToken'      => $trustedAppModel->getAuthToken(),
+                            'userGoogleJwt' => $userGoogleJwt,
                         ]
                     )
+                    ->setMethod('POST')
                     ->setResponse(
                         static function(array $response) : array {
                             return [

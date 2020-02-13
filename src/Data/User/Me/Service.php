@@ -45,13 +45,7 @@ class Service extends
                 (new Request(
                     '/data/users/me'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -96,20 +90,14 @@ class Service extends
                 (new Request(
                     '/data/users/me'
                 ))
+                    ->setJson($userModel)
+                    ->setJwt($jwt)
                     ->setMethod('PUT')
                     ->setNormalization(
                         [
                             AbstractNormalizer::GROUPS => [
                                 'update',
                             ],
-                        ]
-                    )
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ],
-                            'json'    => $userModel
                         ]
                     )
             );

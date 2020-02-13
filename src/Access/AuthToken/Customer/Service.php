@@ -51,15 +51,9 @@ class Service extends
                 (new Request(
                     '/access/auth-token/customers/%s/relations'
                 ))
+                    ->setJwt((string)$jwt)
                     ->setMethod('DELETE')
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $customerModel->getUid(),
                         ]

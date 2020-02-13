@@ -12,8 +12,8 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
 /**
@@ -52,13 +52,7 @@ class Service extends
                 (new Request(
                     '/data/auth-token/customers'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -114,15 +108,11 @@ class Service extends
                 (new Request(
                     '/data/auth-token/customers'
                 ))
-                    ->setOptions(
+                    ->setJwt((string)$jwt)
+                    ->setQueryParameters(
                         [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ],
-                            'query'   => [
-                                'email'    => $email,
-                                'googleId' => $googleId
-                            ]
+                            'email'    => $email,
+                            'googleId' => $googleId
                         ]
                     )
                     ->setResponse(
@@ -176,13 +166,7 @@ class Service extends
                 (new Request(
                     '/data/auth-token/customers/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => (string)$jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt((string)$jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -192,7 +176,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $uid,
                         ]

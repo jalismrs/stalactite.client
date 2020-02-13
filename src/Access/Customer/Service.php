@@ -80,13 +80,7 @@ class Service extends
                 (new Request(
                     '/access/customers/%s/relations'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) use ($customerModel) : array {
                             return [
@@ -100,7 +94,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $customerModel->getUid(),
                         ]
@@ -149,13 +143,7 @@ class Service extends
                 (new Request(
                     '/access/customers/%s/access/%s'
                 ))
-                    ->setOptions(
-                        [
-                            'headers' => [
-                                'X-API-TOKEN' => $jwt
-                            ]
-                        ]
-                    )
+                    ->setJwt($jwt)
                     ->setResponse(
                         static function(array $response) : array {
                             return [
@@ -163,7 +151,7 @@ class Service extends
                             ];
                         }
                     )
-                    ->setUriDatas(
+                    ->setUriParameters(
                         [
                             $customerModel->getUid(),
                             $domainModel->getUid(),
