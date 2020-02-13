@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Lead;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
@@ -13,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Request;
@@ -36,9 +35,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getAllLeads(
         User $userModel,
@@ -90,9 +88,8 @@ class Service extends
      *
      * @throws ClientException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function addLeads(
         User $userModel,
@@ -134,9 +131,8 @@ class Service extends
      *
      * @throws ClientException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function removeLeads(
         User $userModel,

@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Access;
 
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 
 /**
  * Service
@@ -42,8 +41,6 @@ class Service extends
      * customers
      *
      * @return Customer\Service
-     *
-     * @throws RequestException
      */
     public function customers() : Customer\Service
     {
@@ -58,8 +55,6 @@ class Service extends
      * domains
      *
      * @return Domain\Service
-     *
-     * @throws RequestException
      */
     public function domains() : Domain\Service
     {
@@ -74,8 +69,6 @@ class Service extends
      * relations
      *
      * @return Relation\Service
-     *
-     * @throws RequestException
      */
     public function relations() : Relation\Service
     {
@@ -90,8 +83,6 @@ class Service extends
      * users
      *
      * @return User\Service
-     *
-     * @throws RequestException
      */
     public function users() : User\Service
     {

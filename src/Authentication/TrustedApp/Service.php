@@ -3,14 +3,13 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -34,9 +33,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getAllTrustedApps(
         string $jwt
@@ -80,9 +78,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getTrustedApp(
         string $uid,
@@ -126,10 +123,10 @@ class Service extends
      * @param string     $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
@@ -168,9 +165,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
@@ -228,9 +224,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function deleteTrustedApp(
         string $uid,
@@ -267,9 +262,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function resetAuthToken(
         TrustedApp $trustedAppModel,

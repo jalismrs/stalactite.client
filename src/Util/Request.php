@@ -85,10 +85,10 @@ final class Request
         string $method = null
     ) {
         $this->endpoint = $endpoint;
-    
+        
         try {
             $this->method = self::validateMethod($method ?? 'GET');
-        
+            
             $throwable = null;
         } catch (OutOfBoundsException $outOfBoundsException) {
             $throwable = $outOfBoundsException;
@@ -101,110 +101,6 @@ final class Request
                 );
             }
         }
-    }
-    
-    /**
-     * getUri
-     *
-     * @return string
-     */
-    public function getUri() : string
-    {
-        return vsprintf(
-            $this->getEndpoint(),
-            $this->getUriParameters()
-        );
-    }
-    
-    /**
-     * getEndpoint
-     *
-     * @return string
-     */
-    public function getEndpoint() : string
-    {
-        return $this->endpoint;
-    }
-    
-    /**
-     * getUriParameters
-     *
-     * @return array
-     */
-    public function getUriParameters() : array
-    {
-        return $this->uriParameters;
-    }
-    
-    /**
-     * setUriParameters
-     *
-     * @param array $uriParameters
-     *
-     * @return $this
-     *
-     * @throws RequestException
-     */
-    public function setUriParameters(array $uriParameters) : self
-    {
-        try {
-            self::validateUriParameters($uriParameters);
-            
-            $throwable = null;
-        } catch (TypeError $typeError) {
-            $throwable = $typeError;
-        } finally {
-            if ($throwable instanceof Throwable) {
-                throw new RequestException(
-                    'error while setting uriParameters',
-                    $throwable->getCode(),
-                    $throwable
-                );
-            }
-        }
-        
-        $this->uriParameters = $uriParameters;
-        
-        return $this;
-    }
-    
-    /**
-     * validateUriParameters
-     *
-     * @static
-     *
-     * @param array $uriParameters
-     *
-     * @return void
-     *
-     * @throws TypeError
-     */
-    private static function validateUriParameters(array $uriParameters) : void
-    {
-        foreach ($uriParameters as $uriParameter) {
-            if (!is_scalar($uriParameter)) {
-                $type = gettype($uriParameter);
-                throw new TypeError(
-                    "Expected a scalar value, received '{$type}'"
-                );
-            }
-            if (is_bool($uriParameter)) {
-                trigger_error(
-                    'boolean value in discouraged, prefer int',
-                    E_USER_WARNING
-                );
-            }
-        }
-    }
-    
-    /**
-     * getMethod
-     *
-     * @return string
-     */
-    public function getMethod() : string
-    {
-        return $this->method;
     }
     
     /**
@@ -252,6 +148,110 @@ final class Request
         }
         
         return $method;
+    }
+    
+    /**
+     * getUri
+     *
+     * @return string
+     */
+    public function getUri() : string
+    {
+        return vsprintf(
+            $this->getEndpoint(),
+            $this->getUriParameters()
+        );
+    }
+    
+    /**
+     * getEndpoint
+     *
+     * @return string
+     */
+    public function getEndpoint() : string
+    {
+        return $this->endpoint;
+    }
+    
+    /**
+     * getUriParameters
+     *
+     * @return array
+     */
+    public function getUriParameters() : array
+    {
+        return $this->uriParameters;
+    }
+    
+    /**
+     * setUriParameters
+     *
+     * @param array $uriParameters
+     *
+     * @return $this
+     *
+     * @throws RequestException
+     */
+    public function setUriParameters(array $uriParameters) : self
+    {
+        try {
+            $this->uriParameters = self::validateUriParameters($uriParameters);
+            
+            $throwable = null;
+        } catch (TypeError $typeError) {
+            $throwable = $typeError;
+        } finally {
+            if ($throwable instanceof Throwable) {
+                throw new RequestException(
+                    'error while setting uriParameters',
+                    $throwable->getCode(),
+                    $throwable
+                );
+            }
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * validateUriParameters
+     *
+     * @static
+     *
+     * @param array $uriParameters
+     *
+     * @return array
+     *
+     * @throws TypeError
+     */
+    private static function validateUriParameters(array $uriParameters) : array
+    {
+        foreach ($uriParameters as $uriParameter) {
+            if (!is_scalar($uriParameter)) {
+                $type = gettype($uriParameter);
+                throw new TypeError(
+                    "Expected a scalar value, received '{$type}'"
+                );
+            }
+            if (is_bool($uriParameter)) {
+                trigger_error(
+                    'boolean value in discouraged, prefer int',
+                    E_USER_WARNING
+                );
+            }
+        }
+        
+        return $uriParameters;
+    }
+    
+    /**
+     * getMethod
+     *
+     * @return string
+     */
+    public function getMethod() : string
+    {
+        return $this->method;
     }
     
     /**
@@ -371,29 +371,25 @@ final class Request
      */
     public function setResponse(?Closure $response) : self
     {
-        if ($response !== null) {
-            try {
-                self::validateResponse($response);
-                
-                $throwable = null;
-            } catch (ErrorException $errorException) {
-                $throwable = $errorException;
-            } catch (InvalidArgumentException $invalidArgumentException) {
-                $throwable = $invalidArgumentException;
-            } catch (TypeError $typeError) {
-                $throwable = $typeError;
-            } finally {
-                if ($throwable instanceof Throwable) {
-                    throw new RequestException(
-                        'error while setting response',
-                        $throwable->getCode(),
-                        $throwable
-                    );
-                }
+        try {
+            $this->response = self::validateResponse($response);
+            
+            $throwable = null;
+        } catch (ErrorException $errorException) {
+            $throwable = $errorException;
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $throwable = $invalidArgumentException;
+        } catch (TypeError $typeError) {
+            $throwable = $typeError;
+        } finally {
+            if ($throwable instanceof Throwable) {
+                throw new RequestException(
+                    'error while setting response',
+                    $throwable->getCode(),
+                    $throwable
+                );
             }
         }
-        
-        $this->response = $response;
         
         return $this;
     }
@@ -403,58 +399,62 @@ final class Request
      *
      * @static
      *
-     * @param Closure $response
+     * @param Closure|null $response
      *
-     * @return void
+     * @return Closure|null
      *
      * @throws ErrorException
      * @throws InvalidArgumentException
      * @throws TypeError
      */
-    private static function validateResponse(Closure $response) : void
+    private static function validateResponse(?Closure $response) : ?Closure
     {
-        try {
-            $reflectionFunction = new ReflectionFunction($response);
-        } catch (ReflectionException $reflectionException) {
-            throw new ErrorException(
-                'should never happen',
-                $reflectionException->getCode(),
-                $reflectionException
-            );
+        if ($response !== null) {
+            try {
+                $reflectionFunction = new ReflectionFunction($response);
+            } catch (ReflectionException $reflectionException) {
+                throw new ErrorException(
+                    'should never happen',
+                    $reflectionException->getCode(),
+                    $reflectionException
+                );
+            }
+            
+            $reflectionReturnType = $reflectionFunction->getReturnType();
+            if ($reflectionReturnType === null) {
+                trigger_error(
+                    'Response should specify its return type',
+                    E_USER_WARNING
+                );
+            } elseif ((string)$reflectionReturnType !== 'array') {
+                throw new TypeError(
+                    "Response should specify return type 'array'"
+                );
+            }
+            
+            $reflectionParameters = $reflectionFunction->getParameters();
+            if (count($reflectionParameters) !== 1) {
+                throw new InvalidArgumentException(
+                    'Response should specify only one parameter'
+                );
+            }
+            $reflectionParameter = $reflectionParameters[0];
+            assert($reflectionParameter instanceof ReflectionParameter);
+            
+            $reflectionParameterType = $reflectionParameter->getType();
+            if ($reflectionParameterType === null) {
+                trigger_error(
+                    'Response should specify its parameter type',
+                    E_USER_WARNING
+                );
+            } elseif ((string)$reflectionParameterType !== 'array') {
+                throw new TypeError(
+                    "Response should specify parameter type 'array'"
+                );
+            }
         }
         
-        $reflectionReturnType = $reflectionFunction->getReturnType();
-        if ($reflectionReturnType === null) {
-            trigger_error(
-                'Response should specify its return type',
-                E_USER_WARNING
-            );
-        } elseif ((string)$reflectionReturnType !== 'array') {
-            throw new TypeError(
-                "Response should specify return type 'array'"
-            );
-        }
-        
-        $reflectionParameters = $reflectionFunction->getParameters();
-        if (count($reflectionParameters) !== 1) {
-            throw new InvalidArgumentException(
-                'Response should specify only one parameter'
-            );
-        }
-        $reflectionParameter = $reflectionParameters[0];
-        assert($reflectionParameter instanceof ReflectionParameter);
-        
-        $reflectionParameterType = $reflectionParameter->getType();
-        if ($reflectionParameterType === null) {
-            trigger_error(
-                'Response should specify its parameter type',
-                E_USER_WARNING
-            );
-        } elseif ((string)$reflectionParameterType !== 'array') {
-            throw new TypeError(
-                "Response should specify parameter type 'array'"
-            );
-        }
+        return $response;
     }
     
     /**

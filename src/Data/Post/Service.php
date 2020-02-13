@@ -3,17 +3,16 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -33,9 +32,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getAllPosts(
         string $jwt
@@ -79,9 +77,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getPost(
         string $uid,
@@ -129,9 +126,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function createPost(
         Post $postModel,
@@ -183,9 +179,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function updatePost(
         Post $postModel,
@@ -224,9 +219,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function deletePost(
         string $uid,
@@ -257,9 +251,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getUsers(
         string $uid,

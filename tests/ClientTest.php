@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -7,7 +7,6 @@ use Jalismrs\Stalactite\Client\Client;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -29,11 +28,11 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testGetHost(): void
+    public function testGetHost() : void
     {
-        $host = 'http://fakeHost';
+        $host       = 'http://fakeHost';
         $mockClient = new Client($host);
-
+        
         self::assertSame(
             $host,
             $mockClient->getHost()
@@ -48,10 +47,10 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testGetUserAgentDefault(): void
+    public function testGetUserAgentDefault() : void
     {
         $mockClient = new Client('http://fakeHost');
-
+        
         self::assertNull($mockClient->getUserAgent());
     }
     
@@ -63,12 +62,12 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testGetUserAgent(): void
+    public function testGetUserAgent() : void
     {
-        $userAgent = 'fake user agent';
+        $userAgent  = 'fake user agent';
         $mockClient = new Client('http://fakeHost');
         $mockClient->setUserAgent($userAgent);
-
+        
         self::assertSame(
             $userAgent,
             $mockClient->getUserAgent()
@@ -83,12 +82,12 @@ class ClientTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testGetHttpClient(): void
+    public function testGetHttpClient() : void
     {
         $httpClient = new MockHttpClient();
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient($httpClient);
-
+        
         self::assertSame(
             $httpClient,
             $mockClient->getHttpClient()
@@ -105,7 +104,7 @@ class ClientTest extends
      */
     public function testGetLogger() : void
     {
-        $logger = new TestLogger();
+        $logger     = new TestLogger();
         $mockClient = new Client('http://fakeHost');
         $mockClient->setLogger($logger);
         
@@ -127,7 +126,7 @@ class ClientTest extends
     public function testGetLoggerDefault() : void
     {
         $mockClient = new Client('http://fakeHost');
-    
+        
         self::assertInstanceOf(
             NullLogger::class,
             $mockClient->getLogger()

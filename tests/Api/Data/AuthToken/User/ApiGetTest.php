@@ -1,19 +1,17 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\AuthToken\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\User\Service;
 use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * ApiGetTest
  *
- * @package Jalismrs\Stalactite\Service\Tests\Data\AuthToken\User
+ * @package Jalismrs\Stalactite\Client\Tests\Api\Data\AuthToken\User
  */
 class ApiGetTest extends
     TestCase
@@ -37,36 +35,34 @@ class ApiGetTest extends
      * @throws Exception
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
      */
-    public function testGet(): void
+    public function testGet() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => null,
-                        'user' => Serializer::getInstance()
-                            ->normalize(
-                                ModelFactory::getTestableUser(),
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'main',
-                                    ],
-                                ]
-                            )
+                        'error'   => null,
+                        'user'    => Serializer::getInstance()
+                                               ->normalize(
+                                                   ModelFactory::getTestableUser(),
+                                                   [
+                                                       AbstractNormalizer::GROUPS => [
+                                                           'main',
+                                                       ],
+                                                   ]
+                                               )
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $response = $mockService->getUser(
             'fake user uid',
             'fake user jwt'
@@ -85,32 +81,30 @@ class ApiGetTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws SerializerException
      * @throws RequestException
+     * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseGet(): void
+    public function testThrowOnInvalidResponseGet() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => null,
-                        'user' => []
+                        'error'   => null,
+                        'user'    => []
                         // invalid user
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $mockService->getUser(
             'fake user uid',
             'fake user jwt'

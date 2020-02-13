@@ -1,24 +1,23 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Post;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ApiRemovePostsTest
- * @package Jalismrs\Stalactite\Service\Tests\Data\User\Post
+ * ApiRemovePostsTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Api\Data\User\Post
  */
 class ApiRemovePostsTest extends
     TestCase
@@ -31,28 +30,26 @@ class ApiRemovePostsTest extends
      * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws RequestException
      * @throws SerializerException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testRemovePosts(): void
+    public function testRemovePosts() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => null
+                        'error'   => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $response = $mockService->removePosts(
             ModelFactory::getTestableUser(),
             [
@@ -71,31 +68,29 @@ class ApiRemovePostsTest extends
      *
      * @throws ClientException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws RequestException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidResponseRemovePosts(): void
+    public function testThrowOnInvalidResponseRemovePosts() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => false
+                        'error'   => false
                         // invalid type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $mockService->removePosts(
             ModelFactory::getTestableUser(),
             [
@@ -112,29 +107,27 @@ class ApiRemovePostsTest extends
      *
      * @throws ClientException
      * @throws InvalidArgumentException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws RequestException
      * @throws SerializerException
      */
-    public function testThrowOnInvalidPostsParameterRemovePosts(): void
+    public function testThrowOnInvalidPostsParameterRemovePosts() : void
     {
         $this->expectException(InvalidArgumentException::class);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => null
+                        'error'   => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $mockService->removePosts(
             ModelFactory::getTestableUser(),
             [

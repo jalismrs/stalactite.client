@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
@@ -46,8 +44,6 @@ class Service extends
      * leads
      *
      * @return Lead\Service
-     *
-     * @throws RequestException
      */
     public function leads() : Lead\Service
     {
@@ -62,8 +58,6 @@ class Service extends
      * me
      *
      * @return Me\Service
-     *
-     * @throws RequestException
      */
     public function me() : Me\Service
     {
@@ -78,8 +72,6 @@ class Service extends
      * posts
      *
      * @return PostService
-     *
-     * @throws RequestException
      */
     public function posts() : PostService
     {
@@ -104,8 +96,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function getAllUsers(
@@ -150,8 +141,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function getUser(
@@ -201,8 +191,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function getByEmailAndGoogleId(
@@ -245,15 +234,17 @@ class Service extends
     }
     
     /**
+     * createUser
+     *
      * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws RequestException
+     * @throws SerializerException
      */
     public function createUser(
         User $userModel,
@@ -327,8 +318,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function updateUser(
@@ -368,8 +358,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function deleteUser(

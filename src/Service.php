@@ -39,8 +39,6 @@ class Service extends
      * authentication
      *
      * @return Authentication\Service
-     *
-     * @throws Exception\RequestException
      */
     public function authentication() : Authentication\Service
     {

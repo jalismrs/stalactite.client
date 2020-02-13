@@ -3,14 +3,13 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -33,9 +32,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getAllDomains(
         string $jwt
@@ -79,9 +77,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getDomain(
         string $uid,
@@ -129,9 +126,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getByName(
         string $name,
@@ -182,9 +178,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function getByNameAndApiKey(
         string $name,
@@ -236,9 +231,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function createDomain(
         Domain $domainModel,
@@ -290,9 +284,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function updateDomain(
         Domain $domainModel,
@@ -331,9 +324,8 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws SerializerException
+     * @throws RequestException
      */
     public function deleteDomain(
         string $uid,

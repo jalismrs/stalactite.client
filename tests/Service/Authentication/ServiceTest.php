@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Service\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * ServiceTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Service\Authentication
  */
 class ServiceTest extends
     TestCase
@@ -30,11 +29,10 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestException
      */
-    public function testTrustedApp(): void
+    public function testTrustedApp() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient()
@@ -43,10 +41,10 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-
+        
         $mockService1 = $mockService->trustedApps();
         $mockService2 = $mockService->trustedApps();
-
+        
         self::checkServices(
             $mockService,
             $mockService1,

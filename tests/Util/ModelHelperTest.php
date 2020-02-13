@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
@@ -15,37 +15,48 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
  */
-class ModelHelperTest extends TestCase
+class ModelHelperTest extends
+    TestCase
 {
     /**
      * @throws InvalidArgumentException
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGetUids(): void
+    public function testGetUids() : void
     {
-        $domain = ModelFactory::getTestableDomain()->setUid('azerty');
-        $domain2 = ModelFactory::getTestableDomain()->setUid('uiop');
-
+        $domain = ModelFactory::getTestableDomain()
+                              ->setUid('azerty');
+        $domain2 = ModelFactory::getTestableDomain()
+                               ->setUid('uiop');
+        
         static::assertEquals(
-            [$domain->getUid(), $domain2->getUid()],
-            ModelHelper::getUids([$domain, $domain2])
+            [
+                $domain->getUid(),
+                $domain2->getUid()
+            ],
+            ModelHelper::getUids(
+                [
+                    $domain,
+                    $domain2
+                ]
+            )
         );
     }
-
+    
     /**
      * @throws InvalidArgumentException
      */
-    public function testThrowOnGetUidsWithNonModelList(): void
+    public function testThrowOnGetUidsWithNonModelList() : void
     {
         $this->expectException(InvalidArgumentException::class);
         ModelHelper::getUids(['not a model']);
     }
-
+    
     /**
      * @throws InvalidArgumentException
      */
-    public function testThrowOnGetUidsWithInvalidModelTypeList(): void
+    public function testThrowOnGetUidsWithInvalidModelTypeList() : void
     {
         $this->expectException(InvalidArgumentException::class);
         ModelHelper::getUids([ModelFactory::getTestableDomain()], User::class);

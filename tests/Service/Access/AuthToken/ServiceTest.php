@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Service\Access\AuthToken;
 
 use Jalismrs\Stalactite\Client\Access\AuthToken\Service;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +15,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 /**
  * ServiceTest
  *
- * @package Jalismrs\Stalactite\Service\Tests\Access\AuthToken
+ * @package Jalismrs\Stalactite\Client\Tests\Service\Access\AuthToken
  */
 class ServiceTest extends
     TestCase
@@ -30,11 +29,10 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestException
      */
-    public function testCustomer(): void
+    public function testCustomer() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient()
@@ -43,10 +41,10 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-
+        
         $mockService1 = $mockService->customers();
         $mockService2 = $mockService->customers();
-
+        
         self::checkServices(
             $mockService,
             $mockService1,
@@ -61,11 +59,10 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestException
      */
-    public function testDomainDefault(): void
+    public function testDomainDefault() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient()
@@ -74,10 +71,10 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-
+        
         $mockService1 = $mockService->domains();
         $mockService2 = $mockService->domains();
-
+        
         self::checkServices(
             $mockService,
             $mockService1,
@@ -92,11 +89,10 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestException
      */
-    public function testUser(): void
+    public function testUser() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient()
@@ -105,10 +101,10 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-
+        
         $mockService1 = $mockService->users();
         $mockService2 = $mockService->users();
-
+        
         self::checkServices(
             $mockService,
             $mockService1,

@@ -6,7 +6,6 @@ namespace Jalismrs\Stalactite\Client\Tests\Util;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Util\Request;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -123,7 +122,7 @@ class RequestTest extends
     {
         $this->expectException(RequestException::class);
         
-        $request = new Request(
+        new Request(
             '',
             'PSOT'
         );
@@ -140,7 +139,7 @@ class RequestTest extends
     {
         $this->expectError();
         
-        $request = new Request(
+        new Request(
             '',
             'put'
         );

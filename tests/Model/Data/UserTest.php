@@ -1,11 +1,11 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * UserTest
  *
- * @package Jalismrs\Stalactite\Service\Tests\Data\Model
+ * @package Jalismrs\Stalactite\Client\Tests\Model\Data
  */
 class UserTest extends
     TestCase
@@ -24,28 +24,29 @@ class UserTest extends
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCommon(): void
+    public function testGroupCommon() : void
     {
         $model = ModelFactory::getTestableUser();
-
-        $actual = Serializer::getInstance()->normalize($model);
-
+        
+        $actual = Serializer::getInstance()
+                            ->normalize($model);
+        
         $expected = [];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMain(): void
+    public function testGroupMain() : void
     {
         $serializer = Serializer::getInstance();
-
+        
         $model = ModelFactory::getTestableUser();
-
+        
         $actual = $serializer->normalize(
             $model,
             [
@@ -54,30 +55,30 @@ class UserTest extends
                 ],
             ]
         );
-
+        
         $expected = [
-            'uid' => $model->getUid(),
+            'uid'       => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName' => $model->getLastName(),
-            'email' => $model->getEmail(),
-            'googleId' => $model->getGoogleId(),
-            'admin' => $model->isAdmin()
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'googleId'  => $model->getGoogleId(),
+            'admin'     => $model->isAdmin()
         ];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMin(): void
+    public function testGroupMin() : void
     {
         $serializer = Serializer::getInstance();
-
+        
         $model = ModelFactory::getTestableUser();
-
+        
         $actual = $serializer->normalize(
             $model,
             [
@@ -86,30 +87,30 @@ class UserTest extends
                 ],
             ]
         );
-
+        
         $expected = [
-            'uid' => $model->getUid(),
+            'uid'       => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName' => $model->getLastName(),
-            'email' => $model->getEmail(),
-            'googleId' => $model->getGoogleId(),
-            'admin' => $model->isAdmin(),
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'googleId'  => $model->getGoogleId(),
+            'admin'     => $model->isAdmin(),
         ];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCreate(): void
+    public function testGroupCreate() : void
     {
         $serializer = Serializer::getInstance();
-
+        
         $model = ModelFactory::getTestableUser();
-
+        
         $actual = $serializer->normalize(
             $model,
             [
@@ -118,28 +119,28 @@ class UserTest extends
                 ],
             ]
         );
-
+        
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName' => $model->getLastName(),
-            'email' => $model->getEmail(),
-            'admin' => $model->isAdmin(),
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'admin'     => $model->isAdmin(),
         ];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupUpdate(): void
+    public function testGroupUpdate() : void
     {
         $serializer = Serializer::getInstance();
-
+        
         $model = ModelFactory::getTestableUser();
-
+        
         $actual = $serializer->normalize(
             $model,
             [
@@ -148,28 +149,28 @@ class UserTest extends
                 ],
             ]
         );
-
+        
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName' => $model->getLastName(),
-            'email' => $model->getEmail(),
-            'admin' => $model->isAdmin(),
+            'lastName'  => $model->getLastName(),
+            'email'     => $model->getEmail(),
+            'admin'     => $model->isAdmin(),
         ];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-
+    
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupUpdateMe(): void
+    public function testGroupUpdateMe() : void
     {
         $serializer = Serializer::getInstance();
-
+        
         $model = ModelFactory::getTestableUser();
-
+        
         $actual = $serializer->normalize(
             $model,
             [
@@ -178,12 +179,12 @@ class UserTest extends
                 ],
             ]
         );
-
+        
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName' => $model->getLastName(),
+            'lastName'  => $model->getLastName(),
         ];
-
+        
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }
