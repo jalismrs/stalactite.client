@@ -15,7 +15,7 @@ abstract class AbstractService
     /**
      * @var array
      */
-    protected $requestConfigurations = [];
+    protected $requests = [];
     /**
      * @var Client
      */

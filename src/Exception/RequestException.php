@@ -10,8 +10,9 @@ use RuntimeException;
  *
  * @package Jalismrs\Stalactite\Client\Exception
  */
-class RequestConfigurationException extends
-    RuntimeException
+class RequestException extends
+    RuntimeException implements
+    ExceptionInterface
 {
 
 }

@@ -8,13 +8,13 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\Customer\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -39,7 +39,7 @@ class ApiGetRelationsTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testGetRelations(): void
     {
@@ -93,7 +93,7 @@ class ApiGetRelationsTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testThrowExceptionOnInvalidResponseGetRelations(): void
     {

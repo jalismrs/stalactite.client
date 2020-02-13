@@ -10,12 +10,11 @@ use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
@@ -42,43 +41,6 @@ class Service extends
     
     private $serviceTrustedApp;
     
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'login' => (new RequestConfiguration(
-                '/auth/login'
-            ))
-                ->setMethod('POST')
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'jwt' => $response['jwt'],
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'jwt' => [
-                            'type' => JsonRule::STRING_TYPE,
-                            'null' => true,
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -90,7 +52,7 @@ class Service extends
      *
      * @return TrustedAppService
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function trustedApps() : TrustedAppService
     {
@@ -125,16 +87,15 @@ class Service extends
         try {
             $token = $this->getTokenFromString($jwt);
         } catch (Throwable $throwable) {
-            $exception = new ClientException(
+            $this
+                ->getLogger()
+                ->error($throwable);
+            
+            throw new ClientException(
                 'Invalid user JWT',
                 ClientException::INVALID_JWT_STRING,
                 $throwable
             );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
         }
         
         $data = new ValidationData();
@@ -147,8 +108,9 @@ class Service extends
                 ClientException::INVALID_JWT_STRUCTURE
             );
             
-            $this->getLogger()
-                 ->error($exception);
+            $this
+                ->getLogger()
+                ->error($exception);
             
             throw $exception;
         }
@@ -159,8 +121,9 @@ class Service extends
                 ClientException::EXPIRED_JWT
             );
             
-            $this->getLogger()
-                 ->error($exception);
+            $this
+                ->getLogger()
+                ->error($exception);
             
             throw $exception;
         }
@@ -171,8 +134,9 @@ class Service extends
                 ClientException::INVALID_JWT_USER_TYPE
             );
             
-            $this->getLogger()
-                 ->error($exception);
+            $this
+                ->getLogger()
+                ->error($exception);
             
             throw $exception;
         }
@@ -183,8 +147,9 @@ class Service extends
                 ClientException::INVALID_JWT_ISSUER
             );
             
-            $this->getLogger()
-                 ->error($exception);
+            $this
+                ->getLogger()
+                ->error($exception);
             
             throw $exception;
         }
@@ -194,29 +159,27 @@ class Service extends
         
         try {
             return $token->verify($signer, $publicKey);
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this
+                ->getLogger()
+                ->error($invalidArgumentException);
+            
             // thrown by the library on invalid key
-            $exception = new ClientException(
+            throw new ClientException(
                 'Invalid RSA public key',
                 ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY,
-                $exception
+                $invalidArgumentException
             );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
         } catch (Throwable $throwable) { // other exceptions result in an invalid token / signature
-            $exception = new ClientException(
+            $this
+                ->getLogger()
+                ->error($throwable);
+            
+            throw new ClientException(
                 'Invalid JWT signature',
                 ClientException::INVALID_JWT_SIGNATURE,
                 $throwable
             );
-            
-            $this->getLogger()
-                 ->error($exception);
-            
-            throw $exception;
         }
     }
     
@@ -253,17 +216,15 @@ class Service extends
                 )
                 ->getContent();
         } catch (Throwable $throwable) {
-            $exception = new ClientException(
+            $this
+                ->getLogger()
+                ->error($throwable);
+            
+            throw new ClientException(
                 'Error while fetching Stalactite API RSA public key',
                 ClientException::CLIENT_TRANSPORT,
                 $throwable
             );
-            
-            $this
-                ->getLogger()
-                ->error($exception);
-            
-            throw $exception;
         }
     }
     
@@ -287,15 +248,34 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['login'],
-                [],
-                [
-                    'json' => [
-                        'appName'       => $trustedAppModel->getName(),
-                        'appToken'      => $trustedAppModel->getAuthToken(),
-                        'userGoogleJwt' => $userGoogleJwt,
-                    ],
-                ]
+                (new Request(
+                    '/auth/login'
+                ))
+                    ->setMethod('POST')
+                    ->setOptions(
+                        [
+                            'json' => [
+                                'appName'       => $trustedAppModel->getName(),
+                                'appToken'      => $trustedAppModel->getAuthToken(),
+                                'userGoogleJwt' => $userGoogleJwt,
+                            ],
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'jwt' => $response['jwt'],
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'jwt' => [
+                                'type' => JsonRule::STRING_TYPE,
+                                'null' => true,
+                            ],
+                        ]
+                    )
             );
     }
 }

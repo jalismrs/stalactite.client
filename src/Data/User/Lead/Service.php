@@ -8,17 +8,15 @@ use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Request;
 use function array_map;
 
 /**
@@ -29,55 +27,6 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'addLeads'    => (new RequestConfiguration(
-                '/data/users/%s/leads'
-            ))
-                ->setMethod('POST'),
-            'getAll'      => (new RequestConfiguration(
-                '/data/users/%s/leads'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'leads' => array_map(
-                                static function($lead) {
-                                    return ModelFactory::createPost($lead);
-                                },
-                                $response['leads']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'leads' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::POST,
-                        ],
-                    ]
-                ),
-            'removeLeads' => (new RequestConfiguration(
-                '/data/users/%s/leads'
-            ))
-                ->setMethod('DELETE'),
-        ];
-    }
-    
     /**
      * getAllLeads
      *
@@ -98,15 +47,41 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [
-                    $userModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/users/%s/leads'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'leads' => array_map(
+                                    static function($lead) {
+                                        return ModelFactory::createPost($lead);
+                                    },
+                                    $response['leads']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'leads' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::POST,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -133,21 +108,28 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['addLeads'],
-                [
-                    $userModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => [
-                        'leads' => ModelHelper::getUids(
-                            $leadModels,
-                            Post::class
-                        )
-                    ],
-                ]
+                (new Request(
+                    '/data/users/%s/leads'
+                ))
+                    ->setMethod('POST')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => [
+                                'leads' => ModelHelper::getUids(
+                                    $leadModels,
+                                    Post::class
+                                )
+                            ],
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
             );
     }
     
@@ -174,21 +156,28 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['removeLeads'],
-                [
-                    $userModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => [
-                        'leads' => ModelHelper::getUids(
-                            $leadModels,
-                            Post::class
-                        )
-                    ],
-                ]
+                (new Request(
+                    '/data/users/%s/leads'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => [
+                                'leads' => ModelHelper::getUids(
+                                    $leadModels,
+                                    Post::class
+                                )
+                            ],
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
             );
     }
 }

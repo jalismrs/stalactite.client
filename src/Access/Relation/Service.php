@@ -7,12 +7,10 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainRelation;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 
 /**
  * Service
@@ -22,28 +20,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'deleteRelation' => (new RequestConfiguration(
-                '/access/relations/%s'
-            ))
-                ->setMethod('DELETE'),
-        ];
-    }
-    
     /**
      * deleteRelation
      *
@@ -64,15 +40,22 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['deleteRelation'],
-                [
-                    $domainRelationModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/access/relations/%s'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $domainRelationModel->getUid(),
+                        ]
+                    )
             );
     }
 }

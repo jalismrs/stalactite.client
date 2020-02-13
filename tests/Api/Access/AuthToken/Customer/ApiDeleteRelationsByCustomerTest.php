@@ -7,11 +7,11 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Access\AuthToken\Customer\Service;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -34,7 +34,7 @@ class ApiDeleteRelationsByCustomerTest extends
      * @throws InvalidArgumentException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function testDeleteRelationsByCustomer(): void
@@ -69,7 +69,7 @@ class ApiDeleteRelationsByCustomerTest extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function testThrowExceptionOnInvalidResponseDeleteRelationByDomain(): void

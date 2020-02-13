@@ -7,13 +7,11 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 
 /**
  * Service
@@ -23,28 +21,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'deleteRelationsByCustomer' => (new RequestConfiguration(
-                '/access/auth-token/customers/%s/relations'
-            ))
-                ->setMethod('DELETE'),
-        ];
-    }
-    
     /**
      * deleteRelationsByCustomer
      *
@@ -72,15 +48,22 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['deleteRelationsByCustomer'],
-                [
-                    $customerModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/access/auth-token/customers/%s/relations'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $customerModel->getUid(),
+                        ]
+                    )
             );
     }
 }

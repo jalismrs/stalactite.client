@@ -7,15 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use function array_map;
 
 /**
@@ -26,114 +24,6 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'getAll'             => (new RequestConfiguration(
-                '/data/auth-token/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'getByNameAndApiKey' => (new RequestConfiguration(
-                '/data/auth-token/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'getByName'          => (new RequestConfiguration(
-                '/data/auth-token/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'get'                => (new RequestConfiguration(
-                '/data/auth-token/domains/%s'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domain' => $response['domain'] === null
-                                ? null
-                                : ModelFactory::createDomain($response['domain']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getAllDomains
      *
@@ -159,13 +49,36 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -198,17 +111,40 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getByNameAndApiKey'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ],
-                    'query'   => [
-                        'name'   => $name,
-                        'apiKey' => $apiKey
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ],
+                            'query'   => [
+                                'name'   => $name,
+                                'apiKey' => $apiKey
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -239,16 +175,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getByName'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ],
-                    'query'   => [
-                        'name' => $name
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ],
+                            'query'   => [
+                                'name' => $name
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -279,15 +238,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/domains/%s'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domain' => $response['domain'] === null
+                                    ? null
+                                    : ModelFactory::createDomain($response['domain']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'domain' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
 }

@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Service\Data\AuthToken;
 
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Data\AuthToken\Service;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +30,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testCustomer(): void
     {
@@ -61,7 +61,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testDomain(): void
     {
@@ -92,7 +92,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testPost(): void
     {
@@ -123,7 +123,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testUser(): void
     {

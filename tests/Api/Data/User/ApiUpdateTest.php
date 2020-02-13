@@ -6,12 +6,13 @@ namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User;
 use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\User\Service;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -35,7 +36,7 @@ class ApiUpdateTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testUpdate(): void
     {
@@ -54,7 +55,7 @@ class ApiUpdateTest extends
         );
 
         $response = $mockService->updateUser(
-            new User(),
+            ModelFactory::getTestableUser(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -70,7 +71,7 @@ class ApiUpdateTest extends
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
      * @throws SerializerException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testThrowOnInvalidResponseOnUpdate(): void
     {
@@ -92,7 +93,7 @@ class ApiUpdateTest extends
         );
 
         $mockService->updateUser(
-            new User(),
+            ModelFactory::getTestableUser(),
             'fake user jwt'
         );
     }

@@ -119,9 +119,9 @@
             <file>tests/ClientTest.php</file>
         </testsuite>
         <testsuite
-                name="request-configuration"
+                name="request"
         >
-            <file>tests/RequestConfigurationTest.php</file>
+            <file>tests/Util/RequestTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

@@ -7,15 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use function array_map;
 
 /**
@@ -26,89 +24,6 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'getAll'                => (new RequestConfiguration(
-                '/data/auth-token/users'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'users' => array_map(
-                                static function($user) {
-                                    return ModelFactory::createUser($user);
-                                },
-                                $response['users']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'users' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::USER,
-                        ],
-                    ]
-                ),
-            'getByEmailAndGoogleId' => (new RequestConfiguration(
-                '/data/auth-token/users'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'user' => $response['user'] === null
-                                ? null
-                                : ModelFactory::createUser($response['user']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'user' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::USER,
-                        ],
-                    ]
-                ),
-            'get'                   => (new RequestConfiguration(
-                '/data/auth-token/users/%s'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'user' => $response['user'] === null
-                                ? null
-                                : ModelFactory::createUser($response['user']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'user' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::USER,
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getAllUsers
      *
@@ -134,13 +49,36 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/users'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'users' => array_map(
+                                    static function($user) {
+                                        return ModelFactory::createUser($user);
+                                    },
+                                    $response['users']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'users' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -173,17 +111,38 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getByEmailAndGoogleId'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ],
-                    'query'   => [
-                        'email'    => $email,
-                        'googleId' => $googleId
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/users'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ],
+                            'query'   => [
+                                'email'    => $email,
+                                'googleId' => $googleId
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'user' => $response['user'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['user']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'user' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -214,15 +173,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/users/%s'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'user' => $response['user'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['user']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'user' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
     }
 }

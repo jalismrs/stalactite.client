@@ -10,12 +10,10 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -28,149 +26,6 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'create'         => (new RequestConfiguration(
-                '/auth/trustedApps'
-            ))
-                ->setMethod('POST')
-                ->setNormalization(
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'create',
-                        ],
-                    ]
-                )
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'trustedApp' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => array_merge(
-                                Schema::TRUSTED_APP,
-                                [
-                                    'resetToken' => [
-                                        'type' => JsonRule::STRING_TYPE
-                                    ],
-                                ]
-                            ),
-                        ],
-                    ]
-                ),
-            'delete'         => (new RequestConfiguration(
-                '/auth/trustedApps/%s'
-            ))
-                ->setMethod('DELETE'),
-            'getAll'         => (new RequestConfiguration(
-                '/auth/trustedApps'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'trustedApps' => array_map(
-                                static function($trustedApp) {
-                                    return ModelFactory::createTrustedApp($trustedApp);
-                                },
-                                $response['trustedApps']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'trustedApps' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::TRUSTED_APP,
-                        ],
-                    ]
-                ),
-            'get'            => (new RequestConfiguration(
-                '/auth/trustedApps/%s'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'trustedApp' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'schema' => Schema::TRUSTED_APP,
-                            'null'   => true,
-                        ],
-                    ]
-                ),
-            'resetAuthToken' => (new RequestConfiguration(
-                '/auth/trustedApps/%s/authToken/reset'
-            ))
-                ->setMethod('PUT')
-                ->setNormalization(
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'reset',
-                        ],
-                    ]
-                )
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'success'    => [
-                            'type' => JsonRule::BOOLEAN_TYPE,
-                        ],
-                        'error'      => [
-                            'type' => JsonRule::STRING_TYPE,
-                            'null' => true,
-                        ],
-                        'trustedApp' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::TRUSTED_APP,
-                        ],
-                    ]
-                ),
-            'update'         => (new RequestConfiguration(
-                '/auth/trustedApps/%s'
-            ))
-                ->setMethod('PUT')
-                ->setNormalization(
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'update',
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getAllTrustedApps
      *
@@ -189,13 +44,36 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/auth/trustedApps'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'trustedApps' => array_map(
+                                    static function($trustedApp) {
+                                        return ModelFactory::createTrustedApp($trustedApp);
+                                    },
+                                    $response['trustedApps']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'trustedApps' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::TRUSTED_APP,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -219,15 +97,37 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/auth/trustedApps/%s'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'trustedApp' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => Schema::TRUSTED_APP,
+                                'null'   => true,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -250,16 +150,30 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['update'],
-                [
-                    $trustedAppModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => $trustedAppModel,
-                ]
+                (new Request(
+                    '/auth/trustedApps/%s'
+                ))
+                    ->setMethod('PUT')
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'update',
+                            ],
+                        ]
+                    )
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => $trustedAppModel,
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $trustedAppModel->getUid(),
+                        ]
+                    )
             );
     }
     
@@ -283,14 +197,48 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['create'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => $trustedAppModel,
-                ]
+                (new Request(
+                    '/auth/trustedApps'
+                ))
+                    ->setMethod('POST')
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'create',
+                            ],
+                        ]
+                    )
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => $trustedAppModel,
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'trustedApp' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => array_merge(
+                                    Schema::TRUSTED_APP,
+                                    [
+                                        'resetToken' => [
+                                            'type' => JsonRule::STRING_TYPE
+                                        ],
+                                    ]
+                                ),
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -316,18 +264,25 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['delete'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => [
-                        'resetToken' => $resetToken,
-                    ]
-                ]
+                (new Request(
+                    '/auth/trustedApps/%s'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => [
+                                'resetToken' => $resetToken,
+                            ]
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
             );
     }
     
@@ -351,16 +306,53 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['resetAuthToken'],
-                [
-                    $trustedAppModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => $trustedAppModel
-                ]
+                (new Request(
+                    '/auth/trustedApps/%s/authToken/reset'
+                ))
+                    ->setMethod('PUT')
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'reset',
+                            ],
+                        ]
+                    )
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => $trustedAppModel
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $trustedAppModel->getUid(),
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'success'    => [
+                                'type' => JsonRule::BOOLEAN_TYPE,
+                            ],
+                            'error'      => [
+                                'type' => JsonRule::STRING_TYPE,
+                                'null' => true,
+                            ],
+                            'trustedApp' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::TRUSTED_APP,
+                            ],
+                        ]
+                    )
             );
     }
 }

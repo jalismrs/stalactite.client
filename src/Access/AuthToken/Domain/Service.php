@@ -11,15 +11,13 @@ use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
-use function assert;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 
 /**
  * Service
@@ -29,64 +27,6 @@ use function assert;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'deleteRelationsByDomain' => (new RequestConfiguration(
-                '/access/auth-token/domains/%s/relations'
-            ))
-                ->setMethod('DELETE'),
-            'getRelations'            => (new RequestConfiguration(
-                '/access/auth-token/domains/%s/relations'
-            ))
-                ->setValidation(
-                    [
-                        'relations' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'schema' => [
-                                'users'   => [
-                                    'type'   => JsonRule::LIST_TYPE,
-                                    'schema' => [
-                                        'uid'  => [
-                                            'type' => JsonRule::STRING_TYPE,
-                                        ],
-                                        'user' => [
-                                            'type'   => JsonRule::OBJECT_TYPE,
-                                            'schema' => DataSchema::USER,
-                                        ],
-                                    ],
-                                ],
-                                'customers' => [
-                                    'type'   => JsonRule::LIST_TYPE,
-                                    'schema' => [
-                                        'uid'    => [
-                                            'type' => JsonRule::STRING_TYPE
-                                        ],
-                                        'customer' => [
-                                            'type'   => JsonRule::OBJECT_TYPE,
-                                            'schema' => DataSchema::CUSTOMER,
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * deleteRelationsByDomain
      *
@@ -114,15 +54,22 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['deleteRelationsByDomain'],
-                [
-                    $domainModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/access/auth-token/domains/%s/relations'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $domainModel->getUid(),
+                        ]
+                    )
             );
     }
     
@@ -137,7 +84,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidDataTypeException
      * @throws InvalidSchemaException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      * @throws SerializerException
      */
     public function getRelations(
@@ -151,48 +98,83 @@ class Service extends
                 ->getUserAgent()
         );
         
-        $requestConfiguration = $this->requestConfigurations['getRelations'];
-        assert($requestConfiguration instanceof RequestConfiguration);
-        
-        $requestConfiguration->setResponse(
-            static function(array $response) use ($domainModel) : array {
-                return [
-                    'relations' => [
-                        'users'     => array_map(
-                            static function(array $relation) use ($domainModel): DomainUserRelation {
-                                $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                                $domainUserRelationModel->setDomain($domainModel);
-                                
-                                return $domainUserRelationModel;
-                            },
-                            $response['relations']['users']
-                        ),
-                        'customers' => array_map(
-                            static function(array $relation) use ($domainModel): DomainCustomerRelation {
-                                $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                                $domainCustomerRelation->setDomain($domainModel);
-                                
-                                return $domainCustomerRelation;
-                            },
-                            $response['relations']['customers']
-                        )
-                    ],
-                ];
-            }
-        );
-        
         return $this
             ->getClient()
             ->request(
-                $requestConfiguration,
-                [
-                    $domainModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/access/auth-token/domains/%s/relations'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) use ($domainModel) : array {
+                            return [
+                                'relations' => [
+                                    'users'     => array_map(
+                                        static function(array $relation) use ($domainModel): DomainUserRelation {
+                                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                                            $domainUserRelationModel->setDomain($domainModel);
+                                            
+                                            return $domainUserRelationModel;
+                                        },
+                                        $response['relations']['users']
+                                    ),
+                                    'customers' => array_map(
+                                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                                            $domainCustomerRelation->setDomain($domainModel);
+                                            
+                                            return $domainCustomerRelation;
+                                        },
+                                        $response['relations']['customers']
+                                    )
+                                ]
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $domainModel->getUid(),
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'relations' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'schema' => [
+                                    'users'     => [
+                                        'type'   => JsonRule::LIST_TYPE,
+                                        'schema' => [
+                                            'uid'  => [
+                                                'type' => JsonRule::STRING_TYPE,
+                                            ],
+                                            'user' => [
+                                                'type'   => JsonRule::OBJECT_TYPE,
+                                                'schema' => DataSchema::USER,
+                                            ],
+                                        ],
+                                    ],
+                                    'customers' => [
+                                        'type'   => JsonRule::LIST_TYPE,
+                                        'schema' => [
+                                            'uid'      => [
+                                                'type' => JsonRule::STRING_TYPE
+                                            ],
+                                            'customer' => [
+                                                'type'   => JsonRule::OBJECT_TYPE,
+                                                'schema' => DataSchema::CUSTOMER,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ]
+                    )
             );
     }
 }

@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken;
 
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 
 /**
  * Service
@@ -27,14 +27,14 @@ class Service extends
      *
      * @return Customer\Service
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
-    public function customers(): Customer\Service
+    public function customers() : Customer\Service
     {
         if ($this->serviceCustomer === null) {
             $this->serviceCustomer = new Customer\Service($this->getClient());
         }
-
+        
         return $this->serviceCustomer;
     }
     
@@ -43,14 +43,14 @@ class Service extends
      *
      * @return Domain\Service
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
-    public function domains(): Domain\Service
+    public function domains() : Domain\Service
     {
         if ($this->serviceDomain === null) {
             $this->serviceDomain = new Domain\Service($this->getClient());
         }
-
+        
         return $this->serviceDomain;
     }
     
@@ -59,14 +59,14 @@ class Service extends
      *
      * @return User\Service
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
-    public function users(): User\Service
+    public function users() : User\Service
     {
         if ($this->serviceUser === null) {
             $this->serviceUser = new User\Service($this->getClient());
         }
-
+        
         return $this->serviceUser;
     }
 }

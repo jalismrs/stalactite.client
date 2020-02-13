@@ -7,14 +7,12 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 
 /**
  * Service
@@ -24,45 +22,6 @@ use Jalismrs\Stalactite\Client\Util\SerializerException;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'get' => (new RequestConfiguration(
-                '/data/customers/me'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'me' => $response['me'] === null
-                                ? null
-                                : ModelFactory::createCustomer($response['me']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'me' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::CUSTOMER,
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getMe
      *
@@ -81,13 +40,34 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/customers/me'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'me' => $response['me'] === null
+                                    ? null
+                                    : ModelFactory::createCustomer($response['me']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'me' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::CUSTOMER,
+                            ],
+                        ]
+                    )
             );
     }
 }

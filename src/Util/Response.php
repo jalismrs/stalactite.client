@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client;
+namespace Jalismrs\Stalactite\Client\Util;
 
 /**
  * Response

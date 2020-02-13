@@ -5,8 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
@@ -44,7 +44,7 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testTransportExceptionThrownOnRSAPublicKeyFetching(): void
     {
@@ -66,7 +66,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testValidToken(): void
     {
@@ -96,7 +96,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testInvalidPublicKeyToken(): void
     {
@@ -129,7 +129,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testInvalidToken(): void
     {
@@ -151,7 +151,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testWrongIssuerToken(): void
     {
@@ -184,7 +184,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testExpiredToken(): void
     {
@@ -217,7 +217,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testInvalidUserTypeToken(): void
     {
@@ -250,7 +250,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testInvalidJwtStructureMissingClaimToken(): void
     {
@@ -285,7 +285,7 @@ class JwtValidationTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     private function checkToken(
         string $token,

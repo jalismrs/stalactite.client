@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Tests\Service;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Service;
 use Jalismrs\Stalactite\Client\Tests\ServiceTestTrait;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -60,7 +60,7 @@ class ServiceTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testAuthentication(): void
     {

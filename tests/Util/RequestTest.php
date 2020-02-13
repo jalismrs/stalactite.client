@@ -1,22 +1,24 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests;
+namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use hunomina\Validator\Json\Rule\JsonRule;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Request;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * RequestConfigurationTest
+ * RequestTest
  *
- * @package Jalismrs\Stalactite\Client\Tests
+ * @package Jalismrs\Stalactite\Client\Tests\Util
  */
-class RequestConfigurationTest extends
+class RequestTest extends
     TestCase
 {
     /**
@@ -29,12 +31,12 @@ class RequestConfigurationTest extends
      */
     public function testEndpoint() : void
     {
-        $endpoint             = '/collection1/%s/collection2/%s/details';
-        $requestConfiguration = new RequestConfiguration($endpoint);
+        $endpoint = '/collection1/%s/collection2/%s/details';
+        $request  = new Request($endpoint);
         
         self::assertSame(
             $endpoint,
-            $requestConfiguration->getEndpoint()
+            $request->getEndpoint()
         );
     }
     
@@ -45,20 +47,25 @@ class RequestConfigurationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testUri() : void
     {
-        $endpoint             = '/collection1/%s/collection2/%s/details';
-        $requestConfiguration = new RequestConfiguration($endpoint);
+        $endpoint = '/collection1/%s/collection2/%s/details';
+        $uriDatas = [
+            'test',
+            '51',
+        ];
+        
+        $request = new Request($endpoint);
+        $request->setUriDatas($uriDatas);
         
         self::assertSame(
-            '/collection1/test/collection2/51/details',
-            $requestConfiguration->getUri(
-                [
-                    'test',
-                    '51',
-                ]
-            )
+            vsprintf(
+                $endpoint,
+                $uriDatas
+            ),
+            $request->getUri()
         );
     }
     
@@ -69,18 +76,18 @@ class RequestConfigurationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testMethod() : void
     {
         $method = 'POST';
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setMethod($method);
+        $request = new Request('');
+        $request->setMethod($method);
         
         self::assertSame(
             $method,
-            $requestConfiguration->getMethod()
+            $request->getMethod()
         );
     }
     
@@ -94,11 +101,11 @@ class RequestConfigurationTest extends
      */
     public function testMethodDefault() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
+        $request = new Request('');
         
         self::assertSame(
             'GET',
-            $requestConfiguration->getMethod()
+            $request->getMethod()
         );
     }
     
@@ -107,14 +114,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testMethodInvalid() : void
     {
-        $this->expectException(RequestConfigurationException::class);
+        $this->expectException(RequestException::class);
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setMethod('PSOT');
+        $request = new Request('');
+        $request->setMethod('PSOT');
     }
     
     /**
@@ -122,14 +129,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testMethodLowerCase() : void
     {
         $this->expectError();
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setMethod('put');
+        $request = new Request('');
+        $request->setMethod('put');
     }
     
     /**
@@ -139,6 +146,7 @@ class RequestConfigurationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testNormalization() : void
     {
@@ -148,29 +156,30 @@ class RequestConfigurationTest extends
             ],
         ];
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setNormalization($normalization);
+        $request = new Request('');
+        $request->setNormalization($normalization);
         
         self::assertSame(
             $normalization,
-            $requestConfiguration->getNormalization()
+            $request->getNormalization()
         );
     }
     
     /**
-     * testMethod
+     * testNormalizationNull
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testNormalizationNull() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setNormalization(null);
+        $request = new Request('');
+        $request->setNormalization(null);
         
-        self::assertNull($requestConfiguration->getNormalization());
+        self::assertNull($request->getNormalization());
     }
     
     /**
@@ -183,9 +192,49 @@ class RequestConfigurationTest extends
      */
     public function testNormalizationDefault() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
+        $request = new Request('');
         
-        self::assertNull($requestConfiguration->getNormalization());
+        self::assertNull($request->getNormalization());
+    }
+    
+    /**
+     * testOptions
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
+     * @throws SerializerException
+     */
+    public function testOptions() : void
+    {
+        $options = [
+            'query' => [],
+        ];
+        $request = new Request('');
+        $request->setOptions($options);
+        
+        self::assertSame(
+            $options,
+            $request->getOptions()
+        );
+    }
+    
+    /**
+     * testOptionsDefault
+     *
+     * @return void
+     *
+     * @throws Exception
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testOptionsDefault() : void
+    {
+        $request = new Request('');
+        
+        self::assertEmpty($request->getOptions());
     }
     
     /**
@@ -195,7 +244,7 @@ class RequestConfigurationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponse() : void
     {
@@ -203,12 +252,12 @@ class RequestConfigurationTest extends
             return $response;
         };
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse($response);
+        $request = new Request('');
+        $request->setResponse($response);
         
         self::assertSame(
             $response,
-            $requestConfiguration->getResponse()
+            $request->getResponse()
         );
     }
     
@@ -219,14 +268,14 @@ class RequestConfigurationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseNull() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(null);
+        $request = new Request('');
+        $request->setResponse(null);
         
-        self::assertNull($requestConfiguration->getResponse());
+        self::assertNull($request->getResponse());
     }
     
     /**
@@ -239,9 +288,9 @@ class RequestConfigurationTest extends
      */
     public function testResponseDefault() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
+        $request = new Request('');
         
-        self::assertNull($requestConfiguration->getResponse());
+        self::assertNull($request->getResponse());
     }
     
     /**
@@ -249,14 +298,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseMissingReturnType() : void
     {
         $this->expectError();
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(
+        $request = new Request('');
+        $request->setResponse(
             static function(array $response) {
                 return $response;
             }
@@ -268,14 +317,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseInvalidReturnType() : void
     {
-        $this->expectException(RequestConfigurationException::class);
+        $this->expectException(RequestException::class);
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(
+        $request = new Request('');
+        $request->setResponse(
             static function(array $response) : bool {
                 return $response === [];
             }
@@ -287,14 +336,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseInvalidParameterCount() : void
     {
-        $this->expectException(RequestConfigurationException::class);
+        $this->expectException(RequestException::class);
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(
+        $request = new Request('');
+        $request->setResponse(
             static function(array $response, array $invalid) : array {
                 return array_merge($response, $invalid);
             }
@@ -306,14 +355,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseMissingParameterType() : void
     {
         $this->expectError();
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(
+        $request = new Request('');
+        $request->setResponse(
             static function($response) : array {
                 return $response;
             }
@@ -325,14 +374,14 @@ class RequestConfigurationTest extends
      *
      * @return void
      *
-     * @throws RequestConfigurationException
+     * @throws RequestException
      */
     public function testResponseInvalidParameterType() : void
     {
-        $this->expectException(RequestConfigurationException::class);
+        $this->expectException(RequestException::class);
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setResponse(
+        $request = new Request('');
+        $request->setResponse(
             static function(bool $response) : array {
                 return [$response];
             }
@@ -340,12 +389,92 @@ class RequestConfigurationTest extends
     }
     
     /**
-     * testMethod
+     * testUriDatas
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
+     */
+    public function testUriDatas() : void
+    {
+        $uriDatas = [
+            'prout',
+        ];
+        
+        $request = new Request('');
+        $request->setUriDatas($uriDatas);
+        
+        self::assertSame(
+            $uriDatas,
+            $request->getUriDatas()
+        );
+    }
+    
+    /**
+     * testUriDatasDefault
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testUriDatasDefault() : void
+    {
+        $request = new Request('');
+        
+        self::assertEmpty($request->getUriDatas());
+    }
+    
+    /**
+     * testUriDatasInvalidType
+     *
+     * @return void
+     *
+     * @throws RequestException
+     */
+    public function testUriDatasInvalidType() : void
+    {
+        $this->expectException(RequestException::class);
+        
+        $request = new Request('');
+        $request->setUriDatas(
+            [
+                'prout',
+                []
+            ]
+        );
+    }
+    
+    /**
+     * testUriDatasTypeBool
+     *
+     * @return void
+     *
+     * @throws RequestException
+     */
+    public function testUriDatasTypeBool() : void
+    {
+        $this->expectError();
+        
+        $request = new Request('');
+        $request->setUriDatas(
+            [
+                'prout',
+                true
+            ]
+        );
+    }
+    
+    /**
+     * testValidation
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testValidation() : void
     {
@@ -356,29 +485,30 @@ class RequestConfigurationTest extends
             ]
         ];
         
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setValidation($validation);
+        $request = new Request('');
+        $request->setValidation($validation);
         
         self::assertSame(
             $validation,
-            $requestConfiguration->getValidation()
+            $request->getValidation()
         );
     }
     
     /**
-     * testMethod
+     * testValidationNull
      *
      * @return void
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws RequestException
      */
     public function testValidationNull() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
-        $requestConfiguration->setValidation(null);
+        $request = new Request('');
+        $request->setValidation(null);
         
-        self::assertNull($requestConfiguration->getValidation());
+        self::assertNull($request->getValidation());
     }
     
     /**
@@ -391,8 +521,8 @@ class RequestConfigurationTest extends
      */
     public function testValidationDefault() : void
     {
-        $requestConfiguration = new RequestConfiguration('');
+        $request = new Request('');
         
-        self::assertNull($requestConfiguration->getValidation());
+        self::assertNull($request->getValidation());
     }
 }

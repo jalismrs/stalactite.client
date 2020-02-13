@@ -7,15 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -27,158 +25,6 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'create'             => (new RequestConfiguration(
-                '/data/domains'
-            ))
-                ->setMethod('POST')
-                ->setNormalization(
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'create',
-                        ],
-                    ]
-                )
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domain' => $response['domain'] === null
-                                ? null
-                                : ModelFactory::createDomain($response['domain']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'delete'             => (new RequestConfiguration(
-                '/data/domains/%s'
-            ))
-                ->setMethod('DELETE'),
-            'getAll'             => (new RequestConfiguration(
-                '/data/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'getByNameAndApiKey' => (new RequestConfiguration(
-                '/data/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'getByName'          => (new RequestConfiguration(
-                '/data/domains'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domains' => array_map(
-                                static function($domain) {
-                                    return ModelFactory::createDomain($domain);
-                                },
-                                $response['domains']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domains' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'get'                => (new RequestConfiguration(
-                '/data/domains/%s'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'domain' => $response['domain'] === null
-                                ? null
-                                : ModelFactory::createDomain($response['domain']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'domain' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::DOMAIN,
-                        ],
-                    ]
-                ),
-            'update'             => (new RequestConfiguration(
-                '/data/domains/%s'
-            ))
-                ->setMethod('PUT')
-                ->setNormalization(
-                    [
-                        AbstractNormalizer::GROUPS => [
-                            'update',
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getAllDomains
      *
@@ -197,13 +43,36 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -227,15 +96,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/domains/%s'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domain' => $response['domain'] === null
+                                    ? null
+                                    : ModelFactory::createDomain($response['domain']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'domain' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -259,16 +152,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getByName'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'query'   => [
-                        'name' => $name
-                    ]
-                ]
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'query'   => [
+                                'name' => $name
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -294,17 +210,40 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getByNameAndApiKey'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'query'   => [
-                        'name'   => $name,
-                        'apiKey' => $apiKey
-                    ]
-                ]
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'query'   => [
+                                'name'   => $name,
+                                'apiKey' => $apiKey
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domains' => array_map(
+                                    static function($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -328,14 +267,43 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['create'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => $domainModel,
-                ]
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setMethod('POST')
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'create',
+                            ],
+                        ]
+                    )
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => $domainModel,
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'domain' => $response['domain'] === null
+                                    ? null
+                                    : ModelFactory::createDomain($response['domain']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domain' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -359,16 +327,30 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['update'],
-                [
-                    $domainModel->getUid(),
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json'    => $domainModel,
-                ]
+                (new Request(
+                    '/data/domains/%s'
+                ))
+                    ->setMethod('PUT')
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'update',
+                            ],
+                        ]
+                    )
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ],
+                            'json'    => $domainModel,
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $domainModel->getUid(),
+                        ]
+                    )
             );
     }
     
@@ -392,15 +374,22 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['delete'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ]
-            );
+                (new Request(
+                    '/data/domains/%s'
+                ))
+                    ->setMethod('DELETE')
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => $jwt
+                            ]
+                        ]
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    ),
+                );
     }
 }

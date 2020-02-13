@@ -7,15 +7,13 @@ use hunomina\Validator\Json\Exception\InvalidDataTypeException;
 use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Exception\RequestConfigurationException;
-use Jalismrs\Stalactite\Client\RequestConfiguration;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Request;
 use function array_map;
 
 /**
@@ -26,91 +24,6 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     *
-     * @throws RequestConfigurationException
-     */
-    public function __construct(
-        Client $client
-    ) {
-        parent::__construct(
-            $client
-        );
-        
-        $this->requestConfigurations = [
-            'getAll'   => (new RequestConfiguration(
-                '/data/auth-token/posts'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'posts' => array_map(
-                                static function($post) {
-                                    return ModelFactory::createPost($post);
-                                },
-                                $response['posts']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'posts' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::POST,
-                        ],
-                    ]
-                ),
-            'get'      => (new RequestConfiguration(
-                '/data/auth-token/posts/%s'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'post' => $response['post'] === null
-                                ? null
-                                : ModelFactory::createPost($response['post']),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'post' => [
-                            'type'   => JsonRule::OBJECT_TYPE,
-                            'null'   => true,
-                            'schema' => Schema::POST,
-                        ],
-                    ]
-                ),
-            'getUsers' => (new RequestConfiguration(
-                '/data/auth-token/posts/%s/users'
-            ))
-                ->setResponse(
-                    static function(array $response) : array {
-                        return [
-                            'users' => array_map(
-                                static function($user) {
-                                    return ModelFactory::createUser($user);
-                                },
-                                $response['users']
-                            ),
-                        ];
-                    }
-                )
-                ->setValidation(
-                    [
-                        'users' => [
-                            'type'   => JsonRule::LIST_TYPE,
-                            'schema' => Schema::USER,
-                        ],
-                    ]
-                ),
-        ];
-    }
-    
     /**
      * getAllPosts
      *
@@ -136,13 +49,36 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getAll'],
-                [],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/posts'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'posts' => array_map(
+                                    static function($post) {
+                                        return ModelFactory::createPost($post);
+                                    },
+                                    $response['posts']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'posts' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::POST,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -173,15 +109,39 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['get'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/posts/%s'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'post' => $response['post'] === null
+                                    ? null
+                                    : ModelFactory::createPost($response['post']),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'post' => [
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
+                                'schema' => Schema::POST,
+                            ],
+                        ]
+                    )
             );
     }
     
@@ -212,15 +172,41 @@ class Service extends
         return $this
             ->getClient()
             ->request(
-                $this->requestConfigurations['getUsers'],
-                [
-                    $uid,
-                ],
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ]
+                (new Request(
+                    '/data/auth-token/posts/%s/users'
+                ))
+                    ->setOptions(
+                        [
+                            'headers' => [
+                                'X-API-TOKEN' => (string)$jwt
+                            ]
+                        ]
+                    )
+                    ->setResponse(
+                        static function(array $response) : array {
+                            return [
+                                'users' => array_map(
+                                    static function($user) {
+                                        return ModelFactory::createUser($user);
+                                    },
+                                    $response['users']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setUriDatas(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'users' => [
+                                'type'   => JsonRule::LIST_TYPE,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
     }
 }
