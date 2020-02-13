@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Validator;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
@@ -98,6 +99,7 @@ final class Client
      *
      * @throws ClientException
      * @throws Exception\SerializerException
+     * @throws Exception\ValidatorException
      */
     public function request(Request $request) : Response
     {
@@ -343,29 +345,17 @@ final class Client
      * @return array
      *
      * @throws ClientException
+     * @throws Exception\ValidatorException
      */
     private function validateResponse(
         Request $request,
         string $content
     ) : array {
-        $jsonData = new JsonData();
-        try {
-            $jsonData->setData($content);
-        } catch (InvalidDataException $invalidDataException) {
-            $this
-                ->getLogger()
-                ->error($invalidDataException);
-            
-            throw new ClientException(
-                'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE,
-                $invalidDataException
-            );
-        }
+        $validator = Validator::getInstance();
         
-        $schema = new JsonSchema();
-        try {
-            $schema->setSchema(
+        $isValid = $validator
+            ->setData($content)
+            ->setSchema(
                 array_merge(
                     [
                         'success' => [
@@ -378,36 +368,13 @@ final class Client
                     ],
                     $request->getValidation() ?? []
                 )
-            );
-        } catch (InvalidSchemaException $invalidSchemaException) {
-            $this
-                ->getLogger()
-                ->error($invalidSchemaException);
-            
-            throw new ClientException(
-                'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE,
-                $invalidSchemaException
-            );
-        }
-        
-        try {
-            $isValid = $schema->validate($jsonData);
-        } catch (InvalidDataTypeException $invalidDataTypeException) {
-            $this
-                ->getLogger()
-                ->error($invalidDataTypeException);
-            
-            throw new ClientException(
-                'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE,
-                $invalidDataTypeException
-            );
-        }
+            )
+            ->validate();
         
         if (!$isValid) {
+            $lastError = $validator->getLastError() ?? 'unknown';
             $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $schema->getLastError(),
+                'Invalid response from Stalactite API: ' . $lastError,
                 ClientException::INVALID_API_RESPONSE
             );
             
@@ -418,7 +385,7 @@ final class Client
             throw $clientException;
         }
         
-        $data = $jsonData->getData();
+        $data = $validator->getData();
         if ($data === null) {
             $clientException = new ClientException(
                 'Invalid response from Stalactite API: response is null',
