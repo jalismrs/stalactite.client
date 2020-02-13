@@ -5,9 +5,8 @@ namespace Jalismrs\Stalactite\Client\Access\Domain;
 
 use hunomina\Validator\Json\Rule\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Access\ResponseFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
@@ -19,7 +18,6 @@ use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
-use function array_map;
 
 /**
  * Service
@@ -53,32 +51,7 @@ class Service extends
                     '/access/domains/%s/relations'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
-                        static function(array $response) use ($domainModel) : array {
-                            return [
-                                'relations' => [
-                                    'users'     => array_map(
-                                        static function(array $relation) use ($domainModel): DomainUserRelation {
-                                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                                            $domainUserRelationModel->setDomain($domainModel);
-                                            
-                                            return $domainUserRelationModel;
-                                        },
-                                        $response['relations']['users']
-                                    ),
-                                    'customers' => array_map(
-                                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
-                                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                                            $domainCustomerRelation->setDomain($domainModel);
-                                            
-                                            return $domainCustomerRelation;
-                                        },
-                                        $response['relations']['customers']
-                                    )
-                                ]
-                            ];
-                        }
-                    )
+                    ->setResponse(ResponseFactory::domainGetRelations($domainModel))
                     ->setUriParameters(
                         [
                             $domainModel->getUid(),
