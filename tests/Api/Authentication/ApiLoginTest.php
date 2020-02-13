@@ -1,8 +1,9 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Authentication;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication;
 
+use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
@@ -15,11 +16,11 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
- * LoginTest
+ * ApiLoginTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication
  */
-class LoginTest extends
+class ApiLoginTest extends
     TestCase
 {
     /**
@@ -96,9 +97,8 @@ class LoginTest extends
      */
     public function testExceptionThrownOnInvalidAPIResponse() : void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
+        $this->expectException(ValidatorException::class);
+
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
