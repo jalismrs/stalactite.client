@@ -10,7 +10,9 @@ use Jalismrs\Stalactite\Client\Exception\RequestException;
 use OutOfBoundsException;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionType;
 use Throwable;
 use TypeError;
 use function assert;
@@ -86,10 +88,9 @@ final class Request
     ) {
         $this->endpoint = $endpoint;
         
+        $throwable = null;
         try {
             $this->method = self::validateMethod($method ?? 'GET');
-            
-            $throwable = null;
         } catch (OutOfBoundsException $outOfBoundsException) {
             $throwable = $outOfBoundsException;
         } finally {
@@ -194,10 +195,10 @@ final class Request
      */
     public function setUriParameters(array $uriParameters) : self
     {
+        $throwable = null;
+        
         try {
             $this->uriParameters = self::validateUriParameters($uriParameters);
-            
-            $throwable = null;
         } catch (TypeError $typeError) {
             $throwable = $typeError;
         } finally {
@@ -371,10 +372,10 @@ final class Request
      */
     public function setResponse(?Closure $response) : self
     {
+        $throwable = null;
+        
         try {
             $this->response = self::validateResponse($response);
-            
-            $throwable = null;
         } catch (ErrorException $errorException) {
             $throwable = $errorException;
         } catch (InvalidArgumentException $invalidArgumentException) {
@@ -420,15 +421,22 @@ final class Request
                 );
             }
             
+            $typeError            = new TypeError(
+                "Response should specify return type 'array'"
+            );
             $reflectionReturnType = $reflectionFunction->getReturnType();
-            if ($reflectionReturnType === null) {
+            if ($reflectionReturnType instanceof ReflectionNamedType) {
+                if ($reflectionReturnType->getName() !== 'array') {
+                    throw $typeError;
+                }
+            } elseif ($reflectionReturnType instanceof ReflectionType) {
+                if ((string)$reflectionReturnType !== 'array') {
+                    throw $typeError;
+                }
+            } elseif ($reflectionReturnType === null) {
                 trigger_error(
                     'Response should specify its return type',
                     E_USER_WARNING
-                );
-            } elseif ((string)$reflectionReturnType !== 'array') {
-                throw new TypeError(
-                    "Response should specify return type 'array'"
                 );
             }
             
@@ -441,15 +449,22 @@ final class Request
             $reflectionParameter = $reflectionParameters[0];
             assert($reflectionParameter instanceof ReflectionParameter);
             
+            $typeError               = new TypeError(
+                "Response should specify parameter type 'array'"
+            );
             $reflectionParameterType = $reflectionParameter->getType();
-            if ($reflectionParameterType === null) {
+            if ($reflectionParameterType instanceof ReflectionNamedType) {
+                if ($reflectionParameterType->getName() !== 'array') {
+                    throw $typeError;
+                }
+            } elseif ($reflectionParameterType instanceof ReflectionType) {
+                if ((string)$reflectionParameterType !== 'array') {
+                    throw $typeError;
+                }
+            } elseif ($reflectionParameterType === null) {
                 trigger_error(
                     'Response should specify its parameter type',
                     E_USER_WARNING
-                );
-            } elseif ((string)$reflectionParameterType !== 'array') {
-                throw new TypeError(
-                    "Response should specify parameter type 'array'"
                 );
             }
         }
