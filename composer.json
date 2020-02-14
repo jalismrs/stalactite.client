@@ -19,8 +19,7 @@
     "symfony/contracts": ">=1.1.7 <3",
     "symfony/http-client": ">=4.4 <6",
     "symfony/property-access": ">=4.4 <6",
-    "symfony/serializer": ">=4.4 <6",
-    "symfony/validator": "^5.0"
+    "symfony/serializer": ">=4.4 <6"
   },
   "require-dev": {
     "phpunit/phpunit": ">=7 <9"
