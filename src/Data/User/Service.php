@@ -3,26 +3,25 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
-use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
-use function vsprintf;
 
 /**
  * Service
@@ -43,13 +42,13 @@ class Service extends
      */
 
     /**
-     * lead
+     * leads
      *
      * @return Lead\Service
      */
     public function leads(): Lead\Service
     {
-        if (null === $this->serviceLead) {
+        if ($this->serviceLead === null) {
             $this->serviceLead = new Lead\Service($this->getClient());
         }
 
@@ -63,7 +62,7 @@ class Service extends
      */
     public function me(): Me\Service
     {
-        if (null === $this->serviceMe) {
+        if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
 
@@ -77,7 +76,7 @@ class Service extends
      */
     public function posts(): PostService
     {
-        if (null === $this->servicePost) {
+        if ($this->servicePost === null) {
             $this->servicePost = new PostService($this->getClient());
         }
 
@@ -98,249 +97,225 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllUsers(
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'users' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/users',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'users' => array_map(
+                                    static function ($user) {
+                                        return ModelFactory::createUser($user);
+                                    },
+                                    $response['users']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'users' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'users' => array_map(
-                    static function ($user) {
-                        return ModelFactory::createUser($user);
-                    },
-                    $response['users']
-                )
-            ]
-        );
     }
 
     /**
+     * getUser
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getUser(
         string $uid,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/users/%s',
-                    [
-                        $uid,
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users/%s'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'user' => $response['user'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['user']),
+                            ];
+                        }
+                    )
+                    ->setUriParameters(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'user' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'user' => null === $response['user']
-                    ? null
-                    : ModelFactory::createUser($response['user']),
-            ]
-        );
     }
 
     /**
+     * getByEmailAndGoogleId
+     *
      * @param string $email
      * @param string $googleId
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
-    public function getByEmailAndGoogleId(string $email, string $googleId, string $jwt): Response
+    public function getByEmailAndGoogleId(
+        string $email,
+        string $googleId,
+        string $jwt
+    ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/users',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'query' => [
-                        'email' => $email,
-                        'googleId' => $googleId
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users'
+                ))
+                    ->setJwt($jwt)
+                    ->setQueryParameters(
+                        [
+                            'email' => $email,
+                            'googleId' => $googleId
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'user' => $response['user'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['user']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'user' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'user' => null === $response['user']
-                    ? null
-                    : ModelFactory::createUser($response['user']),
-            ]
-        );
     }
 
     /**
+     * createUser
+     *
      * @param User $userModel
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
-     * @throws SerializerException
      * @throws InvalidArgumentException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function createUser(
         User $userModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'user' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->post(
-                '/data/users',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => array_merge(
-                        Serializer::getInstance()
-                            ->normalize(
-                                $userModel,
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'create',
-                                    ],
-                                ]
-                            ),
+            ->request(
+                (new Request(
+                    '/data/users',
+                    'POST'
+                ))
+                    ->setJson(
+                        array_merge(
+                            Serializer::getInstance()
+                                ->normalize(
+                                    $userModel,
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'create',
+                                        ],
+                                    ]
+                                ),
+                            [
+                                'leads' => ModelHelper::getUids(
+                                    $userModel->getLeads(),
+                                    Post::class
+                                ),
+                                'posts' => ModelHelper::getUids(
+                                    $userModel->getPosts(),
+                                    Post::class
+                                ),
+                            ],
+                        )
+                    )
+                    ->setJwt($jwt)
+                    ->setNormalization(
                         [
-                            'leads' => ModelHelper::getUids(
-                                $userModel->getLeads(),
-                                Post::class
-                            ),
-                            'posts' => ModelHelper::getUids(
-                                $userModel->getPosts(),
-                                Post::class
-                            ),
-                        ],
-                    ),
-                ],
-                $schema
+                            AbstractNormalizer::GROUPS => [
+                                'create',
+                            ],
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'user' => $response['user'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['user']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'user' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'user' => null === $response['user']
-                    ? null
-                    : ModelFactory::createUser($response['user']),
-            ]
-        );
     }
 
     /**
@@ -352,104 +327,70 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateUser(
         User $userModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->put(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/users/%s',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $userModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'update',
-                                ],
-                            ]
-                        ),
-                ],
-                $schema
+                    'PUT'
+                ))
+                    ->setJson($userModel)
+                    ->setJwt($jwt)
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'update',
+                            ],
+                        ]
+                    )
+                    ->setUriParameters(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 
     /**
+     * deleteUser
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
-    public function deleteUser(string $uid, string $jwt): Response
+    public function deleteUser(
+        string $uid,
+        string $jwt
+    ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->delete(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/users/%s',
-                    [
-                        $uid,
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+                    'DELETE'
+                ))
+                    ->setJwt($jwt)
+                    ->setUriParameters(
+                        [
+                            $uid,
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

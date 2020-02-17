@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
 use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\ClientException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
@@ -18,24 +18,13 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 /**
  * JwtValidationTest
  *
- * @packageJalismrs\Stalactite\Service\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication
  */
 class JwtValidationTest extends
     TestCase
 {
     private const TEST_RSA_PRIVATE_KEY = __DIR__ . '/keys/private.pem';
     private const TEST_RSA_PUBLIC_KEY = __DIR__ . '/keys/public.pem';
-
-    /**
-     * getTestPublicKey
-     *
-     * @static
-     * @return string
-     */
-    private static function getTestPublicKey(): string
-    {
-        return file_get_contents(self::TEST_RSA_PUBLIC_KEY);
-    }
 
     /**
      * testTransportExceptionThrownOnRSAPublicKeyFetching
@@ -61,9 +50,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testValidToken(): void
     {
@@ -85,14 +74,54 @@ class JwtValidationTest extends
     }
 
     /**
+     * checkToken
+     *
+     * @param string $token
+     * @param string $publicKey
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
+     */
+    private function checkToken(
+        string $token,
+        string $publicKey
+    ): void
+    {
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+        $mockClient->setHttpClient(
+            MockHttpClientFactory::create($publicKey)
+        );
+
+        $response = $mockService->validate($token);
+
+        self::assertTrue($response);
+    }
+
+    /**
+     * getTestPublicKey
+     *
+     * @static
+     * @return string
+     */
+    private static function getTestPublicKey(): string
+    {
+        return file_get_contents(self::TEST_RSA_PUBLIC_KEY);
+    }
+
+    /**
      * testInvalidPublicKeyToken
      *
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testInvalidPublicKeyToken(): void
     {
@@ -122,9 +151,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testInvalidToken(): void
     {
@@ -143,9 +172,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testWrongIssuerToken(): void
     {
@@ -175,9 +204,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testExpiredToken(): void
     {
@@ -207,9 +236,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testInvalidUserTypeToken(): void
     {
@@ -239,9 +268,9 @@ class JwtValidationTest extends
      * @return void
      *
      * @throws ClientException
-     * @throws OutOfBoundsException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
+     * @throws OutOfBoundsException
      */
     public function testInvalidJwtStructureMissingClaimToken(): void
     {
@@ -262,34 +291,5 @@ class JwtValidationTest extends
                 ->getToken($signer, $privateKey),
             self::getTestPublicKey()
         );
-    }
-
-    /**
-     * checkToken
-     *
-     * @param string $token
-     * @param string $publicKey
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws OutOfBoundsException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    private function checkToken(
-        string $token,
-        string $publicKey
-    ): void
-    {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create($publicKey)
-        );
-
-        $response = $mockService->validate($token);
-
-        self::assertTrue($response);
     }
 }

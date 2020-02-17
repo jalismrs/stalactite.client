@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Me;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -26,56 +25,47 @@ class Service extends
     AbstractService
 {
     /**
+     * getMe
+     *
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getMe(
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'me' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::USER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/users/me',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users/me'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'me' => $response['me'] === null
+                                    ? null
+                                    : ModelFactory::createUser($response['me']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'me' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::USER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'me' => null === $response['me']
-                    ? null
-                    : ModelFactory::createUser($response['me']),
-            ]
-        );
     }
 
     /**
@@ -87,52 +77,31 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateMe(
         User $userModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->post(
-                '/data/users/me',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $userModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'updateMe',
-                                ],
-                            ]
-                        )
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users/me',
+                    'PUT'
+                ))
+                    ->setJson($userModel)
+                    ->setJwt($jwt)
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'update',
+                            ],
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

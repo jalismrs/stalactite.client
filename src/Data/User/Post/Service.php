@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Post;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -36,60 +36,48 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllPosts(
         User $userModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'posts' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::POST
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/users/%s/posts'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'posts' => array_map(
+                                    static function ($post) {
+                                        return ModelFactory::createPost($post);
+                                    },
+                                    $response['posts']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setUriParameters(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'posts' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::POST,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'posts' => array_map(
-                    static function ($post) {
-                        return ModelFactory::createPost($post);
-                    },
-                    $response['posts']
-                )
-            ]
-        );
     }
 
     /**
@@ -102,9 +90,10 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws InvalidArgumentException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function addPosts(
         User $userModel,
@@ -112,46 +101,28 @@ class Service extends
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->post(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => [
-                        'posts' => ModelHelper::getUids(
-                            $postModels,
-                            Post::class
-                        )
-                    ],
-                ],
-                $schema
+                    'POST'
+                ))
+                    ->setJson(
+                        [
+                            'posts' => ModelHelper::getUids(
+                                $postModels,
+                                Post::class
+                            )
+                        ]
+                    )
+                    ->setJwt($jwt)
+                    ->setUriParameters(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 
     /**
@@ -164,9 +135,10 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
      * @throws InvalidArgumentException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function removePosts(
         User $userModel,
@@ -174,45 +146,27 @@ class Service extends
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->delete(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/users/%s/posts',
-                    [
-                        $userModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => [
-                        'posts' => ModelHelper::getUids(
-                            $postModels,
-                            Post::class
-                        )
-                    ],
-                ],
-                $schema
+                    'DELETE'
+                ))
+                    ->setJson(
+                        [
+                            'posts' => ModelHelper::getUids(
+                                $postModels,
+                                Post::class
+                            )
+                        ]
+                    )
+                    ->setJwt($jwt)
+                    ->setUriParameters(
+                        [
+                            $userModel->getUid(),
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 }

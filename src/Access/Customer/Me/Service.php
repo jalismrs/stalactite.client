@@ -3,90 +3,81 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Customer\Me;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
-use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
  *
- * @package Jalismrs\Stalactite\Service\Access\Customer
+ * @package Jalismrs\Stalactite\Client\Access\Customer\Me
  */
 class Service extends
     AbstractService
 {
     /**
+     * getRelations
+     *
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getRelations(
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'relations' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => [
-                        'uid' => [
-                            'type' => JsonRule::STRING_TYPE
-                        ],
-                        'domain' => [
-                            'type' => JsonRule::OBJECT_TYPE,
-                            'schema' => DataSchema::DOMAIN
-                        ]
-                    ]
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/access/customers/me/relations',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/access/customers/me/relations'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'relations' => array_map(
+                                    static function (array $relation): DomainCustomerRelation {
+                                        return ModelFactory::createDomainCustomerRelation($relation);
+                                    },
+                                    $response['relations']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'relations' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => [
+                                    'uid' => [
+                                        'type' => JsonRule::STRING_TYPE
+                                    ],
+                                    'domain' => [
+                                        'type' => JsonRule::OBJECT_TYPE,
+                                        'schema' => DataSchema::DOMAIN
+                                    ]
+                                ]
+                            ]
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'relations' => array_map(
-                    static function (array $relation): DomainCustomerRelation {
-                        return ModelFactory::createDomainCustomerRelation($relation);
-                    },
-                    $response['relations']
-                )
-            ]
-        );
     }
 
     /**
@@ -98,54 +89,42 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAccessClearance(
         Domain $domainModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'clearance' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'schema' => Schema::ACCESS_CLEARANCE
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/access/customers/me/access/%s',
-                    [
-                        $domainModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/access/customers/me/access/%s'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'clearance' => ModelFactory::createAccessClearance($response['clearance']),
+                            ];
+                        }
+                    )
+                    ->setUriParameters(
+                        [
+                            $domainModel->getUid(),
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'clearance' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'schema' => Schema::ACCESS_CLEARANCE
+                            ]
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'clearance' => ModelFactory::createAccessClearance($response['clearance'])
-            ]
-        );
     }
 }

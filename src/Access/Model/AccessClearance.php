@@ -36,28 +36,6 @@ class AccessClearance
     }
 
     /**
-     * @return bool
-     */
-    public function isGranted(): bool
-    {
-        return $this->granted;
-    }
-
-    /**
-     * setAccessGranted
-     *
-     * @param bool $granted
-     *
-     * @return $this
-     */
-    public function setGranted(bool $granted): self
-    {
-        $this->granted = $granted;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getType(): ?string
@@ -83,6 +61,28 @@ class AccessClearance
     public function hasUserAccessGranted(): bool
     {
         return $this->isGranted() && $this->type === self::USER_ACCESS;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGranted(): bool
+    {
+        return $this->granted;
+    }
+
+    /**
+     * setAccessGranted
+     *
+     * @param bool $granted
+     *
+     * @return $this
+     */
+    public function setGranted(bool $granted): self
+    {
+        $this->granted = $granted;
+
+        return $this;
     }
 
     /**

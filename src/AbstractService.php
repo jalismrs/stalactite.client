@@ -30,16 +30,6 @@ abstract class AbstractService
     }
 
     /**
-     * getClient
-     *
-     * @return Client
-     */
-    public function getClient(): Client
-    {
-        return $this->client;
-    }
-
-    /**
      * getLogger
      *
      * @return LoggerInterface
@@ -48,5 +38,15 @@ abstract class AbstractService
     {
         return $this->getClient()
             ->getLogger();
+    }
+
+    /**
+     * getClient
+     *
+     * @return Client
+     */
+    public function getClient(): Client
+    {
+        return $this->client;
     }
 }

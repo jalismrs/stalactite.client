@@ -3,21 +3,19 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -28,234 +26,209 @@ class Service extends
     AbstractService
 {
     /**
+     * getAllDomains
+     *
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllDomains(
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/domains',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'domains' => array_map(
+                                    static function ($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function ($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
 
     /**
+     * getDomain
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getDomain(
         string $uid,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domain' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/domains/%s',
-                    [
-                        $uid,
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/domains/%s'
+                ))
+                    ->setJwt($jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'domain' => $response['domain'] === null
+                                    ? null
+                                    : ModelFactory::createDomain($response['domain']),
+                            ];
+                        }
+                    )
+                    ->setUriParameters(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'domain' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domain' => null === $response['domain']
-                    ? null
-                    : ModelFactory::createDomain($response['domain']),
-            ]
-        );
     }
 
     /**
+     * getByName
+     *
      * @param string $name
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
-    public function getByName(string $name, string $jwt): Response
+    public function getByName(
+        string $name,
+        string $jwt
+    ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/domains',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'query' => [
-                        'name' => $name
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setJwt($jwt)
+                    ->setQueryParameters(
+                        [
+                            'name' => $name
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'domains' => array_map(
+                                    static function ($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function ($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
 
     /**
+     * getByNameAndApiKey
+     *
      * @param string $name
      * @param string $apiKey
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
-    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
+    public function getByNameAndApiKey(
+        string $name,
+        string $apiKey,
+        string $jwt
+    ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domains' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/domains',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'query' => [
-                        'name' => $name,
-                        'apiKey' => $apiKey
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/domains'
+                ))
+                    ->setJwt($jwt)
+                    ->setQueryParameters(
+                        [
+                            'name' => $name,
+                            'apiKey' => $apiKey
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'domains' => array_map(
+                                    static function ($domain) {
+                                        return ModelFactory::createDomain($domain);
+                                    },
+                                    $response['domains']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domains' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domains' => array_map(
-                    static function ($domain) {
-                        return ModelFactory::createDomain($domain);
-                    },
-                    $response['domains']
-                )
-            ]
-        );
     }
 
     /**
@@ -267,63 +240,50 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function createDomain(
         Domain $domainModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'domain' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::DOMAIN
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->post(
-                '/data/domains',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $domainModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'create',
-                                ],
-                            ]
-                        )
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/domains',
+                    'POST'
+                ))
+                    ->setJson($domainModel)
+                    ->setJwt($jwt)
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'create',
+                            ],
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'domain' => $response['domain'] === null
+                                    ? null
+                                    : ModelFactory::createDomain($response['domain']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'domain' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::DOMAIN,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'domain' => null === $response['domain']
-                    ? null
-                    : ModelFactory::createDomain($response['domain']),
-            ]
-        );
     }
 
     /**
@@ -335,107 +295,70 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
      * @throws SerializerException
+     * @throws ValidatorException
      */
     public function updateDomain(
         Domain $domainModel,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->put(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/domains/%s',
-                    [
-                        $domainModel->getUid(),
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ],
-                    'json' => Serializer::getInstance()
-                        ->normalize(
-                            $domainModel,
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'update',
-                                ],
-                            ]
-                        )
-                ],
-                $schema
+                    'PUT'
+                ))
+                    ->setJson($domainModel)
+                    ->setJwt($jwt)
+                    ->setNormalization(
+                        [
+                            AbstractNormalizer::GROUPS => [
+                                'update',
+                            ],
+                        ]
+                    )
+                    ->setUriParameters(
+                        [
+                            $domainModel->getUid(),
+                        ]
+                    )
             );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
     }
 
     /**
+     * deleteDomain
+     *
      * @param string $uid
      * @param string $jwt
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function deleteDomain(
         string $uid,
         string $jwt
     ): Response
     {
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->delete(
-                vsprintf(
+            ->request(
+                (new Request(
                     '/data/domains/%s',
-                    [
-                        $uid,
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => $jwt
-                    ]
-                ],
-                $schema
-            );
-
-        return (new Response(
-            $response['success'],
-            $response['error']
-        ));
+                    'DELETE'
+                ))
+                    ->setJwt($jwt)
+                    ->setUriParameters(
+                        [
+                            $uid,
+                        ]
+                    ),
+                );
     }
 }

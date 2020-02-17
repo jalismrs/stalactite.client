@@ -15,7 +15,8 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
  */
-class ModelHelperTest extends TestCase
+class ModelHelperTest extends
+    TestCase
 {
     /**
      * @throws InvalidArgumentException
@@ -24,12 +25,22 @@ class ModelHelperTest extends TestCase
      */
     public function testGetUids(): void
     {
-        $domain = ModelFactory::getTestableDomain()->setUid('azerty');
-        $domain2 = ModelFactory::getTestableDomain()->setUid('uiop');
+        $domain = ModelFactory::getTestableDomain()
+            ->setUid('azerty');
+        $domain2 = ModelFactory::getTestableDomain()
+            ->setUid('uiop');
 
         static::assertEquals(
-            [$domain->getUid(), $domain2->getUid()],
-            ModelHelper::getUids([$domain, $domain2])
+            [
+                $domain->getUid(),
+                $domain2->getUid()
+            ],
+            ModelHelper::getUids(
+                [
+                    $domain,
+                    $domain2
+                ]
+            )
         );
     }
 

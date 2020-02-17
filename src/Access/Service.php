@@ -30,7 +30,7 @@ class Service extends
      */
     public function authToken(): AuthToken\Service
     {
-        if (null === $this->serviceAuthToken) {
+        if ($this->serviceAuthToken === null) {
             $this->serviceAuthToken = new AuthToken\Service($this->getClient());
         }
 
@@ -38,13 +38,13 @@ class Service extends
     }
 
     /**
-     * customer
+     * customers
      *
      * @return Customer\Service
      */
     public function customers(): Customer\Service
     {
-        if (null === $this->serviceCustomer) {
+        if ($this->serviceCustomer === null) {
             $this->serviceCustomer = new Customer\Service($this->getClient());
         }
 
@@ -52,13 +52,13 @@ class Service extends
     }
 
     /**
-     * domain
+     * domains
      *
      * @return Domain\Service
      */
     public function domains(): Domain\Service
     {
-        if (null === $this->serviceDomain) {
+        if ($this->serviceDomain === null) {
             $this->serviceDomain = new Domain\Service($this->getClient());
         }
 
@@ -66,13 +66,13 @@ class Service extends
     }
 
     /**
-     * relation
+     * relations
      *
      * @return Relation\Service
      */
     public function relations(): Relation\Service
     {
-        if (null === $this->serviceRelation) {
+        if ($this->serviceRelation === null) {
             $this->serviceRelation = new Relation\Service($this->getClient());
         }
 
@@ -80,13 +80,13 @@ class Service extends
     }
 
     /**
-     * user
+     * users
      *
      * @return User\Service
      */
     public function users(): User\Service
     {
-        if (null === $this->serviceUser) {
+        if ($this->serviceUser === null) {
             $this->serviceUser = new User\Service($this->getClient());
         }
 

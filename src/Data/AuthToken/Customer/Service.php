@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
 use hunomina\Validator\Json\Rule\JsonRule;
-use hunomina\Validator\Json\Schema\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\ClientException;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
-use Jalismrs\Stalactite\Client\Response;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\RequestException;
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
-use function vsprintf;
 
 /**
  * Service
@@ -32,8 +32,9 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getAllCustomers(
         string $apiAuthToken
@@ -46,58 +47,49 @@ class Service extends
                 ->getUserAgent()
         );
 
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customers' => [
-                    'type' => JsonRule::LIST_TYPE,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/auth-token/customers',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/auth-token/customers'
+                ))
+                    ->setJwt((string)$jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'customers' => array_map(
+                                    static function ($customer) {
+                                        return ModelFactory::createCustomer($customer);
+                                    },
+                                    $response['customers']
+                                ),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'customers' => [
+                                'type' => JsonRule::LIST_TYPE,
+                                'schema' => Schema::CUSTOMER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customers' => array_map(
-                    static function ($customer) {
-                        return ModelFactory::createCustomer($customer);
-                    },
-                    $response['customers']
-                )
-            ]
-        );
     }
 
     /**
+     * getByEmailAndGoogleId
+     *
      * @param string $email
      * @param string $googleId
      * @param string $apiAuthToken
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -112,59 +104,52 @@ class Service extends
                 ->getUserAgent()
         );
 
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                '/data/auth-token/customers',
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ],
-                    'query' => [
-                        'email' => $email,
-                        'googleId' => $googleId
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/auth-token/customers'
+                ))
+                    ->setJwt((string)$jwt)
+                    ->setQueryParameters(
+                        [
+                            'email' => $email,
+                            'googleId' => $googleId
+                        ]
+                    )
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'customer' => $response['customer'] === null
+                                    ? null
+                                    : ModelFactory::createCustomer($response['customer']),
+                            ];
+                        }
+                    )
+                    ->setValidation(
+                        [
+                            'customer' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::CUSTOMER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customer' => null === $response['customer']
-                    ? null
-                    : ModelFactory::createCustomer($response['customer']),
-            ]
-        );
     }
 
     /**
+     * getCustomer
+     *
      * @param string $uid
      * @param string $apiAuthToken
      *
      * @return Response
+     *
      * @throws ClientException
-     * @throws InvalidDataTypeException
-     * @throws InvalidSchemaException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ValidatorException
      */
     public function getCustomer(
         string $uid,
@@ -178,49 +163,36 @@ class Service extends
                 ->getUserAgent()
         );
 
-        $schema = new JsonSchema();
-        $schema->setSchema(
-            [
-                'success' => [
-                    'type' => JsonRule::BOOLEAN_TYPE
-                ],
-                'error' => [
-                    'type' => JsonRule::STRING_TYPE,
-                    'null' => true
-                ],
-                'customer' => [
-                    'type' => JsonRule::OBJECT_TYPE,
-                    'null' => true,
-                    'schema' => Schema::CUSTOMER
-                ]
-            ]
-        );
-
-        $response = $this
+        return $this
             ->getClient()
-            ->get(
-                vsprintf(
-                    '/data/auth-token/customers/%s',
-                    [
-                        $uid,
-                    ],
-                ),
-                [
-                    'headers' => [
-                        'X-API-TOKEN' => (string)$jwt
-                    ]
-                ],
-                $schema
+            ->request(
+                (new Request(
+                    '/data/auth-token/customers/%s'
+                ))
+                    ->setJwt((string)$jwt)
+                    ->setResponse(
+                        static function (array $response): array {
+                            return [
+                                'customer' => $response['customer'] === null
+                                    ? null
+                                    : ModelFactory::createCustomer($response['customer']),
+                            ];
+                        }
+                    )
+                    ->setUriParameters(
+                        [
+                            $uid,
+                        ]
+                    )
+                    ->setValidation(
+                        [
+                            'customer' => [
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
+                                'schema' => Schema::CUSTOMER,
+                            ],
+                        ]
+                    )
             );
-
-        return new Response(
-            $response['success'],
-            $response['error'],
-            [
-                'customer' => null === $response['customer']
-                    ? null
-                    : ModelFactory::createCustomer($response['customer']),
-            ]
-        );
     }
 }

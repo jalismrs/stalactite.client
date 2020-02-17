@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
+use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\MappingException;
@@ -12,7 +14,6 @@ use Symfony\Component\Serializer\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer as SerializerObject;
-use Throwable;
 use function array_replace_recursive;
 
 /**
@@ -29,16 +30,14 @@ final class Serializer
             'common',
         ],
     ];
-
-    /**
-     * @var SerializerObject
-     */
-    private $serializer;
-
     /**
      * @var self
      */
     private static $instance;
+    /**
+     * @var SerializerObject
+     */
+    private $serializer;
 
     /**
      * Serializer constructor.
@@ -73,8 +72,12 @@ final class Serializer
             if (!(self::$instance instanceof self)) {
                 self::$instance = new self();
             }
-        } catch (Throwable $t) {
-            throw new SerializerException('Error while instantiating ' . self::class, null, $t);
+        } catch (ExceptionInterface $exception) {
+            throw new SerializerException(
+                'Error while instantiating ' . self::class,
+                $exception->getCode(),
+                $exception
+            );
         }
 
         return self::$instance;
@@ -102,11 +105,11 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $exception) {
             throw new SerializerException(
                 'Error while normalizing data',
-                null,
-                $throwable
+                $exception->getCode(),
+                $exception
             );
         }
     }
@@ -135,11 +138,11 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $exception) {
             throw new SerializerException(
                 'Error while denormalizing data',
-                null,
-                $throwable
+                $exception->getCode(),
+                $exception
             );
         }
     }
@@ -166,11 +169,11 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $exception) {
             throw new SerializerException(
                 'Error while serializing data',
-                null,
-                $throwable
+                $exception->getCode(),
+                $exception
             );
         }
     }
@@ -199,11 +202,11 @@ final class Serializer
                     $context
                 )
             );
-        } catch (Throwable $throwable) {
+        } catch (ExceptionInterface $exception) {
             throw new SerializerException(
                 'Error while deserializing data',
-                null,
-                $throwable
+                $exception->getCode(),
+                $exception
             );
         }
     }
