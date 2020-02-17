@@ -84,14 +84,14 @@ final class Request
      */
     public function __construct(
         string $endpoint,
-        string $method = null
+        string $method = 'GET'
     )
     {
         $this->endpoint = $endpoint;
 
         $throwable = null;
         try {
-            $this->method = self::validateMethod($method ?? 'GET');
+            $this->method = self::validateMethod($method);
         } catch (OutOfBoundsException $outOfBoundsException) {
             $throwable = $outOfBoundsException;
         } finally {
@@ -237,7 +237,7 @@ final class Request
             }
             if (is_bool($uriParameter)) {
                 trigger_error(
-                    'boolean value in discouraged, prefer int',
+                    'boolean value in discouraged',
                     E_USER_WARNING
                 );
             }
