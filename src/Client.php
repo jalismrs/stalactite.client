@@ -201,11 +201,6 @@ final class Client
         );
 
         if (isset($options['json'])) {
-            $options = array_replace_recursive(
-                $options,
-                ['headers' => ['Content-Type' => 'application/json']]
-            );
-
             $options['json'] = Serializer::getInstance()
                 ->normalize(
                     $options['json'],
