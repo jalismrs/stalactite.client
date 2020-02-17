@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -313,7 +314,7 @@ final class Client
      * @return array
      *
      * @throws ClientException
-     * @throws Exception\ValidatorException
+     * @throws ValidatorException
      */
     private function validateResponse(
         Request $request,
@@ -322,7 +323,7 @@ final class Client
     {
         $validator = Validator::getInstance();
 
-        $isValid = $validator
+        $validator
             ->setData($content)
             ->setSchema(
                 array_merge(
@@ -337,14 +338,15 @@ final class Client
                     ],
                     $request->getValidation() ?? []
                 )
-            )
-            ->validate();
+            );
 
-        if (!$isValid) {
-            $lastError = $validator->getLastError() ?? 'unknown';
+        try {
+            $validator->validate();
+        } catch (ValidatorException $e) {
             $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $lastError,
-                ClientException::INVALID_API_RESPONSE
+                'Invalid response from Stalactite API: ' . $e->getMessage(),
+                ClientException::INVALID_API_RESPONSE,
+                $e
             );
 
             $this
