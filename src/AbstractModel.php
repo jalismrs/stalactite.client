@@ -10,10 +10,7 @@ namespace Jalismrs\Stalactite\Client;
  */
 abstract class AbstractModel
 {
-    /**
-     * @var null|string
-     */
-    protected $uid;
+    protected ?string $uid = null;
 
     /**
      * getUid

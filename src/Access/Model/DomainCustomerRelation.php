@@ -13,10 +13,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 class DomainCustomerRelation extends
     DomainRelation
 {
-    /**
-     * @var null|Customer
-     */
-    private $customer;
+    private ?Customer $customer = null;
 
     /**
      * getCustomer

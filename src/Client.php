@@ -23,22 +23,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 final class Client
 {
-    /**
-     * @var string
-     */
-    private $host;
-    /**
-     * @var HttpClientInterface
-     */
-    private $httpClient;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var null|string
-     */
-    private $userAgent;
+    private string $host;
+
+    private ?HttpClientInterface $httpClient = null;
+
+    private ?LoggerInterface $logger = null;
+
+    private ?string $userAgent = null;
 
     /**
      * Client constructor.

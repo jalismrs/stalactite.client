@@ -31,9 +31,9 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    private $serviceLead;
-    private $serviceMe;
-    private $servicePost;
+    private ?Lead\Service $serviceLead = null;
+    private ?Me\Service $serviceMe = null;
+    private ?PostService $servicePost = null;
 
     /*
      * -------------------------------------------------------------------------

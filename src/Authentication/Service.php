@@ -39,7 +39,7 @@ class Service extends
         'customer'
     ];
 
-    private $serviceTrustedApp;
+    private ?TrustedAppService $serviceTrustedApp = null;
 
     /*
      * -------------------------------------------------------------------------

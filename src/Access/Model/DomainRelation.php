@@ -14,8 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 abstract class DomainRelation extends
     AbstractModel
 {
-    /** @var Domain|null $domain */
-    protected $domain;
+    protected ?Domain $domain = null;
 
     /**
      * @return Domain|null

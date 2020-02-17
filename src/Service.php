@@ -11,9 +11,9 @@ namespace Jalismrs\Stalactite\Client;
 class Service extends
     AbstractService
 {
-    private $serviceAccess;
-    private $serviceAuthentication;
-    private $serviceData;
+    private ?Access\Service $serviceAccess = null;
+    private ?Authentication\Service $serviceAuthentication = null;
+    private ?Data\Service $serviceData = null;
 
     /*
      * -------------------------------------------------------------------------

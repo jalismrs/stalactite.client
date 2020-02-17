@@ -13,40 +13,19 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class User extends
     AbstractModel
 {
-    /**
-     * @var null|string
-     */
-    private $email;
+    private ?string $email = null;
 
-    /**
-     * @var null|string
-     */
-    private $googleId;
+    private ?string $googleId = null;
 
-    /**
-     * @var null|string
-     */
-    private $lastName;
+    private ?string $lastName = null;
 
-    /**
-     * @var null|string
-     */
-    private $firstName;
+    private ?string $firstName = null;
 
-    /**
-     * @var bool
-     */
-    private $admin = false;
+    private bool $admin = false;
 
-    /**
-     * @var array
-     */
-    private $posts = [];
+    private array $posts = [];
 
-    /**
-     * @var array
-     */
-    private $leads = [];
+    private array $leads = [];
 
     /**
      * getEmail
