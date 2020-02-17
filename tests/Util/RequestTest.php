@@ -286,23 +286,6 @@ class RequestTest extends
     }
 
     /**
-     * testQueryParametersNull
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws RequestException
-     */
-    public function testQueryParametersNull(): void
-    {
-        $request = new Request('');
-        $request->setQueryParameters(null);
-
-        self::assertNull($request->getQueryParameters());
-    }
-
-    /**
      * testQueryParametersDefault
      *
      * @return void
@@ -315,7 +298,7 @@ class RequestTest extends
     {
         $request = new Request('');
 
-        self::assertNull($request->getQueryParameters());
+        self::assertEmpty($request->getQueryParameters());
     }
 
     /**
