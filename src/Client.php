@@ -195,38 +195,24 @@ final class Client
 
         $options = array_replace_recursive(
             $request->getOptions(),
-            [
-                'headers' => [
-                    'Accept' => 'application/json',
-                ],
-            ],
-            $json === null
-                ? []
-                : [
-                'json' => $json,
-            ],
-            $jwt === null
-                ? []
-                : [
-                'headers' => [
-                    'X-API-TOKEN' => $jwt,
-                ],
-            ],
-            $queryParameters === null
-                ? []
-                : [
-                'query' => $queryParameters,
-            ]
+            ['headers' => ['Accept' => 'application/json']],
+            $json
+                ? ['json' => $json]
+                : []
+            ,
+            $jwt
+                ? ['headers' => ['X-API-TOKEN' => $jwt]]
+                : []
+            ,
+            $queryParameters
+                ? ['query' => $queryParameters]
+                : []
         );
 
         if (isset($options['json'])) {
             $options = array_replace_recursive(
                 $options,
-                [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                ]
+                ['headers' => ['Content-Type' => 'application/json']]
             );
 
             $options['json'] = Serializer::getInstance()
