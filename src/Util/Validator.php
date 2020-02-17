@@ -17,26 +17,19 @@ use Jalismrs\Stalactite\Client\Exception\ValidatorException;
  */
 final class Validator
 {
-    /**
-     * @var self
-     */
-    private static $instance;
-    /**
-     * @var JsonData
-     */
-    private $container;
-    /**
-     * @var JsonSchema
-     */
-    private $validator;
+    private static ?self $instance = null;
+
+    private JsonData $data;
+
+    private JsonSchema $schema;
 
     /**
      * Validator constructor.
      */
     private function __construct()
     {
-        $this->container = new JsonData();
-        $this->validator = new JsonSchema();
+        $this->data = new JsonData();
+        $this->schema = new JsonSchema();
     }
 
     /**
@@ -61,7 +54,7 @@ final class Validator
      */
     public function getData(): ?array
     {
-        return $this->container->getData();
+        return $this->data->getData();
     }
 
     /**
@@ -76,13 +69,9 @@ final class Validator
     public function setData($data): self
     {
         try {
-            $this->container->setData($data);
-        } catch (InvalidDataException $invalidDataException) {
-            throw new ValidatorException(
-                'Error while setting data',
-                $invalidDataException->getCode(),
-                $invalidDataException
-            );
+            $this->data->setData($data);
+        } catch (InvalidDataException $e) {
+            throw new ValidatorException('Error while setting data', ValidatorException::INVALID_DATA_SET, $e);
         }
 
         return $this;
@@ -100,13 +89,9 @@ final class Validator
     public function setSchema(array $schema): self
     {
         try {
-            $this->validator->setSchema($schema);
-        } catch (InvalidSchemaException $invalidSchemaException) {
-            throw new ValidatorException(
-                'Error while setting schema',
-                $invalidSchemaException->getCode(),
-                $invalidSchemaException
-            );
+            $this->schema->setSchema($schema);
+        } catch (InvalidSchemaException $e) {
+            throw new ValidatorException('Error while setting schema', ValidatorException::INVALID_SCHEMA, $e);
         }
 
         return $this;
@@ -122,23 +107,12 @@ final class Validator
     public function validate(): bool
     {
         try {
-            return $this->validator->validate($this->container);
-        } catch (InvalidDataTypeException $invalidDataTypeException) {
-            throw new ValidatorException(
-                'Error while validating',
-                $invalidDataTypeException->getCode(),
-                $invalidDataTypeException
-            );
+            return $this->schema->validate($this->data);
+        } catch (InvalidDataTypeException $e) {
+            // todo : should never be thrown because $this->container is a JsonData object
+            throw new ValidatorException('Invalid data type to validate', ValidatorException::INVALID_DATA_TYPE, $e);
+        } catch (InvalidDataException $e) {
+            throw new ValidatorException('Invalid data', ValidatorException::INVALID_DATA, $e);
         }
-    }
-
-    /**
-     * getLastError
-     *
-     * @return string|null
-     */
-    public function getLastError(): ?string
-    {
-        return $this->validator->getLastError();
     }
 }
