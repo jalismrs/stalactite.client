@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\Domain;
 
@@ -40,34 +40,34 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testGet() : void
+    public function testGet(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'domain'  => Serializer::getInstance()
-                                               ->normalize(
-                                                   ModelFactory::getTestableDomain(),
-                                                   [
-                                                       AbstractNormalizer::GROUPS => [
-                                                           'main',
-                                                       ],
-                                                   ]
-                                               )
+                        'error' => null,
+                        'domain' => Serializer::getInstance()
+                            ->normalize(
+                                ModelFactory::getTestableDomain(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->getDomain(
             ModelFactory::getTestableDomain()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -77,7 +77,7 @@ class ApiGetTest extends
             $response->getData()['domain']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseGet
      *
@@ -88,30 +88,30 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseGet() : void
+    public function testThrowOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'domain'  => []
+                        'error' => null,
+                        'domain' => []
                         // invalid domain
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->getDomain(
             ModelFactory::getTestableDomain()
-                        ->getUid(),
+                ->getUid(),
             'fake user jwt'
         );
     }

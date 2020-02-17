@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -22,7 +22,7 @@ class MockHttpClientFactory
      *
      * @return MockHttpClient
      */
-    public static function create(string $body) : MockHttpClient
+    public static function create(string $body): MockHttpClient
     {
         return new MockHttpClient(
             [

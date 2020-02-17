@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
@@ -40,7 +40,8 @@ class Service extends
      */
     public function getAllTrustedApps(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -49,10 +50,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'trustedApps' => array_map(
-                                    static function($trustedApp) {
+                                    static function ($trustedApp) {
                                         return ModelFactory::createTrustedApp($trustedApp);
                                     },
                                     $response['trustedApps']
@@ -63,14 +64,14 @@ class Service extends
                     ->setValidation(
                         [
                             'trustedApps' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::TRUSTED_APP,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getTrustedApp
      *
@@ -87,7 +88,8 @@ class Service extends
     public function getTrustedApp(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -96,7 +98,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
                             ];
@@ -110,20 +112,20 @@ class Service extends
                     ->setValidation(
                         [
                             'trustedApp' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
+                                'type' => JsonRule::OBJECT_TYPE,
                                 'schema' => Schema::TRUSTED_APP,
-                                'null'   => true,
+                                'null' => true,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * updateTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -135,7 +137,8 @@ class Service extends
     public function updateTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -159,12 +162,12 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * createTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -176,7 +179,8 @@ class Service extends
     public function createTrustedApp(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -194,7 +198,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
                             ];
@@ -203,8 +207,8 @@ class Service extends
                     ->setValidation(
                         [
                             'trustedApp' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => array_merge(
                                     Schema::TRUSTED_APP,
                                     [
@@ -218,7 +222,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * deleteTrustedApp
      *
@@ -237,7 +241,8 @@ class Service extends
         string $uid,
         string $resetToken,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -258,12 +263,12 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * resetAuthToken
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -275,7 +280,8 @@ class Service extends
     public function resetAuthToken(
         TrustedApp $trustedAppModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -293,7 +299,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
                             ];
@@ -306,16 +312,16 @@ class Service extends
                     )
                     ->setValidation(
                         [
-                            'success'    => [
+                            'success' => [
                                 'type' => JsonRule::BOOLEAN_TYPE,
                             ],
-                            'error'      => [
+                            'error' => [
                                 'type' => JsonRule::STRING_TYPE,
                                 'null' => true,
                             ],
                             'trustedApp' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::TRUSTED_APP,
                             ],
                         ]

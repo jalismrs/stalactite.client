@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication;
 
@@ -33,40 +33,40 @@ class Service extends
     AbstractService
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
-    
+
     private const AUTHORIZED_JWT_TYPES = [
         'user',
         'customer'
     ];
-    
+
     private $serviceTrustedApp;
-    
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * trustedApps
      *
      * @return TrustedAppService
      */
-    public function trustedApps() : TrustedAppService
+    public function trustedApps(): TrustedAppService
     {
         if ($this->serviceTrustedApp === null) {
             $this->serviceTrustedApp = new TrustedAppService($this->getClient());
         }
-        
+
         return $this->serviceTrustedApp;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    
+
     /**
      * validate
      *
@@ -81,87 +81,88 @@ class Service extends
      */
     public function validate(
         string $jwt
-    ) : bool {
+    ): bool
+    {
         try {
             $token = $this->getTokenFromString($jwt);
         } catch (Throwable $throwable) {
             $this
                 ->getLogger()
                 ->error($throwable);
-            
+
             throw new ClientException(
                 'Invalid user JWT',
                 ClientException::INVALID_JWT_STRING,
                 $throwable
             );
         }
-        
+
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
-        
+
         if (!$token->hasClaim('iss') || !$token->hasClaim('aud') || !$token->hasClaim('type') ||
             !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
             $exception = new ClientException(
                 'Invalid JWT structure',
                 ClientException::INVALID_JWT_STRUCTURE
             );
-            
+
             $this
                 ->getLogger()
                 ->error($exception);
-            
+
             throw $exception;
         }
-        
+
         if ($token->isExpired()) {
             $exception = new ClientException(
                 'Expired JWT',
                 ClientException::EXPIRED_JWT
             );
-            
+
             $this
                 ->getLogger()
                 ->error($exception);
-            
+
             throw $exception;
         }
-        
+
         if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
             $exception = new ClientException(
                 'Invalid JWT user type',
                 ClientException::INVALID_JWT_USER_TYPE
             );
-            
+
             $this
                 ->getLogger()
                 ->error($exception);
-            
+
             throw $exception;
         }
-        
+
         if (!$token->validate($data)) {
             $exception = new ClientException(
                 'Invalid JWT issuer',
                 ClientException::INVALID_JWT_ISSUER
             );
-            
+
             $this
                 ->getLogger()
                 ->error($exception);
-            
+
             throw $exception;
         }
-        
-        $signer    = new Sha256();
+
+        $signer = new Sha256();
         $publicKey = new Key($this->getRSAPublicKey());
-        
+
         try {
             return $token->verify($signer, $publicKey);
         } catch (BadMethodCallException $badMethodCallException) {
             $this
                 ->getLogger()
                 ->error($badMethodCallException);
-    
+
             // thrown by the library on invalid key
             throw new ClientException(
                 'Unsigned token',
@@ -172,7 +173,7 @@ class Service extends
             $this
                 ->getLogger()
                 ->error($invalidArgumentException);
-            
+
             // thrown by the library on invalid key
             throw new ClientException(
                 'Invalid RSA public key',
@@ -183,7 +184,7 @@ class Service extends
             $this
                 ->getLogger()
                 ->error($throwable);
-            
+
             throw new ClientException(
                 'Invalid JWT signature',
                 ClientException::INVALID_JWT_SIGNATURE,
@@ -191,18 +192,18 @@ class Service extends
             );
         }
     }
-    
+
     /**
      * @param string $jwt
      *
      * @return Token
      * @throws Throwable
      */
-    protected function getTokenFromString(string $jwt) : Token
+    protected function getTokenFromString(string $jwt): Token
     {
         return (new Parser())->parse($jwt);
     }
-    
+
     /**
      * getRSAPublicKey
      *
@@ -212,7 +213,7 @@ class Service extends
      *
      * @throws ClientException
      */
-    public function getRSAPublicKey() : string
+    public function getRSAPublicKey(): string
     {
         //TODO: uniformize
         try {
@@ -228,7 +229,7 @@ class Service extends
             $this
                 ->getLogger()
                 ->error($throwable);
-            
+
             throw new ClientException(
                 'Error while fetching Stalactite API RSA public key',
                 ClientException::CLIENT_TRANSPORT,
@@ -236,12 +237,12 @@ class Service extends
             );
         }
     }
-    
+
     /**
      * login
      *
      * @param TrustedApp $trustedAppModel
-     * @param string     $userGoogleJwt
+     * @param string $userGoogleJwt
      *
      * @return Response
      *
@@ -253,7 +254,8 @@ class Service extends
     public function login(
         TrustedApp $trustedAppModel,
         string $userGoogleJwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -263,13 +265,13 @@ class Service extends
                 ))
                     ->setJson(
                         [
-                            'appName'       => $trustedAppModel->getName(),
-                            'appToken'      => $trustedAppModel->getAuthToken(),
+                            'appName' => $trustedAppModel->getName(),
+                            'appToken' => $trustedAppModel->getAuthToken(),
                             'userGoogleJwt' => $userGoogleJwt,
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'jwt' => $response['jwt'],
                             ];

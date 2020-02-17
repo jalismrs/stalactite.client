@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -26,50 +26,51 @@ class Response
      * @var bool
      */
     private $success;
-    
+
     /**
      * Response constructor.
      *
-     * @param bool        $success
+     * @param bool $success
      * @param string|null $error
-     * @param array|null  $data
+     * @param array|null $data
      */
     public function __construct(
         bool $success,
         ?string $error,
         ?array $data
-    ) {
+    )
+    {
         $this->success = $success;
-        $this->error   = $error;
-        $this->data    = $data;
+        $this->error = $error;
+        $this->data = $data;
     }
-    
+
     /**
      * isSuccess
      *
      * @return bool
      */
-    public function isSuccess() : bool
+    public function isSuccess(): bool
     {
         return $this->success;
     }
-    
+
     /**
      * getError
      *
      * @return null|string
      */
-    public function getError() : ?string
+    public function getError(): ?string
     {
         return $this->error;
     }
-    
+
     /**
      * getData
      *
      * @return array
      */
-    public function getData() : array
+    public function getData(): array
     {
         return $this->data;
     }

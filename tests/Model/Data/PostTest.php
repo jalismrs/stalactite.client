@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
@@ -24,29 +24,29 @@ class PostTest extends
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = ModelFactory::getTestablePost();
-        
+
         $actual = Serializer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestablePost();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -55,29 +55,29 @@ class PostTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'         => $model->getUid(),
-            'name'        => $model->getName(),
-            'shortName'   => $model->getShortName(),
+            'uid' => $model->getUid(),
+            'name' => $model->getName(),
+            'shortName' => $model->getShortName(),
             'adminAccess' => $model->hasAdminAccess(),
             'allowAccess' => $model->allowAccess(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestablePost();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -86,28 +86,28 @@ class PostTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'access'    => $model->allowAccess(),
-            'admin'     => $model->hasAdminAccess(),
-            'name'      => $model->getName(),
+            'access' => $model->allowAccess(),
+            'admin' => $model->hasAdminAccess(),
+            'name' => $model->getName(),
             'shortName' => $model->getShortName(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestablePost();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -116,14 +116,14 @@ class PostTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'access'    => $model->allowAccess(),
-            'admin'     => $model->hasAdminAccess(),
-            'name'      => $model->getName(),
+            'access' => $model->allowAccess(),
+            'admin' => $model->hasAdminAccess(),
+            'name' => $model->getName(),
             'shortName' => $model->getShortName(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }

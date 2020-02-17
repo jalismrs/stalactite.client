@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Post;
 
@@ -38,14 +38,15 @@ class Service extends
      */
     public function getAllPosts(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -54,10 +55,10 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'posts' => array_map(
-                                    static function($post) {
+                                    static function ($post) {
                                         return ModelFactory::createPost($post);
                                     },
                                     $response['posts']
@@ -68,14 +69,14 @@ class Service extends
                     ->setValidation(
                         [
                             'posts' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getPost
      *
@@ -92,14 +93,15 @@ class Service extends
     public function getPost(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -108,7 +110,7 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'post' => $response['post'] === null
                                     ? null
@@ -124,15 +126,15 @@ class Service extends
                     ->setValidation(
                         [
                             'post' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getUsers
      *
@@ -149,14 +151,15 @@ class Service extends
     public function getUsers(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -165,10 +168,10 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'users' => array_map(
-                                    static function($user) {
+                                    static function ($user) {
                                         return ModelFactory::createUser($user);
                                     },
                                     $response['users']
@@ -184,7 +187,7 @@ class Service extends
                     ->setValidation(
                         [
                             'users' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::USER,
                             ],
                         ]

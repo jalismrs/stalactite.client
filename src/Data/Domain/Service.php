@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
@@ -39,7 +39,8 @@ class Service extends
      */
     public function getAllDomains(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -48,10 +49,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -62,14 +63,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getDomain
      *
@@ -86,7 +87,8 @@ class Service extends
     public function getDomain(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -95,7 +97,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null
                                     ? null
@@ -111,15 +113,15 @@ class Service extends
                     ->setValidation(
                         [
                             'domain' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByName
      *
@@ -136,7 +138,8 @@ class Service extends
     public function getByName(
         string $name,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -150,10 +153,10 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -164,14 +167,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByNameAndApiKey
      *
@@ -190,7 +193,8 @@ class Service extends
         string $name,
         string $apiKey,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -200,15 +204,15 @@ class Service extends
                     ->setJwt($jwt)
                     ->setQueryParameters(
                         [
-                            'name'   => $name,
+                            'name' => $name,
                             'apiKey' => $apiKey
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -219,14 +223,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * createDomain
      *
@@ -243,7 +247,8 @@ class Service extends
     public function createDomain(
         Domain $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -261,7 +266,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null
                                     ? null
@@ -272,15 +277,15 @@ class Service extends
                     ->setValidation(
                         [
                             'domain' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * updateDomain
      *
@@ -297,7 +302,8 @@ class Service extends
     public function updateDomain(
         Domain $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -321,7 +327,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * deleteDomain
      *
@@ -338,7 +344,8 @@ class Service extends
     public function deleteDomain(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(

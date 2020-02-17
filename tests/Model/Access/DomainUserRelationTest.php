@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
 
@@ -24,29 +24,29 @@ class DomainUserRelationTest extends
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = ModelFactory::getTestableDomainUserRelation();
-        
+
         $actual = Serializer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainUserRelation();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -55,9 +55,9 @@ class DomainUserRelationTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'    => $model->getUid(),
+            'uid' => $model->getUid(),
             'domain' => $serializer->normalize(
                 $model->getDomain(),
                 [
@@ -66,44 +66,6 @@ class DomainUserRelationTest extends
                     ],
                 ]
             ),
-            'user'   => $serializer->normalize(
-                $model->getUser(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
-        ];
-        
-        self::assertEquals($expected, $actual);
-    }
-    
-    /**
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws SerializerException
-     */
-    public function testGroupIgnoreDomain() : void
-    {
-        $serializer = Serializer::getInstance();
-        
-        $model = ModelFactory::getTestableDomainUserRelation();
-        
-        $actual = $serializer->normalize(
-            $model,
-            [
-                AbstractNormalizer::GROUPS             => [
-                    'main',
-                ],
-                AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                    'domain',
-                ],
-            ]
-        );
-        
-        $expected = [
-            'uid'  => $model->getUid(),
             'user' => $serializer->normalize(
                 $model->getUser(),
                 [
@@ -113,25 +75,63 @@ class DomainUserRelationTest extends
                 ]
             ),
         ];
-        
-        self::assertEqualsCanonicalizing($expected, $actual);
+
+        self::assertEquals($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMainIgnoreUser() : void
+    public function testGroupIgnoreDomain(): void
     {
         $serializer = Serializer::getInstance();
-        
+
         $model = ModelFactory::getTestableDomainUserRelation();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS             => [
+                AbstractNormalizer::GROUPS => [
+                    'main',
+                ],
+                AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                    'domain',
+                ],
+            ]
+        );
+
+        $expected = [
+            'uid' => $model->getUid(),
+            'user' => $serializer->normalize(
+                $model->getUser(),
+                [
+                    AbstractNormalizer::GROUPS => [
+                        'main',
+                    ],
+                ]
+            ),
+        ];
+
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+
+    /**
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws SerializerException
+     */
+    public function testGroupMainIgnoreUser(): void
+    {
+        $serializer = Serializer::getInstance();
+
+        $model = ModelFactory::getTestableDomainUserRelation();
+
+        $actual = $serializer->normalize(
+            $model,
+            [
+                AbstractNormalizer::GROUPS => [
                     'main',
                 ],
                 AbstractNormalizer::IGNORED_ATTRIBUTES => [
@@ -139,9 +139,9 @@ class DomainUserRelationTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'    => $model->getUid(),
+            'uid' => $model->getUid(),
             'domain' => $serializer->normalize(
                 $model->getDomain(),
                 [
@@ -151,7 +151,7 @@ class DomainUserRelationTest extends
                 ]
             ),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }

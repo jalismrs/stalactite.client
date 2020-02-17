@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken\Domain;
 
@@ -40,14 +40,15 @@ class Service extends
     public function deleteRelationsByDomain(
         Domain $domainModel,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -63,7 +64,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * getRelations
      *
@@ -80,14 +81,15 @@ class Service extends
     public function getRelations(
         Domain $domainModel,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -104,28 +106,28 @@ class Service extends
                     ->setValidation(
                         [
                             'relations' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
+                                'type' => JsonRule::OBJECT_TYPE,
                                 'schema' => [
-                                    'users'     => [
-                                        'type'   => JsonRule::LIST_TYPE,
+                                    'users' => [
+                                        'type' => JsonRule::LIST_TYPE,
                                         'schema' => [
-                                            'uid'  => [
+                                            'uid' => [
                                                 'type' => JsonRule::STRING_TYPE,
                                             ],
                                             'user' => [
-                                                'type'   => JsonRule::OBJECT_TYPE,
+                                                'type' => JsonRule::OBJECT_TYPE,
                                                 'schema' => DataSchema::USER,
                                             ],
                                         ],
                                     ],
                                     'customers' => [
-                                        'type'   => JsonRule::LIST_TYPE,
+                                        'type' => JsonRule::LIST_TYPE,
                                         'schema' => [
-                                            'uid'      => [
+                                            'uid' => [
                                                 'type' => JsonRule::STRING_TYPE
                                             ],
                                             'customer' => [
-                                                'type'   => JsonRule::OBJECT_TYPE,
+                                                'type' => JsonRule::OBJECT_TYPE,
                                                 'schema' => DataSchema::CUSTOMER,
                                             ],
                                         ],

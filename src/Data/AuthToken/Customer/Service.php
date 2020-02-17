@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 
@@ -38,14 +38,15 @@ class Service extends
      */
     public function getAllCustomers(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -54,10 +55,10 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customers' => array_map(
-                                    static function($customer) {
+                                    static function ($customer) {
                                         return ModelFactory::createCustomer($customer);
                                     },
                                     $response['customers']
@@ -68,14 +69,14 @@ class Service extends
                     ->setValidation(
                         [
                             'customers' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByEmailAndGoogleId
      *
@@ -94,14 +95,15 @@ class Service extends
         string $email,
         string $googleId,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -111,12 +113,12 @@ class Service extends
                     ->setJwt((string)$jwt)
                     ->setQueryParameters(
                         [
-                            'email'    => $email,
+                            'email' => $email,
                             'googleId' => $googleId
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
                                     ? null
@@ -127,15 +129,15 @@ class Service extends
                     ->setValidation(
                         [
                             'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getCustomer
      *
@@ -152,14 +154,15 @@ class Service extends
     public function getCustomer(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -168,7 +171,7 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
                                     ? null
@@ -184,8 +187,8 @@ class Service extends
                     ->setValidation(
                         [
                             'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Post;
 
@@ -36,22 +36,22 @@ class ApiAddPostsTest extends
      * @throws ValidatorException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testAddPosts() : void
+    public function testAddPosts(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [
@@ -62,7 +62,7 @@ class ApiAddPostsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnInvalidResponseAddPosts
      *
@@ -74,26 +74,26 @@ class ApiAddPostsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseAddPosts() : void
+    public function testThrowOnInvalidResponseAddPosts(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => false
+                        'error' => false
                         // invalid type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [
@@ -102,7 +102,7 @@ class ApiAddPostsTest extends
             'fake user jwt'
         );
     }
-    
+
     /**
      * testThrowOnInvalidPostsParameterAddPosts
      *
@@ -114,24 +114,24 @@ class ApiAddPostsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidPostsParameterAddPosts() : void
+    public function testThrowOnInvalidPostsParameterAddPosts(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->addPosts(
             ModelFactory::getTestableUser(),
             [

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Domain;
 
@@ -38,14 +38,15 @@ class Service extends
      */
     public function getAllDomains(
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -54,10 +55,10 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -68,14 +69,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByNameAndApiKey
      *
@@ -94,14 +95,15 @@ class Service extends
         string $name,
         string $apiKey,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -111,15 +113,15 @@ class Service extends
                     ->setJwt((string)$jwt)
                     ->setQueryParameters(
                         [
-                            'name'   => $name,
+                            'name' => $name,
                             'apiKey' => $apiKey
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -130,14 +132,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByName
      *
@@ -154,14 +156,15 @@ class Service extends
     public function getByName(
         string $name,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -175,10 +178,10 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domains' => array_map(
-                                    static function($domain) {
+                                    static function ($domain) {
                                         return ModelFactory::createDomain($domain);
                                     },
                                     $response['domains']
@@ -189,14 +192,14 @@ class Service extends
                     ->setValidation(
                         [
                             'domains' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getDomain
      *
@@ -213,14 +216,15 @@ class Service extends
     public function getDomain(
         string $uid,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(
@@ -229,7 +233,7 @@ class Service extends
                 ))
                     ->setJwt((string)$jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null
                                     ? null
@@ -245,8 +249,8 @@ class Service extends
                     ->setValidation(
                         [
                             'domain' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::DOMAIN,
                             ],
                         ]

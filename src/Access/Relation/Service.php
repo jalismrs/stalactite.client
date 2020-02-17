@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Relation;
 
@@ -24,7 +24,7 @@ class Service extends
      * deleteRelation
      *
      * @param DomainRelation $domainRelationModel
-     * @param string         $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -36,7 +36,8 @@ class Service extends
     public function deleteRelation(
         DomainRelation $domainRelationModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(

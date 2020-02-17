@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Access\AuthToken\User;
 
@@ -35,22 +35,22 @@ class ApiDeleteRelationsByUserTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testDeleteRelationsByUser() : void
+    public function testDeleteRelationsByUser(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'
@@ -58,7 +58,7 @@ class ApiDeleteRelationsByUserTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseDeleteRelationByUser
      *
@@ -69,26 +69,26 @@ class ApiDeleteRelationsByUserTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseDeleteRelationByUser() : void
+    public function testThrowExceptionOnInvalidResponseDeleteRelationByUser(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => false
+                        'error' => false
                         // invalid type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->deleteRelationsByUser(
             ModelFactory::getTestableUser(),
             'fake API auth token'

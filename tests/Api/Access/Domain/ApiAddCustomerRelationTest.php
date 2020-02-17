@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Access\Domain;
 
@@ -41,31 +41,31 @@ class ApiAddCustomerRelationTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testAddCustomerRelation() : void
+    public function testAddCustomerRelation(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'  => true,
-                        'error'    => null,
+                        'success' => true,
+                        'error' => null,
                         'relation' => Serializer::getInstance()
-                                                ->normalize(
-                                                    ModelFactory::getTestableDomainCustomerRelation(),
-                                                    [
-                                                        AbstractNormalizer::GROUPS => [
-                                                            'main',
-                                                        ],
-                                                    ]
-                                                )
+                            ->normalize(
+                                ModelFactory::getTestableDomainCustomerRelation(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->addCustomerRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableCustomer(),
@@ -75,7 +75,7 @@ class ApiAddCustomerRelationTest extends
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainCustomerRelation::class, $response->getData()['relation']);
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseAddCustomerRelation
      *
@@ -86,19 +86,19 @@ class ApiAddCustomerRelationTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseAddCustomerRelation() : void
+    public function testThrowExceptionOnInvalidResponseAddCustomerRelation(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'  => true,
-                        'error'    => null,
+                        'success' => true,
+                        'error' => null,
                         'relation' => []
                         // wrong type
                     ],
@@ -106,7 +106,7 @@ class ApiAddCustomerRelationTest extends
                 )
             )
         );
-        
+
         $mockService->addCustomerRelation(
             DataTestModelFactory::getTestableDomain(),
             DataTestModelFactory::getTestableCustomer(),

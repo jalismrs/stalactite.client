@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Lead;
 
@@ -30,7 +30,7 @@ class Service extends
     /**
      * getAllLeads
      *
-     * @param User   $userModel
+     * @param User $userModel
      * @param string $jwt
      *
      * @return Response
@@ -43,7 +43,8 @@ class Service extends
     public function getAllLeads(
         User $userModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -52,10 +53,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'leads' => array_map(
-                                    static function($lead) {
+                                    static function ($lead) {
                                         return ModelFactory::createPost($lead);
                                     },
                                     $response['leads']
@@ -71,19 +72,19 @@ class Service extends
                     ->setValidation(
                         [
                             'leads' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * addLeads
      *
-     * @param User   $userModel
-     * @param array  $leadModels
+     * @param User $userModel
+     * @param array $leadModels
      * @param string $jwt
      *
      * @return Response
@@ -98,7 +99,8 @@ class Service extends
         User $userModel,
         array $leadModels,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -122,12 +124,12 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * removeLeads
      *
-     * @param User   $userModel
-     * @param array  $leadModels
+     * @param User $userModel
+     * @param array $leadModels
      * @param string $jwt
      *
      * @return Response
@@ -142,7 +144,8 @@ class Service extends
         User $userModel,
         array $leadModels,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(

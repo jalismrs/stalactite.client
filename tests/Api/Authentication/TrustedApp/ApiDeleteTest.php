@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
 
@@ -35,34 +35,34 @@ class ApiDeleteTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testDelete() : void
+    public function testDelete(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
-        
+
         $response = $mockService->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),
             'fake user jwt'
         );
-        
+
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnDelete
      *
@@ -73,27 +73,27 @@ class ApiDeleteTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnDelete() : void
+    public function testThrowOnDelete(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => false
+                        'error' => false
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $trustedAppModel = ModelFactory::getTestableTrustedApp();
-        
+
         $mockService->deleteTrustedApp(
             $trustedAppModel->getUid(),
             $trustedAppModel->getResetToken(),

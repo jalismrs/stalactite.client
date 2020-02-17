@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\AuthToken\Domain;
 
@@ -38,33 +38,33 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testGetAll() : void
+    public function testGetAll(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
+                        'error' => null,
                         'domains' => [
                             Serializer::getInstance()
-                                      ->normalize(
-                                          ModelFactory::getTestableDomain(),
-                                          [
-                                              AbstractNormalizer::GROUPS => [
-                                                  'main',
-                                              ],
-                                          ]
-                                      )
+                                ->normalize(
+                                    ModelFactory::getTestableDomain(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                         ]
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->getAllDomains(
             'fake API auth token'
         );
@@ -75,7 +75,7 @@ class ApiGetAllTest extends
             $response->getData()['domains']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGetAll
      *
@@ -86,35 +86,35 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll() : void
+    public function testThrowExceptionOnInvalidResponseGetAll(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
+                        'error' => null,
                         'domains' => Serializer::getInstance()
-                                               ->normalize(
-                                                   ModelFactory::getTestableDomain(),
-                                                   [
-                                                       AbstractNormalizer::GROUPS => [
-                                                           'main',
-                                                       ],
-                                                   ]
-                                               )
+                            ->normalize(
+                                ModelFactory::getTestableDomain(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                         // invalid type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->getAllDomains(
             'fake API auth token'
         );

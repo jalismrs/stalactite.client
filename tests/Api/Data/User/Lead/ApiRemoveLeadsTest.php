@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Lead;
 
@@ -36,22 +36,22 @@ class ApiRemoveLeadsTest extends
      * @throws ValidatorException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testRemoveLeads() : void
+    public function testRemoveLeads(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
@@ -62,7 +62,7 @@ class ApiRemoveLeadsTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnInvalidResponseRemoveLeads
      *
@@ -74,26 +74,26 @@ class ApiRemoveLeadsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseRemoveLeads() : void
+    public function testThrowOnInvalidResponseRemoveLeads(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => false
+                        'error' => false
                         // invalid type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [
@@ -102,7 +102,7 @@ class ApiRemoveLeadsTest extends
             'fake user jwt'
         );
     }
-    
+
     /**
      * testThrowOnInvalidPostsParameterRemoveLeads
      *
@@ -114,24 +114,24 @@ class ApiRemoveLeadsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidPostsParameterRemoveLeads() : void
+    public function testThrowOnInvalidPostsParameterRemoveLeads(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [

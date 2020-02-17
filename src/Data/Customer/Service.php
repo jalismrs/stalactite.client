@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer;
 
@@ -26,7 +26,7 @@ class Service extends
     AbstractService
 {
     private $serviceMe;
-    
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -37,15 +37,15 @@ class Service extends
      *
      * @return Me\Service
      */
-    public function me() : Me\Service
+    public function me(): Me\Service
     {
         if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
-        
+
         return $this->serviceMe;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -65,7 +65,8 @@ class Service extends
      */
     public function getAllCustomers(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -74,10 +75,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customers' => array_map(
-                                    static function($customer) {
+                                    static function ($customer) {
                                         return ModelFactory::createCustomer($customer);
                                     },
                                     $response['customers']
@@ -88,14 +89,14 @@ class Service extends
                     ->setValidation(
                         [
                             'customers' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getCustomer
      *
@@ -112,7 +113,8 @@ class Service extends
     public function getCustomer(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -121,7 +123,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
                                     ? null
@@ -137,15 +139,15 @@ class Service extends
                     ->setValidation(
                         [
                             'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getByEmailAndGoogleId
      *
@@ -164,7 +166,8 @@ class Service extends
         string $email,
         string $googleId,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -174,12 +177,12 @@ class Service extends
                     ->setJwt($jwt)
                     ->setQueryParameters(
                         [
-                            'email'    => $email,
+                            'email' => $email,
                             'googleId' => $googleId
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
                                     ? null
@@ -189,28 +192,28 @@ class Service extends
                     )
                     ->setValidation(
                         [
-                            'success'  => [
+                            'success' => [
                                 'type' => JsonRule::BOOLEAN_TYPE,
                             ],
-                            'error'    => [
+                            'error' => [
                                 'type' => JsonRule::STRING_TYPE,
                                 'null' => true,
                             ],
                             'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * createCustomer
      *
      * @param Customer $customerModel
-     * @param string   $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -222,7 +225,8 @@ class Service extends
     public function createCustomer(
         Customer $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -240,7 +244,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
                                     ? null
@@ -251,20 +255,20 @@ class Service extends
                     ->setValidation(
                         [
                             'customer' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::CUSTOMER,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * updateCustomer
      *
      * @param Customer $customerModel
-     * @param string   $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -276,7 +280,8 @@ class Service extends
     public function updateCustomer(
         Customer $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -300,7 +305,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * deleteCustomer
      *
@@ -317,7 +322,8 @@ class Service extends
     public function deleteCustomer(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(

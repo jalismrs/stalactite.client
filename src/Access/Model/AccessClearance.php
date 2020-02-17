@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
@@ -10,66 +10,67 @@ namespace Jalismrs\Stalactite\Client\Access\Model;
  */
 class AccessClearance
 {
-    public const NO_ACCESS    = null;
+    public const NO_ACCESS = null;
     public const ADMIN_ACCESS = 'admin';
-    public const USER_ACCESS  = 'user';
-    
+    public const USER_ACCESS = 'user';
+
     /** @var bool $granted */
     private $granted;
-    
+
     /** @var string|null $type */
     private $type;
-    
+
     /**
      * AccessClearance constructor.
      *
-     * @param bool        $granted
+     * @param bool $granted
      * @param string|null $type
      */
     public function __construct(
         bool $granted = false,
         string $type = null
-    ) {
+    )
+    {
         $this->granted = $granted;
-        $this->type    = $type ?? self::NO_ACCESS;
+        $this->type = $type ?? self::NO_ACCESS;
     }
-    
+
     /**
      * @return string|null
      */
-    public function getType() : ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
-    
+
     /**
      * @param string|null $type
      *
      * @return AccessClearance
      */
-    public function setType(?string $type) : self
+    public function setType(?string $type): self
     {
         $this->type = $type;
-        
+
         return $this;
     }
-    
+
     /**
      * @return bool
      */
-    public function hasUserAccessGranted() : bool
+    public function hasUserAccessGranted(): bool
     {
         return $this->isGranted() && $this->type === self::USER_ACCESS;
     }
-    
+
     /**
      * @return bool
      */
-    public function isGranted() : bool
+    public function isGranted(): bool
     {
         return $this->granted;
     }
-    
+
     /**
      * setAccessGranted
      *
@@ -77,17 +78,17 @@ class AccessClearance
      *
      * @return $this
      */
-    public function setGranted(bool $granted) : self
+    public function setGranted(bool $granted): self
     {
         $this->granted = $granted;
-        
+
         return $this;
     }
-    
+
     /**
      * @return bool
      */
-    public function hasAdminAccessGranted() : bool
+    public function hasAdminAccessGranted(): bool
     {
         return $this->isGranted() && $this->type === self::ADMIN_ACCESS;
     }

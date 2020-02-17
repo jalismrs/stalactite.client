@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Service\Access\Customer;
 
@@ -21,7 +21,7 @@ class ServiceTest extends
     TestCase
 {
     use ServiceTestTrait;
-    
+
     /**
      * testMe
      *
@@ -30,9 +30,9 @@ class ServiceTest extends
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    public function testMe() : void
+    public function testMe(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             new MockHttpClient()
@@ -41,10 +41,10 @@ class ServiceTest extends
             new TestLogger()
         );
         $mockClient->setUserAgent('fake user agent');
-        
+
         $mockService1 = $mockService->me();
         $mockService2 = $mockService->me();
-        
+
         self::checkServices(
             $mockService,
             $mockService1,

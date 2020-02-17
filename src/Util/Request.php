@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -73,11 +73,11 @@ final class Request
      * @var array|null
      */
     private $validation;
-    
+
     /**
      * Request constructor.
      *
-     * @param string      $endpoint
+     * @param string $endpoint
      * @param string|null $method
      *
      * @throws RequestException
@@ -85,9 +85,10 @@ final class Request
     public function __construct(
         string $endpoint,
         string $method = null
-    ) {
+    )
+    {
         $this->endpoint = $endpoint;
-        
+
         $throwable = null;
         try {
             $this->method = self::validateMethod($method ?? 'GET');
@@ -103,7 +104,7 @@ final class Request
             }
         }
     }
-    
+
     /**
      * validateMethod
      *
@@ -115,7 +116,7 @@ final class Request
      *
      * @throws OutOfBoundsException
      */
-    private static function validateMethod(string $method) : string
+    private static function validateMethod(string $method): string
     {
         $methods = [
             'GET',
@@ -123,7 +124,7 @@ final class Request
             'PUT',
             'POST',
         ];
-        
+
         if (!in_array(
             $method,
             $methods,
@@ -144,46 +145,46 @@ final class Request
                     "Invalid HTTP method '{$method}'"
                 );
             }
-            
+
             $method = $methodUpper;
         }
-        
+
         return $method;
     }
-    
+
     /**
      * getUri
      *
      * @return string
      */
-    public function getUri() : string
+    public function getUri(): string
     {
         return vsprintf(
             $this->getEndpoint(),
             $this->getUriParameters()
         );
     }
-    
+
     /**
      * getEndpoint
      *
      * @return string
      */
-    public function getEndpoint() : string
+    public function getEndpoint(): string
     {
         return $this->endpoint;
     }
-    
+
     /**
      * getUriParameters
      *
      * @return array
      */
-    public function getUriParameters() : array
+    public function getUriParameters(): array
     {
         return $this->uriParameters;
     }
-    
+
     /**
      * setUriParameters
      *
@@ -193,10 +194,10 @@ final class Request
      *
      * @throws RequestException
      */
-    public function setUriParameters(array $uriParameters) : self
+    public function setUriParameters(array $uriParameters): self
     {
         $throwable = null;
-        
+
         try {
             $this->uriParameters = self::validateUriParameters($uriParameters);
         } catch (TypeError $typeError) {
@@ -210,10 +211,10 @@ final class Request
                 );
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * validateUriParameters
      *
@@ -225,7 +226,7 @@ final class Request
      *
      * @throws TypeError
      */
-    private static function validateUriParameters(array $uriParameters) : array
+    private static function validateUriParameters(array $uriParameters): array
     {
         foreach ($uriParameters as $uriParameter) {
             if (!is_scalar($uriParameter)) {
@@ -241,20 +242,20 @@ final class Request
                 );
             }
         }
-        
+
         return $uriParameters;
     }
-    
+
     /**
      * getMethod
      *
      * @return string
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }
-    
+
     /**
      * getJson
      *
@@ -264,7 +265,7 @@ final class Request
     {
         return $this->json;
     }
-    
+
     /**
      * setJson
      *
@@ -272,23 +273,23 @@ final class Request
      *
      * @return $this
      */
-    public function setJson($json) : self
+    public function setJson($json): self
     {
         $this->json = $json;
-        
+
         return $this;
     }
-    
+
     /**
      * getQueryParameters
      *
      * @return array|null
      */
-    public function getQueryParameters() : ?array
+    public function getQueryParameters(): ?array
     {
         return $this->queryParameters;
     }
-    
+
     /**
      * setQueryParameters
      *
@@ -296,23 +297,23 @@ final class Request
      *
      * @return $this
      */
-    public function setQueryParameters(?array $queryParameters) : self
+    public function setQueryParameters(?array $queryParameters): self
     {
         $this->queryParameters = $queryParameters;
-        
+
         return $this;
     }
-    
+
     /**
      * getJwt
      *
      * @return string|null
      */
-    public function getJwt() : ?string
+    public function getJwt(): ?string
     {
         return $this->jwt;
     }
-    
+
     /**
      * setJwt
      *
@@ -320,23 +321,23 @@ final class Request
      *
      * @return $this
      */
-    public function setJwt(?string $jwt) : self
+    public function setJwt(?string $jwt): self
     {
         $this->jwt = $jwt;
-        
+
         return $this;
     }
-    
+
     /**
      * getNormalization
      *
      * @return array
      */
-    public function getNormalization() : ?array
+    public function getNormalization(): ?array
     {
         return $this->normalization;
     }
-    
+
     /**
      * setNormalization
      *
@@ -344,23 +345,23 @@ final class Request
      *
      * @return $this
      */
-    public function setNormalization(?array $normalization) : self
+    public function setNormalization(?array $normalization): self
     {
         $this->normalization = $normalization;
-        
+
         return $this;
     }
-    
+
     /**
      * getResponse
      *
      * @return Closure|null
      */
-    public function getResponse() : ?Closure
+    public function getResponse(): ?Closure
     {
         return $this->response;
     }
-    
+
     /**
      * setResponse
      *
@@ -370,10 +371,10 @@ final class Request
      *
      * @throws RequestException
      */
-    public function setResponse(?Closure $response) : self
+    public function setResponse(?Closure $response): self
     {
         $throwable = null;
-        
+
         try {
             $this->response = self::validateResponse($response);
         } catch (ErrorException $errorException) {
@@ -391,10 +392,10 @@ final class Request
                 );
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * validateResponse
      *
@@ -408,7 +409,7 @@ final class Request
      * @throws InvalidArgumentException
      * @throws TypeError
      */
-    private static function validateResponse(?Closure $response) : ?Closure
+    private static function validateResponse(?Closure $response): ?Closure
     {
         if ($response !== null) {
             try {
@@ -420,8 +421,8 @@ final class Request
                     $reflectionException
                 );
             }
-            
-            $typeError            = new TypeError(
+
+            $typeError = new TypeError(
                 "Response should specify return type 'array'"
             );
             $reflectionReturnType = $reflectionFunction->getReturnType();
@@ -439,7 +440,7 @@ final class Request
                     E_USER_WARNING
                 );
             }
-            
+
             $reflectionParameters = $reflectionFunction->getParameters();
             if (count($reflectionParameters) !== 1) {
                 throw new InvalidArgumentException(
@@ -448,8 +449,8 @@ final class Request
             }
             $reflectionParameter = $reflectionParameters[0];
             assert($reflectionParameter instanceof ReflectionParameter);
-            
-            $typeError               = new TypeError(
+
+            $typeError = new TypeError(
                 "Response should specify parameter type 'array'"
             );
             $reflectionParameterType = $reflectionParameter->getType();
@@ -468,20 +469,20 @@ final class Request
                 );
             }
         }
-        
+
         return $response;
     }
-    
+
     /**
      * getValidation
      *
      * @return array
      */
-    public function getValidation() : ?array
+    public function getValidation(): ?array
     {
         return $this->validation;
     }
-    
+
     /**
      * setValidation
      *
@@ -489,23 +490,23 @@ final class Request
      *
      * @return $this
      */
-    public function setValidation(?array $validation) : self
+    public function setValidation(?array $validation): self
     {
         $this->validation = $validation;
-        
+
         return $this;
     }
-    
+
     /**
      * getOptions
      *
      * @return array
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->options;
     }
-    
+
     /**
      * setOptions
      *
@@ -513,10 +514,10 @@ final class Request
      *
      * @return $this
      */
-    public function setOptions(array $options) : self
+    public function setOptions(array $options): self
     {
         $this->options = $options;
-        
+
         return $this;
     }
 }

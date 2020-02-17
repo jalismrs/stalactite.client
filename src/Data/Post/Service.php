@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
@@ -39,7 +39,8 @@ class Service extends
      */
     public function getAllPosts(
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -48,10 +49,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'posts' => array_map(
-                                    static function($post) {
+                                    static function ($post) {
                                         return ModelFactory::createPost($post);
                                     },
                                     $response['posts']
@@ -62,14 +63,14 @@ class Service extends
                     ->setValidation(
                         [
                             'posts' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * getPost
      *
@@ -86,7 +87,8 @@ class Service extends
     public function getPost(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -95,7 +97,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'post' => $response['post'] === null
                                     ? null
@@ -111,19 +113,19 @@ class Service extends
                     ->setValidation(
                         [
                             'post' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * createPost
      *
-     * @param Post   $postModel
+     * @param Post $postModel
      * @param string $jwt
      *
      * @return Response
@@ -136,7 +138,8 @@ class Service extends
     public function createPost(
         Post $postModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -154,7 +157,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'post' => $response['post'] === null
                                     ? null
@@ -165,19 +168,19 @@ class Service extends
                     ->setValidation(
                         [
                             'post' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
-                                'null'   => true,
+                                'type' => JsonRule::OBJECT_TYPE,
+                                'null' => true,
                                 'schema' => Schema::POST,
                             ],
                         ]
                     )
             );
     }
-    
+
     /**
      * updatePost
      *
-     * @param Post   $postModel
+     * @param Post $postModel
      * @param string $jwt
      *
      * @return Response
@@ -190,7 +193,8 @@ class Service extends
     public function updatePost(
         Post $postModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -214,7 +218,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * deletePost
      *
@@ -231,7 +235,8 @@ class Service extends
     public function deletePost(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -247,7 +252,7 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * getUsers
      *
@@ -264,7 +269,8 @@ class Service extends
     public function getUsers(
         string $uid,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -273,10 +279,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'users' => array_map(
-                                    static function($user) {
+                                    static function ($user) {
                                         return ModelFactory::createUser($user);
                                     },
                                     $response['users']
@@ -292,7 +298,7 @@ class Service extends
                     ->setValidation(
                         [
                             'users' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => Schema::USER,
                             ],
                         ]

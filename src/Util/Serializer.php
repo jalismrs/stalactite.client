@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -24,7 +24,7 @@ use function array_replace_recursive;
 final class Serializer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
-    
+
     private const CONTEXT = [
         AbstractNormalizer::GROUPS => [
             'common',
@@ -38,7 +38,7 @@ final class Serializer
      * @var SerializerObject
      */
     private $serializer;
-    
+
     /**
      * Serializer constructor.
      *
@@ -61,12 +61,12 @@ final class Serializer
             ]
         );
     }
-    
+
     /**
      * @return static
      * @throws SerializerException
      */
-    public static function getInstance() : self
+    public static function getInstance(): self
     {
         try {
             if (!(self::$instance instanceof self)) {
@@ -79,10 +79,10 @@ final class Serializer
                 $exception
             );
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * normalize
      *
@@ -93,7 +93,7 @@ final class Serializer
      *
      * @throws SerializerException
      */
-    public function normalize($data, array $context = []) : array
+    public function normalize($data, array $context = []): array
     {
         try {
             return $this->serializer->normalize(
@@ -113,13 +113,13 @@ final class Serializer
             );
         }
     }
-    
+
     /**
      * denormalize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *
@@ -146,7 +146,7 @@ final class Serializer
             );
         }
     }
-    
+
     /**
      * serialize
      *
@@ -157,7 +157,7 @@ final class Serializer
      *
      * @throws SerializerException
      */
-    public function serialize($data, array $context = []) : string
+    public function serialize($data, array $context = []): string
     {
         try {
             return $this->serializer->serialize(
@@ -177,13 +177,13 @@ final class Serializer
             );
         }
     }
-    
+
     /**
      * deserialize
      *
      * @param        $data
      * @param string $type
-     * @param array  $context
+     * @param array $context
      *
      * @return array|object
      *

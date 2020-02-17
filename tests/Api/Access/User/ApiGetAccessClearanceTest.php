@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Access\User;
 
@@ -41,31 +41,31 @@ class ApiGetAccessClearanceTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testGetAccessClearance() : void
+    public function testGetAccessClearance(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'   => true,
-                        'error'     => null,
+                        'success' => true,
+                        'error' => null,
                         'clearance' => Serializer::getInstance()
-                                                 ->normalize(
-                                                     ModelFactory::getTestableAccessClearance(),
-                                                     [
-                                                         AbstractNormalizer::GROUPS => [
-                                                             'main',
-                                                         ],
-                                                     ]
-                                                 ),
+                            ->normalize(
+                                ModelFactory::getTestableAccessClearance(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            ),
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'
@@ -77,7 +77,7 @@ class ApiGetAccessClearanceTest extends
             $response->getData()['clearance']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGetAccessClearance
      *
@@ -88,19 +88,19 @@ class ApiGetAccessClearanceTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetAccessClearance() : void
+    public function testThrowExceptionOnInvalidResponseGetAccessClearance(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'   => true,
-                        'error'     => null,
+                        'success' => true,
+                        'error' => null,
                         'clearance' => []
                         // wrong type
                     ],
@@ -108,7 +108,7 @@ class ApiGetAccessClearanceTest extends
                 )
             )
         );
-        
+
         $mockService->getAccessClearance(
             DataTestModelFactory::getTestableUser(), DataTestModelFactory::getTestableDomain(),
             'fake user jwt'

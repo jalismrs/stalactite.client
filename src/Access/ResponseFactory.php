@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access;
 
@@ -29,24 +29,25 @@ class ResponseFactory extends
      */
     public static function domainGetRelations(
         Domain $domainModel
-    ) : Closure {
-        return static function(array $response) use ($domainModel) : array {
+    ): Closure
+    {
+        return static function (array $response) use ($domainModel) : array {
             return [
                 'relations' => [
-                    'users'     => array_map(
-                        static function(array $relation) use ($domainModel): DomainUserRelation {
+                    'users' => array_map(
+                        static function (array $relation) use ($domainModel): DomainUserRelation {
                             $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
                             $domainUserRelationModel->setDomain($domainModel);
-                            
+
                             return $domainUserRelationModel;
                         },
                         $response['relations']['users']
                     ),
                     'customers' => array_map(
-                        static function(array $relation) use ($domainModel): DomainCustomerRelation {
+                        static function (array $relation) use ($domainModel): DomainCustomerRelation {
                             $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
                             $domainCustomerRelation->setDomain($domainModel);
-                            
+
                             return $domainCustomerRelation;
                         },
                         $response['relations']['customers']

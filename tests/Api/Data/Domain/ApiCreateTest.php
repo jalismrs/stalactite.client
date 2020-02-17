@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\Domain;
 
@@ -40,31 +40,31 @@ class ApiCreateTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testCreate() : void
+    public function testCreate(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'domain'  => Serializer::getInstance()
-                                               ->normalize(
-                                                   ModelFactory::getTestableDomain(),
-                                                   [
-                                                       AbstractNormalizer::GROUPS => [
-                                                           'main',
-                                                       ],
-                                                   ]
-                                               )
+                        'error' => null,
+                        'domain' => Serializer::getInstance()
+                            ->normalize(
+                                ModelFactory::getTestableDomain(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'
@@ -76,7 +76,7 @@ class ApiCreateTest extends
             $response->getData()['domain']
         );
     }
-    
+
     /**
      * testThrowOnInvalidResponseCreate
      *
@@ -87,26 +87,26 @@ class ApiCreateTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseCreate() : void
+    public function testThrowOnInvalidResponseCreate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'domain'  => 'invalid-domain'
+                        'error' => null,
+                        'domain' => 'invalid-domain'
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'

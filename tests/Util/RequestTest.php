@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
@@ -28,17 +28,17 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testEndpoint() : void
+    public function testEndpoint(): void
     {
         $endpoint = '/collection1/%s/collection2/%s/details';
-        $request  = new Request($endpoint);
-        
+        $request = new Request($endpoint);
+
         self::assertSame(
             $endpoint,
             $request->getEndpoint()
         );
     }
-    
+
     /**
      * testUri
      *
@@ -48,17 +48,17 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testUri() : void
+    public function testUri(): void
     {
-        $endpoint      = '/collection1/%s/collection2/%s/details';
+        $endpoint = '/collection1/%s/collection2/%s/details';
         $uriParameters = [
             'test',
             '51',
         ];
-        
+
         $request = new Request($endpoint);
         $request->setUriParameters($uriParameters);
-        
+
         self::assertSame(
             vsprintf(
                 $endpoint,
@@ -67,7 +67,7 @@ class RequestTest extends
             $request->getUri()
         );
     }
-    
+
     /**
      * testMethod
      *
@@ -77,21 +77,21 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testMethod() : void
+    public function testMethod(): void
     {
         $method = 'POST';
-        
+
         $request = new Request(
             '',
             $method
         );
-        
+
         self::assertSame(
             $method,
             $request->getMethod()
         );
     }
-    
+
     /**
      * testMethodDefault
      *
@@ -101,16 +101,16 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testMethodDefault() : void
+    public function testMethodDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertSame(
             'GET',
             $request->getMethod()
         );
     }
-    
+
     /**
      * testMethodInvalid
      *
@@ -118,16 +118,16 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testMethodInvalid() : void
+    public function testMethodInvalid(): void
     {
         $this->expectException(RequestException::class);
-        
+
         new Request(
             '',
             'PSOT'
         );
     }
-    
+
     /**
      * testMethodLowerCase
      *
@@ -135,16 +135,16 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testMethodLowerCase() : void
+    public function testMethodLowerCase(): void
     {
         $this->expectError();
-        
+
         new Request(
             '',
             'put'
         );
     }
-    
+
     /**
      * testJson
      *
@@ -154,23 +154,23 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJson() : void
+    public function testJson(): void
     {
         $json = [
             AbstractNormalizer::GROUPS => [
                 'create',
             ],
         ];
-        
+
         $request = new Request('');
         $request->setJson($json);
-        
+
         self::assertSame(
             $json,
             $request->getJson()
         );
     }
-    
+
     /**
      * testJsonNull
      *
@@ -180,14 +180,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJsonNull() : void
+    public function testJsonNull(): void
     {
         $request = new Request('');
         $request->setJson(null);
-        
+
         self::assertNull($request->getJson());
     }
-    
+
     /**
      * testJsonDefault
      *
@@ -197,13 +197,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJsonDefault() : void
+    public function testJsonDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getJson());
     }
-    
+
     /**
      * testJwt
      *
@@ -213,19 +213,19 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJwt() : void
+    public function testJwt(): void
     {
         $jwt = 'fake jwt';
-        
+
         $request = new Request('');
         $request->setJwt($jwt);
-        
+
         self::assertSame(
             $jwt,
             $request->getJwt()
         );
     }
-    
+
     /**
      * testJwtNull
      *
@@ -235,14 +235,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJwtNull() : void
+    public function testJwtNull(): void
     {
         $request = new Request('');
         $request->setJwt(null);
-        
+
         self::assertNull($request->getJwt());
     }
-    
+
     /**
      * testJwtDefault
      *
@@ -252,13 +252,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testJwtDefault() : void
+    public function testJwtDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getJwt());
     }
-    
+
     /**
      * testQueryParameters
      *
@@ -268,23 +268,23 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testQueryParameters() : void
+    public function testQueryParameters(): void
     {
         $queryParameters = [
             AbstractNormalizer::GROUPS => [
                 'create',
             ],
         ];
-        
+
         $request = new Request('');
         $request->setQueryParameters($queryParameters);
-        
+
         self::assertSame(
             $queryParameters,
             $request->getQueryParameters()
         );
     }
-    
+
     /**
      * testQueryParametersNull
      *
@@ -294,14 +294,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testQueryParametersNull() : void
+    public function testQueryParametersNull(): void
     {
         $request = new Request('');
         $request->setQueryParameters(null);
-        
+
         self::assertNull($request->getQueryParameters());
     }
-    
+
     /**
      * testQueryParametersDefault
      *
@@ -311,13 +311,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testQueryParametersDefault() : void
+    public function testQueryParametersDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getQueryParameters());
     }
-    
+
     /**
      * testNormalization
      *
@@ -327,23 +327,23 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testNormalization() : void
+    public function testNormalization(): void
     {
         $normalization = [
             AbstractNormalizer::GROUPS => [
                 'create',
             ],
         ];
-        
+
         $request = new Request('');
         $request->setNormalization($normalization);
-        
+
         self::assertSame(
             $normalization,
             $request->getNormalization()
         );
     }
-    
+
     /**
      * testNormalizationNull
      *
@@ -353,14 +353,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testNormalizationNull() : void
+    public function testNormalizationNull(): void
     {
         $request = new Request('');
         $request->setNormalization(null);
-        
+
         self::assertNull($request->getNormalization());
     }
-    
+
     /**
      * testNormalizationDefault
      *
@@ -370,13 +370,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testNormalizationDefault() : void
+    public function testNormalizationDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getNormalization());
     }
-    
+
     /**
      * testOptions
      *
@@ -386,20 +386,20 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testOptions() : void
+    public function testOptions(): void
     {
         $options = [
             'plop' => 'prout',
         ];
         $request = new Request('');
         $request->setOptions($options);
-        
+
         self::assertSame(
             $options,
             $request->getOptions()
         );
     }
-    
+
     /**
      * testOptionsDefault
      *
@@ -409,13 +409,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testOptionsDefault() : void
+    public function testOptionsDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertEmpty($request->getOptions());
     }
-    
+
     /**
      * testResponse
      *
@@ -425,21 +425,21 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testResponse() : void
+    public function testResponse(): void
     {
-        $response = static function(array $response) : array {
+        $response = static function (array $response): array {
             return $response;
         };
-        
+
         $request = new Request('');
         $request->setResponse($response);
-        
+
         self::assertSame(
             $response,
             $request->getResponse()
         );
     }
-    
+
     /**
      * testResponseNull
      *
@@ -449,14 +449,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testResponseNull() : void
+    public function testResponseNull(): void
     {
         $request = new Request('');
         $request->setResponse(null);
-        
+
         self::assertNull($request->getResponse());
     }
-    
+
     /**
      * testResponseDefault
      *
@@ -466,13 +466,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testResponseDefault() : void
+    public function testResponseDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getResponse());
     }
-    
+
     /**
      * testResponseMissingReturnType
      *
@@ -480,18 +480,18 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testResponseMissingReturnType() : void
+    public function testResponseMissingReturnType(): void
     {
         $this->expectError();
-        
+
         $request = new Request('');
         $request->setResponse(
-            static function(array $response) {
+            static function (array $response) {
                 return $response;
             }
         );
     }
-    
+
     /**
      * testResponseInvalidReturnType
      *
@@ -499,18 +499,18 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testResponseInvalidReturnType() : void
+    public function testResponseInvalidReturnType(): void
     {
         $this->expectException(RequestException::class);
-        
+
         $request = new Request('');
         $request->setResponse(
-            static function(array $response) : bool {
+            static function (array $response): bool {
                 return $response === [];
             }
         );
     }
-    
+
     /**
      * testResponseInvalidParameterCount
      *
@@ -518,18 +518,18 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testResponseInvalidParameterCount() : void
+    public function testResponseInvalidParameterCount(): void
     {
         $this->expectException(RequestException::class);
-        
+
         $request = new Request('');
         $request->setResponse(
-            static function(array $response, array $invalid) : array {
+            static function (array $response, array $invalid): array {
                 return array_merge($response, $invalid);
             }
         );
     }
-    
+
     /**
      * testResponseMissingParameterType
      *
@@ -537,18 +537,18 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testResponseMissingParameterType() : void
+    public function testResponseMissingParameterType(): void
     {
         $this->expectError();
-        
+
         $request = new Request('');
         $request->setResponse(
-            static function($response) : array {
+            static function ($response): array {
                 return $response;
             }
         );
     }
-    
+
     /**
      * testResponseInvalidParameterType
      *
@@ -556,18 +556,18 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testResponseInvalidParameterType() : void
+    public function testResponseInvalidParameterType(): void
     {
         $this->expectException(RequestException::class);
-        
+
         $request = new Request('');
         $request->setResponse(
-            static function(bool $response) : array {
+            static function (bool $response): array {
                 return [$response];
             }
         );
     }
-    
+
     /**
      * testUriParameters
      *
@@ -577,21 +577,21 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testUriParameters() : void
+    public function testUriParameters(): void
     {
         $uriParameters = [
             'prout',
         ];
-        
+
         $request = new Request('');
         $request->setUriParameters($uriParameters);
-        
+
         self::assertSame(
             $uriParameters,
             $request->getUriParameters()
         );
     }
-    
+
     /**
      * testUriParametersDefault
      *
@@ -601,13 +601,13 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testUriParametersDefault() : void
+    public function testUriParametersDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertEmpty($request->getUriParameters());
     }
-    
+
     /**
      * testUriParametersInvalidType
      *
@@ -615,10 +615,10 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testUriParametersInvalidType() : void
+    public function testUriParametersInvalidType(): void
     {
         $this->expectException(RequestException::class);
-        
+
         $request = new Request('');
         $request->setUriParameters(
             [
@@ -627,7 +627,7 @@ class RequestTest extends
             ]
         );
     }
-    
+
     /**
      * testUriParametersTypeBool
      *
@@ -635,10 +635,10 @@ class RequestTest extends
      *
      * @throws RequestException
      */
-    public function testUriParametersTypeBool() : void
+    public function testUriParametersTypeBool(): void
     {
         $this->expectError();
-        
+
         $request = new Request('');
         $request->setUriParameters(
             [
@@ -647,7 +647,7 @@ class RequestTest extends
             ]
         );
     }
-    
+
     /**
      * testValidation
      *
@@ -657,7 +657,7 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testValidation() : void
+    public function testValidation(): void
     {
         $validation = [
             'clearance' => [
@@ -665,16 +665,16 @@ class RequestTest extends
                 'null' => true,
             ]
         ];
-        
+
         $request = new Request('');
         $request->setValidation($validation);
-        
+
         self::assertSame(
             $validation,
             $request->getValidation()
         );
     }
-    
+
     /**
      * testValidationNull
      *
@@ -684,14 +684,14 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testValidationNull() : void
+    public function testValidationNull(): void
     {
         $request = new Request('');
         $request->setValidation(null);
-        
+
         self::assertNull($request->getValidation());
     }
-    
+
     /**
      * testValidationDefault
      *
@@ -701,10 +701,10 @@ class RequestTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      */
-    public function testValidationDefault() : void
+    public function testValidationDefault(): void
     {
         $request = new Request('');
-        
+
         self::assertNull($request->getValidation());
     }
 }

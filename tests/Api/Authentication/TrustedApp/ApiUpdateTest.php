@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
 
@@ -35,22 +35,22 @@ class ApiUpdateTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testUpdate() : void
+    public function testUpdate(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null
+                        'error' => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->updateTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'
@@ -58,7 +58,7 @@ class ApiUpdateTest extends
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
     }
-    
+
     /**
      * testThrowOnUpdate
      *
@@ -69,25 +69,25 @@ class ApiUpdateTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowOnUpdate() : void
+    public function testThrowOnUpdate(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => false
+                        'error' => false
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->updateTrustedApp(
             ModelFactory::getTestableTrustedApp(),
             'fake user jwt'

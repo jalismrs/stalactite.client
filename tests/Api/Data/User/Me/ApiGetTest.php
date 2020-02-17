@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me;
 
@@ -40,31 +40,31 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testGet() : void
+    public function testGet(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'me'      => Serializer::getInstance()
-                                               ->normalize(
-                                                   ModelFactory::getTestableUser(),
-                                                   [
-                                                       AbstractNormalizer::GROUPS => [
-                                                           'main',
-                                                       ],
-                                                   ]
-                                               )
+                        'error' => null,
+                        'me' => Serializer::getInstance()
+                            ->normalize(
+                                ModelFactory::getTestableUser(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->getMe(
             'fake user jwt'
         );
@@ -75,7 +75,7 @@ class ApiGetTest extends
             $response->getData()['me']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGet
      *
@@ -86,29 +86,29 @@ class ApiGetTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGet() : void
+    public function testThrowExceptionOnInvalidResponseGet(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error'   => null,
-                        'me'      => [
+                        'error' => null,
+                        'me' => [
                             Serializer::getInstance()
-                                      ->normalize(
-                                          ModelFactory::getTestableUser(),
-                                          [
-                                              AbstractNormalizer::GROUPS => [
-                                                  'main',
-                                              ],
-                                          ]
-                                      )
+                                ->normalize(
+                                    ModelFactory::getTestableUser(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                    ]
+                                )
                         ]
                         // invalid type
                     ],
@@ -116,7 +116,7 @@ class ApiGetTest extends
                 )
             )
         );
-        
+
         $mockService->getMe(
             'fake user jwt'
         );

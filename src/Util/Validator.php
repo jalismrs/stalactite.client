@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -29,7 +29,7 @@ final class Validator
      * @var JsonSchema
      */
     private $validator;
-    
+
     /**
      * Validator constructor.
      */
@@ -38,32 +38,32 @@ final class Validator
         $this->container = new JsonData();
         $this->validator = new JsonSchema();
     }
-    
+
     /**
      * getInstance
      *
      * @static
      * @return static
      */
-    public static function getInstance() : self
+    public static function getInstance(): self
     {
         if (!(self::$instance instanceof self)) {
             self::$instance = new self();
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * getData
      *
      * @return array|null
      */
-    public function getData() : ?array
+    public function getData(): ?array
     {
         return $this->container->getData();
     }
-    
+
     /**
      * setData
      *
@@ -73,7 +73,7 @@ final class Validator
      *
      * @throws ValidatorException
      */
-    public function setData($data) : self
+    public function setData($data): self
     {
         try {
             $this->container->setData($data);
@@ -84,10 +84,10 @@ final class Validator
                 $invalidDataException
             );
         }
-        
+
         return $this;
     }
-    
+
     /**
      * setSchema
      *
@@ -97,7 +97,7 @@ final class Validator
      *
      * @throws ValidatorException
      */
-    public function setSchema(array $schema) : self
+    public function setSchema(array $schema): self
     {
         try {
             $this->validator->setSchema($schema);
@@ -108,10 +108,10 @@ final class Validator
                 $invalidSchemaException
             );
         }
-        
+
         return $this;
     }
-    
+
     /**
      * validate
      *
@@ -119,7 +119,7 @@ final class Validator
      *
      * @throws ValidatorException
      */
-    public function validate() : bool
+    public function validate(): bool
     {
         try {
             return $this->validator->validate($this->container);
@@ -131,13 +131,13 @@ final class Validator
             );
         }
     }
-    
+
     /**
      * getLastError
      *
      * @return string|null
      */
-    public function getLastError() : ?string
+    public function getLastError(): ?string
     {
         return $this->validator->getLastError();
     }

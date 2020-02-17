@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication;
 
@@ -12,14 +12,14 @@ use hunomina\Validator\Json\Rule\JsonRule;
  */
 abstract class Schema
 {
-    public const TRUSTED_APP      = [
-        'uid'                 => [
+    public const TRUSTED_APP = [
+        'uid' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'name'                => [
+        'name' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'authToken'           => [
+        'authToken' => [
             'type' => JsonRule::STRING_TYPE
         ],
         'googleOAuthClientId' => [

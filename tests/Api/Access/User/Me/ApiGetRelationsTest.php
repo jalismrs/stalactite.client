@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Access\User\Me;
 
@@ -38,36 +38,36 @@ class ApiGetRelationsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testGetRelations() : void
+    public function testGetRelations(): void
     {
-        $mockClient  = new Client('http://fakeHost');
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'   => true,
-                        'error'     => null,
+                        'success' => true,
+                        'error' => null,
                         'relations' => [
                             Serializer::getInstance()
-                                      ->normalize(
-                                          ModelFactory::getTestableDomainUserRelation(),
-                                          [
-                                              AbstractNormalizer::GROUPS             => [
-                                                  'main',
-                                              ],
-                                              AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                                                  'user'
-                                              ],
-                                          ]
-                                      )
+                                ->normalize(
+                                    ModelFactory::getTestableDomainUserRelation(),
+                                    [
+                                        AbstractNormalizer::GROUPS => [
+                                            'main',
+                                        ],
+                                        AbstractNormalizer::IGNORED_ATTRIBUTES => [
+                                            'user'
+                                        ],
+                                    ]
+                                )
                         ]
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $response = $mockService->getRelations(
             'fake user jwt'
         );
@@ -78,7 +78,7 @@ class ApiGetRelationsTest extends
             $response->getData()['relations']
         );
     }
-    
+
     /**
      * testThrowExceptionOnInvalidResponseGetRelations
      *
@@ -89,35 +89,35 @@ class ApiGetRelationsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetRelations() : void
+    public function testThrowExceptionOnInvalidResponseGetRelations(): void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
+
+        $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'success'   => true,
-                        'error'     => null,
+                        'success' => true,
+                        'error' => null,
                         'relations' => Serializer::getInstance()
-                                                 ->normalize(
-                                                     ModelFactory::getTestableDomainUserRelation(),
-                                                     [
-                                                         AbstractNormalizer::GROUPS => [
-                                                             'main',
-                                                         ],
-                                                     ]
-                                                 )
+                            ->normalize(
+                                ModelFactory::getTestableDomainUserRelation(),
+                                [
+                                    AbstractNormalizer::GROUPS => [
+                                        'main',
+                                    ],
+                                ]
+                            )
                         // invalid
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $mockService->getRelations(
             'fake user jwt'
         );

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\AuthToken\User;
 
@@ -24,7 +24,7 @@ class Service extends
     /**
      * deleteRelationsByUser
      *
-     * @param User   $userModel
+     * @param User $userModel
      * @param string $apiAuthToken
      *
      * @return Response
@@ -37,14 +37,15 @@ class Service extends
     public function deleteRelationsByUser(
         User $userModel,
         string $apiAuthToken
-    ) : Response {
+    ): Response
+    {
         $jwt = JwtFactory::generateJwt(
             $apiAuthToken,
             $this
                 ->getClient()
                 ->getUserAgent()
         );
-        
+
         return $this
             ->getClient()
             ->request(

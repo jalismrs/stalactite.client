@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Customer;
 
@@ -28,7 +28,7 @@ class Service extends
     AbstractService
 {
     private $serviceMe;
-    
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -39,15 +39,15 @@ class Service extends
      *
      * @return Me\Service
      */
-    public function me() : Me\Service
+    public function me(): Me\Service
     {
         if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
-        
+
         return $this->serviceMe;
     }
-    
+
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
@@ -57,7 +57,7 @@ class Service extends
      * getRelations
      *
      * @param Customer $customerModel
-     * @param string   $jwt
+     * @param string $jwt
      *
      * @return Response
      *
@@ -69,7 +69,8 @@ class Service extends
     public function getRelations(
         Customer $customerModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -78,12 +79,12 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) use ($customerModel) : array {
+                        static function (array $response) use ($customerModel) : array {
                             return [
                                 'relations' => array_map(
-                                    static function(array $relation) use ($customerModel): DomainCustomerRelation {
+                                    static function (array $relation) use ($customerModel): DomainCustomerRelation {
                                         return ModelFactory::createDomainCustomerRelation($relation)
-                                                           ->setCustomer($customerModel);
+                                            ->setCustomer($customerModel);
                                     },
                                     $response['relations']
                                 )
@@ -98,13 +99,13 @@ class Service extends
                     ->setValidation(
                         [
                             'relations' => [
-                                'type'   => JsonRule::LIST_TYPE,
+                                'type' => JsonRule::LIST_TYPE,
                                 'schema' => [
-                                    'uid'    => [
+                                    'uid' => [
                                         'type' => JsonRule::STRING_TYPE
                                     ],
                                     'domain' => [
-                                        'type'   => JsonRule::OBJECT_TYPE,
+                                        'type' => JsonRule::OBJECT_TYPE,
                                         'schema' => DataSchema::DOMAIN
                                     ]
                                 ]
@@ -113,13 +114,13 @@ class Service extends
                     )
             );
     }
-    
+
     /**
      * getAccessClearance
      *
      * @param Customer $customerModel
-     * @param Domain   $domainModel
-     * @param string   $jwt
+     * @param Domain $domainModel
+     * @param string $jwt
      *
      * @return Response
      *
@@ -132,7 +133,8 @@ class Service extends
         Customer $customerModel,
         Domain $domainModel,
         string $jwt
-    ) : Response {
+    ): Response
+    {
         return $this
             ->getClient()
             ->request(
@@ -141,7 +143,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function(array $response) : array {
+                        static function (array $response): array {
                             return [
                                 'clearance' => ModelFactory::createAccessClearance($response['clearance']),
                             ];
@@ -156,7 +158,7 @@ class Service extends
                     ->setValidation(
                         [
                             'clearance' => [
-                                'type'   => JsonRule::OBJECT_TYPE,
+                                'type' => JsonRule::OBJECT_TYPE,
                                 'schema' => Schema::ACCESS_CLEARANCE
                             ]
                         ]

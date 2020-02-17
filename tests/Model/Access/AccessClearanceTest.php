@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
 
@@ -24,42 +24,42 @@ class AccessClearanceTest extends
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = ModelFactory::getTestableAccessClearance();
-        
+
         $actual = Serializer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws SerializerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $model = ModelFactory::getTestableAccessClearance();
-        
+
         $actual = Serializer::getInstance()
-                            ->normalize(
-                                $model,
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'main',
-                                    ],
-                                ]
-                            );
-        
+            ->normalize(
+                $model,
+                [
+                    AbstractNormalizer::GROUPS => [
+                        'main',
+                    ],
+                ]
+            );
+
         $expected = [
             'granted' => $model->isGranted(),
-            'type'    => $model->getType(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing($expected, $actual);
     }
 }
