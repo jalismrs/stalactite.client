@@ -13,26 +13,15 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class Domain extends
     AbstractModel
 {
-    /**
-     * @var null|string
-     */
-    private $name;
-    /**
-     * @var null|string
-     */
-    private $type;
-    /**
-     * @var null|string
-     */
-    private $apiKey;
-    /**
-     * @var bool null|string
-     */
-    private $externalAuth = false;
-    /**
-     * @var null|string
-     */
-    private $generationDate;
+    private ?string $name = null;
+
+    private ?string $type = null;
+
+    private ?string $apiKey = null;
+
+    private bool $externalAuth = false;
+
+    private ?string $generationDate = null;
 
     /**
      * getName

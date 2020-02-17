@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -23,22 +24,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 final class Client
 {
-    /**
-     * @var string
-     */
-    private $host;
-    /**
-     * @var HttpClientInterface
-     */
-    private $httpClient;
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var null|string
-     */
-    private $userAgent;
+    private string $host;
+
+    private ?HttpClientInterface $httpClient = null;
+
+    private ?LoggerInterface $logger = null;
+
+    private ?string $userAgent = null;
 
     /**
      * Client constructor.
@@ -210,11 +202,6 @@ final class Client
         );
 
         if (isset($options['json'])) {
-            $options = array_replace_recursive(
-                $options,
-                ['headers' => ['Content-Type' => 'application/json']]
-            );
-
             $options['json'] = Serializer::getInstance()
                 ->normalize(
                     $options['json'],
@@ -327,7 +314,7 @@ final class Client
      * @return array
      *
      * @throws ClientException
-     * @throws Exception\ValidatorException
+     * @throws ValidatorException
      */
     private function validateResponse(
         Request $request,
@@ -336,7 +323,7 @@ final class Client
     {
         $validator = Validator::getInstance();
 
-        $isValid = $validator
+        $validator
             ->setData($content)
             ->setSchema(
                 array_merge(
@@ -351,14 +338,15 @@ final class Client
                     ],
                     $request->getValidation() ?? []
                 )
-            )
-            ->validate();
+            );
 
-        if (!$isValid) {
-            $lastError = $validator->getLastError() ?? 'unknown';
+        try {
+            $validator->validate();
+        } catch (ValidatorException $e) {
             $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $lastError,
-                ClientException::INVALID_API_RESPONSE
+                'Invalid response from Stalactite API: ' . $e->getMessage(),
+                ClientException::INVALID_API_RESPONSE,
+                $e
             );
 
             $this

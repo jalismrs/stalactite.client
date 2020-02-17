@@ -14,11 +14,9 @@ class AccessClearance
     public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
 
-    /** @var bool $granted */
-    private $granted;
+    private bool $granted;
 
-    /** @var string|null $type */
-    private $type;
+    private ?string $type;
 
     /**
      * AccessClearance constructor.
@@ -28,7 +26,7 @@ class AccessClearance
      */
     public function __construct(
         bool $granted = false,
-        string $type = null
+        ?string $type = null
     )
     {
         $this->granted = $granted;

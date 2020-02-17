@@ -33,46 +33,28 @@ use const E_USER_WARNING;
  */
 final class Request
 {
-    /**
-     * @var string
-     */
-    private $endpoint;
+    private string $endpoint;
+
     /**
      * @var mixed|null
      */
     private $json;
-    /**
-     * @var string|null
-     */
-    private $jwt;
-    /**
-     * @var string
-     */
-    private $method;
-    /**
-     * @var array|null
-     */
-    private $normalization;
-    /**
-     * @var array
-     */
-    private $options = [];
-    /**
-     * @var array|null
-     */
-    private $queryParameters;
-    /**
-     * @var Closure|null
-     */
-    private $response;
-    /**
-     * @var array
-     */
-    private $uriParameters = [];
-    /**
-     * @var array|null
-     */
-    private $validation;
+
+    private ?string $jwt = null;
+
+    private string $method;
+
+    private ?array $normalization = null;
+
+    private array $options = [];
+
+    private array $queryParameters = [];
+
+    private ?Closure $response = null;
+
+    private array $uriParameters = [];
+
+    private ?array $validation = null;
 
     /**
      * Request constructor.
@@ -281,23 +263,18 @@ final class Request
     }
 
     /**
-     * getQueryParameters
-     *
-     * @return array|null
+     * @return array
      */
-    public function getQueryParameters(): ?array
+    public function getQueryParameters(): array
     {
         return $this->queryParameters;
     }
 
     /**
-     * setQueryParameters
-     *
-     * @param array|null $queryParameters
-     *
+     * @param array $queryParameters
      * @return $this
      */
-    public function setQueryParameters(?array $queryParameters): self
+    public function setQueryParameters(array $queryParameters): self
     {
         $this->queryParameters = $queryParameters;
 

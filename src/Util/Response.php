@@ -14,18 +14,12 @@ class Response
 {
     /**
      * should contain all the response data except the success and error field
-     *
-     * @var array
      */
-    private $data;
-    /**
-     * @var null|string
-     */
-    private $error;
-    /**
-     * @var bool
-     */
-    private $success;
+    private ?array $data;
+
+    private ?string $error;
+
+    private bool $success;
 
     /**
      * Response constructor.
@@ -66,11 +60,9 @@ class Response
     }
 
     /**
-     * getData
-     *
-     * @return array
+     * @return array|null
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         return $this->data;
     }
