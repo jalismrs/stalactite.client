@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
-use hunomina\Validator\Json\Data\JsonData;
-use hunomina\Validator\Json\Exception\InvalidDataException;
-use hunomina\Validator\Json\Exception\InvalidDataTypeException;
-use hunomina\Validator\Json\Exception\InvalidSchemaException;
-use hunomina\Validator\Json\Schema\JsonSchema;
+use hunomina\DataValidator\Data\Json\JsonData;
+use hunomina\DataValidator\Exception\InvalidDataTypeException;
+use hunomina\DataValidator\Exception\Json\InvalidDataException;
+use hunomina\DataValidator\Exception\Json\InvalidSchemaException;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 
 /**

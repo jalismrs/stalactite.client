@@ -13,7 +13,7 @@
   "require": {
     "php": "^7.3",
     "ext-json": "*",
-    "hunomina/json-data-validator": "1.10.*",
+    "hunomina/data-validator": "^4.0",
     "lcobucci/jwt": "3.3.*",
     "symfony/config": ">=4.4 <6",
     "symfony/contracts": ">=1.1.7 <3",

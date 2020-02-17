@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Authentication;
 
 use BadMethodCallException;
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
