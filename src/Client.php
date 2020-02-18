@@ -393,14 +393,12 @@ class Client
         array $data
     ): Response
     {
-        $response = $request->getResponse();
+        $responseFormatter = $request->getResponseFormatter();
 
         return new Response(
             $data['success'],
             $data['error'],
-            $response === null
-                ? null
-                : $response($data)
+            $responseFormatter ? $responseFormatter($data) : null
         );
     }
 }

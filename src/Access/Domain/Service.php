@@ -53,7 +53,7 @@ class Service extends
                     '/access/domains/%s/relations'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(ResponseFactory::domainGetRelations($domainModel))
+                    ->setResponseFormatter(ResponseFactory::domainGetRelations($domainModel))
                     ->setUriParameters(
                         [
                             $domainModel->getUid(),
@@ -140,7 +140,7 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'relation' => $response['relation'] === null
@@ -211,7 +211,7 @@ class Service extends
                         ]
                     )
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'relation' => $response['relation'] === null

@@ -52,8 +52,8 @@ class Service extends
                     '/data/users/%s/leads'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
-                        static function(array $response) : array {
+                    ->setResponseFormatter(
+                        static function (array $response): array {
                             return [
                                 'leads' => array_map(
                                     static function($lead) {

@@ -293,8 +293,8 @@ class Service extends
                             'userGoogleJwt' => $userGoogleJwt,
                         ]
                     )
-                    ->setResponse(
-                        static function(array $response) : array {
+                    ->setResponseFormatter(
+                        static function (array $response): array {
                             return [
                                 'jwt' => $response['jwt'],
                             ];

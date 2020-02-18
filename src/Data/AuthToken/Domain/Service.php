@@ -54,7 +54,7 @@ class Service extends
                     '/data/auth-token/domains'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -117,7 +117,7 @@ class Service extends
                             'apiKey' => $apiKey
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -177,7 +177,7 @@ class Service extends
                             'name' => $name
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -232,7 +232,7 @@ class Service extends
                     '/data/auth-token/domains/%s'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null

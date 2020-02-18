@@ -49,7 +49,7 @@ class Service extends
                     '/access/customers/me/relations'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'relations' => array_map(
@@ -105,7 +105,7 @@ class Service extends
                     '/access/customers/me/access/%s'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'clearance' => ModelFactory::createAccessClearance($response['clearance']),

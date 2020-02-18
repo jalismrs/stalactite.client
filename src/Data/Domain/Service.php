@@ -49,7 +49,7 @@ class Service extends
                     '/data/domains'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -97,7 +97,7 @@ class Service extends
                     '/data/domains/%s'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null
@@ -153,7 +153,7 @@ class Service extends
                             'name' => $name
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -209,7 +209,7 @@ class Service extends
                             'apiKey' => $apiKey
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domains' => array_map(
@@ -273,7 +273,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'domain' => $response['domain'] === null

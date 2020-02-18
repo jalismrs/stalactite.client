@@ -50,7 +50,7 @@ class Service extends
                     '/auth/trustedApps'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'trustedApps' => array_map(
@@ -98,7 +98,7 @@ class Service extends
                     '/auth/trustedApps/%s'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
@@ -212,7 +212,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
@@ -313,7 +313,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),

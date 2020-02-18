@@ -54,7 +54,7 @@ class Service extends
                     '/data/auth-token/customers'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customers' => array_map(
@@ -117,7 +117,7 @@ class Service extends
                             'googleId' => $googleId
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
@@ -170,7 +170,7 @@ class Service extends
                     '/data/auth-token/customers/%s'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null

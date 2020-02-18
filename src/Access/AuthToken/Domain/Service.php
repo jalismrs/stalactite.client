@@ -105,7 +105,7 @@ class Service extends
                     '/access/auth-token/domains/%s/relations'
                 ))
                     ->setJwt((string)$jwt)
-                    ->setResponse(ResponseFactory::domainGetRelations($domainModel))
+                    ->setResponseFormatter(ResponseFactory::domainGetRelations($domainModel))
                     ->setUriParameters(
                         [
                             $domainModel->getUid(),

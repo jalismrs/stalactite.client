@@ -415,11 +415,11 @@ class RequestTest extends
         };
 
         $request = new Request('');
-        $request->setResponse($response);
+        $request->setResponseFormatter($response);
 
         self::assertSame(
             $response,
-            $request->getResponse()
+            $request->getResponseFormatter()
         );
     }
 
@@ -435,9 +435,9 @@ class RequestTest extends
     public function testResponseNull(): void
     {
         $request = new Request('');
-        $request->setResponse(null);
+        $request->setResponseFormatter(null);
 
-        self::assertNull($request->getResponse());
+        self::assertNull($request->getResponseFormatter());
     }
 
     /**
@@ -453,7 +453,7 @@ class RequestTest extends
     {
         $request = new Request('');
 
-        self::assertNull($request->getResponse());
+        self::assertNull($request->getResponseFormatter());
     }
     
     /**
@@ -468,7 +468,7 @@ class RequestTest extends
         $this->expectError();
 
         $request = new Request('');
-        $request->setResponse(
+        $request->setResponseFormatter(
             static function (array $response) {
                 return $response;
             }
@@ -487,7 +487,7 @@ class RequestTest extends
         $this->expectException(RequestException::class);
 
         $request = new Request('');
-        $request->setResponse(
+        $request->setResponseFormatter(
             static function (array $response): bool {
                 return $response === [];
             }
@@ -506,7 +506,7 @@ class RequestTest extends
         $this->expectException(RequestException::class);
 
         $request = new Request('');
-        $request->setResponse(
+        $request->setResponseFormatter(
             static function (array $response, array $invalid): array {
                 return array_merge($response, $invalid);
             }
@@ -525,7 +525,7 @@ class RequestTest extends
         $this->expectError();
 
         $request = new Request('');
-        $request->setResponse(
+        $request->setResponseFormatter(
             static function ($response): array {
                 return $response;
             }
@@ -544,7 +544,7 @@ class RequestTest extends
         $this->expectException(RequestException::class);
 
         $request = new Request('');
-        $request->setResponse(
+        $request->setResponseFormatter(
             static function (bool $response): array {
                 return [$response];
             }

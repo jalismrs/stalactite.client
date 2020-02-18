@@ -172,7 +172,7 @@ class ClientTest extends
             (new Request(
                 'fake endpoint'
             ))
-                ->setResponse(
+                ->setResponseFormatter(
                     static function(array $response) : array {
                         return [
                             'prout' => $response['prout'],

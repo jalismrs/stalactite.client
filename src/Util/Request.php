@@ -62,13 +62,9 @@ class Request
      * @var array
      */
     private array $queryParameters = [];
-    /**
-     * @var Closure|null
-     */
-    private ?Closure $response = null;
-    /**
-     * @var array
-     */
+
+    private ?Closure $responseFormatter = null;
+
     private array $uriParameters = [];
     /**
      * @var array|null
@@ -353,26 +349,26 @@ class Request
      *
      * @return Closure|null
      */
-    public function getResponse(): ?Closure
+    public function getResponseFormatter(): ?Closure
     {
-        return $this->response;
+        return $this->responseFormatter;
     }
 
     /**
      * setResponse
      *
-     * @param Closure|null $response
+     * @param Closure|null $responseFormatter
      *
      * @return $this
      *
      * @throws RequestException
      */
-    public function setResponse(?Closure $response): self
+    public function setResponseFormatter(?Closure $responseFormatter): self
     {
         $throwable = null;
 
         try {
-            $this->response = self::validateResponse($response);
+            $this->responseFormatter = self::validateResponse($responseFormatter);
         } catch (ErrorException $errorException) {
             $throwable = $errorException;
         } catch (InvalidArgumentException $invalidArgumentException) {

@@ -78,7 +78,7 @@ class Service extends
                     '/data/customers'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customers' => array_map(
@@ -126,7 +126,7 @@ class Service extends
                     '/data/customers/%s'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
@@ -185,7 +185,7 @@ class Service extends
                             'googleId' => $googleId
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null
@@ -254,7 +254,7 @@ class Service extends
                             ],
                         ]
                     )
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'customer' => $response['customer'] === null

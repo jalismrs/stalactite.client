@@ -48,7 +48,7 @@ class Service extends
                     '/data/users/me'
                 ))
                     ->setJwt($jwt)
-                    ->setResponse(
+                    ->setResponseFormatter(
                         static function (array $response): array {
                             return [
                                 'me' => $response['me'] === null
