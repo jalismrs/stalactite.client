@@ -24,5 +24,6 @@ jobs:
       - name: Fetch dependencies
         run: php composer.phar install && rm composer.phar
 
+      # TODO: replace run with 'vendor/bin/phpunit' as we now have a phpunit.xml file
       - name: Run tests
         run: php vendor/bin/phpunit tests/
