@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Request;
@@ -34,61 +35,61 @@ class Service extends
     private $serviceLead;
     private $serviceMe;
     private $servicePost;
-
+    
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
+    
     /**
      * leads
      *
      * @return Lead\Service
      */
-    public function leads(): Lead\Service
+    public function leads() : Lead\Service
     {
         if ($this->serviceLead === null) {
             $this->serviceLead = new Lead\Service($this->getClient());
         }
-
+        
         return $this->serviceLead;
     }
-
+    
     /**
      * me
      *
      * @return Me\Service
      */
-    public function me(): Me\Service
+    public function me() : Me\Service
     {
         if ($this->serviceMe === null) {
             $this->serviceMe = new Me\Service($this->getClient());
         }
-
+        
         return $this->serviceMe;
     }
-
+    
     /**
      * posts
      *
      * @return PostService
      */
-    public function posts(): PostService
+    public function posts() : PostService
     {
         if ($this->servicePost === null) {
             $this->servicePost = new PostService($this->getClient());
         }
-
+        
         return $this->servicePost;
     }
-
+    
     /*
      * -------------------------------------------------------------------------
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-
+    
     /**
      * getAllUsers
      *
@@ -103,8 +104,7 @@ class Service extends
      */
     public function getAllUsers(
         string $jwt
-    ): Response
-    {
+    ) : Response {
         return $this
             ->getClient()
             ->request(
@@ -113,10 +113,10 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function (array $response): array {
+                        static function(array $response) : array {
                             return [
                                 'users' => array_map(
-                                    static function ($user) {
+                                    static function($user) {
                                         return ModelFactory::createUser($user);
                                     },
                                     $response['users']
@@ -127,14 +127,14 @@ class Service extends
                     ->setValidation(
                         [
                             'users' => [
-                                'type' => JsonRule::LIST_TYPE,
+                                'type'   => JsonRule::LIST_TYPE,
                                 'schema' => Schema::USER,
                             ],
                         ]
                     )
             );
     }
-
+    
     /**
      * getUser
      *
@@ -151,8 +151,7 @@ class Service extends
     public function getUser(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         return $this
             ->getClient()
             ->request(
@@ -161,7 +160,7 @@ class Service extends
                 ))
                     ->setJwt($jwt)
                     ->setResponse(
-                        static function (array $response): array {
+                        static function(array $response) : array {
                             return [
                                 'user' => $response['user'] === null
                                     ? null
@@ -177,15 +176,15 @@ class Service extends
                     ->setValidation(
                         [
                             'user' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
                                 'schema' => Schema::USER,
                             ],
                         ]
                     )
             );
     }
-
+    
     /**
      * getByEmailAndGoogleId
      *
@@ -204,8 +203,7 @@ class Service extends
         string $email,
         string $googleId,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         return $this
             ->getClient()
             ->request(
@@ -215,12 +213,12 @@ class Service extends
                     ->setJwt($jwt)
                     ->setQueryParameters(
                         [
-                            'email' => $email,
+                            'email'    => $email,
                             'googleId' => $googleId
                         ]
                     )
                     ->setResponse(
-                        static function (array $response): array {
+                        static function(array $response) : array {
                             return [
                                 'user' => $response['user'] === null
                                     ? null
@@ -231,34 +229,54 @@ class Service extends
                     ->setValidation(
                         [
                             'user' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
                                 'schema' => Schema::USER,
                             ],
                         ]
                     )
             );
     }
-
+    
     /**
      * createUser
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function createUser(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
+        try {
+            $leads = ModelHelper::getUids(
+                $userModel->getLeads(),
+                Post::class
+            );
+            $posts = ModelHelper::getUids(
+                $userModel->getPosts(),
+                Post::class
+            );
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $this
+                ->getLogger()
+                ->error($invalidArgumentException);
+            
+            throw new ServiceException(
+                'Error while getting uids',
+                $invalidArgumentException->getCode(),
+                $invalidArgumentException
+            );
+        }
+        
         return $this
             ->getClient()
             ->request(
@@ -269,23 +287,17 @@ class Service extends
                     ->setJson(
                         array_merge(
                             Serializer::getInstance()
-                                ->normalize(
-                                    $userModel,
-                                    [
-                                        AbstractNormalizer::GROUPS => [
-                                            'create',
-                                        ],
-                                    ]
-                                ),
+                                      ->normalize(
+                                          $userModel,
+                                          [
+                                              AbstractNormalizer::GROUPS => [
+                                                  'create',
+                                              ],
+                                          ]
+                                      ),
                             [
-                                'leads' => ModelHelper::getUids(
-                                    $userModel->getLeads(),
-                                    Post::class
-                                ),
-                                'posts' => ModelHelper::getUids(
-                                    $userModel->getPosts(),
-                                    Post::class
-                                ),
+                                'leads' => $leads,
+                                'posts' => $posts,
                             ],
                         )
                     )
@@ -298,7 +310,7 @@ class Service extends
                         ]
                     )
                     ->setResponse(
-                        static function (array $response): array {
+                        static function(array $response) : array {
                             return [
                                 'user' => $response['user'] === null
                                     ? null
@@ -309,19 +321,19 @@ class Service extends
                     ->setValidation(
                         [
                             'user' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
+                                'type'   => JsonRule::OBJECT_TYPE,
+                                'null'   => true,
                                 'schema' => Schema::USER,
                             ],
                         ]
                     )
             );
     }
-
+    
     /**
      * updateUser
      *
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -334,8 +346,7 @@ class Service extends
     public function updateUser(
         User $userModel,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         return $this
             ->getClient()
             ->request(
@@ -359,7 +370,7 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * deleteUser
      *
@@ -376,8 +387,7 @@ class Service extends
     public function deleteUser(
         string $uid,
         string $jwt
-    ): Response
-    {
+    ) : Response {
         return $this
             ->getClient()
             ->request(

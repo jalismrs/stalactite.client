@@ -31,7 +31,7 @@ use const E_USER_WARNING;
  *
  * @package Jalismrs\Stalactite\Client\Util
  */
-final class Request
+class Request
 {
     /**
      * @var string

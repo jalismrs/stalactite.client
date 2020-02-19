@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Access\Relation;
 
@@ -10,9 +10,10 @@ use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
@@ -21,7 +22,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
  * @package Jalismrs\Stalactite\Client\Tests\Api\Access\Relation
  */
 class ApiDeleteRelationTest extends
-    TestCase
+    ApiAbstract
 {
     /**
      * testDeleteRelation
@@ -35,22 +36,22 @@ class ApiDeleteRelationTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testDeleteRelation(): void
+    public function testDeleteRelation() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => null
+                        'error'   => null
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
         $response = $mockService->deleteRelation(
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'
@@ -58,7 +59,7 @@ class ApiDeleteRelationTest extends
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
     }
-
+    
     /**
      * testThrowExceptionOnInvalidResponseDeleteRelation
      *
@@ -69,26 +70,47 @@ class ApiDeleteRelationTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseDeleteRelation(): void
+    public function testThrowExceptionOnInvalidResponseDeleteRelation() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
+        
+        $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
                         'success' => true,
-                        'error' => false
+                        'error'   => false
                         // wrong type
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-
+        
+        $mockService->deleteRelation(
+            ModelFactory::getTestableDomainUserRelation(),
+            'fake user jwt'
+        );
+    }
+    
+    /**
+     * testRequestMethodCalledOnce
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws RuntimeException
+     * @throws SerializerException
+     * @throws ValidatorException
+     */
+    public function testRequestMethodCalledOnce() : void
+    {
+        $mockService = new Service($this->createMockClient());
+    
         $mockService->deleteRelation(
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'

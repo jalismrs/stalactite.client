@@ -21,7 +21,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @package Jalismrs\Stalactite\Client
  */
-final class Client
+class Client
 {
     /**
      * @var string
@@ -370,9 +370,8 @@ final class Client
 
         $data = $validator->getData();
         if ($data === null) {
-            $clientException = new ClientException(
-                'Invalid response from Stalactite API: response is null',
-                ClientException::INVALID_API_RESPONSE
+            throw new ClientException(
+                'should never happen'
             );
 
             $this

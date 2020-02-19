@@ -21,7 +21,7 @@ use function array_replace_recursive;
  *
  * @package Jalismrs\Stalactite\Service\Util
  */
-final class Serializer
+class Serializer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
 

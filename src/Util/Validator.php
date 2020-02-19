@@ -15,7 +15,7 @@ use Jalismrs\Stalactite\Client\Exception\ValidatorException;
  *
  * @package Jalismrs\Stalactite\Client\Util
  */
-final class Validator
+class Validator
 {
     /**
      * @var self

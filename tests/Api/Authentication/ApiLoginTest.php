@@ -9,10 +9,11 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
@@ -21,7 +22,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
  * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication
  */
 class ApiLoginTest extends
-    TestCase
+    ApiAbstract
 {
     /**
      * testSchemaValidationOnLogin
@@ -141,6 +142,27 @@ class ApiLoginTest extends
             )
         );
 
+        $mockService->login(
+            ModelFactory::getTestableTrustedApp(),
+            'fakeUserGoogleToken'
+        );
+    }
+    
+    /**
+     * testRequestMethodCalledOnce
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws RuntimeException
+     * @throws SerializerException
+     * @throws ValidatorException
+     */
+    public function testRequestMethodCalledOnce() : void
+    {
+        $mockService = new Service($this->createMockClient());
+    
         $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'
