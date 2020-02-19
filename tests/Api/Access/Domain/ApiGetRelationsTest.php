@@ -129,6 +129,13 @@ class ApiGetRelationsTest extends
      */
     public function testThrowOnInvalidResponseGetRelations() : void
     {
+        /*
+         * TODO: check redondancy
+         * remove if exception is thrown
+         * by data begin invalid against schema
+         * as ClientTest::testRequestThrowInvalidResponse()
+         * already covers this scenario
+         */
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
         

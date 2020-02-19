@@ -110,15 +110,15 @@ class RequestTest extends
             $request->getMethod()
         );
     }
-
+    
     /**
-     * testMethodInvalid
+     * testMethodThrowInvalid
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testMethodInvalid(): void
+    public function testMethodThrowInvalid(): void
     {
         $this->expectException(RequestException::class);
 
@@ -127,15 +127,15 @@ class RequestTest extends
             'PSOT'
         );
     }
-
+    
     /**
-     * testMethodLowerCase
+     * testMethodErrorLowerCase
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testMethodLowerCase(): void
+    public function testMethodErrorLowerCase(): void
     {
         $this->expectError();
 
@@ -472,15 +472,15 @@ class RequestTest extends
 
         self::assertNull($request->getResponse());
     }
-
+    
     /**
-     * testResponseMissingReturnType
+     * testResponseErrorMissingReturnType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testResponseMissingReturnType(): void
+    public function testResponseErrorMissingReturnType(): void
     {
         $this->expectError();
 
@@ -491,15 +491,15 @@ class RequestTest extends
             }
         );
     }
-
+    
     /**
-     * testResponseInvalidReturnType
+     * testResponseThrowInvalidReturnType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testResponseInvalidReturnType(): void
+    public function testResponseThrowInvalidReturnType(): void
     {
         $this->expectException(RequestException::class);
 
@@ -510,15 +510,15 @@ class RequestTest extends
             }
         );
     }
-
+    
     /**
-     * testResponseInvalidParameterCount
+     * testResponseThrowInvalidParameterCount
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testResponseInvalidParameterCount(): void
+    public function testResponseThrowInvalidParameterCount(): void
     {
         $this->expectException(RequestException::class);
 
@@ -529,15 +529,15 @@ class RequestTest extends
             }
         );
     }
-
+    
     /**
-     * testResponseMissingParameterType
+     * testResponseErrorMissingParameterType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testResponseMissingParameterType(): void
+    public function testResponseErrorMissingParameterType(): void
     {
         $this->expectError();
 
@@ -548,15 +548,15 @@ class RequestTest extends
             }
         );
     }
-
+    
     /**
-     * testResponseInvalidParameterType
+     * testResponseThrowInvalidParameterType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testResponseInvalidParameterType(): void
+    public function testResponseThrowInvalidParameterType(): void
     {
         $this->expectException(RequestException::class);
 
@@ -607,15 +607,15 @@ class RequestTest extends
 
         self::assertEmpty($request->getUriParameters());
     }
-
+    
     /**
-     * testUriParametersInvalidType
+     * testUriParametersThrowInvalidType
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testUriParametersInvalidType(): void
+    public function testUriParametersThrowInvalidType(): void
     {
         $this->expectException(RequestException::class);
 
@@ -627,15 +627,15 @@ class RequestTest extends
             ]
         );
     }
-
+    
     /**
-     * testUriParametersTypeBool
+     * testUriParametersErrorTypeBool
      *
      * @return void
      *
      * @throws RequestException
      */
-    public function testUriParametersTypeBool(): void
+    public function testUriParametersErrorTypeBool(): void
     {
         $this->expectError();
 

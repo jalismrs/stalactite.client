@@ -50,10 +50,10 @@ class JwtValidationTest extends
      *
      * @return void
      *
-     * @throws ClientException
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws OutOfBoundsException
+     * @throws ServiceException
      */
     public function testValidToken() : void
     {

@@ -79,41 +79,6 @@ class ApiGetAllTest extends
     }
     
     /**
-     * testInvalidResponseOnGetAll
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
-     */
-    public function testInvalidResponseOnGetAll() : void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success'     => true,
-                        'error'       => null,
-                        'trustedApps' => 'wrong response type'
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
-        );
-        
-        $mockService->getAllTrustedApps(
-            'fake user jwt'
-        );
-    }
-    
-    /**
      * testRequestMethodCalledOnce
      *
      * @return void

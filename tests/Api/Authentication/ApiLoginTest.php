@@ -64,7 +64,7 @@ class ApiLoginTest extends
     }
 
     /**
-     * testExceptionThrownOnInvalidAPIHost
+     * testThrowOnInvalidAPIHost
      *
      * @return void
      *
@@ -80,6 +80,7 @@ class ApiLoginTest extends
 
         $mockClient = new Client('invalidHost');
         $mockService = new Service($mockClient);
+        
         $mockService->login(
             ModelFactory::getTestableTrustedApp(),
             'fakeUserGoogleToken'

@@ -208,7 +208,7 @@ class ClientTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testRequestNotJson() : void
+    public function testRequestThrowNotJson() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionMessage('Invalid json response from Stalactite API');
@@ -236,7 +236,7 @@ class ClientTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testRequestInvalidResponse() : void
+    public function testRequestThrowInvalidResponse() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionMessageMatches('#^Invalid response from Stalactite API: #');
