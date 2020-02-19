@@ -62,47 +62,6 @@ class ApiDeleteTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseDelete
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
-     */
-    public function testThrowExceptionOnInvalidResponseDelete() : void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success' => true,
-                        'error'   => false
-                        // invalid type
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
-        );
-        
-        $response = $mockService->deleteCustomer(
-            ModelFactory::getTestableCustomer()
-                        ->getUid(),
-            'fake user jwt'
-        );
-        
-        self::assertIsArray($response);
-    }
-    
-    /**
      * testRequestMethodCalledOnce
      *
      * @return void

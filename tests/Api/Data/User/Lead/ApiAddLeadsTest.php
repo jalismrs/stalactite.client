@@ -65,46 +65,6 @@ class ApiAddLeadsTest extends
     }
     
     /**
-     * testThrowOnInvalidResponseAddLeads
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
-     */
-    public function testThrowOnInvalidResponseAddLeads() : void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success' => true,
-                        'error'   => false
-                        // invalid type
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
-        );
-        
-        $mockService->addLeads(
-            ModelFactory::getTestableUser(),
-            [
-                ModelFactory::getTestablePost()
-            ],
-            'fake user jwt'
-        );
-    }
-    
-    /**
      * testThrowOnInvalidLeadsParameterAddLeads
      *
      * @return void
