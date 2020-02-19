@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * ApiAddLeadsTest
@@ -31,11 +32,11 @@ class ApiAddLeadsTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException
      * @throws ValidatorException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testAddLeads() : void
     {
@@ -62,6 +63,34 @@ class ApiAddLeadsTest extends
         );
         self::assertTrue($response->isSuccess());
         self::assertNull($response->getError());
+    }
+    
+    /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('User lacks a uid');
+    
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->addLeads(
+            ModelFactory::getTestableUser()->setUid(null),
+            [
+                ModelFactory::getTestablePost()
+            ],
+            'fake user jwt'
+        );
     }
     
     /**

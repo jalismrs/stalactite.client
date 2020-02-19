@@ -80,7 +80,7 @@ class ApiGetByEmailAndGoogleIdTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId
+     * testThrowOnInvalidResponseGetByEmailAndGoogleId
      *
      * @return void
      *
@@ -89,7 +89,7 @@ class ApiGetByEmailAndGoogleIdTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetByEmailAndGoogleId() : void
+    public function testThrowOnInvalidResponseGetByEmailAndGoogleId() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);

@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
@@ -40,6 +41,7 @@ class ApiAddUserRelationTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testAddUserRelation() : void
@@ -72,45 +74,60 @@ class ApiAddUserRelationTest extends
             DataTestModelFactory::getTestableUser(),
             'fake user jwt'
         );
+        
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
         static::assertInstanceOf(DomainUserRelation::class, $response->getData()['relation']);
     }
     
     /**
-     * testThrowOnInvalidResponseAddUserRelation
+     * testThrowDomainLacksUid
      *
      * @return void
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseAddUserRelation() : void
+    public function testThrowDomainLacksUid() : void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('Domain lacks a uid');
         
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success'  => true,
-                        'error'    => null,
-                        'relation' => []
-                        // wrong type
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
+
+        $mockService->addUserRelation(
+            DataTestModelFactory::getTestableDomain()->setUid(null),
+            DataTestModelFactory::getTestableUser(),
+            'fake user jwt'
         );
+    }
+    
+    /**
+     * testThrowUserLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowUserLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('User lacks a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
         
         $mockService->addUserRelation(
             DataTestModelFactory::getTestableDomain(),
-            DataTestModelFactory::getTestableUser(),
+            DataTestModelFactory::getTestableUser()->setUid(null),
             'fake user jwt'
         );
     }
@@ -124,6 +141,7 @@ class ApiAddUserRelationTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void

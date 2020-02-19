@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -121,11 +122,11 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * createPost
      *
-     * @param Post $postModel
+     * @param Post   $postModel
      * @param string $jwt
      *
      * @return Response
@@ -133,6 +134,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function createPost(
@@ -140,6 +142,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($postModel->getUid() !== null) {
+            throw new ServiceException(
+                'Post has a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(
@@ -176,11 +184,11 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * updatePost
      *
-     * @param Post $postModel
+     * @param Post   $postModel
      * @param string $jwt
      *
      * @return Response
@@ -188,6 +196,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function updatePost(
@@ -195,6 +204,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($postModel->getUid() === null) {
+            throw new ServiceException(
+                'Post lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

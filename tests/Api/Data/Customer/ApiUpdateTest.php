@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -34,6 +35,7 @@ class ApiUpdateTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testUpdate() : void
@@ -61,6 +63,31 @@ class ApiUpdateTest extends
     }
     
     /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('Customer lacks a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+    
+        $mockService->updateCustomer(
+            ModelFactory::getTestableCustomer()->setUid(null),
+            'fake user jwt'
+        );
+    }
+    
+    /**
      * testRequestMethodCalledOnce
      *
      * @return void
@@ -69,6 +96,7 @@ class ApiUpdateTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void

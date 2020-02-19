@@ -256,6 +256,12 @@ class Service extends
         User $userModel,
         string $jwt
     ) : Response {
+        if ($userModel->getUid() !== null) {
+            throw new ServiceException(
+                'User has a uid'
+            );
+        }
+        
         try {
             $leads = ModelHelper::getUids(
                 $userModel->getLeads(),
@@ -341,12 +347,19 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function updateUser(
         User $userModel,
         string $jwt
     ) : Response {
+        if ($userModel->getUid() === null) {
+            throw new ServiceException(
+                'User lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

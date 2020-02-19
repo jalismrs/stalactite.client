@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -34,6 +35,7 @@ class ApiDeleteRelationsByUserTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testDeleteRelationsByUser() : void
@@ -61,6 +63,31 @@ class ApiDeleteRelationsByUserTest extends
     }
     
     /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('User lacks a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+        
+        $mockService->deleteRelationsByUser(
+            ModelFactory::getTestableUser()->setUid(null),
+            'fake API auth token'
+        );
+    }
+    
+    /**
      * testRequestMethodCalledOnce
      *
      * @return void
@@ -69,6 +96,7 @@ class ApiDeleteRelationsByUserTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void

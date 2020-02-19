@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -39,6 +40,7 @@ class ApiCreateTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testCreate() : void
@@ -67,7 +69,7 @@ class ApiCreateTest extends
         );
         
         $response = $mockService->createDomain(
-            ModelFactory::getTestableDomain(),
+            ModelFactory::getTestableDomain()->setUid(null),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -79,35 +81,24 @@ class ApiCreateTest extends
     }
     
     /**
-     * testThrowOnInvalidResponseCreate
+     * testThrowHasUid
      *
      * @return void
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
-    public function testThrowOnInvalidResponseCreate() : void
+    public function testThrowHasUid() : void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('Domain has a uid');
+    
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success' => true,
-                        'error'   => null,
-                        'domain'  => 'invalid-domain'
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
-        );
-        
+
         $mockService->createDomain(
             ModelFactory::getTestableDomain(),
             'fake user jwt'
@@ -123,6 +114,7 @@ class ApiCreateTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void
@@ -130,7 +122,7 @@ class ApiCreateTest extends
         $mockService = new Service($this->createMockClient());
     
         $mockService->createDomain(
-            ModelFactory::getTestableDomain(),
+            ModelFactory::getTestableDomain()->setUid(null),
             'fake user jwt'
         );
     }

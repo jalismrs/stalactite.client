@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -208,18 +209,19 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * createCustomer
      *
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function createCustomer(
@@ -227,6 +229,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($customerModel->getUid() !== null) {
+            throw new ServiceException(
+                'Customer has a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(
@@ -263,18 +271,19 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * updateCustomer
      *
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function updateCustomer(
@@ -282,6 +291,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($customerModel->getUid() === null) {
+            throw new ServiceException(
+                'Customer lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

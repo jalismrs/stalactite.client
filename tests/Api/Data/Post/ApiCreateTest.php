@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
@@ -39,6 +40,7 @@ class ApiCreateTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testCreate() : void
@@ -67,7 +69,7 @@ class ApiCreateTest extends
         );
         
         $response = $mockService->createPost(
-            ModelFactory::getTestablePost(),
+            ModelFactory::getTestablePost()->setUid(null),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -79,20 +81,21 @@ class ApiCreateTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseCreate
+     * testThrowHasUid
      *
      * @return void
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseCreate() : void
+    public function testThrowHasUid() : void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-        
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('Post has a uid');
+    
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -124,6 +127,7 @@ class ApiCreateTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void
@@ -131,7 +135,7 @@ class ApiCreateTest extends
         $mockService = new Service($this->createMockClient());
     
         $mockService->createPost(
-            ModelFactory::getTestablePost(),
+            ModelFactory::getTestablePost()->setUid(null),
             'fake user jwt'
         );
     }

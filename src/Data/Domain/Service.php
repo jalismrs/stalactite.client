@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -230,7 +231,7 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * createDomain
      *
@@ -242,6 +243,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function createDomain(
@@ -249,6 +251,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($domainModel->getUid() !== null) {
+            throw new ServiceException(
+                'Domain has a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(
@@ -285,7 +293,7 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * updateDomain
      *
@@ -297,6 +305,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function updateDomain(
@@ -304,6 +313,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($domainModel->getUid() === null) {
+            throw new ServiceException(
+                'Domain lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

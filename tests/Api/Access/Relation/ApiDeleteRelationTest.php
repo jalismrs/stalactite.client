@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
@@ -34,6 +35,7 @@ class ApiDeleteRelationTest extends
      * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testDeleteRelation() : void
@@ -56,8 +58,34 @@ class ApiDeleteRelationTest extends
             ModelFactory::getTestableDomainUserRelation(),
             'fake user jwt'
         );
+        
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
+    }
+    
+    /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('DomainRelation lacks a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+    
+        $mockService->deleteRelation(
+            ModelFactory::getTestableDomainUserRelation()->setUid(null),
+            'fake user jwt'
+        );
     }
     
     /**
@@ -69,6 +97,7 @@ class ApiDeleteRelationTest extends
      * @throws RequestException
      * @throws RuntimeException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function testRequestMethodCalledOnce() : void

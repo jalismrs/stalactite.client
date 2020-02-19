@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -120,18 +121,19 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * updateTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $jwt
+     * @param string     $jwt
      *
      * @return Response
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function updateTrustedApp(
@@ -139,6 +141,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($trustedAppModel->getUid() === null) {
+            throw new ServiceException(
+                'TrustedApp lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(
@@ -162,18 +170,19 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * createTrustedApp
      *
      * @param TrustedApp $trustedAppModel
-     * @param string $jwt
+     * @param string     $jwt
      *
      * @return Response
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function createTrustedApp(
@@ -181,6 +190,12 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($trustedAppModel->getUid() !== null) {
+            throw new ServiceException(
+                'TrustedApp has a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

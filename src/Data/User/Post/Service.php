@@ -100,6 +100,12 @@ class Service extends
         array $postModels,
         string $jwt
     ) : Response {
+        if ($userModel->getUid() === null) {
+            throw new ServiceException(
+                'User lacks a uid'
+            );
+        }
+    
         try {
             $posts = ModelHelper::getUids(
                 $postModels,
@@ -158,6 +164,12 @@ class Service extends
         array $postModels,
         string $jwt
     ) : Response {
+        if ($userModel->getUid() === null) {
+            throw new ServiceException(
+                'User lacks a uid'
+            );
+        }
+    
         try {
             $posts = ModelHelper::getUids(
                 $postModels,

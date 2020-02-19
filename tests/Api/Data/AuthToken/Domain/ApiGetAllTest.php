@@ -78,7 +78,7 @@ class ApiGetAllTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseGetAll
+     * testThrowOnInvalidResponseGetAll
      *
      * @return void
      *
@@ -87,7 +87,7 @@ class ApiGetAllTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetAll() : void
+    public function testThrowOnInvalidResponseGetAll() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);

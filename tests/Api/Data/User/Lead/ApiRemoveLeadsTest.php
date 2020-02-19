@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Lead;
 
-use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
@@ -16,6 +15,7 @@ use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * ApiRemoveLeadsTest
@@ -32,11 +32,11 @@ class ApiRemoveLeadsTest extends
      *
      * @throws ClientException
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException
      * @throws ValidatorException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testRemoveLeads() : void
     {
@@ -66,6 +66,34 @@ class ApiRemoveLeadsTest extends
     }
     
     /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('User lacks a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+        
+        $mockService->removeLeads(
+            ModelFactory::getTestableUser()->setUid(null),
+            [
+                ModelFactory::getTestablePost()
+            ],
+            'fake user jwt'
+        );
+    }
+    
+    /**
      * testThrowOnInvalidPostsParameterRemoveLeads
      *
      * @return void
@@ -80,7 +108,7 @@ class ApiRemoveLeadsTest extends
     {
         $this->expectException(ServiceException::class);
         $this->expectExceptionMessage('Error while getting uids');
-    
+        
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -119,7 +147,7 @@ class ApiRemoveLeadsTest extends
     public function testRequestMethodCalledOnce() : void
     {
         $mockService = new Service($this->createMockClient());
-    
+        
         $mockService->removeLeads(
             ModelFactory::getTestableUser(),
             [

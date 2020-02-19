@@ -93,6 +93,7 @@ class ApiGetRelationsTest extends
             DataTestModelFactory::getTestableDomain(),
             'fake auth token jwt'
         );
+        
         static::assertTrue($response->isSuccess());
         static::assertNull($response->getError());
         

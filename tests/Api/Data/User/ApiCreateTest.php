@@ -18,6 +18,7 @@ use Jalismrs\Stalactite\Client\Util\Serializer;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -36,11 +37,11 @@ class ApiCreateTest extends
      * @throws ClientException
      * @throws Exception
      * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException
      * @throws ValidatorException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
     public function testCreate() : void
     {
@@ -68,7 +69,7 @@ class ApiCreateTest extends
         );
         
         $response = $mockService->createUser(
-            new User(),
+            ModelFactory::getTestableUser()->setUid(null),
             'fake user jwt'
         );
         self::assertTrue($response->isSuccess());
@@ -76,6 +77,31 @@ class ApiCreateTest extends
         self::assertInstanceOf(
             User::class,
             $response->getData()['user']
+        );
+    }
+    
+    /**
+     * testThrowHasUid
+     *
+     * @return void
+     *
+     * @throws ClientException
+     * @throws RequestException
+     * @throws SerializerException
+     * @throws ServiceException
+     * @throws ValidatorException
+     */
+    public function testThrowHasUid() : void
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('User has a uid');
+        
+        $mockClient  = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->createUser(
+            ModelFactory::getTestableUser(),
+            'fake user jwt'
         );
     }
     
@@ -96,7 +122,7 @@ class ApiCreateTest extends
         $mockService = new Service($this->createMockClient());
         
         $mockService->createUser(
-            new User(),
+            ModelFactory::getTestableUser()->setUid(null),
             'fake user jwt'
         );
     }

@@ -81,7 +81,7 @@ class ApiGetAccessClearanceTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseGetAccessClearance
+     * testThrowOnInvalidResponseGetAccessClearance
      *
      * @return void
      *
@@ -90,7 +90,7 @@ class ApiGetAccessClearanceTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetAccessClearance() : void
+    public function testThrowOnInvalidResponseGetAccessClearance() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);

@@ -84,7 +84,7 @@ class ApiGetRelationsTest extends
     }
     
     /**
-     * testThrowExceptionOnInvalidResponseGetRelations
+     * testThrowOnInvalidResponseGetRelations
      *
      * @return void
      *
@@ -93,7 +93,7 @@ class ApiGetRelationsTest extends
      * @throws SerializerException
      * @throws ValidatorException
      */
-    public function testThrowExceptionOnInvalidResponseGetRelations() : void
+    public function testThrowOnInvalidResponseGetRelations() : void
     {
         $this->expectException(ClientException::class);
         $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
