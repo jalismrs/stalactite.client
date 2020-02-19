@@ -175,6 +175,7 @@ class User extends
      */
     public function hasAdminPost(): bool
     {
+        //TODO: not tested
         /** @var Post $post */
         foreach ($this->posts as $post) {
             if ($post->hasAdminAccess()) {
@@ -204,6 +205,7 @@ class User extends
      */
     public function setPosts(array $posts): self
     {
+        //TODO: not tested
         $this->posts = [];
         foreach ($posts as $post) {
             $this->addPost($post);
@@ -245,6 +247,7 @@ class User extends
      */
     public function setLeads(array $leads): self
     {
+        //TODO: not tested
         $this->leads = [];
         foreach ($leads as $lead) {
             $this->addLead($lead);

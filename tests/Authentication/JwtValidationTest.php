@@ -52,7 +52,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testValidToken() : void
@@ -84,7 +83,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     private function checkToken(
@@ -97,7 +95,7 @@ class JwtValidationTest extends
             MockHttpClientFactory::create($publicKey)
         );
         
-        $response = $mockService->validate($token);
+        $response = $mockService->validateJwt($token);
         
         self::assertTrue($response);
     }
@@ -120,7 +118,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testInvalidPublicKeyToken() : void
@@ -152,7 +149,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testInvalidToken() : void
@@ -173,7 +169,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testWrongIssuerToken() : void
@@ -205,7 +200,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testExpiredToken() : void
@@ -237,7 +231,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testInvalidUserTypeToken() : void
@@ -269,7 +262,6 @@ class JwtValidationTest extends
      *
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
     public function testInvalidJwtStructureMissingClaimToken() : void

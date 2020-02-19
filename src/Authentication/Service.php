@@ -69,22 +69,19 @@ class Service extends
      */
     
     /**
-     * validate
-     *
-     * check if the given JWT is a valid Stalactite API JWT
+     * validateJwt
      *
      * @param string $jwt
      *
      * @return bool
      *
-     * @throws OutOfBoundsException
      * @throws ServiceException
      */
-    public function validate(
+    public function validateJwt(
         string $jwt
     ) : bool {
         try {
-            $token = $this->getTokenFromString($jwt);
+            $token = self::getTokenFromString($jwt);
         } catch (Throwable $throwable) {
             $this
                 ->getLogger()
@@ -100,8 +97,19 @@ class Service extends
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
         
-        if (!$token->hasClaim('iss') || !$token->hasClaim('aud') || !$token->hasClaim('type') ||
-            !$token->hasClaim('sub') || !$token->hasClaim('iat') || !$token->hasClaim('exp')) {
+        if (
+            !$token->hasClaim('iss')
+            ||
+            !$token->hasClaim('aud')
+            ||
+            !$token->hasClaim('type')
+            ||
+            !$token->hasClaim('sub')
+            ||
+            !$token->hasClaim('iat')
+            ||
+            !$token->hasClaim('exp')
+        ) {
             $exception = new ServiceException(
                 'Invalid JWT structure',
                 ClientException::INVALID_JWT_STRUCTURE
@@ -127,17 +135,29 @@ class Service extends
             throw $exception;
         }
         
-        if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
-            $exception = new ServiceException(
-                'Invalid JWT user type',
-                ClientException::INVALID_JWT_USER_TYPE
-            );
-            
+        try {
+            if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
+                $exception = new ServiceException(
+                    'Invalid JWT user type',
+                    ClientException::INVALID_JWT_USER_TYPE
+                );
+                
+                $this
+                    ->getLogger()
+                    ->error($exception);
+                
+                throw $exception;
+            }
+        } catch (OutOfBoundsException $outOfBoundsException) {
             $this
                 ->getLogger()
-                ->error($exception);
+                ->error($outOfBoundsException);
             
-            throw $exception;
+            throw new ServiceException(
+                'should never happen',
+                ClientException::INVALID_JWT_STRUCTURE,
+                $outOfBoundsException
+            );
         }
         
         if (!$token->validate($data)) {
@@ -194,12 +214,15 @@ class Service extends
     }
     
     /**
+     * getTokenFromString
+     *
+     * @static
+     *
      * @param string $jwt
      *
      * @return Token
-     * @throws Throwable
      */
-    protected function getTokenFromString(string $jwt) : Token
+    private static function getTokenFromString(string $jwt) : Token
     {
         return (new Parser())->parse($jwt);
     }

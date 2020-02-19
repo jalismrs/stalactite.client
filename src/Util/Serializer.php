@@ -127,6 +127,7 @@ class Serializer
      */
     public function denormalize($data, string $type, array $context = [])
     {
+        //TODO: not tested
         try {
             return $this->serializer->denormalize(
                 $data,
@@ -159,6 +160,7 @@ class Serializer
      */
     public function serialize($data, array $context = []): string
     {
+        //TODO: not tested
         try {
             return $this->serializer->serialize(
                 $data,
@@ -191,6 +193,7 @@ class Serializer
      */
     public function deserialize($data, string $type, array $context = [])
     {
+        //TODO: not tested
         try {
             return $this->serializer->deserialize(
                 $data,

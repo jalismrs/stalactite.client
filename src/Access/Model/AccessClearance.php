@@ -60,6 +60,7 @@ class AccessClearance
      */
     public function hasUserAccessGranted(): bool
     {
+        //TODO: not tested
         return $this->isGranted() && $this->type === self::USER_ACCESS;
     }
 
@@ -90,6 +91,7 @@ class AccessClearance
      */
     public function hasAdminAccessGranted(): bool
     {
+        //TODO: not tested
         return $this->isGranted() && $this->type === self::ADMIN_ACCESS;
     }
 }
