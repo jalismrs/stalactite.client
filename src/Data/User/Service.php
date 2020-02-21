@@ -256,7 +256,6 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
-     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException

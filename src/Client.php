@@ -314,12 +314,12 @@ class Client
             ]
         );
     }
-
+    
     /**
      * validateResponse
      *
      * @param Request $request
-     * @param string $content
+     * @param array   $content
      *
      * @return array
      *
@@ -352,23 +352,21 @@ class Client
 
         try {
             $validator->validate();
-        } catch (ValidatorException $e) {
-            $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $e->getMessage(),
-                ClientException::INVALID_API_RESPONSE,
-                $e
-            );
-
+        } catch (ValidatorException $validatorException) {
             $this
                 ->getLogger()
-                ->error($clientException);
-
-            throw $clientException;
+                ->error($validatorException);
+    
+            throw new ClientException(
+                'Invalid response from Stalactite API: ' . $validatorException->getMessage(),
+                ClientException::INVALID_API_RESPONSE,
+                $validatorException
+            );
         }
 
         $data = $validator->getData();
         if ($data === null) {
-            throw new ClientException(
+            $clientException = new ClientException(
                 'should never happen'
             );
 

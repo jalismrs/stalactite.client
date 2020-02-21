@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
@@ -7,6 +8,11 @@ use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Validator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * ValidatorTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Util
+ */
 class ValidatorTest extends TestCase
 {
     /**
