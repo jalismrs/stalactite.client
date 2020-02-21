@@ -14,9 +14,9 @@ class DomainUserRelation extends
     DomainRelation
 {
     /**
-     * @var null|User
+     * @var User|null
      */
-    private $user;
+    private ?User $user = null;
 
     /**
      * getUser

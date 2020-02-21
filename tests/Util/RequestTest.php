@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -286,23 +286,6 @@ class RequestTest extends
     }
 
     /**
-     * testQueryParametersNull
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws RequestException
-     */
-    public function testQueryParametersNull(): void
-    {
-        $request = new Request('');
-        $request->setQueryParameters(null);
-
-        self::assertNull($request->getQueryParameters());
-    }
-
-    /**
      * testQueryParametersDefault
      *
      * @return void
@@ -315,7 +298,7 @@ class RequestTest extends
     {
         $request = new Request('');
 
-        self::assertNull($request->getQueryParameters());
+        self::assertEmpty($request->getQueryParameters());
     }
 
     /**

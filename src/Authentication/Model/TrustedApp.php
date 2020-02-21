@@ -14,21 +14,21 @@ class TrustedApp extends
     AbstractModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $name;
+    private ?string $name = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $googleOAuthClientId;
+    private ?string $googleOAuthClientId = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $authToken;
+    private ?string $authToken = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $resetToken;
+    private ?string $resetToken = null;
 
     /**
      * getName

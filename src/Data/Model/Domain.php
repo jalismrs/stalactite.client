@@ -14,25 +14,25 @@ class Domain extends
     AbstractModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $name;
+    private ?string $name = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $type;
+    private ?string $type = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $apiKey;
+    private ?string $apiKey = null;
     /**
-     * @var bool null|string
+     * @var bool
      */
-    private $externalAuth = false;
+    private bool $externalAuth = false;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $generationDate;
+    private ?string $generationDate = null;
 
     /**
      * getName

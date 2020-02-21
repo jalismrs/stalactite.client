@@ -30,14 +30,16 @@ class Serializer
             'common',
         ],
     ];
+    
     /**
-     * @var self
+     * @static
+     * @var Serializer|null
      */
-    private static $instance;
+    private static ?self $instance = null;
     /**
      * @var SerializerObject
      */
-    private $serializer;
+    private SerializerObject $serializer;
 
     /**
      * Serializer constructor.

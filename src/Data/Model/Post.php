@@ -14,21 +14,21 @@ class Post extends
     AbstractModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $name;
+    private ?string $name = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $shortName;
-    /**
-     * @var bool
-     */
-    private $allowAccess = false;
+    private ?string $shortName = null;
     /**
      * @var bool
      */
-    private $adminAccess = false;
+    private bool $allowAccess = false;
+    /**
+     * @var bool
+     */
+    private bool $adminAccess = false;
 
     /**
      * getName

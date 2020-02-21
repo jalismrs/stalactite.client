@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access;
 
 use Closure;
-use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
@@ -15,8 +14,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
  *
  * @package Jalismrs\Stalactite\Client\Access
  */
-class ResponseFactory extends
-    AbstractService
+abstract class ResponseFactory
 {
     /**
      * domainGetRelations

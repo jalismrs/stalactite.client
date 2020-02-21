@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Authentication;
 
 use BadMethodCallException;
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
@@ -34,14 +34,17 @@ class Service extends
     AbstractService
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
-    
+
     private const AUTHORIZED_JWT_TYPES = [
         'user',
         'customer'
     ];
     
-    private $serviceTrustedApp;
-    
+    /**
+     * @var TrustedAppService|null
+     */
+    private ?TrustedAppService $serviceTrustedApp = null;
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------

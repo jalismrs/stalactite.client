@@ -14,9 +14,9 @@ class DomainCustomerRelation extends
     DomainRelation
 {
     /**
-     * @var null|Customer
+     * @var Customer|null
      */
-    private $customer;
+    private ?Customer $customer = null;
 
     /**
      * getCustomer

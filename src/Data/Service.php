@@ -13,11 +13,26 @@ use Jalismrs\Stalactite\Client\AbstractService;
 class Service extends
     AbstractService
 {
-    private $serviceAuthToken;
-    private $serviceCustomer;
-    private $serviceDomain;
-    private $servicePost;
-    private $serviceUser;
+    /**
+     * @var AuthToken\Service|null
+     */
+    private ?AuthToken\Service $serviceAuthToken = null;
+    /**
+     * @var Customer\Service|null
+     */
+    private ?Customer\Service $serviceCustomer = null;
+    /**
+     * @var Domain\Service|null
+     */
+    private ?Domain\Service $serviceDomain = null;
+    /**
+     * @var Post\Service|null
+     */
+    private ?Post\Service $servicePost = null;
+    /**
+     * @var User\Service|null
+     */
+    private ?User\Service $serviceUser = null;
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------

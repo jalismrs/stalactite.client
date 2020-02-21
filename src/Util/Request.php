@@ -36,7 +36,8 @@ class Request
     /**
      * @var string
      */
-    private $endpoint;
+    private string $endpoint;
+
     /**
      * @var mixed|null
      */
@@ -44,35 +45,35 @@ class Request
     /**
      * @var string|null
      */
-    private $jwt;
+    private ?string $jwt = null;
     /**
      * @var string
      */
-    private $method;
+    private string $method;
     /**
      * @var array|null
      */
-    private $normalization;
+    private ?array $normalization = null;
     /**
      * @var array
      */
-    private $options = [];
+    private array $options = [];
     /**
-     * @var array|null
+     * @var array
      */
-    private $queryParameters;
+    private array $queryParameters = [];
     /**
      * @var Closure|null
      */
-    private $response;
+    private ?Closure $response = null;
     /**
      * @var array
      */
-    private $uriParameters = [];
+    private array $uriParameters = [];
     /**
      * @var array|null
      */
-    private $validation;
+    private ?array $validation = null;
 
     /**
      * Request constructor.
@@ -281,23 +282,18 @@ class Request
     }
 
     /**
-     * getQueryParameters
-     *
-     * @return array|null
+     * @return array
      */
-    public function getQueryParameters(): ?array
+    public function getQueryParameters(): array
     {
         return $this->queryParameters;
     }
 
     /**
-     * setQueryParameters
-     *
-     * @param array|null $queryParameters
-     *
+     * @param array $queryParameters
      * @return $this
      */
-    public function setQueryParameters(?array $queryParameters): self
+    public function setQueryParameters(array $queryParameters): self
     {
         $this->queryParameters = $queryParameters;
 

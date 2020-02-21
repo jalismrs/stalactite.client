@@ -14,21 +14,21 @@ class Customer extends
     AbstractModel
 {
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $googleId;
+    private ?string $googleId = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $email;
+    private ?string $email = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $firstName;
+    private ?string $firstName = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $lastName;
+    private ?string $lastName = null;
 
     /**
      * getGoogleId

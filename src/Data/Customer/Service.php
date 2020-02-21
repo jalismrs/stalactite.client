@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer;
 
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -26,7 +26,10 @@ use function array_map;
 class Service extends
     AbstractService
 {
-    private $serviceMe;
+    /**
+     * @var Me\Service|null
+     */
+    private ?Me\Service $serviceMe = null;
 
     /*
      * -------------------------------------------------------------------------

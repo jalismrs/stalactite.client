@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -26,19 +27,20 @@ class Client
     /**
      * @var string
      */
-    private $host;
+    private string $host;
+    
     /**
-     * @var HttpClientInterface
+     * @var HttpClientInterface|null
      */
-    private $httpClient;
+    private ?HttpClientInterface $httpClient = null;
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
-    private $logger;
+    private ?LoggerInterface $logger = null;
     /**
-     * @var null|string
+     * @var string|null
      */
-    private $userAgent;
+    private ?string $userAgent = null;
 
     /**
      * Client constructor.
@@ -113,18 +115,18 @@ class Client
             $data
         );
     }
-
+    
     /**
      * getResponse
      *
      * @param Request $request
      *
-     * @return string
+     * @return array
      *
      * @throws ClientException
      * @throws Exception\SerializerException
      */
-    private function getResponse(Request $request): string
+    private function getResponse(Request $request): array
     {
         $method = $request->getMethod();
         $uri = $request->getUri();
@@ -162,7 +164,7 @@ class Client
         }
 
         try {
-            $content = $response->getContent(false);
+            $content = $response->toArray(false);
         } catch (ExceptionInterface $exception) {
             $this
                 ->getLogger()
@@ -210,11 +212,6 @@ class Client
         );
 
         if (isset($options['json'])) {
-            $options = array_replace_recursive(
-                $options,
-                ['headers' => ['Content-Type' => 'application/json']]
-            );
-
             $options['json'] = Serializer::getInstance()
                 ->normalize(
                     $options['json'],
@@ -327,16 +324,16 @@ class Client
      * @return array
      *
      * @throws ClientException
-     * @throws Exception\ValidatorException
+     * @throws ValidatorException
      */
     private function validateResponse(
         Request $request,
-        string $content
+        array $content
     ): array
     {
         $validator = Validator::getInstance();
 
-        $isValid = $validator
+        $validator
             ->setData($content)
             ->setSchema(
                 array_merge(
@@ -351,14 +348,15 @@ class Client
                     ],
                     $request->getValidation() ?? []
                 )
-            )
-            ->validate();
+            );
 
-        if (!$isValid) {
-            $lastError = $validator->getLastError() ?? 'unknown';
+        try {
+            $validator->validate();
+        } catch (ValidatorException $e) {
             $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $lastError,
-                ClientException::INVALID_API_RESPONSE
+                'Invalid response from Stalactite API: ' . $e->getMessage(),
+                ClientException::INVALID_API_RESPONSE,
+                $e
             );
 
             $this

@@ -14,4 +14,8 @@ class ValidatorException extends
     RuntimeException implements
     ExceptionInterface
 {
+    public const INVALID_SCHEMA = 1;
+    public const INVALID_DATA = 2;
+    public const INVALID_DATA_TYPE = 3;
+    public const INVALID_DATA_SET = 4;
 }

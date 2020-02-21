@@ -88,68 +88,6 @@ class ApiLoginTest extends
     }
 
     /**
-     * testExceptionThrownOnInvalidAPIResponse
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
-     */
-    public function testExceptionThrownOnInvalidAPIResponse(): void
-    {
-        $this->expectException(ValidatorException::class);
-
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create('invalid API response')
-        );
-
-        $mockService->login(
-            ModelFactory::getTestableTrustedApp(),
-            'fakeUserGoogleToken'
-        );
-    }
-
-    /**
-     * testExceptionThrownOnInvalidAPIResponseContent
-     *
-     * @return void
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
-     */
-    public function testExceptionThrownOnInvalidAPIResponseContent(): void
-    {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_API_RESPONSE);
-
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            MockHttpClientFactory::create(
-                json_encode(
-                    [
-                        'success' => false,
-                        'error' => 'An error occurred',
-                        'invalidField' => true
-                    ],
-                    JSON_THROW_ON_ERROR
-                )
-            )
-        );
-
-        $mockService->login(
-            ModelFactory::getTestableTrustedApp(),
-            'fakeUserGoogleToken'
-        );
-    }
-    
-    /**
      * testRequestMethodCalledOnce
      *
      * @return void

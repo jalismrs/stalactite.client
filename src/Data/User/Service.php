@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\User;
 
-use hunomina\Validator\Json\Rule\JsonRule;
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -32,10 +32,19 @@ use function array_merge;
 class Service extends
     AbstractService
 {
-    private $serviceLead;
-    private $serviceMe;
-    private $servicePost;
-    
+    /**
+     * @var Lead\Service|null
+     */
+    private ?Lead\Service $serviceLead = null;
+    /**
+     * @var Me\Service|null
+     */
+    private ?Me\Service $serviceMe = null;
+    /**
+     * @var PostService|null
+     */
+    private ?PostService $servicePost = null;
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -247,6 +256,7 @@ class Service extends
      * @return Response
      *
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException
