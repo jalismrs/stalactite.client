@@ -6,12 +6,11 @@ on:
 
 jobs:
   runUnitTests:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macos-latest]
         php-versions: ['7.4']
-    name: PHP ${{ matrix.php-versions }} on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php-versions }} tests
 
     steps:
       - name: Checkout
