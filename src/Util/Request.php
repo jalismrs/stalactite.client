@@ -31,29 +31,48 @@ use const E_USER_WARNING;
  *
  * @package Jalismrs\Stalactite\Client\Util
  */
-final class Request
+class Request
 {
+    /**
+     * @var string
+     */
     private string $endpoint;
 
     /**
      * @var mixed|null
      */
     private $json;
-
+    /**
+     * @var string|null
+     */
     private ?string $jwt = null;
-
+    /**
+     * @var string
+     */
     private string $method;
-
+    /**
+     * @var array|null
+     */
     private ?array $normalization = null;
-
+    /**
+     * @var array
+     */
     private array $options = [];
-
+    /**
+     * @var array
+     */
     private array $queryParameters = [];
-
+    /**
+     * @var Closure|null
+     */
     private ?Closure $response = null;
-
+    /**
+     * @var array
+     */
     private array $uriParameters = [];
-
+    /**
+     * @var array|null
+     */
     private ?array $validation = null;
 
     /**

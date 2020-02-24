@@ -27,6 +27,9 @@ use function array_map;
 class Service extends
     AbstractService
 {
+    /**
+     * @var Me\Service|null
+     */
     private ?Me\Service $serviceMe = null;
 
     /*

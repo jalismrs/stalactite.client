@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -93,12 +94,12 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * addUserRelation
      *
      * @param Domain $domainModel
-     * @param User $userModel
+     * @param User   $userModel
      * @param string $jwt
      *
      * @return Response
@@ -106,6 +107,7 @@ class Service extends
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function addUserRelation(
@@ -114,6 +116,17 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($domainModel->getUid() === null) {
+            throw new ServiceException(
+                'Domain lacks a uid'
+            );
+        }
+        if ($userModel->getUid() === null) {
+            throw new ServiceException(
+                'User lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(
@@ -152,19 +165,20 @@ class Service extends
                     )
             );
     }
-
+    
     /**
      * addCustomerRelation
      *
-     * @param Domain $domainModel
+     * @param Domain   $domainModel
      * @param Customer $customerModel
-     * @param string $jwt
+     * @param string   $jwt
      *
      * @return Response
      *
      * @throws ClientException
      * @throws RequestException
      * @throws SerializerException
+     * @throws ServiceException
      * @throws ValidatorException
      */
     public function addCustomerRelation(
@@ -173,6 +187,17 @@ class Service extends
         string $jwt
     ): Response
     {
+        if ($domainModel->getUid() === null) {
+            throw new ServiceException(
+                'Domain lacks a uid'
+            );
+        }
+        if ($customerModel->getUid() === null) {
+            throw new ServiceException(
+                'Customer lacks a uid'
+            );
+        }
+    
         return $this
             ->getClient()
             ->request(

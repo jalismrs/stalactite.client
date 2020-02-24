@@ -13,18 +13,33 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class User extends
     AbstractModel
 {
+    /**
+     * @var string|null
+     */
     private ?string $email = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $googleId = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $lastName = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $firstName = null;
-
+    /**
+     * @var bool
+     */
     private bool $admin = false;
-
+    /**
+     * @var array
+     */
     private array $posts = [];
-
+    /**
+     * @var array
+     */
     private array $leads = [];
 
     /**
@@ -154,6 +169,7 @@ class User extends
      */
     public function hasAdminPost(): bool
     {
+        //TODO: not tested
         /** @var Post $post */
         foreach ($this->posts as $post) {
             if ($post->hasAdminAccess()) {
@@ -183,6 +199,7 @@ class User extends
      */
     public function setPosts(array $posts): self
     {
+        //TODO: not tested
         $this->posts = [];
         foreach ($posts as $post) {
             $this->addPost($post);
@@ -224,6 +241,7 @@ class User extends
      */
     public function setLeads(array $leads): self
     {
+        //TODO: not tested
         $this->leads = [];
         foreach ($leads as $lead) {
             $this->addLead($lead);

@@ -13,12 +13,21 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class Post extends
     AbstractModel
 {
+    /**
+     * @var string|null
+     */
     private ?string $name = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $shortName = null;
-
+    /**
+     * @var bool
+     */
     private bool $allowAccess = false;
-
+    /**
+     * @var bool
+     */
     private bool $adminAccess = false;
 
     /**

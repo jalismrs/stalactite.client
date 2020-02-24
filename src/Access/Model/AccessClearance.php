@@ -13,10 +13,16 @@ class AccessClearance
     public const NO_ACCESS = null;
     public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
-
+    
+    /**
+     * @var bool
+     */
     private bool $granted;
-
-    private ?string $type;
+    
+    /**
+     * @var string|null
+     */
+    private ?string $type = null;
 
     /**
      * AccessClearance constructor.
@@ -58,6 +64,7 @@ class AccessClearance
      */
     public function hasUserAccessGranted(): bool
     {
+        //TODO: not tested
         return $this->isGranted() && $this->type === self::USER_ACCESS;
     }
 
@@ -88,6 +95,7 @@ class AccessClearance
      */
     public function hasAdminAccessGranted(): bool
     {
+        //TODO: not tested
         return $this->isGranted() && $this->type === self::ADMIN_ACCESS;
     }
 }

@@ -13,12 +13,16 @@ namespace Jalismrs\Stalactite\Client\Util;
 class Response
 {
     /**
-     * should contain all the response data except the success and error field
+     * @var array|null
      */
-    private ?array $data;
-
-    private ?string $error;
-
+    private ?array $data = null;
+    /**
+     * @var string|null
+     */
+    private ?string $error = null;
+    /**
+     * @var bool
+     */
     private bool $success;
 
     /**

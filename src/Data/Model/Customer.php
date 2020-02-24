@@ -13,13 +13,21 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class Customer extends
     AbstractModel
 {
-
+    /**
+     * @var string|null
+     */
     private ?string $googleId = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $email = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $firstName = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $lastName = null;
 
     /**

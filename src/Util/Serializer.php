@@ -21,7 +21,7 @@ use function array_replace_recursive;
  *
  * @package Jalismrs\Stalactite\Service\Util
  */
-final class Serializer
+class Serializer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
 
@@ -30,9 +30,15 @@ final class Serializer
             'common',
         ],
     ];
-
+    
+    /**
+     * @static
+     * @var Serializer|null
+     */
     private static ?self $instance = null;
-
+    /**
+     * @var SerializerObject
+     */
     private SerializerObject $serializer;
 
     /**
@@ -123,6 +129,7 @@ final class Serializer
      */
     public function denormalize($data, string $type, array $context = [])
     {
+        //TODO: not tested
         try {
             return $this->serializer->denormalize(
                 $data,
@@ -155,6 +162,7 @@ final class Serializer
      */
     public function serialize($data, array $context = []): string
     {
+        //TODO: not tested
         try {
             return $this->serializer->serialize(
                 $data,
@@ -187,6 +195,7 @@ final class Serializer
      */
     public function deserialize($data, string $type, array $context = [])
     {
+        //TODO: not tested
         try {
             return $this->serializer->deserialize(
                 $data,

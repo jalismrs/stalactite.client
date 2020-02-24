@@ -13,6 +13,9 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 class DomainCustomerRelation extends
     DomainRelation
 {
+    /**
+     * @var Customer|null
+     */
     private ?Customer $customer = null;
 
     /**

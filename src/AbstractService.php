@@ -12,6 +12,9 @@ use Psr\Log\LoggerInterface;
  */
 abstract class AbstractService
 {
+    /**
+     * @var Client
+     */
     private Client $client;
 
     /**

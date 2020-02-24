@@ -15,7 +15,7 @@ use function is_object;
  *
  * @package Jalismrs\Stalactite\Service\Util
  */
-final class ModelHelper
+class ModelHelper
 {
     /**
      * getUids

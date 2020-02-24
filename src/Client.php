@@ -22,14 +22,24 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  *
  * @package Jalismrs\Stalactite\Client
  */
-final class Client
+class Client
 {
+    /**
+     * @var string
+     */
     private string $host;
-
+    
+    /**
+     * @var HttpClientInterface|null
+     */
     private ?HttpClientInterface $httpClient = null;
-
+    /**
+     * @var LoggerInterface|null
+     */
     private ?LoggerInterface $logger = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $userAgent = null;
 
     /**
@@ -105,18 +115,18 @@ final class Client
             $data
         );
     }
-
+    
     /**
      * getResponse
      *
      * @param Request $request
      *
-     * @return string
+     * @return array
      *
      * @throws ClientException
      * @throws Exception\SerializerException
      */
-    private function getResponse(Request $request): string
+    private function getResponse(Request $request): array
     {
         $method = $request->getMethod();
         $uri = $request->getUri();
@@ -154,7 +164,7 @@ final class Client
         }
 
         try {
-            $content = $response->getContent(false);
+            $content = $response->toArray(false);
         } catch (ExceptionInterface $exception) {
             $this
                 ->getLogger()
@@ -304,12 +314,12 @@ final class Client
             ]
         );
     }
-
+    
     /**
      * validateResponse
      *
      * @param Request $request
-     * @param string $content
+     * @param array   $content
      *
      * @return array
      *
@@ -318,7 +328,7 @@ final class Client
      */
     private function validateResponse(
         Request $request,
-        string $content
+        array $content
     ): array
     {
         $validator = Validator::getInstance();
@@ -342,25 +352,22 @@ final class Client
 
         try {
             $validator->validate();
-        } catch (ValidatorException $e) {
-            $clientException = new ClientException(
-                'Invalid response from Stalactite API: ' . $e->getMessage(),
-                ClientException::INVALID_API_RESPONSE,
-                $e
-            );
-
+        } catch (ValidatorException $validatorException) {
             $this
                 ->getLogger()
-                ->error($clientException);
-
-            throw $clientException;
+                ->error($validatorException);
+    
+            throw new ClientException(
+                'Invalid response from Stalactite API: ' . $validatorException->getMessage(),
+                ClientException::INVALID_API_RESPONSE,
+                $validatorException
+            );
         }
 
         $data = $validator->getData();
         if ($data === null) {
             $clientException = new ClientException(
-                'Invalid response from Stalactite API: response is null',
-                ClientException::INVALID_API_RESPONSE
+                'should never happen'
             );
 
             $this

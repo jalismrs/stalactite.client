@@ -1,7 +1,7 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests;
+namespace Jalismrs\Stalactite\Client\Tests\Service;
 
 use Jalismrs\Stalactite\Client\AbstractService;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -9,12 +9,12 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
- * ServiceTestTrait
+ * ServiceAbstract
  *
- * @package Jalismrs\Stalactite\Client\Tests
- * @mixin TestCase
+ * @package Jalismrs\Stalactite\Client\Tests\Service
  */
-trait ServiceTestTrait
+abstract class ServiceAbstract extends
+    TestCase
 {
     /**
      * checkServices
@@ -30,17 +30,16 @@ trait ServiceTestTrait
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      */
-    private static function checkServices(
+    final protected static function checkServices(
         AbstractService $mockService,
         AbstractService $mockService1,
         AbstractService $mockService2
-    ): void
-    {
+    ) : void {
         self::assertSame(
             $mockService->getClient(),
             $mockService1->getClient()
         );
-
+        
         self::assertSame(
             $mockService1,
             $mockService2

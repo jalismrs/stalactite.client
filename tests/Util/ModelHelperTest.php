@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
@@ -23,13 +23,13 @@ class ModelHelperTest extends
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testGetUids(): void
+    public function testGetUids() : void
     {
-        $domain = ModelFactory::getTestableDomain()
-            ->setUid('azerty');
+        $domain  = ModelFactory::getTestableDomain()
+                               ->setUid('azerty');
         $domain2 = ModelFactory::getTestableDomain()
-            ->setUid('uiop');
-
+                               ->setUid('uiop');
+        
         static::assertEquals(
             [
                 $domain->getUid(),
@@ -43,22 +43,33 @@ class ModelHelperTest extends
             )
         );
     }
-
+    
     /**
      * @throws InvalidArgumentException
      */
-    public function testThrowOnGetUidsWithNonModelList(): void
+    public function testThrowOnGetUidsWithNonModelList() : void
     {
         $this->expectException(InvalidArgumentException::class);
-        ModelHelper::getUids(['not a model']);
+        
+        ModelHelper::getUids(
+            [
+                'not a model',
+            ]
+        );
     }
-
+    
     /**
      * @throws InvalidArgumentException
      */
-    public function testThrowOnGetUidsWithInvalidModelTypeList(): void
+    public function testThrowOnGetUidsWithInvalidModelTypeList() : void
     {
         $this->expectException(InvalidArgumentException::class);
-        ModelHelper::getUids([ModelFactory::getTestableDomain()], User::class);
+        
+        ModelHelper::getUids(
+            [
+                ModelFactory::getTestableDomain(),
+            ],
+            User::class
+        );
     }
 }

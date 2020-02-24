@@ -6,23 +6,32 @@ on:
 
 jobs:
   runUnitTests:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.4']
+    name: PHP ${{ matrix.php-versions }} tests
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v1
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
           extensions: mbstring
+          php-version: ${{ matrix.php-versions }}
+        env:
+          update: true
+          
+      - name: Setup Problem Matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - name: Install composer
-        run: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://composer.github.io/installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && php composer-setup.php && php -r "unlink('composer-setup.php');"
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Fetch dependencies
-        run: php composer.phar install && rm composer.phar
+        run: composer install
 
       - name: Run tests
-        run: php vendor/bin/phpunit tests/
+        run: vendor/bin/phpunit

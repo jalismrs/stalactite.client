@@ -13,12 +13,21 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class TrustedApp extends
     AbstractModel
 {
+    /**
+     * @var string|null
+     */
     private ?string $name = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $googleOAuthClientId = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $authToken = null;
-
+    /**
+     * @var string|null
+     */
     private ?string $resetToken = null;
 
     /**
