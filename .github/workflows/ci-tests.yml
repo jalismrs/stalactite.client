@@ -22,7 +22,6 @@ jobs:
         with:
           extensions: mbstring
           php-version: ${{ matrix.php-versions }}
-          tools: phpunit
         env:
           update: true
           
@@ -36,4 +35,4 @@ jobs:
         run: composer install
 
       - name: Run tests
-        run: phpunit
+        run: vendor/bin/phpunit
