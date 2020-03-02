@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
+use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\MockObject\RuntimeException;
@@ -23,7 +23,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
  * @package Jalismrs\Stalactite\Client\Tests\Api\Access\Relation
  */
 class ApiDeleteRelationTest extends
-    ApiAbstract
+    EndpointTest
 {
     /**
      * testDeleteRelation

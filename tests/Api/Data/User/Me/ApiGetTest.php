@@ -10,7 +10,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
+use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * @package Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me
  */
 class ApiGetTest extends
-    ApiAbstract
+    EndpointTest
 {
     /**
      * testGet

@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Api
  */
-abstract class ApiAbstract extends
+abstract class EndpointTest extends
     TestCase
 {
     /**

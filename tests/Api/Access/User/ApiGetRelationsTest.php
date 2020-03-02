@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\ValidatorException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Tests\Api\ApiAbstract;
+use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * @package Jalismrs\Stalactite\Client\Tests\Api\Access\User
  */
 class ApiGetRelationsTest extends
-    ApiAbstract
+    EndpointTest
 {
     /**
      * testGetRelations
