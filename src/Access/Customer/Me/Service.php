@@ -35,8 +35,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getRelations(
         string $jwt
@@ -90,8 +88,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAccessClearance(
         Domain $domainModel,

@@ -33,8 +33,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAllCustomers(
         string $apiAuthToken
@@ -88,8 +86,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -148,8 +144,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getCustomer(
         string $uid,

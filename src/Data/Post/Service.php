@@ -35,8 +35,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAllPosts(
         string $jwt
@@ -82,8 +80,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getPost(
         string $uid,
@@ -133,9 +129,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function createPost(
         Post $postModel,
@@ -195,9 +189,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function updatePost(
         Post $postModel,
@@ -244,8 +236,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function deletePost(
         string $uid,
@@ -278,8 +268,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getUsers(
         string $uid,

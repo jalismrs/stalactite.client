@@ -31,8 +31,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getMe(
         string $jwt

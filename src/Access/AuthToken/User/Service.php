@@ -32,9 +32,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function deleteRelationsByUser(
         User $userModel,

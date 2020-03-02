@@ -23,16 +23,7 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 class ApiLoginTest extends EndpointTest
 {
     /**
-     * testSchemaValidationOnLogin
-     *
-     * @return void
-     *
      * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function testSchemaValidationOnLogin(): void
     {

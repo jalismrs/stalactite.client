@@ -38,8 +38,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAllLeads(
         User $userModel,
@@ -91,9 +89,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function addLeads(
         User $userModel,
@@ -155,9 +151,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function removeLeads(
         User $userModel,

@@ -35,9 +35,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function deleteRelationsByDomain(
         Domain $domainModel,
@@ -83,8 +81,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getRelations(
         Domain $domainModel,

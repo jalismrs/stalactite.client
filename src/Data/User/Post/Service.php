@@ -38,8 +38,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAllPosts(
         User $userModel,
@@ -91,9 +89,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function addPosts(
         User $userModel,
@@ -155,9 +151,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function removePosts(
         User $userModel,

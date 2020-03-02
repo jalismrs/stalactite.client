@@ -108,8 +108,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getAllUsers(
         string $jwt
@@ -154,8 +152,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getUser(
         string $uid,
@@ -205,8 +201,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function getByEmailAndGoogleId(
         string $email,
@@ -259,7 +253,6 @@ class Service extends
      * @throws RequestException
      * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function createUser(
         User $userModel,
@@ -355,9 +348,7 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
      * @throws ServiceException
-     * @throws ValidatorException
      */
     public function updateUser(
         User $userModel,
@@ -403,8 +394,6 @@ class Service extends
      *
      * @throws ClientException
      * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
     public function deleteUser(
         string $uid,
