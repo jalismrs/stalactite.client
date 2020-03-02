@@ -7,7 +7,7 @@ PHP client for the Stalactite API
 ### Library
 
 ```bash
-git clone https://github.com/jalismrs/stalactite-api.client.git
+git clone https://github.com/jalismrs/stalactite.client
 ```
 
 ### Composer
