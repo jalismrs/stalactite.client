@@ -20,37 +20,13 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication
  */
-class JwtValidationTest extends
-    TestCase
+class JwtValidationTest extends TestCase
 {
     private const TEST_RSA_PRIVATE_KEY = __DIR__ . '/keys/private.pem';
     private const TEST_RSA_PUBLIC_KEY  = __DIR__ . '/keys/public.pem';
-    
+
     /**
-     * testTransportExceptionThrownOnRSAPublicKeyFetching
-     *
-     * @return void
-     *
-     * @throws ServiceException
-     */
-    public function testTransportExceptionThrownOnRSAPublicKeyFetching() : void
-    {
-        $this->expectException(ServiceException::class);
-        $this->expectExceptionCode(ClientException::CLIENT_TRANSPORT);
-        
-        $mockClient  = new Client('invalidHost');
-        $mockService = new Service($mockClient);
-        
-        $mockService->getRSAPublicKey();
-    }
-    
-    /**
-     * testValidToken
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
+     * @throws ClientException
      * @throws ServiceException
      */
     public function testValidToken() : void
@@ -71,23 +47,14 @@ class JwtValidationTest extends
             self::getTestPublicKey()
         );
     }
-    
+
     /**
-     * checkToken
-     *
      * @param string $token
      * @param string $publicKey
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
+     * @throws ClientException
      * @throws ServiceException
      */
-    private function checkToken(
-        string $token,
-        string $publicKey
-    ) : void {
+    private function checkToken(string $token, string $publicKey) : void {
         $mockClient  = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
