@@ -13,20 +13,11 @@ use Symfony\Component\HttpClient\Response\MockResponse;
  */
 class MockHttpClientFactory
 {
-    /**
-     * create
-     *
-     * @static
-     *
-     * @param string $body
-     *
-     * @return MockHttpClient
-     */
-    public static function create(string $body): MockHttpClient
+    public static function create(string $responseBody, array $infos = []): MockHttpClient
     {
         return new MockHttpClient(
             [
-                new MockResponse($body),
+                new MockResponse($responseBody, $infos)
             ],
             'http://fakeHost'
         );
