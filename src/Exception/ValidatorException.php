@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Exception;
 
-use RuntimeException;
+use Exception;
 
 /**
  * ValidatorException
  *
  * @package Jalismrs\Stalactite\Client\Exception
  */
-class ValidatorException extends
-    RuntimeException implements
-    ExceptionInterface
+class ValidatorException extends Exception
 {
     public const INVALID_SCHEMA = 1;
     public const INVALID_DATA = 2;

@@ -3,30 +3,42 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Exception;
 
-use RuntimeException;
+use Exception;
 
 /**
  * ClientException
  *
  * @package Jalismrs\Stalactite\Client\Exception
  */
-class ClientException extends
-    RuntimeException implements
-    ExceptionInterface
+class ClientException extends Exception
 {
-    ////////////////////
-    /** Common Error **/
-    ////////////////////
+    ///////////////////////
+    /** Transport Error **/
+    ///////////////////////
 
     /**
-     * The client received an invalid response from the Stalactite API
+     * An error occurred while performing an HTTP request
      */
-    public const INVALID_API_RESPONSE = 0;
+    public const REQUEST_FAILED = 1;
+
+    //////////////////////
+    /** Response Error **/
+    //////////////////////
 
     /**
-     * An error occurred while contacting an API
+     * Thrown on invalid Stalactite API response
      */
-    public const CLIENT_TRANSPORT = 1;
+    public const INVALID_RESPONSE = 10;
+
+    /**
+     * Thrown on invalid Stalactite API json response
+     */
+    public const INVALID_JSON_RESPONSE = 11;
+
+    /**
+     * Thrown when the Stalactite API response does not match the expected endpoint schema
+     */
+    public const INVALID_RESPONSE_FORMAT = 12;
 
     ////////////////////////////
     /** Authentication Error **/
@@ -35,7 +47,7 @@ class ClientException extends
     /**
      * Expired user JWT
      */
-    public const EXPIRED_JWT = 13;
+    public const EXPIRED_JWT = 20;
 
     /**
      * Invalid JWT issuer
