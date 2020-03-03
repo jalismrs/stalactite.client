@@ -1,9 +1,9 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Post;
 
-use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
@@ -11,194 +11,104 @@ use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
-use Jalismrs\Stalactite\Client\Util\Request;
 use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
 /**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data\User\Post
+ * Class Service
+ * @package Jalismrs\Stalactite\Client\Data\User\Post
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getAllPosts
-     *
-     * @param User   $userModel
+     * @param User $user
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAllPosts(
-        User $userModel,
-        string $jwt
-    ) : Response {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/users/%s/posts'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'posts' => array_map(
-                                    static function($post) {
-                                        return ModelFactory::createPost($post);
-                                    },
-                                    $response['posts']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'posts' => [
-                                'type'   => JsonRule::LIST_TYPE,
-                                'schema' => Schema::POST,
-                            ],
-                        ]
-                    )
+    public function getAllPosts(User $user, string $jwt): Response
+    {
+        if ($user->getUid() === null) {
+            throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+        }
+
+        $endpoint = new Endpoint('/data/users/%s/posts');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static function ($post): Post {
+                            return ModelFactory::createPost($post);
+                        },
+                        $response
+                    );
+                }
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$user->getUid()]
+        ]);
     }
-    
+
     /**
-     * addPosts
-     *
-     * @param User   $userModel
-     * @param array  $postModels
+     * @param User $user
+     * @param array $posts
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
      */
-    public function addPosts(
-        User $userModel,
-        array $postModels,
-        string $jwt
-    ) : Response {
-        if ($userModel->getUid() === null) {
-            throw new ServiceException(
-                'User lacks a uid'
-            );
+    public function addPosts(User $user, array $posts, string $jwt): Response
+    {
+        if ($user->getUid() === null) {
+            throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
         }
-    
+
         try {
-            $posts = ModelHelper::getUids(
-                $postModels,
-                Post::class
-            );
-        } catch (InvalidArgumentException $invalidArgumentException) {
-            $this
-                ->getLogger()
-                ->error($invalidArgumentException);
-            
-            throw new ServiceException(
-                'Error while getting uids',
-                $invalidArgumentException->getCode(),
-                $invalidArgumentException
-            );
+            $posts = ModelHelper::getUids($posts, Post::class);
+        } catch (InvalidArgumentException $e) {
+            $this->getLogger()->error($e);
+            throw new DataServiceException('Error while getting posts uids', DataServiceException::INVALID_MODEL, $e);
         }
-        
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/users/%s/posts',
-                    'POST'
-                ))
-                    ->setJson(
-                        [
-                            'posts' => $posts,
-                        ]
-                    )
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                        ]
-                    )
-            );
+
+        $endpoint = new Endpoint('/data/users/%s/posts', 'POST');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => ['posts' => $posts],
+            'uriParameters' => [$user->getUid()]
+        ]);
     }
-    
+
     /**
-     * removePosts
-     *
-     * @param User   $userModel
-     * @param array  $postModels
+     * @param User $user
+     * @param array $posts
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
      */
-    public function removePosts(
-        User $userModel,
-        array $postModels,
-        string $jwt
-    ) : Response {
-        if ($userModel->getUid() === null) {
-            throw new ServiceException(
-                'User lacks a uid'
-            );
+    public function removePosts(User $user, array $posts, string $jwt): Response
+    {
+        if ($user->getUid() === null) {
+            throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
         }
-    
+
         try {
-            $posts = ModelHelper::getUids(
-                $postModels,
-                Post::class
-            );
-        } catch (InvalidArgumentException $invalidArgumentException) {
-            $this
-                ->getLogger()
-                ->error($invalidArgumentException);
-            
-            throw new ServiceException(
-                'Error while getting uids',
-                $invalidArgumentException->getCode(),
-                $invalidArgumentException
-            );
+            $posts = ModelHelper::getUids($posts, Post::class);
+        } catch (InvalidArgumentException $e) {
+            $this->getLogger()->error($e);
+            throw new DataServiceException('Error while getting posts uids', DataServiceException::INVALID_MODEL, $e);
         }
-        
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/users/%s/posts',
-                    'DELETE'
-                ))
-                    ->setJson(
-                        [
-                            'posts' => $posts,
-                        ]
-                    )
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                        ]
-                    )
-            );
+
+        $endpoint = new Endpoint('/data/users/%s/posts', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => ['posts' => $posts],
+            'uriParameters' => [$user->getUid()]
+        ]);
     }
 }
