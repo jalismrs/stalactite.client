@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service as TrustedAppService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
+use Jalismrs\Stalactite\Client\Exception\JwtException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Parser;
@@ -19,7 +19,6 @@ use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
-use OutOfBoundsException;
 use Throwable;
 use function in_array;
 
@@ -28,8 +27,7 @@ use function in_array;
  *
  * @package Jalismrs\Stalactite\Service\Authentication
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     public const JWT_ISSUER = 'stalactite.auth-api';
 
@@ -73,22 +71,15 @@ class Service extends
      * @param string $jwt
      * @return bool
      * @throws ClientException
-     * @throws ServiceException
+     * @throws JwtException
      */
     public function validateJwt(string $jwt): bool
     {
         try {
             $token = self::getTokenFromString($jwt);
-        } catch (Throwable $throwable) {
-            $this
-                ->getLogger()
-                ->error($throwable);
-
-            throw new ServiceException(
-                'Invalid user JWT',
-                ClientException::INVALID_JWT_STRING,
-                $throwable
-            );
+        } catch (Throwable $t) {
+            $this->getLogger()->error($t);
+            throw new JwtException('Invalid user JWT', JwtException::INVALID_JWT_STRING, $t);
         }
 
         $data = new ValidationData();
@@ -102,106 +93,45 @@ class Service extends
             || !$token->hasClaim('iat')
             || !$token->hasClaim('exp')
         ) {
-            $exception = new ServiceException(
-                'Invalid JWT structure',
-                ClientException::INVALID_JWT_STRUCTURE
-            );
-
-            $this
-                ->getLogger()
-                ->error($exception);
-
+            $exception = new JwtException('Invalid JWT structure', JwtException::INVALID_JWT_STRUCTURE);
+            $this->getLogger()->error($exception);
             throw $exception;
         }
 
         if ($token->isExpired()) {
-            $exception = new ServiceException(
-                'Expired JWT',
-                ClientException::EXPIRED_JWT
-            );
-
-            $this
-                ->getLogger()
-                ->error($exception);
-
+            $exception = new JwtException('Expired JWT', JwtException::EXPIRED_JWT);
+            $this->getLogger()->error($exception);
             throw $exception;
         }
 
-        try {
-            if (!in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
-                $exception = new ServiceException(
-                    'Invalid JWT user type',
-                    ClientException::INVALID_JWT_USER_TYPE
-                );
-
-                $this
-                    ->getLogger()
-                    ->error($exception);
-
-                throw $exception;
-            }
-        } catch (OutOfBoundsException $outOfBoundsException) {
-            $this
-                ->getLogger()
-                ->error($outOfBoundsException);
-
-            throw new ServiceException(
-                'should never happen',
-                ClientException::INVALID_JWT_STRUCTURE,
-                $outOfBoundsException
-            );
+        if (!$token->hasClaim('type') || !in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
+            $exception = new JwtException('Invalid JWT user type', JwtException::INVALID_JWT_USER_TYPE);
+            $this->getLogger()->error($exception);
+            throw $exception;
         }
 
         if (!$token->validate($data)) {
-            $exception = new ServiceException(
-                'Invalid JWT issuer',
-                ClientException::INVALID_JWT_ISSUER
-            );
-
-            $this
-                ->getLogger()
-                ->error($exception);
-
+            $exception = new JwtException('Invalid JWT issuer', JwtException::INVALID_JWT_ISSUER);
+            $this->getLogger()->error($exception);
             throw $exception;
         }
 
         $signer = new Sha256();
-        $publicKey = new Key($this->getRSAPublicKey());
+        $publicKey = new Key($this->getRSAPublicKey()->getBody());
 
         try {
             return $token->verify($signer, $publicKey);
         } catch (BadMethodCallException $badMethodCallException) {
-            $this
-                ->getLogger()
-                ->error($badMethodCallException);
-
+            $this->getLogger()->error($badMethodCallException);
             // thrown by the library on invalid key
-            throw new ServiceException(
-                'Unsigned token',
-                ClientException::INVALID_JWT_SIGNATURE,
-                $badMethodCallException
-            );
+            throw new JwtException('Unsigned token', JwtException::INVALID_JWT_SIGNATURE, $badMethodCallException);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $this
-                ->getLogger()
-                ->error($invalidArgumentException);
-
+            $this->getLogger()->error($invalidArgumentException);
             // thrown by the library on invalid key
-            throw new ServiceException(
-                'Invalid RSA public key',
-                ClientException::INVALID_STALACTITE_RSA_PUBLIC_KEY,
-                $invalidArgumentException
-            );
-        } catch (Throwable $throwable) { // other exceptions result in an invalid token / signature
-            $this
-                ->getLogger()
-                ->error($throwable);
-
-            throw new ServiceException(
-                'Invalid JWT signature',
-                ClientException::INVALID_JWT_SIGNATURE,
-                $throwable
-            );
+            throw new JwtException('Invalid RSA public key', JwtException::INVALID_STALACTITE_RSA_PUBLIC_KEY, $invalidArgumentException);
+        } catch (Throwable $t) { // other exceptions result in an invalid token / signature
+            $this->getLogger()->error($t);
+            throw new JwtException('Invalid JWT signature', JwtException::INVALID_JWT_SIGNATURE, $t);
         }
     }
 
