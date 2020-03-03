@@ -28,11 +28,9 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/users/me');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
-            ->setResponseFormatter(
-                static function (array $response): User {
-                    return ModelFactory::createUser($response);
-                }
-            );
+            ->setResponseFormatter(static function (array $response): User {
+                return ModelFactory::createUser($response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt
@@ -48,13 +46,11 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/users/me/posts');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(
-                static function (array $response): array {
-                    return array_map(static function (array $post): Post {
-                        return ModelFactory::createPost($post);
-                    }, $response);
-                }
-            );
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static function (array $post): Post {
+                    return ModelFactory::createPost($post);
+                }, $response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt
@@ -70,13 +66,11 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/users/me/leads');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(
-                static function (array $response): array {
-                    return array_map(static function (array $post): Post {
-                        return ModelFactory::createPost($post);
-                    }, $response);
-                }
-            );
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static function (array $post): Post {
+                    return ModelFactory::createPost($post);
+                }, $response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt

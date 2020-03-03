@@ -98,16 +98,11 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/users');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(
-                static function (array $response): array {
-                    return array_map(
-                        static function ($user): User {
-                            return ModelFactory::createUser($user);
-                        },
-                        $response
-                    );
-                }
-            );
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static function (array $user): User {
+                    return ModelFactory::createUser($user);
+                }, $response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt
@@ -124,11 +119,9 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/users/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
-            ->setResponseFormatter(
-                static function (array $response): User {
-                    return ModelFactory::createUser($response);
-                }
-            );
+            ->setResponseFormatter(static function (array $response): User {
+                return ModelFactory::createUser($response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,
@@ -155,11 +148,9 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/data/users', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
-            ->setResponseFormatter(
-                static function (array $response): User {
-                    return ModelFactory::createUser($response);
-                }
-            );
+            ->setResponseFormatter(static function (array $response): User {
+                return ModelFactory::createUser($response);
+            });
 
         $data = array_merge(
             Serializer::getInstance()
