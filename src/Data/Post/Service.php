@@ -3,309 +3,175 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
-use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
 /**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data\Post
+ * Class Service
+ * @package Jalismrs\Stalactite\Client\Data\Post
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getAllPosts
-     *
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAllPosts(
-        string $jwt
-    ): Response
+    public function getAllPosts(string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'posts' => array_map(
-                                    static function ($post) {
-                                        return ModelFactory::createPost($post);
-                                    },
-                                    $response['posts']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'posts' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::POST,
-                            ],
-                        ]
-                    )
+        $endpoint = new Endpoint('/data/posts');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static function (array $post): Post {
+                            return ModelFactory::createPost($post);
+                        },
+                        $response
+                    );
+                }
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt
+        ]);
     }
 
     /**
-     * getPost
-     *
      * @param string $uid
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getPost(
-        string $uid,
-        string $jwt
-    ): Response
+    public function getPost(string $uid, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts/%s'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'post' => $response['post'] === null
-                                    ? null
-                                    : ModelFactory::createPost($response['post']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'post' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::POST,
-                            ],
-                        ]
-                    )
+        $endpoint = new Endpoint('/data/posts/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
+            ->setResponseFormatter(
+                static function (array $response): Post {
+                    return ModelFactory::createPost($response);
+                }
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$uid]
+        ]);
     }
-    
+
     /**
-     * createPost
-     *
-     * @param Post   $postModel
+     * @param Post $post
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
+     * @throws SerializerException
      */
-    public function createPost(
-        Post $postModel,
-        string $jwt
-    ): Response
+    public function createPost(Post $post, string $jwt): Response
     {
-        if ($postModel->getUid() !== null) {
-            throw new ServiceException(
-                'Post has a uid'
+        $endpoint = new Endpoint('/data/posts', 'POST');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
+            ->setResponseFormatter(
+                static function (array $response): Post {
+                    return ModelFactory::createPost($response);
+                }
             );
+
+        $data = Serializer::getInstance()->normalize($post, [
+            AbstractNormalizer::GROUPS => ['create']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data
+        ]);
+    }
+
+    /**
+     * @param Post $post
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws SerializerException
+     */
+    public function updatePost(Post $post, string $jwt): Response
+    {
+        if ($post->getUid() === null) {
+            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
         }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts',
-                    'POST'
-                ))
-                    ->setJson($postModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'create',
-                            ],
-                        ]
-                    )
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'post' => $response['post'] === null
-                                    ? null
-                                    : ModelFactory::createPost($response['post']),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'post' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::POST,
-                            ],
-                        ]
-                    )
-            );
+
+        $endpoint = new Endpoint('/data/posts/%s', 'PUT');
+
+        $data = Serializer::getInstance()->normalize($post, [
+            AbstractNormalizer::GROUPS => ['update']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data,
+            'uriParameters' => [$post->getUid()]
+        ]);
     }
-    
+
     /**
-     * updatePost
-     *
-     * @param Post   $postModel
+     * @param Post $post
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
      */
-    public function updatePost(
-        Post $postModel,
-        string $jwt
-    ): Response
+    public function deletePost(Post $post, string $jwt): Response
     {
-        if ($postModel->getUid() === null) {
-            throw new ServiceException(
-                'Post lacks a uid'
-            );
+        if ($post->getUid() === null) {
+            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
         }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts/%s',
-                    'PUT'
-                ))
-                    ->setJson($postModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'update',
-                            ],
-                        ]
-                    )
-                    ->setUriParameters(
-                        [
-                            $postModel->getUid(),
-                        ]
-                    )
-            );
+
+        $endpoint = new Endpoint('/data/posts/%s', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$post->getUid()]
+        ]);
     }
 
     /**
-     * deletePost
-     *
-     * @param string $uid
+     * @param Post $post
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function deletePost(
-        string $uid,
-        string $jwt
-    ): Response
+    public function getUsers(Post $post, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts/%s',
-                    'DELETE'
-                ))
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-            );
-    }
+        if ($post->getUid() === null) {
+            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
+        }
 
-    /**
-     * getUsers
-     *
-     * @param string $uid
-     * @param string $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     */
-    public function getUsers(
-        string $uid,
-        string $jwt
-    ): Response
-    {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/posts/%s/users'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'users' => array_map(
-                                    static function ($user) {
-                                        return ModelFactory::createUser($user);
-                                    },
-                                    $response['users']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'users' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::USER,
-                            ],
-                        ]
-                    )
+        $endpoint = new Endpoint('/data/posts/%s/users');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static function (array $user): User {
+                            return ModelFactory::createUser($user);
+                        },
+                        $response
+                    );
+                }
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$post->getUid()]
+        ]);
     }
 }
