@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
+use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 
@@ -19,14 +19,14 @@ use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 class ApiDeleteTest extends EndpointTest
 {
     /**
+     * @throws AuthenticationServiceException
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function testThrowMissingUid(): void
     {
-        $this->expectException(ServiceException::class);
-        $this->expectExceptionCode(ServiceException::MISSING_TRUSTED_APP_UID);
+        $this->expectException(AuthenticationServiceException::class);
+        $this->expectExceptionCode(AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -37,9 +37,9 @@ class ApiDeleteTest extends EndpointTest
     }
 
     /**
+     * @throws AuthenticationServiceException
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function testRequestMethodCalledOnce(): void
     {

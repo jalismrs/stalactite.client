@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
+use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Serializer;
@@ -110,12 +110,11 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function updateTrustedApp(TrustedApp $trustedApp, string $jwt): Response
     {
         if ($trustedApp->getUid() === null) {
-            throw new ServiceException('TrustedApp lacks a uid', ServiceException::MISSING_TRUSTED_APP_UID);
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
         }
 
         $endpoint = new Endpoint('/auth/trustedApps/%s', 'PUT');
@@ -139,12 +138,11 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function deleteTrustedApp(TrustedApp $trustedApp, string $jwt): Response
     {
         if ($trustedApp->getUid() === null) {
-            throw new ServiceException('TrustedApp lacks a uid', ServiceException::MISSING_TRUSTED_APP_UID);
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
         }
 
         $endpoint = new Endpoint('/auth/trustedApps/%s', 'DELETE');
@@ -163,14 +161,13 @@ class Service extends AbstractService
      * @param TrustedApp $trustedApp
      * @param string $jwt
      * @return Response
-     * @throws ServiceException
      * @throws ClientException
      * @throws SerializerException
      */
     public function resetAuthToken(TrustedApp $trustedApp, string $jwt): Response
     {
         if ($trustedApp->getUid() === null) {
-            throw new ServiceException('TrustedApp lacks a uid', ServiceException::MISSING_TRUSTED_APP_UID);
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
         }
 
         $endpoint = new Endpoint('/auth/trustedApps/%s/authToken/reset', 'PUT');
