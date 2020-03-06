@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
-use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -27,339 +26,135 @@ class Service extends
     AbstractService
 {
     /**
-     * getAllDomains
-     *
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAllDomains(
-        string $jwt
-    ): Response
+    public function getAllDomains(string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'domains' => array_map(
-                                    static function ($domain) {
-                                        return ModelFactory::createDomain($domain);
-                                    },
-                                    $response['domains']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'domains' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::DOMAIN,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/domains');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static function (array $domain): Domain {
+                    return ModelFactory::createDomain($domain);
+                }, $response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt
+        ]);
     }
 
     /**
-     * getDomain
-     *
      * @param string $uid
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getDomain(
-        string $uid,
-        string $jwt
-    ): Response
+    public function getDomain(string $uid, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains/%s'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'domain' => $response['domain'] === null
-                                    ? null
-                                    : ModelFactory::createDomain($response['domain']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'domain' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::DOMAIN,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/domains/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static function (array $response): Domain {
+                return ModelFactory::createDomain($response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$uid]
+        ]);
     }
 
     /**
-     * getByName
-     *
      * @param string $name
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getByName(
-        string $name,
-        string $jwt
-    ): Response
+    public function getByName(string $name, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains'
-                ))
-                    ->setJwt($jwt)
-                    ->setQueryParameters(
-                        [
-                            'name' => $name
-                        ]
-                    )
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'domains' => array_map(
-                                    static function ($domain) {
-                                        return ModelFactory::createDomain($domain);
-                                    },
-                                    $response['domains']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'domains' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::DOMAIN,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/domains');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static function (array $domain): Domain {
+                    return ModelFactory::createDomain($domain);
+                }, $response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'query' => ['name' => $name]
+        ]);
     }
 
     /**
-     * getByNameAndApiKey
-     *
-     * @param string $name
-     * @param string $apiKey
+     * @param Domain $domain
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
+     * @throws SerializerException
      */
-    public function getByNameAndApiKey(
-        string $name,
-        string $apiKey,
-        string $jwt
-    ): Response
+    public function createDomain(Domain $domain, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains'
-                ))
-                    ->setJwt($jwt)
-                    ->setQueryParameters(
-                        [
-                            'name' => $name,
-                            'apiKey' => $apiKey
-                        ]
-                    )
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'domains' => array_map(
-                                    static function ($domain) {
-                                        return ModelFactory::createDomain($domain);
-                                    },
-                                    $response['domains']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'domains' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::DOMAIN,
-                            ],
-                        ]
-                    )
-            );
-    }
-    
-    /**
-     * createDomain
-     *
-     * @param Domain $domainModel
-     * @param string $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
-     */
-    public function createDomain(
-        Domain $domainModel,
-        string $jwt
-    ): Response
-    {
-        if ($domainModel->getUid() !== null) {
-            throw new ServiceException(
-                'Domain has a uid'
-            );
-        }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains',
-                    'POST'
-                ))
-                    ->setJson($domainModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'create',
-                            ],
-                        ]
-                    )
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'domain' => $response['domain'] === null
-                                    ? null
-                                    : ModelFactory::createDomain($response['domain']),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'domain' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::DOMAIN,
-                            ],
-                        ]
-                    )
-            );
-    }
-    
-    /**
-     * updateDomain
-     *
-     * @param Domain $domainModel
-     * @param string $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws ServiceException
-     */
-    public function updateDomain(
-        Domain $domainModel,
-        string $jwt
-    ): Response
-    {
-        if ($domainModel->getUid() === null) {
-            throw new ServiceException(
-                'Domain lacks a uid'
-            );
-        }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains/%s',
-                    'PUT'
-                ))
-                    ->setJson($domainModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'update',
-                            ],
-                        ]
-                    )
-                    ->setUriParameters(
-                        [
-                            $domainModel->getUid(),
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/domains', 'POST');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static function (array $response): Domain {
+                return ModelFactory::createDomain($response);
+            });
+
+        $data = Serializer::getInstance()->normalize($domain, [
+            AbstractNormalizer::GROUPS => ['create']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data
+        ]);
     }
 
     /**
-     * deleteDomain
-     *
-     * @param string $uid
+     * @param Domain $domain
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
+     * @throws SerializerException
      */
-    public function deleteDomain(
-        string $uid,
-        string $jwt
-    ): Response
+    public function updateDomain(Domain $domain, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/domains/%s',
-                    'DELETE'
-                ))
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    ),
-                );
+        if ($domain->getUid() === null) {
+            throw new DataServiceException('Domain lacks an uid', DataServiceException::MISSING_DOMAIN_UID);
+        }
+
+        $endpoint = new Endpoint('/data/domains/%s', 'PUT');
+
+        $data = Serializer::getInstance()->normalize($domain, [
+            AbstractNormalizer::GROUPS => ['update']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data,
+            'uriParameters' => [$domain->getUid()]
+        ]);
+    }
+
+    /**
+     * @param Domain $domain
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function deleteDomain(Domain $domain, string $jwt): Response
+    {
+        if ($domain->getUid() === null) {
+            throw new DataServiceException('Domain lacks an uid', DataServiceException::MISSING_DOMAIN_UID);
+        }
+
+        $endpoint = new Endpoint('/data/domains/%s', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$domain->getUid()]
+        ]);
     }
 }
