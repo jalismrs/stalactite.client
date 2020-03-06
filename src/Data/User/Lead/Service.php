@@ -38,9 +38,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s/leads');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $post): Post {
-                    return ModelFactory::createPost($post);
-                }, $response);
+                return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
 
         return $this->getClient()->request($endpoint, [

@@ -35,9 +35,10 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/auth/trustedApps');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $trustedApp): TrustedApp {
-                    return ModelFactory::createTrustedApp($trustedApp);
-                }, $response);
+                return array_map(
+                    static fn(array $trustedApp): TrustedApp => ModelFactory::createTrustedApp($trustedApp),
+                    $response
+                );
             });
 
         return $this->getClient()->request($endpoint, [
@@ -55,9 +56,9 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/auth/trustedApps/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
-            ->setResponseFormatter(static function (array $response): TrustedApp {
-                return ModelFactory::createTrustedApp($response);
-            });
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
+            );
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,
@@ -81,9 +82,9 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/auth/trustedApps', 'POST');
         $endpoint->setResponseValidationSchema($schema)
-            ->setResponseFormatter(static function (array $response): TrustedApp {
-                return ModelFactory::createTrustedApp($response);
-            });
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
+            );
 
         $data = Serializer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['create']
@@ -163,9 +164,9 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/auth/trustedApps/%s/authToken/reset', 'PUT');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
-            ->setResponseFormatter(static function (array $response): TrustedApp {
-                return ModelFactory::createTrustedApp($response);
-            });
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
+            );
 
         $data = Serializer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['reset']

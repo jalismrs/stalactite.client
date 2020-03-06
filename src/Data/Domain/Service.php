@@ -35,9 +35,10 @@ class Service extends
         $endpoint = new Endpoint('/data/domains');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $domain): Domain {
-                    return ModelFactory::createDomain($domain);
-                }, $response);
+                return array_map(
+                    static fn(array $domain): Domain => ModelFactory::createDomain($domain),
+                    $response
+                );
             });
 
         return $this->getClient()->request($endpoint, [
@@ -55,9 +56,7 @@ class Service extends
     {
         $endpoint = new Endpoint('/data/domains/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
-            ->setResponseFormatter(static function (array $response): Domain {
-                return ModelFactory::createDomain($response);
-            });
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,
@@ -76,9 +75,10 @@ class Service extends
         $endpoint = new Endpoint('/data/domains');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $domain): Domain {
-                    return ModelFactory::createDomain($domain);
-                }, $response);
+                return array_map(
+                    static fn(array $domain): Domain => ModelFactory::createDomain($domain),
+                    $response
+                );
             });
 
         return $this->getClient()->request($endpoint, [
@@ -98,9 +98,7 @@ class Service extends
     {
         $endpoint = new Endpoint('/data/domains', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
-            ->setResponseFormatter(static function (array $response): Domain {
-                return ModelFactory::createDomain($response);
-            });
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
 
         $data = Serializer::getInstance()->normalize($domain, [
             AbstractNormalizer::GROUPS => ['create']

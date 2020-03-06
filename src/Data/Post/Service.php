@@ -34,9 +34,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/posts');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $post): Post {
-                    return ModelFactory::createPost($post);
-                }, $response);
+                return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
 
         return $this->getClient()->request($endpoint, [
@@ -54,9 +52,7 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/posts/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
-            ->setResponseFormatter(static function (array $response): Post {
-                return ModelFactory::createPost($response);
-            });
+            ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,
@@ -75,9 +71,7 @@ class Service extends AbstractService
     {
         $endpoint = new Endpoint('/data/posts', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
-            ->setResponseFormatter(static function (array $response): Post {
-                return ModelFactory::createPost($response);
-            });
+            ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         $data = Serializer::getInstance()->normalize($post, [
             AbstractNormalizer::GROUPS => ['create']
@@ -150,9 +144,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/posts/%s/users');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
-                return array_map(static function (array $user): User {
-                    return ModelFactory::createUser($user);
-                }, $response);
+                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
             });
 
         return $this->getClient()->request($endpoint, [
