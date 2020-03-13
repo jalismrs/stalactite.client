@@ -25,20 +25,11 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Api\Access\User
  */
-class ApiGetRelationsTest extends
-    EndpointTest
+class ApiGetRelationsTest extends EndpointTest
 {
     /**
-     * testGetRelations
-     *
-     * @return void
-     *
      * @throws ClientException
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws RequestException
      * @throws SerializerException
-     * @throws ValidatorException
      */
     public function testGetRelations() : void
     {

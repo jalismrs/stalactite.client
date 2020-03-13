@@ -10,8 +10,7 @@ use Jalismrs\Stalactite\Client\AbstractService;
  *
  * @package Jalismrs\Stalactite\Service\Access
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
      * @var AuthToken\Service|null

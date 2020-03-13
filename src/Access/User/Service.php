@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access\User;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
@@ -12,10 +14,8 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
@@ -24,8 +24,7 @@ use function array_map;
  *
  * @package Jalismrs\Stalactite\Service\Access\User
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
      * @var Me\Service|null
@@ -37,6 +36,7 @@ class Service extends
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
+
     /**
      * me
      *
@@ -56,114 +56,70 @@ class Service extends
      * API ---------------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    /**
-     * getRelations
-     *
-     * @param User $userModel
-     * @param string $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     */
-    public function getRelations(
-        User $userModel,
-        string $jwt
-    ): Response
-    {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/users/%s/relations'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response) use ($userModel) : array {
-                            return [
-                                'relations' => array_map(
-                                    static function (array $relation) use ($userModel): DomainUserRelation {
-                                        $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                                        $domainUserRelationModel->setUser($userModel);
 
-                                        return $domainUserRelationModel;
-                                    },
-                                    $response['relations']
-                                )
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'relations' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => [
-                                    'uid' => [
-                                        'type' => JsonRule::STRING_TYPE,
-                                    ],
-                                    'domain' => [
-                                        'type' => JsonRule::OBJECT_TYPE,
-                                        'schema' => DataSchema::DOMAIN,
-                                    ],
-                                ],
-                            ],
-                        ]
-                    )
-            );
+    /**
+     * @param User $user
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getRelations(User $user, string $jwt): Response
+    {
+        if ($user->getUid() === null) {
+            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
+        }
+
+        $schema = [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'domain' => [
+                'type' => JsonRule::OBJECT_TYPE,
+                'schema' => DataSchema::DOMAIN,
+            ],
+        ];
+
+        $endpoint = new Endpoint('/access/users/%s/relations');
+        $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response) use ($user) : array {
+                return array_map(
+                    static function (array $relation) use ($user): DomainUserRelation {
+                        $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
+                        $domainUserRelationModel->setUser($user);
+
+                        return $domainUserRelationModel;
+                    },
+                    $response
+                );
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$user->getUid()]
+        ]);
     }
 
     /**
-     * getAccessClearance
-     *
-     * @param User $userModel
-     * @param Domain $domainModel
+     * @param User $user
+     * @param Domain $domain
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAccessClearance(
-        User $userModel,
-        Domain $domainModel,
-        string $jwt
-    ): Response
+    public function getAccessClearance(User $user, Domain $domain, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/users/%s/access/%s'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'clearance' => ModelFactory::createAccessClearance($response['clearance']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                            $domainModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'clearance' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'schema' => Schema::ACCESS_CLEARANCE,
-                            ],
-                        ]
-                    )
+        $endpoint = new Endpoint('/access/users/%s/access/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
+            ->setResponseFormatter(
+                static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [
+                $user->getUid(),
+                $domain->getUid(),
+            ]
+        ]);
     }
 }
