@@ -3,190 +3,87 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\AuthToken\Customer;
 
-use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
 /**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data\AuthToken\Customer
+ * Class Service
+ * @package Jalismrs\Stalactite\Client\Data\AuthToken\Customer
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getAllCustomers
-     *
      * @param string $apiAuthToken
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAllCustomers(
-        string $apiAuthToken
-    ): Response
+    public function getAllCustomers(string $apiAuthToken): Response
     {
-        $jwt = JwtFactory::generateJwt(
-            $apiAuthToken,
-            $this
-                ->getClient()
-                ->getUserAgent()
-        );
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
 
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/auth-token/customers'
-                ))
-                    ->setJwt((string)$jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'customers' => array_map(
-                                    static function ($customer) {
-                                        return ModelFactory::createCustomer($customer);
-                                    },
-                                    $response['customers']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'customers' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::CUSTOMER,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/auth-token/customers');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(
+                    static fn(array $customer): Customer => ModelFactory::createCustomer($customer),
+                    $response
+                );
+            });
+
+        return $this->getClient()->request($endpoint, ['jwt' => $jwt]);
     }
 
     /**
-     * getByEmailAndGoogleId
-     *
      * @param string $email
      * @param string $googleId
      * @param string $apiAuthToken
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getByEmailAndGoogleId(
-        string $email,
-        string $googleId,
-        string $apiAuthToken
-    ): Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, string $apiAuthToken): Response
     {
-        $jwt = JwtFactory::generateJwt(
-            $apiAuthToken,
-            $this
-                ->getClient()
-                ->getUserAgent()
-        );
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
 
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/auth-token/customers'
-                ))
-                    ->setJwt((string)$jwt)
-                    ->setQueryParameters(
-                        [
-                            'email' => $email,
-                            'googleId' => $googleId
-                        ]
-                    )
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'customer' => $response['customer'] === null
-                                    ? null
-                                    : ModelFactory::createCustomer($response['customer']),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'customer' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::CUSTOMER,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/auth-token/customers');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+            ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'query' => [
+                'email' => $email,
+                'googleId' => $googleId
+            ]
+        ]);
     }
 
     /**
-     * getCustomer
-     *
      * @param string $uid
      * @param string $apiAuthToken
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getCustomer(
-        string $uid,
-        string $apiAuthToken
-    ): Response
+    public function getCustomer(string $uid, string $apiAuthToken): Response
     {
-        $jwt = JwtFactory::generateJwt(
-            $apiAuthToken,
-            $this
-                ->getClient()
-                ->getUserAgent()
-        );
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
 
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/data/auth-token/customers/%s'
-                ))
-                    ->setJwt((string)$jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'customer' => $response['customer'] === null
-                                    ? null
-                                    : ModelFactory::createCustomer($response['customer']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'customer' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::CUSTOMER,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/data/auth-token/customers/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+            ->setResponseFormatter(static function (array $response): Customer {
+                return ModelFactory::createCustomer($response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$uid]
+        ]);
     }
 }
