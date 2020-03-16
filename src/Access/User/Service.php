@@ -121,7 +121,7 @@ class Service extends AbstractService
             'jwt' => $jwt,
             'uriParameters' => [
                 $user->getUid(),
-                $domain->getUid(),
+                $domain->getUid()
             ]
         ]);
     }
