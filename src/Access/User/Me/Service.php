@@ -4,17 +4,17 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access\User\Me;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use function array_map;
 
@@ -23,104 +23,60 @@ use function array_map;
  *
  * @package Jalismrs\Stalactite\Service\Access\User\Me
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getRelations
-     *
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getRelations(
-        string $jwt
-    ): Response
+    public function getRelations(string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/users/me/relations'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'relations' => array_map(
-                                    static function (array $relation): DomainUserRelation {
-                                        return ModelFactory::createDomainUserRelation($relation);
-                                    },
-                                    $response['relations']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'relations' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => [
-                                    'uid' => [
-                                        'type' => JsonRule::STRING_TYPE,
-                                    ],
-                                    'domain' => [
-                                        'type' => JsonRule::OBJECT_TYPE,
-                                        'schema' => DataSchema::DOMAIN,
-                                    ],
-                                ],
-                            ],
-                        ]
-                    )
-            );
+        $schema = [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'domain' => [
+                'type' => JsonRule::OBJECT_TYPE,
+                'schema' => DataSchema::DOMAIN
+            ]
+        ];
+
+        $endpoint = new Endpoint('/access/users/me/relations');
+        $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(
+                    static fn(array $relation): DomainUserRelation => ModelFactory::createDomainUserRelation($relation),
+                    $response
+                );
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt
+        ]);
     }
 
     /**
-     * getAccessClearance
-     *
-     * @param Domain $domainModel
+     * @param Domain $domain
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      */
-    public function getAccessClearance(
-        Domain $domainModel,
-        string $jwt
-    ): Response
+    public function getAccessClearance(Domain $domain, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/users/me/access/%s'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponseFormatter(
-                        static function (array $response): array {
-                            return [
-                                'clearance' => ModelFactory::createAccessClearance($response['clearance']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $domainModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'clearance' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'schema' => Schema::ACCESS_CLEARANCE,
-                            ],
-                        ]
-                    )
-            );
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+        }
+
+        $endpoint = new Endpoint('/access/users/me/access/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
+            ->setResponseFormatter(static function (array $response): AccessClearance {
+                return ModelFactory::createAccessClearance($response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => $domain->getUid()
+        ]);
     }
 }
