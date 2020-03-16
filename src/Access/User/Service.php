@@ -71,12 +71,12 @@ class Service extends AbstractService
 
         $schema = [
             'uid' => [
-                'type' => JsonRule::STRING_TYPE,
+                'type' => JsonRule::STRING_TYPE
             ],
             'domain' => [
                 'type' => JsonRule::OBJECT_TYPE,
-                'schema' => DataSchema::DOMAIN,
-            ],
+                'schema' => DataSchema::DOMAIN
+            ]
         ];
 
         $endpoint = new Endpoint('/access/users/%s/relations');
@@ -108,6 +108,14 @@ class Service extends AbstractService
      */
     public function getAccessClearance(User $user, Domain $domain, string $jwt): Response
     {
+        if ($user->getUid() === null) {
+            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
+        }
+
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+        }
+
         $endpoint = new Endpoint('/access/users/%s/access/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
             ->setResponseFormatter(

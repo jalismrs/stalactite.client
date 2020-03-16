@@ -8,6 +8,7 @@ use Jalismrs\Stalactite\Client\Access\User\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
@@ -51,6 +52,42 @@ class ApiGetAccessClearanceTest extends EndpointTest
         );
 
         self::assertInstanceOf(AccessClearance::class, $response->getBody());
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function testThrowUserLacksUid(): void
+    {
+        $this->expectException(AccessServiceException::class);
+        $this->expectExceptionCode(AccessServiceException::MISSING_USER_UID);
+
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->getAccessClearance(
+            DataTestModelFactory::getTestableUser()->setUid(null),
+            DataTestModelFactory::getTestableDomain(),
+            'fake user jwt'
+        );
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function testThrowDomainLacksUid(): void
+    {
+        $this->expectException(AccessServiceException::class);
+        $this->expectExceptionCode(AccessServiceException::MISSING_DOMAIN_UID);
+
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->getAccessClearance(
+            DataTestModelFactory::getTestableUser(),
+            DataTestModelFactory::getTestableDomain()->setUid(null),
+            'fake user jwt'
+        );
     }
 
     /**
