@@ -81,14 +81,9 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/access/users/%s/relations');
         $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response) use ($user) : array {
+            ->setResponseFormatter(static function (array $response): array {
                 return array_map(
-                    static function (array $relation) use ($user): DomainUserRelation {
-                        $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                        $domainUserRelationModel->setUser($user);
-
-                        return $domainUserRelationModel;
-                    },
+                    static fn(array $relation): DomainUserRelation => ModelFactory::createDomainUserRelation($relation),
                     $response
                 );
             });
