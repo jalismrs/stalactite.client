@@ -8,7 +8,6 @@ use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -25,7 +24,6 @@ class ApiResetAuthTokenTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function testResetAuthToken(): void
     {
@@ -54,7 +52,6 @@ class ApiResetAuthTokenTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
-     * @throws ServiceException
      */
     public function testRequestMethodCalledOnce(): void
     {
