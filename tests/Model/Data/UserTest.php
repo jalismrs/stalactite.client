@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
+use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -186,5 +188,61 @@ class UserTest extends
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
+    }
+
+    /**
+     * @param array $posts
+     * @param int $expectedCount
+     * @dataProvider getPosts
+     */
+    public function testSetPosts(array $posts, int $expectedCount): void
+    {
+        $user = new User();
+        $user->setPosts($posts);
+
+        self::assertCount($expectedCount, $user->getPosts());
+        self::assertContainsOnlyInstancesOf(Post::class, $user->getPosts());
+    }
+
+    /**
+     * @param array $leads
+     * @param int $expectedCount
+     * @dataProvider getPosts
+     */
+    public function testSetLeads(array $leads, int $expectedCount): void
+    {
+        $user = new User();
+        $user->setLeads($leads);
+
+        self::assertCount($expectedCount, $user->getLeads());
+        self::assertContainsOnlyInstancesOf(Post::class, $user->getLeads());
+    }
+
+    /**
+     * @return array
+     */
+    public function getPosts(): array
+    {
+        return [
+            [[new Post(), new Post(), new Post()], 3],
+            [['this', 'is', 'a', 'post', new Post()], 1],
+            [['not', 'a', 'post'], 0]
+        ];
+    }
+
+    public function testHasAdminPost(): void
+    {
+        $post = new Post();
+        $adminPost = new Post();
+        $adminPost->setAdminAccess(true);
+
+        $user = new User();
+        $user->setPosts([$post]);
+
+        $adminUser = new User();
+        $adminUser->setPosts([$user, $adminPost]);
+
+        self::assertFalse($user->hasAdminPost());
+        self::assertTrue($adminUser->hasAdminPost());
     }
 }
