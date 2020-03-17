@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -36,7 +36,7 @@ class ApiGetRelationsTest extends EndpointTest
             MockHttpClientFactory::create(
                 json_encode([
                     'users' => [
-                        Serializer::getInstance()
+                        Normalizer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableDomainUserRelation(),
                                 [
@@ -46,7 +46,7 @@ class ApiGetRelationsTest extends EndpointTest
                             )
                     ],
                     'customers' => [
-                        Serializer::getInstance()
+                        Normalizer::getInstance()
                             ->normalize(
                                 ModelFactory::getTestableDomainCustomerRelation(),
                                 [

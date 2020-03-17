@@ -17,7 +17,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -147,7 +147,7 @@ class Service extends AbstractService
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
 
         $data = array_merge(
-            Serializer::getInstance()
+            Normalizer::getInstance()
                 ->normalize(
                     $user,
                     [AbstractNormalizer::GROUPS => ['create']]
@@ -179,7 +179,7 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/data/users/%s', 'PUT');
 
-        $data = Serializer::getInstance()->normalize(
+        $data = Normalizer::getInstance()->normalize(
             $user,
             [AbstractNormalizer::GROUPS => ['update']]
         );

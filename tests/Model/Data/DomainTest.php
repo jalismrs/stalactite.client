@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,7 +28,7 @@ class DomainTest extends
     {
         $model = ModelFactory::getTestableDomain();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize($model);
 
         $expected = [];
@@ -43,7 +43,7 @@ class DomainTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomain();
 
@@ -75,7 +75,7 @@ class DomainTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomain();
 
@@ -106,7 +106,7 @@ class DomainTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomain();
 
