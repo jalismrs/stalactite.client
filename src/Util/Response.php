@@ -51,4 +51,12 @@ class Response
     {
         return $this->body;
     }
+
+    /**
+     * @return bool
+     */
+    public function isSuccessful(): bool
+    {
+        return $this->code >= 200 && $this->code < 300;
+    }
 }
