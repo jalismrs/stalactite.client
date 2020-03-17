@@ -17,40 +17,31 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 abstract class ResponseFactory
 {
     /**
-     * domainGetRelations
-     *
-     * @static
-     *
-     * @param Domain $domainModel
-     *
+     * @param Domain $domain
      * @return Closure
      */
-    public static function domainGetRelations(
-        Domain $domainModel
-    ): Closure
+    public static function domainGetRelations(Domain $domain): Closure
     {
-        return static function (array $response) use ($domainModel) : array {
+        return static function (array $response) use ($domain) : array {
             return [
-                'relations' => [
-                    'users' => array_map(
-                        static function (array $relation) use ($domainModel): DomainUserRelation {
-                            $domainUserRelationModel = ModelFactory::createDomainUserRelation($relation);
-                            $domainUserRelationModel->setDomain($domainModel);
+                'users' => array_map(
+                    static function (array $relation) use ($domain): DomainUserRelation {
+                        $domainUserRelation = ModelFactory::createDomainUserRelation($relation);
+                        $domainUserRelation->setDomain($domain);
 
-                            return $domainUserRelationModel;
-                        },
-                        $response['relations']['users']
-                    ),
-                    'customers' => array_map(
-                        static function (array $relation) use ($domainModel): DomainCustomerRelation {
-                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
-                            $domainCustomerRelation->setDomain($domainModel);
+                        return $domainUserRelation;
+                    },
+                    $response['users']
+                ),
+                'customers' => array_map(
+                    static function (array $relation) use ($domain): DomainCustomerRelation {
+                        $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                        $domainCustomerRelation->setDomain($domain);
 
-                            return $domainCustomerRelation;
-                        },
-                        $response['relations']['customers']
-                    )
-                ]
+                        return $domainCustomerRelation;
+                    },
+                    $response['customers']
+                )
             ];
         };
     }

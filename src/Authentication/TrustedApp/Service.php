@@ -4,343 +4,178 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Authentication\TrustedApp;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
-use function array_merge;
 
 /**
  * Service
  *
  * @package Jalismrs\Stalactite\Service\Authentication\TrustedApp
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getAllTrustedApps
-     *
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
-    public function getAllTrustedApps(
-        string $jwt
-    ): Response
+    public function getAllTrustedApps(string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'trustedApps' => array_map(
-                                    static function ($trustedApp) {
-                                        return ModelFactory::createTrustedApp($trustedApp);
-                                    },
-                                    $response['trustedApps']
-                                ),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'trustedApps' => [
-                                'type' => JsonRule::LIST_TYPE,
-                                'schema' => Schema::TRUSTED_APP,
-                            ],
-                        ]
-                    )
-            );
+        $endpoint = new Endpoint('/auth/trustedApps');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(
+                    static fn(array $trustedApp): TrustedApp => ModelFactory::createTrustedApp($trustedApp),
+                    $response
+                );
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt
+        ]);
     }
 
     /**
-     * getTrustedApp
-     *
      * @param string $uid
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
-    public function getTrustedApp(
-        string $uid,
-        string $jwt
-    ): Response
+    public function getTrustedApp(string $uid, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps/%s'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'trustedApp' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'schema' => Schema::TRUSTED_APP,
-                                'null' => true,
-                            ],
-                        ]
-                    )
+        $endpoint = new Endpoint('/auth/trustedApps/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
-    }
-    
-    /**
-     * updateTrustedApp
-     *
-     * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
-     */
-    public function updateTrustedApp(
-        TrustedApp $trustedAppModel,
-        string $jwt
-    ): Response
-    {
-        if ($trustedAppModel->getUid() === null) {
-            throw new ServiceException(
-                'TrustedApp lacks a uid'
-            );
-        }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps/%s',
-                    'PUT'
-                ))
-                    ->setJson($trustedAppModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'update',
-                            ],
-                        ]
-                    )
-                    ->setUriParameters(
-                        [
-                            $trustedAppModel->getUid(),
-                        ]
-                    )
-            );
-    }
-    
-    /**
-     * createTrustedApp
-     *
-     * @param TrustedApp $trustedAppModel
-     * @param string     $jwt
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
-     */
-    public function createTrustedApp(
-        TrustedApp $trustedAppModel,
-        string $jwt
-    ): Response
-    {
-        if ($trustedAppModel->getUid() !== null) {
-            throw new ServiceException(
-                'TrustedApp has a uid'
-            );
-        }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps',
-                    'POST'
-                ))
-                    ->setJson($trustedAppModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'create',
-                            ],
-                        ]
-                    )
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                            ];
-                        }
-                    )
-                    ->setValidation(
-                        [
-                            'trustedApp' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => array_merge(
-                                    Schema::TRUSTED_APP,
-                                    [
-                                        'resetToken' => [
-                                            'type' => JsonRule::STRING_TYPE
-                                        ],
-                                    ]
-                                ),
-                            ],
-                        ]
-                    )
-            );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$uid]
+        ]);
     }
 
     /**
-     * deleteTrustedApp
-     *
-     * @param string $uid
-     * @param string $resetToken
+     * @param TrustedApp $trustedApp
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      * @throws SerializerException
-     * @throws ValidatorException
      */
-    public function deleteTrustedApp(
-        string $uid,
-        string $resetToken,
-        string $jwt
-    ): Response
+    public function createTrustedApp(TrustedApp $trustedApp, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps/%s',
-                    'DELETE'
-                ))
-                    ->setJson(
-                        [
-                            'resetToken' => $resetToken,
-                        ]
-                    )
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $uid,
-                        ]
-                    )
+        $schema = new JsonSchema(array_merge(
+            Schema::TRUSTED_APP,
+            ['resetToken' => ['type' => JsonRule::STRING_TYPE]]
+        ));
+
+        $endpoint = new Endpoint('/auth/trustedApps', 'POST');
+        $endpoint->setResponseValidationSchema($schema)
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
+
+        $data = Serializer::getInstance()->normalize($trustedApp, [
+            AbstractNormalizer::GROUPS => ['create']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data
+        ]);
     }
 
     /**
-     * resetAuthToken
-     *
-     * @param TrustedApp $trustedAppModel
+     * @param TrustedApp $trustedApp
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
      * @throws SerializerException
-     * @throws ValidatorException
      */
-    public function resetAuthToken(
-        TrustedApp $trustedAppModel,
-        string $jwt
-    ): Response
+    public function updateTrustedApp(TrustedApp $trustedApp, string $jwt): Response
     {
+        if ($trustedApp->getUid() === null) {
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+        }
+
+        $endpoint = new Endpoint('/auth/trustedApps/%s', 'PUT');
+
+        $data = Serializer::getInstance()->normalize($trustedApp, [
+            AbstractNormalizer::GROUPS => ['update']
+        ]);
+
         return $this
             ->getClient()
-            ->request(
-                (new Request(
-                    '/auth/trustedApps/%s/authToken/reset',
-                    'PUT'
-                ))
-                    ->setJson($trustedAppModel)
-                    ->setJwt($jwt)
-                    ->setNormalization(
-                        [
-                            AbstractNormalizer::GROUPS => [
-                                'reset',
-                            ],
-                        ]
-                    )
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'trustedApp' => ModelFactory::createTrustedApp($response['trustedApp']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $trustedAppModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'success' => [
-                                'type' => JsonRule::BOOLEAN_TYPE,
-                            ],
-                            'error' => [
-                                'type' => JsonRule::STRING_TYPE,
-                                'null' => true,
-                            ],
-                            'trustedApp' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::TRUSTED_APP,
-                            ],
-                        ]
-                    )
+            ->request($endpoint, [
+                'jwt' => $jwt,
+                'json' => $data,
+                'uriParameters' => [$trustedApp->getUid()]
+            ]);
+    }
+
+    /**
+     * @param TrustedApp $trustedApp
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws SerializerException
+     */
+    public function deleteTrustedApp(TrustedApp $trustedApp, string $jwt): Response
+    {
+        if ($trustedApp->getUid() === null) {
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+        }
+
+        $endpoint = new Endpoint('/auth/trustedApps/%s', 'DELETE');
+        $data = Serializer::getInstance()->normalize($trustedApp, [
+            AbstractNormalizer::GROUPS => ['delete']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data,
+            'uriParameters' => [$trustedApp->getUid()]
+        ]);
+    }
+
+    /**
+     * @param TrustedApp $trustedApp
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws SerializerException
+     */
+    public function resetAuthToken(TrustedApp $trustedApp, string $jwt): Response
+    {
+        if ($trustedApp->getUid() === null) {
+            throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+        }
+
+        $endpoint = new Endpoint('/auth/trustedApps/%s/authToken/reset', 'PUT');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
+            ->setResponseFormatter(
+                static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
+
+        $data = Serializer::getInstance()->normalize($trustedApp, [
+            AbstractNormalizer::GROUPS => ['reset']
+        ]);
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'json' => $data,
+            'uriParamaters' => [$trustedApp->getUid()]
+        ]);
     }
 }

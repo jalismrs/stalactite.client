@@ -57,6 +57,7 @@
         </attribute>
         <attribute name="resetToken">
             <group>reset</group>
+            <group>delete</group>
         </attribute>
         <attribute name="uid">
             <group>main</group>

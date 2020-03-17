@@ -3,19 +3,20 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client;
 
+use hunomina\DataValidator\Data\Json\JsonData;
+use hunomina\DataValidator\Exception\Json\InvalidDataException;
 use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
-use Jalismrs\Stalactite\Client\Util\Validator;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Throwable;
 
 /**
  * Client
@@ -24,63 +25,35 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class Client
 {
-    /**
-     * @var string
-     */
+    private const ERROR_SCHEMA = [
+        'error' => ['type' => JsonRule::INTEGER_TYPE]
+    ];
+
     private string $host;
-    
-    /**
-     * @var HttpClientInterface|null
-     */
-    private ?HttpClientInterface $httpClient = null;
-    /**
-     * @var LoggerInterface|null
-     */
-    private ?LoggerInterface $logger = null;
-    /**
-     * @var string|null
-     */
+
     private ?string $userAgent = null;
 
-    /**
-     * Client constructor.
-     *
-     * @param string $host
-     */
-    public function __construct(
-        string $host
-    )
+    private ?HttpClientInterface $httpClient = null;
+
+    private ?LoggerInterface $logger = null;
+
+    private ?JsonSchema $errorSchema = null;
+
+    public function __construct(string $host)
     {
         $this->host = $host;
     }
 
-    /**
-     * getHost
-     *
-     * @return string
-     */
     public function getHost(): string
     {
         return $this->host;
     }
 
-    /**
-     * getUserAgent
-     *
-     * @return null|string
-     */
     public function getUserAgent(): ?string
     {
         return $this->userAgent;
     }
 
-    /**
-     * setUserAgent
-     *
-     * @param string|null $userAgent
-     *
-     * @return $this
-     */
     public function setUserAgent(?string $userAgent): self
     {
         $this->userAgent = $userAgent;
@@ -88,166 +61,64 @@ class Client
         return $this;
     }
 
-    /**
-     * request
-     *
-     * @param Request $request
-     *
-     * @return Response
-     *
-     * @throws ClientException
-     * @throws Exception\SerializerException
-     * @throws Exception\ValidatorException
-     */
-    public function request(Request $request): Response
+    private static function getRequestOptions(array $options): array
     {
-        $content = $this->getResponse(
-            $request
-        );
+        $requestOptions = [];
 
-        $data = $this->validateResponse(
-            $request,
-            $content
-        );
-
-        return $this->buildResponse(
-            $request,
-            $data
-        );
-    }
-    
-    /**
-     * getResponse
-     *
-     * @param Request $request
-     *
-     * @return array
-     *
-     * @throws ClientException
-     * @throws Exception\SerializerException
-     */
-    private function getResponse(Request $request): array
-    {
-        $method = $request->getMethod();
-        $uri = $request->getUri();
-        $options = $this->getRequestOptions($request);
-
-        $this
-            ->getLogger()
-            ->debug(
-                'API call',
-                [
-                    'method' => $method,
-                    'uri' => $uri,
-                    'options' => $options,
-                ]
-            );
-
-        try {
-            $response = $this
-                ->getHttpClient()
-                ->request(
-                    $method,
-                    $uri,
-                    $options
-                );
-        } catch (TransportExceptionInterface $transportException) {
-            $this
-                ->getLogger()
-                ->error($transportException);
-
-            throw new ClientException(
-                'Error while contacting Stalactite API',
-                ClientException::CLIENT_TRANSPORT,
-                $transportException
-            );
+        if (isset($options['jwt'])) {
+            $requestOptions['headers']['X-API-TOKEN'] = $options['jwt'];
         }
-
-        try {
-            $content = $response->toArray(false);
-        } catch (ExceptionInterface $exception) {
-            $this
-                ->getLogger()
-                ->error($exception);
-
-            throw new ClientException(
-                'Invalid json response from Stalactite API',
-                ClientException::INVALID_API_RESPONSE,
-                $exception
-            );
-        }
-
-        return $content;
-    }
-
-    /**
-     * getRequestOptions
-     *
-     * @param Request $request
-     *
-     * @return array
-     *
-     * @throws Exception\SerializerException
-     */
-    private function getRequestOptions(Request $request): array
-    {
-        $json = $request->getJson();
-        $jwt = $request->getJwt();
-        $queryParameters = $request->getQueryParameters();
-
-        $options = array_replace_recursive(
-            $request->getOptions(),
-            ['headers' => ['Accept' => 'application/json']],
-            $json
-                ? ['json' => $json]
-                : []
-            ,
-            $jwt
-                ? ['headers' => ['X-API-TOKEN' => $jwt]]
-                : []
-            ,
-            $queryParameters
-                ? ['query' => $queryParameters]
-                : []
-        );
 
         if (isset($options['json'])) {
-            $options['json'] = Serializer::getInstance()
-                ->normalize(
-                    $options['json'],
-                    $request->getNormalization() ?? []
-                );
+            $requestOptions['json'] = $options['json'];
         }
 
-        return $options;
+        if (isset($options['query'])) {
+            $requestOptions['query'] = $options['query'];
+        }
+
+        return $requestOptions;
     }
 
-    /**
-     * getLogger
-     *
-     * @return LoggerInterface
-     */
     public function getLogger(): LoggerInterface
     {
-        if ($this->logger === null) {
+        if (!($this->logger instanceof LoggerInterface)) {
             $this->logger = $this->createDefaultLogger();
         }
 
         return $this->logger;
     }
 
-    /**
-     * setLogger
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return $this
-     */
     public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
 
         return $this;
+    }
+
+    public function getHttpClient(): HttpClientInterface
+    {
+        if (!($this->httpClient instanceof HttpClientInterface)) {
+            $this->httpClient = $this->createDefaultHttpClient();
+        }
+
+        return $this->httpClient;
+    }
+
+    public function setHttpClient(HttpClientInterface $httpClient): self
+    {
+        $this->httpClient = $httpClient;
+
+        return $this;
+    }
+
+    private function getErrorSchema(): JsonSchema
+    {
+        if (!($this->errorSchema instanceof JsonSchema)) {
+            $this->errorSchema = new JsonSchema(self::ERROR_SCHEMA);
+        }
+
+        return $this->errorSchema;
     }
 
     /*
@@ -256,40 +127,19 @@ class Client
      * -------------------------------------------------------------------------
      */
 
-    /**
-     * createDefaultLogger
-     *
-     * @return LoggerInterface
-     */
     private function createDefaultLogger(): LoggerInterface
     {
         return new NullLogger();
     }
 
-    /**
-     * @return HttpClientInterface
-     */
-    public function getHttpClient(): HttpClientInterface
+    private function createDefaultHttpClient(): HttpClientInterface
     {
-        if ($this->httpClient === null) {
-            $this->httpClient = $this->createDefaultHttpClient();
-        }
-
-        return $this->httpClient;
-    }
-
-    /**
-     * setHttpClient
-     *
-     * @param HttpClientInterface $httpClient
-     *
-     * @return $this
-     */
-    public function setHttpClient(HttpClientInterface $httpClient): self
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
+        return HttpClient::create(
+            [
+                'base_uri' => $this->host,
+                'headers' => $this->userAgent ? ['User-Agent' => $this->userAgent] : []
+            ]
+        );
     }
 
     /*
@@ -299,108 +149,127 @@ class Client
      */
 
     /**
-     * createDefaultHttpClient
-     *
-     * @return HttpClientInterface
-     */
-    private function createDefaultHttpClient(): HttpClientInterface
-    {
-        return HttpClient::create(
-            [
-                'base_uri' => $this->host,
-                'headers' => $this->userAgent
-                    ? ['User-Agent' => $this->userAgent]
-                    : [],
-            ]
-        );
-    }
-    
-    /**
-     * validateResponse
-     *
-     * @param Request $request
-     * @param array   $content
-     *
-     * @return array
-     *
+     * @param Endpoint $endpoint
+     * @param array $options
+     * @return Response
      * @throws ClientException
-     * @throws ValidatorException
      */
-    private function validateResponse(
-        Request $request,
-        array $content
-    ): array
+    public function request(Endpoint $endpoint, array $options = []): Response
     {
-        $validator = Validator::getInstance();
+        // prepare request
+        $method = $endpoint->getMethod();
+        $uri = $endpoint->getUri();
 
-        $validator
-            ->setData($content)
-            ->setSchema(
-                array_merge(
-                    [
-                        'success' => [
-                            'type' => JsonRule::BOOLEAN_TYPE
-                        ],
-                        'error' => [
-                            'type' => JsonRule::STRING_TYPE,
-                            'null' => true
-                        ],
-                    ],
-                    $request->getValidation() ?? []
-                )
-            );
-
-        try {
-            $validator->validate();
-        } catch (ValidatorException $validatorException) {
-            $this
-                ->getLogger()
-                ->error($validatorException);
-    
-            throw new ClientException(
-                'Invalid response from Stalactite API: ' . $validatorException->getMessage(),
-                ClientException::INVALID_API_RESPONSE,
-                $validatorException
-            );
+        // uri paramteters must be an array or will be ignored
+        if (isset($options['uriParameters']) && is_array($options['uriParameters'])) {
+            $uri = sprintf($endpoint->getUri(), ...$options['uriParameters']);
+            unset($options['uriParameters']);
         }
 
-        $data = $validator->getData();
-        if ($data === null) {
-            $clientException = new ClientException(
-                'should never happen'
-            );
+        $requestOptions = self::getRequestOptions($options);
 
-            $this
-                ->getLogger()
-                ->error($clientException);
+        $this->getLogger()->notice('API call', [
+            'method' => $method,
+            'uri' => $uri,
+            'options' => $requestOptions,
+        ]);
 
+        // exec request
+        try {
+            $response = $this->getHttpClient()->request($method, $uri, $options);
+            $responseCode = $response->getStatusCode();
+        } catch (TransportExceptionInterface $transportException) {
+            $clientException = new ClientException('Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $transportException);
+            $this->getLogger()->error($clientException);
             throw $clientException;
         }
 
-        return $data;
+        if ($responseCode >= 400) { // HTTP errors
+            return $this->handleError($response);
+        }
+
+        return $this->handleResponse($endpoint, $response);
     }
 
     /**
-     * buildResponse
-     *
-     * @param Request $request
-     * @param array $data
-     *
+     * @param ResponseInterface $response
      * @return Response
+     * @throws ClientException
      */
-    private function buildResponse(
-        Request $request,
-        array $data
-    ): Response
+    private function handleError(ResponseInterface $response): Response
     {
-        $response = $request->getResponse();
+        $responseInfos = $this->getResponseInfos($response);
 
-        return new Response(
-            $data['success'],
-            $data['error'],
-            $response === null
-                ? null
-                : $response($data)
-        );
+        try {
+            $data = new JsonData($responseInfos['body']);
+            $this->getErrorSchema()->validate($data);
+        } catch (InvalidDataException $e) { // throw ClientException if invalid error format
+            $clientException = new ClientException('Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
+            $this->getLogger()->error($clientException);
+            throw $clientException;
+        }
+
+        return new Response($responseInfos['code'], $responseInfos['headers'], $data->getData());
+    }
+
+    /**
+     * @param Endpoint $endpoint
+     * @param ResponseInterface $response
+     * @return Response
+     * @throws ClientException
+     */
+    private function handleResponse(Endpoint $endpoint, ResponseInterface $response): Response
+    {
+        $responseInfos = $this->getResponseInfos($response);
+        $content = $responseInfos['body'];
+
+        if ($schema = $endpoint->getResponseValidationSchema()) {
+
+            // validate
+            try {
+                $responseBody = new JsonData($responseInfos['body']);
+            } catch (InvalidDataException $e) {
+                $clientException = new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_JSON_RESPONSE, $e);
+                $this->getLogger()->error($clientException);
+                throw $clientException;
+            }
+
+            try {
+                $schema->validate($responseBody);
+            } catch (InvalidDataException $e) {
+                $clientException = new ClientException('Invalid Stalactite API response format', ClientException::INVALID_RESPONSE_FORMAT, $e);
+                $this->getLogger()->error($clientException);
+                throw $clientException;
+            }
+
+            $content = $responseBody->getData();
+
+            // format the validated response - if needed
+            if ($formatter = $endpoint->getResponseFormatter()) {
+                $content = $formatter($content);
+            }
+        }
+
+        return new Response($responseInfos['code'], $responseInfos['headers'], $content);
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return array
+     * @throws ClientException
+     */
+    private function getResponseInfos(ResponseInterface $response): array
+    {
+        try {
+            return [
+                'code' => $response->getStatusCode(),
+                'headers' => $response->getHeaders(false),
+                'body' => $response->getContent(false)
+            ];
+        } catch (Throwable $t) {
+            $clientException = new ClientException('Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $t);
+            $this->getLogger()->error($clientException);
+            throw $clientException;
+        }
     }
 }

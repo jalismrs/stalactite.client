@@ -3,67 +3,36 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Exception;
 
-use RuntimeException;
+use Exception;
 
 /**
  * ClientException
  *
  * @package Jalismrs\Stalactite\Client\Exception
  */
-class ClientException extends
-    RuntimeException implements
-    ExceptionInterface
+class ClientException extends Exception
 {
-    ////////////////////
-    /** Common Error **/
-    ////////////////////
+    /**
+     * An error occurred while performing an HTTP request
+     */
+    public const REQUEST_FAILED = 1;
+
+    //////////////////////
+    /** Response Error **/
+    //////////////////////
 
     /**
-     * The client received an invalid response from the Stalactite API
+     * Thrown on invalid Stalactite API response
      */
-    public const INVALID_API_RESPONSE = 0;
+    public const INVALID_RESPONSE = 10;
 
     /**
-     * An error occurred while contacting an API
+     * Thrown on invalid Stalactite API json response
      */
-    public const CLIENT_TRANSPORT = 1;
-
-    ////////////////////////////
-    /** Authentication Error **/
-    ////////////////////////////
+    public const INVALID_JSON_RESPONSE = 11;
 
     /**
-     * Expired user JWT
+     * Thrown when the Stalactite API response does not match the expected endpoint schema
      */
-    public const EXPIRED_JWT = 13;
-
-    /**
-     * Invalid JWT issuer
-     */
-    public const INVALID_JWT_ISSUER = 12;
-
-    /**
-     * Invalid user JWT signature
-     */
-    public const INVALID_JWT_SIGNATURE = 15;
-
-    /**
-     * Invalid user JWT string used
-     */
-    public const INVALID_JWT_STRING = 11;
-
-    /**
-     * Invalid JWT structure (missing fields)
-     */
-    public const INVALID_JWT_STRUCTURE = 16;
-
-    /**
-     * Wrong user type set for the JWT
-     */
-    public const INVALID_JWT_USER_TYPE = 14;
-
-    /**
-     * Invalid Stalactite RSA public key used
-     */
-    public const INVALID_STALACTITE_RSA_PUBLIC_KEY = 10;
+    public const INVALID_RESPONSE_FORMAT = 12;
 }

@@ -21,9 +21,10 @@ jobs:
         with:
           extensions: mbstring
           php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
         env:
           update: true
-          
+
       - name: Setup Problem Matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
@@ -35,3 +36,9 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: clover.xml

@@ -14,114 +14,85 @@
         verbose="true"
 >
     <testsuites>
-        <testsuite
-                name=""
-        >
+        <testsuite name="">
             <directory>tests</directory>
         </testsuite>
-        <testsuite
-                name="access"
-        >
+        <testsuite name="access">
             <directory>tests/Access</directory>
             <directory>tests/Api/Access</directory>
             <directory>tests/Model/Access</directory>
             <directory>tests/Service/Access</directory>
         </testsuite>
-        <testsuite
-                name="authentication"
-        >
+        <testsuite name="authentication">
             <directory>tests/Authentication</directory>
             <directory>tests/Api/Authentication</directory>
             <directory>tests/Model/Authentication</directory>
             <directory>tests/Service/Authentication</directory>
         </testsuite>
-        <testsuite
-                name="data"
-        >
+        <testsuite name="data">
             <directory>tests/Data</directory>
             <directory>tests/Api/Data</directory>
             <directory>tests/Model/Data</directory>
             <directory>tests/Service/Data</directory>
         </testsuite>
-        <testsuite
-                name="api"
-        >
+        <testsuite name="api">
             <directory>tests/Api</directory>
         </testsuite>
-        <testsuite
-                name="api-access"
-        >
+        <testsuite name="api-access">
             <directory>tests/Api/Access</directory>
         </testsuite>
-        <testsuite
-                name="api-authentication"
-        >
+        <testsuite name="api-authentication">
             <directory>tests/Api/Authentication</directory>
         </testsuite>
-        <testsuite
-                name="api-data"
-        >
+        <testsuite name="api-data">
             <directory>tests/Api/Data</directory>
         </testsuite>
-        <testsuite
-                name="model"
-        >
+        <testsuite name="model">
             <directory>tests/Model</directory>
         </testsuite>
-        <testsuite
-                name="model-access"
-        >
+        <testsuite name="model-access">
             <directory>tests/Model/Access</directory>
         </testsuite>
-        <testsuite
-                name="model-authentication"
-        >
+        <testsuite name="model-authentication">
             <directory>tests/Model/Authentication</directory>
         </testsuite>
-        <testsuite
-                name="model-data"
-        >
+        <testsuite name="model-data">
             <directory>tests/Model/Data</directory>
         </testsuite>
-        <testsuite
-                name="service"
-        >
+        <testsuite name="service">
             <directory>tests/Service</directory>
         </testsuite>
-        <testsuite
-                name="service-access"
-        >
+        <testsuite name="service-access">
             <directory>tests/Service/Access</directory>
         </testsuite>
-        <testsuite
-                name="service-authentication"
-        >
+        <testsuite name="service-authentication">
             <directory>tests/Service/Authentication</directory>
         </testsuite>
-        <testsuite
-                name="service-data"
-        >
+        <testsuite name="service-data">
             <directory>tests/Service/Data</directory>
         </testsuite>
-        <testsuite
-                name="service-entry"
-        >
+        <testsuite name="service-entry">
             <file>tests/Service/ServiceTest.php</file>
         </testsuite>
-        <testsuite
-                name="util"
-        >
+        <testsuite name="util">
             <directory>tests/Util</directory>
         </testsuite>
-        <testsuite
-                name="client"
-        >
+        <testsuite name="client">
             <file>tests/ClientTest.php</file>
         </testsuite>
-        <testsuite
-                name="request"
-        >
+        <testsuite name="request">
             <file>tests/Util/RequestTest.php</file>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
 </phpunit>

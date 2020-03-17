@@ -7,11 +7,8 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 
 /**
@@ -19,54 +16,27 @@ use Jalismrs\Stalactite\Client\Util\Response;
  *
  * @package Jalismrs\Stalactite\Service\Access\AuthToken\User
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * deleteRelationsByUser
-     *
-     * @param User   $userModel
+     * @param User $user
      * @param string $apiAuthToken
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
      */
-    public function deleteRelationsByUser(
-        User $userModel,
-        string $apiAuthToken
-    ): Response
+    public function deleteRelationsByUser(User $user, string $apiAuthToken): Response
     {
-        if ($userModel->getUid() === null) {
-            throw new ServiceException(
-                'User lacks a uid'
-            );
+        if ($user->getUid() === null) {
+            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
         }
-    
-        $jwt = JwtFactory::generateJwt(
-            $apiAuthToken,
-            $this
-                ->getClient()
-                ->getUserAgent()
-        );
 
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/auth-token/users/%s/relations',
-                    'DELETE'
-                ))
-                    ->setJwt((string)$jwt)
-                    ->setUriParameters(
-                        [
-                            $userModel->getUid(),
-                        ]
-                    )
-            );
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
+
+        $endpoint = new Endpoint('/access/auth-token/users/%s/relations', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$user->getUid()]
+        ]);
     }
 }

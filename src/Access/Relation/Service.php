@@ -6,11 +6,8 @@ namespace Jalismrs\Stalactite\Client\Access\Relation;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\DomainRelation;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 
 /**
@@ -18,47 +15,25 @@ use Jalismrs\Stalactite\Client\Util\Response;
  *
  * @package Jalismrs\Stalactite\Service\Access\Relation
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * deleteRelation
-     *
-     * @param DomainRelation $domainRelationModel
-     * @param string         $jwt
-     *
+     * @param DomainRelation $domainRelation
+     * @param string $jwt
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
      */
-    public function deleteRelation(
-        DomainRelation $domainRelationModel,
-        string $jwt
-    ): Response
+    public function deleteRelation(DomainRelation $domainRelation, string $jwt): Response
     {
-        if ($domainRelationModel->getUid() === null) {
-            throw new ServiceException(
-                'DomainRelation lacks a uid'
-            );
+        if ($domainRelation->getUid() === null) {
+            throw new AccessServiceException('DomainRelation lacks a uid', AccessServiceException::MISSING_DOMAIN_RELATION_UID);
         }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/relations/%s',
-                    'DELETE'
-                ))
-                    ->setJwt($jwt)
-                    ->setUriParameters(
-                        [
-                            $domainRelationModel->getUid(),
-                        ]
-                    )
-            );
+
+        $endpoint = new Endpoint('/access/relations/%s', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => $domainRelation->getUid()
+        ]);
     }
 }

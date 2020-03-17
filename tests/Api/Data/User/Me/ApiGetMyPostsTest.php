@@ -1,11 +1,10 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\AuthToken\Domain;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\AuthToken\Domain\Service;
-use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\User\Me\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
@@ -14,18 +13,13 @@ use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Serializer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * ApiGetAllTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Api\Data\AuthToken\Domain
- */
-class ApiGetAllTest extends EndpointTest
+class ApiGetMyPostsTest extends EndpointTest
 {
     /**
      * @throws ClientException
      * @throws SerializerException
      */
-    public function testGetAll(): void
+    public function testGetMyPosts(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -34,7 +28,7 @@ class ApiGetAllTest extends EndpointTest
                 json_encode([
                     Serializer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableDomain(),
+                            ModelFactory::getTestablePost(),
                             [
                                 AbstractNormalizer::GROUPS => ['main']
                             ]
@@ -43,9 +37,9 @@ class ApiGetAllTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getAllDomains('fake API auth token');
+        $response = $mockService->getMyPosts('fake user jwt');
 
-        self::assertContainsOnlyInstancesOf(Domain::class, $response->getBody());
+        self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
 
     /**
@@ -54,6 +48,6 @@ class ApiGetAllTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getAllDomains('fake API auth token');
+        $mockService->getMyPosts('fake user jwt');
     }
 }

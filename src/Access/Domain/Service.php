@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Access\Domain;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
+use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
+use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\ResponseFactory;
 use Jalismrs\Stalactite\Client\Access\Schema;
@@ -13,11 +16,8 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\RequestException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Exception\ServiceException;
-use Jalismrs\Stalactite\Client\Exception\ValidatorException;
-use Jalismrs\Stalactite\Client\Util\Request;
+use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 
 /**
@@ -25,215 +25,114 @@ use Jalismrs\Stalactite\Client\Util\Response;
  *
  * @package Jalismrs\Stalactite\Service\Access\Domain
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
     /**
-     * getRelations
-     *
-     * @param Domain $domainModel
+     * @param Domain $domain
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ValidatorException
      */
-    public function getRelations(
-        Domain $domainModel,
-        string $jwt
-    ): Response
+    public function getRelations(Domain $domain, string $jwt): Response
     {
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/domains/%s/relations'
-                ))
-                    ->setJwt($jwt)
-                    ->setResponse(ResponseFactory::domainGetRelations($domainModel))
-                    ->setUriParameters(
-                        [
-                            $domainModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'relations' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'schema' => [
-                                    'users' => [
-                                        'type' => JsonRule::LIST_TYPE,
-                                        'schema' => [
-                                            'uid' => [
-                                                'type' => JsonRule::STRING_TYPE,
-                                            ],
-                                            'user' => [
-                                                'type' => JsonRule::OBJECT_TYPE,
-                                                'schema' => DataSchema::USER,
-                                            ],
-                                        ],
-                                    ],
-                                    'customers' => [
-                                        'type' => JsonRule::LIST_TYPE,
-                                        'schema' => [
-                                            'uid' => [
-                                                'type' => JsonRule::STRING_TYPE,
-                                            ],
-                                            'customer' => [
-                                                'type' => JsonRule::OBJECT_TYPE,
-                                                'schema' => DataSchema::CUSTOMER,
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ]
-                    )
-            );
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+        }
+
+        $schema = [
+            'users' => [
+                'type' => JsonRule::LIST_TYPE,
+                'schema' => [
+                    'uid' => [
+                        'type' => JsonRule::STRING_TYPE
+                    ],
+                    'user' => [
+                        'type' => JsonRule::OBJECT_TYPE,
+                        'schema' => DataSchema::USER
+                    ]
+                ]
+            ],
+            'customers' => [
+                'type' => JsonRule::LIST_TYPE,
+                'schema' => [
+                    'uid' => [
+                        'type' => JsonRule::STRING_TYPE
+                    ],
+                    'customer' => [
+                        'type' => JsonRule::OBJECT_TYPE,
+                        'schema' => DataSchema::CUSTOMER
+                    ]
+                ]
+            ]
+        ];
+
+        $endpoint = new Endpoint('/access/domains/%s/relations');
+        $endpoint->setResponseValidationSchema(new JsonSchema($schema))
+            ->setResponseFormatter(ResponseFactory::domainGetRelations($domain));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$domain->getUid()]
+        ]);
     }
-    
+
     /**
-     * addUserRelation
-     *
-     * @param Domain $domainModel
-     * @param User   $userModel
+     * @param Domain $domain
+     * @param User $user
      * @param string $jwt
-     *
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
      */
-    public function addUserRelation(
-        Domain $domainModel,
-        User $userModel,
-        string $jwt
-    ): Response
+    public function addUserRelation(Domain $domain, User $user, string $jwt): Response
     {
-        if ($domainModel->getUid() === null) {
-            throw new ServiceException(
-                'Domain lacks a uid'
-            );
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
         }
-        if ($userModel->getUid() === null) {
-            throw new ServiceException(
-                'User lacks a uid'
-            );
+
+        if ($user->getUid() === null) {
+            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
         }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/domains/%s/relations/users',
-                    'POST'
-                ))
-                    ->setJson(
-                        [
-                            'user' => $userModel->getUid(),
-                        ]
-                    )
-                    ->setJwt($jwt)
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'relation' => $response['relation'] === null
-                                    ? null
-                                    : ModelFactory::createDomainUserRelation($response['relation']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $domainModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'relation' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::DOMAIN_USER_RELATION,
-                            ],
-                        ]
-                    )
+
+        $endpoint = new Endpoint('/access/domains/%s/relations/users', 'POST');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_USER_RELATION))
+            ->setResponseFormatter(
+                static fn(array $response): DomainUserRelation => ModelFactory::createDomainUserRelation($response)
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$domain->getUid()],
+            'json' => ['user' => $user->getUid()]
+        ]);
     }
-    
+
     /**
-     * addCustomerRelation
-     *
-     * @param Domain   $domainModel
-     * @param Customer $customerModel
-     * @param string   $jwt
-     *
+     * @param Domain $domain
+     * @param Customer $customer
+     * @param string $jwt
      * @return Response
-     *
      * @throws ClientException
-     * @throws RequestException
-     * @throws SerializerException
-     * @throws ServiceException
-     * @throws ValidatorException
      */
-    public function addCustomerRelation(
-        Domain $domainModel,
-        Customer $customerModel,
-        string $jwt
-    ): Response
+    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt): Response
     {
-        if ($domainModel->getUid() === null) {
-            throw new ServiceException(
-                'Domain lacks a uid'
-            );
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
         }
-        if ($customerModel->getUid() === null) {
-            throw new ServiceException(
-                'Customer lacks a uid'
-            );
+
+        if ($customer->getUid() === null) {
+            throw new AccessServiceException('Customer lacks a uid', AccessServiceException::MISSING_CUSTOMER_UID);
         }
-    
-        return $this
-            ->getClient()
-            ->request(
-                (new Request(
-                    '/access/domains/%s/relations/customers',
-                    'POST'
-                ))
-                    ->setJson(
-                        [
-                            'customer' => $customerModel->getUid(),
-                        ]
-                    )
-                    ->setJwt($jwt)
-                    ->setResponse(
-                        static function (array $response): array {
-                            return [
-                                'relation' => $response['relation'] === null
-                                    ? null
-                                    : ModelFactory::createDomainCustomerRelation($response['relation']),
-                            ];
-                        }
-                    )
-                    ->setUriParameters(
-                        [
-                            $domainModel->getUid(),
-                        ]
-                    )
-                    ->setValidation(
-                        [
-                            'relation' => [
-                                'type' => JsonRule::OBJECT_TYPE,
-                                'null' => true,
-                                'schema' => Schema::DOMAIN_CUSTOMER_RELATION,
-                            ],
-                        ]
-                    )
+
+        $endpoint = new Endpoint('/access/domains/%s/relations/customers', 'POST');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_CUSTOMER_RELATION))
+            ->setResponseFormatter(
+                static fn(array $response): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($response)
             );
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$domain->getUid()],
+            'json' => ['customer' => $customer->getUid()]
+        ]);
     }
 }

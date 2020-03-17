@@ -12,62 +12,43 @@ namespace Jalismrs\Stalactite\Client\Util;
  */
 class Response
 {
-    /**
-     * @var array|null
-     */
-    private ?array $data = null;
-    /**
-     * @var string|null
-     */
-    private ?string $error = null;
-    /**
-     * @var bool
-     */
-    private bool $success;
+    /** @var int $code */
+    private int $code;
 
-    /**
-     * Response constructor.
-     *
-     * @param bool $success
-     * @param string|null $error
-     * @param array|null $data
-     */
-    public function __construct(
-        bool $success,
-        ?string $error,
-        ?array $data
-    )
+    /** @var array $headers */
+    private array $headers;
+
+    /** @var mixed $body */
+    private $body;
+
+    public function __construct(int $code, array $headers = [], $body = null)
     {
-        $this->success = $success;
-        $this->error = $error;
-        $this->data = $data;
+        $this->code = $code;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**
-     * isSuccess
-     *
-     * @return bool
+     * @return int
      */
-    public function isSuccess(): bool
+    public function getCode(): int
     {
-        return $this->success;
+        return $this->code;
     }
 
     /**
-     * getError
-     *
-     * @return null|string
+     * @return array
      */
-    public function getError(): ?string
+    public function getHeaders(): array
     {
-        return $this->error;
+        return $this->headers;
     }
 
     /**
-     * @return array|null
+     * @return mixed
      */
-    public function getData(): ?array
+    public function getBody()
     {
-        return $this->data;
+        return $this->body;
     }
 }
