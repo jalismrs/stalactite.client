@@ -27,14 +27,19 @@ class JwtException extends Exception
     public const INVALID_JWT_SIGNATURE = 4;
 
     /**
+     * JWT signature is missing
+     */
+    public const MISSING_JWT_SIGNATURE = 5;
+
+    /**
      * Invalid JWT structure (missing fields)
      */
-    public const INVALID_JWT_STRUCTURE = 5;
+    public const INVALID_JWT_STRUCTURE = 6;
 
     /**
      * Expired user JWT
      */
-    public const EXPIRED_JWT = 6;
+    public const EXPIRED_JWT = 7;
 
     /**
      * Invalid Stalactite RSA public key used
