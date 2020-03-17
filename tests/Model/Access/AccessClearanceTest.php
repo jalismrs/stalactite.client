@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
 
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,7 +28,7 @@ class AccessClearanceTest extends
     {
         $model = ModelFactory::getTestableAccessClearance();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize($model);
 
         $expected = [];
@@ -45,7 +45,7 @@ class AccessClearanceTest extends
     {
         $model = ModelFactory::getTestableAccessClearance();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize(
                 $model,
                 [

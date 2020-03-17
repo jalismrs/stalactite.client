@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -73,7 +73,7 @@ class Service extends AbstractService
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
-        $data = Serializer::getInstance()->normalize($post, [
+        $data = Normalizer::getInstance()->normalize($post, [
             AbstractNormalizer::GROUPS => ['create']
         ]);
 
@@ -98,7 +98,7 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/data/posts/%s', 'PUT');
 
-        $data = Serializer::getInstance()->normalize($post, [
+        $data = Normalizer::getInstance()->normalize($post, [
             AbstractNormalizer::GROUPS => ['update']
         ]);
 

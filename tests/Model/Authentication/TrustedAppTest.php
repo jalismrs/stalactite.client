@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Authentication;
 
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,7 +28,7 @@ class TrustedAppTest extends
     {
         $model = ModelFactory::getTestableTrustedApp();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize($model);
 
         $expected = [];
@@ -43,7 +43,7 @@ class TrustedAppTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -73,7 +73,7 @@ class TrustedAppTest extends
      */
     public function testGroupReset(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -100,7 +100,7 @@ class TrustedAppTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 
@@ -128,7 +128,7 @@ class TrustedAppTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableTrustedApp();
 

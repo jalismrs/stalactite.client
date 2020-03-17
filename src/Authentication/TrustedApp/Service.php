@@ -14,7 +14,7 @@ use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -86,7 +86,7 @@ class Service extends AbstractService
                 static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
 
-        $data = Serializer::getInstance()->normalize($trustedApp, [
+        $data = Normalizer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['create']
         ]);
 
@@ -111,7 +111,7 @@ class Service extends AbstractService
 
         $endpoint = new Endpoint('/auth/trustedApps/%s', 'PUT');
 
-        $data = Serializer::getInstance()->normalize($trustedApp, [
+        $data = Normalizer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['update']
         ]);
 
@@ -138,7 +138,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/auth/trustedApps/%s', 'DELETE');
-        $data = Serializer::getInstance()->normalize($trustedApp, [
+        $data = Normalizer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['delete']
         ]);
 
@@ -168,7 +168,7 @@ class Service extends AbstractService
                 static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
 
-        $data = Serializer::getInstance()->normalize($trustedApp, [
+        $data = Normalizer::getInstance()->normalize($trustedApp, [
             AbstractNormalizer::GROUPS => ['reset']
         ]);
 

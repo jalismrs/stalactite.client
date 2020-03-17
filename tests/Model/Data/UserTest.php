@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,7 +28,7 @@ class UserTest extends
     {
         $model = ModelFactory::getTestableUser();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize($model);
 
         $expected = [];
@@ -43,7 +43,7 @@ class UserTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -75,7 +75,7 @@ class UserTest extends
      */
     public function testGroupMin(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -107,7 +107,7 @@ class UserTest extends
      */
     public function testGroupCreate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -137,7 +137,7 @@ class UserTest extends
      */
     public function testGroupUpdate(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 
@@ -167,7 +167,7 @@ class UserTest extends
      */
     public function testGroupUpdateMe(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableUser();
 

@@ -12,7 +12,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -32,7 +32,7 @@ class ApiGetAllTest extends EndpointTest
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
-                    Serializer::getInstance()
+                    Normalizer::getInstance()
                         ->normalize(
                             ModelFactory::getTestablePost(),
                             [

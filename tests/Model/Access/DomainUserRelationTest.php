@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
 
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
-use Jalismrs\Stalactite\Client\Util\Serializer;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
@@ -28,7 +28,7 @@ class DomainUserRelationTest extends
     {
         $model = ModelFactory::getTestableDomainUserRelation();
 
-        $actual = Serializer::getInstance()
+        $actual = Normalizer::getInstance()
             ->normalize($model);
 
         $expected = [];
@@ -43,7 +43,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupMain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomainUserRelation();
 
@@ -86,7 +86,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupIgnoreDomain(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomainUserRelation();
 
@@ -124,7 +124,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupMainIgnoreUser(): void
     {
-        $serializer = Serializer::getInstance();
+        $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestableDomainUserRelation();
 
