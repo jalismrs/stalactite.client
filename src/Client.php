@@ -184,7 +184,7 @@ class Client
             throw $clientException;
         }
 
-        if ($responseCode < 200 && $response >= 300) { // not a 2XX => errors
+        if ($responseCode < 200 || $responseCode >= 300) { // not a 2XX => errors
             return $this->handleError($response);
         }
 
