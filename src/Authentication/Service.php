@@ -120,11 +120,11 @@ class Service extends AbstractService
         $publicKey = new Key($this->getRSAPublicKey()->getBody());
 
         try {
-            return $token->verify($signer, $publicKey);
+            $validSignature = $token->verify($signer, $publicKey);
         } catch (BadMethodCallException $badMethodCallException) {
             $this->getLogger()->error($badMethodCallException);
             // thrown by the library on invalid key
-            throw new JwtException('Unsigned token', JwtException::INVALID_JWT_SIGNATURE, $badMethodCallException);
+            throw new JwtException('Missing JWT signature', JwtException::MISSING_JWT_SIGNATURE, $badMethodCallException);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->getLogger()->error($invalidArgumentException);
             // thrown by the library on invalid key
@@ -133,6 +133,12 @@ class Service extends AbstractService
             $this->getLogger()->error($t);
             throw new JwtException('Invalid JWT signature', JwtException::INVALID_JWT_SIGNATURE, $t);
         }
+
+        if (!$validSignature) {
+            throw new JwtException('Invalid JWT signature', JwtException::INVALID_JWT_SIGNATURE);
+        }
+
+        return true;
     }
 
     /**
