@@ -176,7 +176,7 @@ class Client
 
         // exec request
         try {
-            $response = $this->getHttpClient()->request($method, $uri, $options);
+            $response = $this->getHttpClient()->request($method, $uri, $requestOptions);
             $responseCode = $response->getStatusCode();
         } catch (TransportExceptionInterface $transportException) {
             $clientException = new ClientException('Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $transportException);
