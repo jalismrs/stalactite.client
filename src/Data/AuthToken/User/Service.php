@@ -7,6 +7,7 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\AuthToken\JwtFactory;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
@@ -80,6 +81,72 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/auth-token/users/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $apiAuthToken
+     * @return Response
+     * @throws ClientException
+     */
+    public function getUserPosts(string $uid, string $apiAuthToken): Response
+    {
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
+
+        $endpoint = new Endpoint('/data/auth-token/users/%s/posts');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $apiAuthToken
+     * @return Response
+     * @throws ClientException
+     */
+    public function getUserLeads(string $uid, string $apiAuthToken): Response
+    {
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
+
+        $endpoint = new Endpoint('/data/auth-token/users/%s/leads');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static fn(array $lead): Post => ModelFactory::createPost($lead), $response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $apiAuthToken
+     * @return Response
+     * @throws ClientException
+     */
+    public function getUserSubordinates(string $uid, string $apiAuthToken): Response
+    {
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
+
+        $endpoint = new Endpoint('/data/auth-token/users/%s/subordinates');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,

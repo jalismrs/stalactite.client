@@ -16,8 +16,8 @@ use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -118,6 +118,26 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getUserSubordinates(string $uid, string $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users/%s/subordinates');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,
