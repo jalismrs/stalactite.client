@@ -70,4 +70,22 @@ class Service extends AbstractService
             'jwt' => $jwt
         ]);
     }
+
+    /**
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getMySubordinates(string $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users/me/subordinates');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+            ->setResponseFormatter(static function (array $response): array {
+                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
+            });
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt
+        ]);
+    }
 }
