@@ -12,8 +12,8 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -64,6 +64,24 @@ class Service extends AbstractService
             });
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt
+        ]);
+    }
+
+    /**
+     * @param string $email
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getByEmail(string $email, string $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/customers');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+            ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'query' => ['email' => $email]
         ]);
     }
 

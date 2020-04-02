@@ -31,15 +31,15 @@ class ApiGetByNameAndApiKeyTest extends EndpointTest
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
-                json_encode([
+                json_encode(
                     Normalizer::getInstance()
                         ->normalize(
                             ModelFactory::getTestableDomain(),
                             [
                                 AbstractNormalizer::GROUPS => ['main']
                             ]
-                        )
-                ], JSON_THROW_ON_ERROR)
+                        ), JSON_THROW_ON_ERROR
+                )
             )
         );
 
@@ -47,7 +47,7 @@ class ApiGetByNameAndApiKeyTest extends EndpointTest
 
         $response = $mockService->getByNameAndApiKey($domainModel->getName(), $domainModel->getApiKey(), 'fake API auth token');
 
-        self::assertContainsOnlyInstancesOf(Domain::class, $response->getBody());
+        self::assertInstanceOf(Domain::class, $response->getBody());
     }
 
     /**

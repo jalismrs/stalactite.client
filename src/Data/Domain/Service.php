@@ -12,8 +12,8 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use Jalismrs\Stalactite\Client\Util\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -66,6 +66,28 @@ class Service extends
 
     /**
      * @param string $name
+     * @param string $apiKey
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/domains');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'query' => [
+                'name' => $name,
+                'apiKey' => $apiKey
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $name
      * @param string $jwt
      * @return Response
      * @throws ClientException
@@ -73,13 +95,8 @@ class Service extends
     public function getByName(string $name, string $jwt): Response
     {
         $endpoint = new Endpoint('/data/domains');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(
-                    static fn(array $domain): Domain => ModelFactory::createDomain($domain),
-                    $response
-                );
-            });
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
 
         return $this->getClient()->request($endpoint, [
             'jwt' => $jwt,

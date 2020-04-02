@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class ApiGetByNameTest
  * @package Jalismrs\Stalactite\Client\Tests\Api\Data\Domain
  */
-class ApiGetByNameTest extends EndpointTest
+class ApiGetByNameAndApiKeyTest extends EndpointTest
 {
     /**
      * @throws ClientException
@@ -42,7 +42,9 @@ class ApiGetByNameTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getByName(ModelFactory::getTestableDomain()->getName(), 'fake user jwt');
+        $domain = ModelFactory::getTestableDomain();
+
+        $response = $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), 'fake user jwt');
 
         self::assertInstanceOf(Domain::class, $response->getBody());
     }
@@ -53,6 +55,7 @@ class ApiGetByNameTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getByName(ModelFactory::getTestableDomain()->getName(), 'fake user jwt');
+        $domain = ModelFactory::getTestableDomain();
+        $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), 'fake user jwt');
     }
 }

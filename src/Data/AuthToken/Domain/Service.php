@@ -55,13 +55,8 @@ class Service extends AbstractService
         $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
 
         $endpoint = new Endpoint('/data/auth-token/domains');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(
-                    static fn($domain): Domain => ModelFactory::createDomain($domain),
-                    $response
-                );
-            });
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,
@@ -83,13 +78,8 @@ class Service extends AbstractService
         $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
 
         $endpoint = new Endpoint('/data/auth-token/domains');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(
-                    static fn($domain): Domain => ModelFactory::createDomain($domain),
-                    $response
-                );
-            });
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,
