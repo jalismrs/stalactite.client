@@ -38,7 +38,7 @@ class Service extends AbstractService
                 );
             });
 
-        return $this->getClient()->request($endpoint, ['jwt' => $jwt]);
+        return $this->getClient()->request($endpoint, ['jwt' => (string)$jwt]);
     }
 
     /**
@@ -57,11 +57,31 @@ class Service extends AbstractService
             ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'query' => [
                 'email' => $email,
                 'googleId' => $googleId
             ]
+        ]);
+    }
+
+    /**
+     * @param string $email
+     * @param string $apiAuthToken
+     * @return Response
+     * @throws ClientException
+     */
+    public function getByEmail(string $email, string $apiAuthToken): Response
+    {
+        $jwt = JwtFactory::generateJwt($apiAuthToken, $this->getClient()->getUserAgent());
+
+        $endpoint = new Endpoint('/data/auth-token/customers');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+            ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'query' => ['email' => $email]
         ]);
     }
 
@@ -82,7 +102,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$uid]
         ]);
     }
