@@ -66,6 +66,28 @@ class Service extends
 
     /**
      * @param string $name
+     * @param string $apiKey
+     * @param string $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getByNameAndApiKey(string $name, string $apiKey, string $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/domains');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN))
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => $jwt,
+            'query' => [
+                'name' => $name,
+                'apiKey' => $apiKey
+            ]
+        ]);
+    }
+
+    /**
+     * @param string $name
      * @param string $jwt
      * @return Response
      * @throws ClientException
