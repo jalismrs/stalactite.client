@@ -30,21 +30,21 @@ class ApiGetByNameTest extends EndpointTest
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
-                json_encode([
+                json_encode(
                     Normalizer::getInstance()
                         ->normalize(
                             ModelFactory::getTestableDomain(),
                             [
                                 AbstractNormalizer::GROUPS => ['main']
                             ]
-                        )
-                ], JSON_THROW_ON_ERROR)
+                        ), JSON_THROW_ON_ERROR
+                )
             )
         );
 
         $response = $mockService->getByName(ModelFactory::getTestableDomain()->getName(), 'fake user jwt');
 
-        self::assertContainsOnlyInstancesOf(Domain::class, $response->getBody());
+        self::assertInstanceOf(Domain::class, $response->getBody());
     }
 
     /**
