@@ -9,9 +9,11 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -24,6 +26,7 @@ class ApiResetAuthTokenTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
+     * @throws JsonException
      */
     public function testResetAuthToken(): void
     {
@@ -44,7 +47,7 @@ class ApiResetAuthTokenTest extends EndpointTest
             )
         );
 
-        $response = $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $response = $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
 
         self::assertInstanceOf(TrustedApp::class, $response->getBody());
     }
@@ -56,6 +59,6 @@ class ApiResetAuthTokenTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), 'fake user jwt');
+        $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
     }
 }

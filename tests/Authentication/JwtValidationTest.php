@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,7 +35,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
@@ -47,12 +48,12 @@ class JwtValidationTest extends TestCase
     }
 
     /**
-     * @param string $token
+     * @param Token $token
      * @param string $publicKey
      * @throws ClientException
      * @throws JwtException
      */
-    private function checkToken(string $token, string $publicKey): void
+    private function checkToken(Token $token, string $publicKey): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -88,7 +89,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
@@ -97,21 +98,6 @@ class JwtValidationTest extends TestCase
                 ->withClaim('type', 'user')
                 ->getToken($signer, $privateKey),
             'invalid public key'
-        );
-    }
-
-    /**
-     * @throws ClientException
-     * @throws JwtException
-     */
-    public function testInvalidToken(): void
-    {
-        $this->expectException(JwtException::class);
-        $this->expectExceptionCode(JwtException::INVALID_JWT_STRING);
-
-        $this->checkToken(
-            'invalid-token',
-            self::getTestPublicKey()
         );
     }
 
@@ -129,7 +115,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy('wrong issuer')
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
@@ -155,7 +141,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
@@ -181,7 +167,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')
@@ -207,7 +193,7 @@ class JwtValidationTest extends TestCase
         $time = time();
 
         $this->checkToken(
-            (string)(new Builder())
+            (new Builder())
                 ->issuedBy(Service::JWT_ISSUER)
                 ->permittedFor('testTrustedAppName')
                 ->relatedTo('0123456789')

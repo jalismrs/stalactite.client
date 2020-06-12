@@ -9,9 +9,11 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -23,6 +25,7 @@ class ApiGetByNameAndApiKeyTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
+     * @throws JsonException
      */
     public function testGetByName(): void
     {
@@ -44,7 +47,7 @@ class ApiGetByNameAndApiKeyTest extends EndpointTest
 
         $domain = ModelFactory::getTestableDomain();
 
-        $response = $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), 'fake user jwt');
+        $response = $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
 
         self::assertInstanceOf(Domain::class, $response->getBody());
     }
@@ -56,6 +59,6 @@ class ApiGetByNameAndApiKeyTest extends EndpointTest
     {
         $mockService = new Service($this->createMockClient());
         $domain = ModelFactory::getTestableDomain();
-        $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), 'fake user jwt');
+        $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
     }
 }

@@ -7,8 +7,9 @@ use Jalismrs\Stalactite\Client\Access\Relation\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 
 /**
  * ApiDeleteRelationTest
@@ -28,7 +29,7 @@ class ApiDeleteRelationTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation()->setUid(null), 'fake user jwt');
+        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -37,6 +38,6 @@ class ApiDeleteRelationTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation(), 'fake user jwt');
+        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation(), JwtFactory::create());
     }
 }

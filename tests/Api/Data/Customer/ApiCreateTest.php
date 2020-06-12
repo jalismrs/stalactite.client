@@ -9,9 +9,11 @@ use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -24,6 +26,7 @@ class ApiCreateTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
+     * @throws JsonException
      */
     public function testCreate(): void
     {
@@ -45,7 +48,7 @@ class ApiCreateTest extends EndpointTest
             )
         );
 
-        $response = $mockService->createCustomer(ModelFactory::getTestableCustomer(), 'fake user jwt');
+        $response = $mockService->createCustomer(ModelFactory::getTestableCustomer(), JwtFactory::create());
 
         self::assertInstanceOf(Customer::class, $response->getBody());
     }
@@ -57,6 +60,6 @@ class ApiCreateTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->createCustomer(ModelFactory::getTestableCustomer()->setUid(null), 'fake user jwt');
+        $mockService->createCustomer(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
     }
 }

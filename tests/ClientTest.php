@@ -8,6 +8,7 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
+use JsonException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
@@ -155,6 +156,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws JsonException
      */
     public function testRequestWithValidationSchema(): void
     {
@@ -206,6 +208,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws JsonException
      */
     public function testRequestWithInvalidDataFormat(): void
     {
@@ -231,6 +234,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws JsonException
      */
     public function testRequestWithValidationSchemaAndResponseFormatter(): void
     {
@@ -292,6 +296,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws JsonException
      */
     public function testErrorResponse(): void
     {

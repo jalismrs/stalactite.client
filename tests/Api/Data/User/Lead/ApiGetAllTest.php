@@ -10,9 +10,11 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -24,6 +26,7 @@ class ApiGetAllTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
+     * @throws JsonException
      */
     public function testGetAll(): void
     {
@@ -45,7 +48,7 @@ class ApiGetAllTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getAllLeads(ModelFactory::getTestableUser(), 'fake user jwt');
+        $response = $mockService->getAllLeads(ModelFactory::getTestableUser(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -61,7 +64,7 @@ class ApiGetAllTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->getAllLeads(ModelFactory::getTestableUser()->setUid(null), 'fake user jwt');
+        $mockService->getAllLeads(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -73,7 +76,7 @@ class ApiGetAllTest extends EndpointTest
 
         $mockService->getAllLeads(
             ModelFactory::getTestableUser(),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 }

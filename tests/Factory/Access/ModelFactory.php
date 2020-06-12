@@ -1,18 +1,12 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Access;
+namespace Jalismrs\Stalactite\Client\Tests\Factory\Access;
 
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
 
-/**
- * ModelFactory
- *
- * @package Jalismrs\Stalactite\Service\Tests\Access
- */
 abstract class ModelFactory
 {
     /**

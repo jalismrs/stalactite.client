@@ -9,11 +9,13 @@ use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\SerializerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -26,6 +28,7 @@ class ApiGetAccessClearanceTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws SerializerException
+     * @throws JsonException
      */
     public function testGetAccessClearance(): void
     {
@@ -49,7 +52,7 @@ class ApiGetAccessClearanceTest extends EndpointTest
         $response = $mockService->getAccessClearance(
             DataTestModelFactory::getTestableCustomer(),
             DataTestModelFactory::getTestableDomain(),
-            'fake user jwt'
+            JwtFactory::create()
         );
 
         self::assertInstanceOf(AccessClearance::class, $response->getBody());
@@ -69,7 +72,7 @@ class ApiGetAccessClearanceTest extends EndpointTest
         $mockService->getAccessClearance(
             DataTestModelFactory::getTestableCustomer()->setUid(null),
             DataTestModelFactory::getTestableDomain(),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 
@@ -87,7 +90,7 @@ class ApiGetAccessClearanceTest extends EndpointTest
         $mockService->getAccessClearance(
             DataTestModelFactory::getTestableCustomer(),
             DataTestModelFactory::getTestableDomain()->setUid(null),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 
@@ -101,7 +104,7 @@ class ApiGetAccessClearanceTest extends EndpointTest
         $mockService->getAccessClearance(
             DataTestModelFactory::getTestableCustomer(),
             DataTestModelFactory::getTestableDomain(),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 }

@@ -1,18 +1,12 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data;
+namespace Jalismrs\Stalactite\Client\Tests\Factory\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 
-/**
- * ModelFactory
- *
- * @package Jalismrs\Stalactite\Client\Tests\Data
- */
 abstract class ModelFactory
 {
     /**
