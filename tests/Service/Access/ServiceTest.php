@@ -20,36 +20,6 @@ class ServiceTest extends
     ServiceAbstract
 {
     /**
-     * testAuthToken
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
-    public function testAuthToken() : void
-    {
-        $mockClient  = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
-            new MockHttpClient()
-        );
-        $mockClient->setLogger(
-            new TestLogger()
-        );
-        $mockClient->setUserAgent('fake user agent');
-        
-        $mockService1 = $mockService->authToken();
-        $mockService2 = $mockService->authToken();
-        
-        self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
-        );
-    }
-    
-    /**
      * testCustomer
      *
      * @return void

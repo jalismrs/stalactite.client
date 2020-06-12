@@ -13,10 +13,6 @@ use Jalismrs\Stalactite\Client\AbstractService;
 class Service extends AbstractService
 {
     /**
-     * @var AuthToken\Service|null
-     */
-    private ?AuthToken\Service $serviceAuthToken = null;
-    /**
      * @var Customer\Service|null
      */
     private ?Customer\Service $serviceCustomer = null;
@@ -37,19 +33,6 @@ class Service extends AbstractService
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
-    /**
-     * authToken
-     *
-     * @return AuthToken\Service
-     */
-    public function authToken(): AuthToken\Service
-    {
-        if ($this->serviceAuthToken === null) {
-            $this->serviceAuthToken = new AuthToken\Service($this->getClient());
-        }
-
-        return $this->serviceAuthToken;
-    }
 
     /**
      * customers
