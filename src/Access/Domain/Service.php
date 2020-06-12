@@ -19,6 +19,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 
 /**
  * Service
@@ -29,11 +30,11 @@ class Service extends AbstractService
 {
     /**
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(Domain $domain, string $jwt): Response
+    public function getRelations(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -71,7 +72,7 @@ class Service extends AbstractService
             ->setResponseFormatter(ResponseFactory::domainGetRelations($domain));
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()]
         ]);
     }
@@ -79,11 +80,11 @@ class Service extends AbstractService
     /**
      * @param Domain $domain
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addUserRelation(Domain $domain, User $user, string $jwt): Response
+    public function addUserRelation(Domain $domain, User $user, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -100,7 +101,7 @@ class Service extends AbstractService
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()],
             'json' => ['user' => $user->getUid()]
         ]);
@@ -109,11 +110,11 @@ class Service extends AbstractService
     /**
      * @param Domain $domain
      * @param Customer $customer
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt): Response
+    public function addCustomerRelation(Domain $domain, Customer $customer, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -130,7 +131,7 @@ class Service extends AbstractService
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()],
             'json' => ['customer' => $customer->getUid()]
         ]);

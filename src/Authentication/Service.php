@@ -14,7 +14,6 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\JwtException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
@@ -68,49 +67,42 @@ class Service extends AbstractService
      */
 
     /**
-     * @param string $jwt
+     * @param Token $jwt
      * @return bool
      * @throws ClientException
      * @throws JwtException
      */
-    public function validateJwt(string $jwt): bool
+    public function validateJwt(Token $jwt): bool
     {
-        try {
-            $token = self::getTokenFromString($jwt);
-        } catch (Throwable $t) {
-            $this->getLogger()->error($t);
-            throw new JwtException('Invalid user JWT', JwtException::INVALID_JWT_STRING, $t);
-        }
-
         $data = new ValidationData();
         $data->setIssuer(self::JWT_ISSUER);
 
         if (
-            !$token->hasClaim('iss')
-            || !$token->hasClaim('aud')
-            || !$token->hasClaim('type')
-            || !$token->hasClaim('sub')
-            || !$token->hasClaim('iat')
-            || !$token->hasClaim('exp')
+            !$jwt->hasClaim('iss')
+            || !$jwt->hasClaim('aud')
+            || !$jwt->hasClaim('type')
+            || !$jwt->hasClaim('sub')
+            || !$jwt->hasClaim('iat')
+            || !$jwt->hasClaim('exp')
         ) {
             $exception = new JwtException('Invalid JWT structure', JwtException::INVALID_JWT_STRUCTURE);
             $this->getLogger()->error($exception);
             throw $exception;
         }
 
-        if ($token->isExpired()) {
+        if ($jwt->isExpired()) {
             $exception = new JwtException('Expired JWT', JwtException::EXPIRED_JWT);
             $this->getLogger()->error($exception);
             throw $exception;
         }
 
-        if (!$token->hasClaim('type') || !in_array($token->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
+        if (!$jwt->hasClaim('type') || !in_array($jwt->getClaim('type'), self::AUTHORIZED_JWT_TYPES, true)) {
             $exception = new JwtException('Invalid JWT user type', JwtException::INVALID_JWT_USER_TYPE);
             $this->getLogger()->error($exception);
             throw $exception;
         }
 
-        if (!$token->validate($data)) {
+        if (!$jwt->validate($data)) {
             $exception = new JwtException('Invalid JWT issuer', JwtException::INVALID_JWT_ISSUER);
             $this->getLogger()->error($exception);
             throw $exception;
@@ -120,7 +112,7 @@ class Service extends AbstractService
         $publicKey = new Key($this->getRSAPublicKey()->getBody());
 
         try {
-            $validSignature = $token->verify($signer, $publicKey);
+            $validSignature = $jwt->verify($signer, $publicKey);
         } catch (BadMethodCallException $badMethodCallException) {
             $this->getLogger()->error($badMethodCallException);
             // thrown by the library on invalid key
@@ -139,15 +131,6 @@ class Service extends AbstractService
         }
 
         return true;
-    }
-
-    /**
-     * @param string $jwt
-     * @return Token
-     */
-    private static function getTokenFromString(string $jwt): Token
-    {
-        return (new Parser())->parse($jwt);
     }
 
     /**

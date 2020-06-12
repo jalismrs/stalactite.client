@@ -17,6 +17,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -59,11 +60,11 @@ class Service extends AbstractService
 
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(User $user, string $jwt): Response
+    public function getRelations(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
@@ -89,7 +90,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$user->getUid()]
         ]);
     }
@@ -97,11 +98,11 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAccessClearance(User $user, Domain $domain, string $jwt): Response
+    public function getAccessClearance(User $user, Domain $domain, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
@@ -118,7 +119,7 @@ class Service extends AbstractService
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [
                 $user->getUid(),
                 $domain->getUid()

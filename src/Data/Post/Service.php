@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use Lcobucci\JWT\Token;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -25,11 +26,11 @@ use function array_map;
 class Service extends AbstractService
 {
     /**
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAllPosts(string $jwt): Response
+    public function getAllPosts(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
@@ -38,36 +39,36 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt
+            'jwt' => (string)$jwt
         ]);
     }
 
     /**
      * @param string $uid
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getPost(string $uid, string $jwt): Response
+    public function getPost(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$uid]
         ]);
     }
 
     /**
      * @param Post $post
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      * @throws SerializerException
      */
-    public function createPost(Post $post, string $jwt): Response
+    public function createPost(Post $post, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
@@ -78,19 +79,19 @@ class Service extends AbstractService
         ]);
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => $data
         ]);
     }
 
     /**
      * @param Post $post
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      * @throws SerializerException
      */
-    public function updatePost(Post $post, string $jwt): Response
+    public function updatePost(Post $post, Token $jwt): Response
     {
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
@@ -103,7 +104,7 @@ class Service extends AbstractService
         ]);
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => $data,
             'uriParameters' => [$post->getUid()]
         ]);
@@ -111,11 +112,11 @@ class Service extends AbstractService
 
     /**
      * @param Post $post
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function deletePost(Post $post, string $jwt): Response
+    public function deletePost(Post $post, Token $jwt): Response
     {
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
@@ -124,18 +125,18 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/posts/%s', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$post->getUid()]
         ]);
     }
 
     /**
      * @param Post $post
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getUsers(Post $post, string $jwt): Response
+    public function getUsers(Post $post, Token $jwt): Response
     {
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
@@ -148,7 +149,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$post->getUid()]
         ]);
     }

@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -25,11 +26,11 @@ class Service extends AbstractService
 {
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAllPosts(User $user, string $jwt): Response
+    public function getAllPosts(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -42,7 +43,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$user->getUid()]
         ]);
     }
@@ -50,11 +51,11 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param array $posts
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addPosts(User $user, array $posts, string $jwt): Response
+    public function addPosts(User $user, array $posts, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -70,7 +71,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s/posts', 'POST');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => ['posts' => $posts],
             'uriParameters' => [$user->getUid()]
         ]);
@@ -79,11 +80,11 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param array $posts
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function removePosts(User $user, array $posts, string $jwt): Response
+    public function removePosts(User $user, array $posts, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -99,7 +100,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s/posts', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => ['posts' => $posts],
             'uriParameters' => [$user->getUid()]
         ]);

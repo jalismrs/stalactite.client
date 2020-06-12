@@ -16,6 +16,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -26,11 +27,11 @@ use function array_map;
 class Service extends AbstractService
 {
     /**
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(string $jwt): Response
+    public function getRelations(Token $jwt): Response
     {
         $schema = [
             'uid' => [
@@ -52,17 +53,17 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt
+            'jwt' => (string)$jwt
         ]);
     }
 
     /**
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAccessClearance(Domain $domain, string $jwt): Response
+    public function getAccessClearance(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -75,7 +76,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => $domain->getUid()
         ]);
     }
