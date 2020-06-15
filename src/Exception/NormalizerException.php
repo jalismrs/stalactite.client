@@ -6,10 +6,10 @@ namespace Jalismrs\Stalactite\Client\Exception;
 use Exception;
 
 /**
- * SerializerException
+ * NormalizerException
  *
  * @package Jalismrs\Stalactite\Client\Exception
  */
-class SerializerException extends Exception
+class NormalizerException extends Exception
 {
 }

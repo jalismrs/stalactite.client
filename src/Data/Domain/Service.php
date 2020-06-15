@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -110,7 +110,7 @@ class Service extends
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function createDomain(Domain $domain, Token $jwt): Response
     {
@@ -133,7 +133,7 @@ class Service extends
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function updateDomain(Domain $domain, Token $jwt): Response
     {

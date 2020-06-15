@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
 
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -23,7 +23,7 @@ class AccessClearanceTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCommon(): void
     {
@@ -40,7 +40,7 @@ class AccessClearanceTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMain(): void
     {

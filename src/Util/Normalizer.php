@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -61,14 +61,14 @@ class Normalizer
      * @param $data
      * @param array $context
      * @return array
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function normalize($data, array $context = []): array
     {
         try {
-            return $this->serializer->normalize($data, 'json', array_replace_recursive(self::CONTEXT, [], $context));
-        } catch (ExceptionInterface $exception) {
-            throw new SerializerException('Error while normalizing data', $exception->getCode(), $exception);
+            return $this->serializer->normalize($data, 'json', array_replace_recursive(self::CONTEXT, $context));
+        } catch (ExceptionInterface $e) {
+            throw new NormalizerException('Error while normalizing data', 0, $e);
         }
     }
 }

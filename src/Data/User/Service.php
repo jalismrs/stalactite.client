@@ -12,7 +12,7 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
@@ -151,7 +151,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function createUser(User $user, Token $jwt): Response
     {
@@ -190,7 +190,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function updateUser(User $user, Token $jwt): Response
     {

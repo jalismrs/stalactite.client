@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
@@ -22,7 +22,7 @@ class ApiUpdateTest extends EndpointTest
     /**
      * @throws AuthenticationServiceException
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testThrowLacksUid(): void
     {
@@ -38,7 +38,7 @@ class ApiUpdateTest extends EndpointTest
     /**
      * @throws AuthenticationServiceException
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testRequestMethodCalledOnce(): void
     {

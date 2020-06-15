@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -24,7 +24,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCommon(): void
     {
@@ -41,7 +41,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMain(): void
     {
@@ -73,7 +73,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMin(): void
     {
@@ -105,7 +105,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCreate(): void
     {
@@ -135,7 +135,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdate(): void
     {
@@ -165,7 +165,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdateMe(): void
     {

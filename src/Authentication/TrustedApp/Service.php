@@ -10,7 +10,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -72,7 +72,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function createTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
     {
@@ -102,7 +102,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function updateTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
     {
@@ -130,7 +130,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function deleteTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
     {
@@ -155,7 +155,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function resetAuthToken(TrustedApp $trustedApp, Token $jwt): Response
     {

@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 class ApiCreateTest extends EndpointTest
 {
     /**
-     * @throws SerializerException
+     * @throws NormalizerException
      * @throws ClientException
      * @throws JsonException
      */
@@ -57,7 +57,7 @@ class ApiCreateTest extends EndpointTest
 
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testRequestMethodCalledOnce(): void
     {

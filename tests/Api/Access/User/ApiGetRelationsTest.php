@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\User\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
@@ -27,7 +27,7 @@ class ApiGetRelationsTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      * @throws JsonException
      */
     public function testGetRelations(): void
