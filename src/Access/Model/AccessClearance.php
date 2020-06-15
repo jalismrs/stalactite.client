@@ -13,14 +13,15 @@ class AccessClearance
     public const NO_ACCESS = null;
     public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
-    
+
     /**
      * @var bool
      */
     private bool $granted;
-    
+
     /**
      * @var string|null
+     * @todo check with default value in test
      */
     private ?string $type = null;
 

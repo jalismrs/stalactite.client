@@ -47,6 +47,28 @@ abstract class ModelFactory
     }
 
     /**
+     * createPostModel
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return Post
+     */
+    public static function createPost(array $data): Post
+    {
+        $model = new Post();
+        $model
+            ->setAccess($data['allowAccess'] ?? false)
+            ->setAdminAccess($data['adminAccess'] ?? false)
+            ->setName($data['name'] ?? null)
+            ->setShortName($data['shortName'] ?? null)
+            ->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
+
+    /**
      * createDomainModel
      *
      * @static
@@ -86,28 +108,6 @@ abstract class ModelFactory
             ->setFirstName($data['firstName'] ?? null)
             ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
-            ->setUid($data['uid'] ?? null);
-
-        return $model;
-    }
-
-    /**
-     * createPostModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return Post
-     */
-    public static function createPost(array $data): Post
-    {
-        $model = new Post();
-        $model
-            ->setAccess($data['allowAccess'] ?? false)
-            ->setAdminAccess($data['adminAccess'] ?? false)
-            ->setName($data['name'] ?? null)
-            ->setShortName($data['shortName'] ?? null)
             ->setUid($data['uid'] ?? null);
 
         return $model;
