@@ -65,15 +65,15 @@ class Client
     {
         $requestOptions = [];
 
-        if (isset($options['jwt'])) {
+        if (isset($options['jwt']) && is_string($options['jwt'])) {
             $requestOptions['headers']['X-API-TOKEN'] = $options['jwt'];
         }
 
-        if (isset($options['json'])) {
+        if (isset($options['json']) && is_array($options['json'])) {
             $requestOptions['json'] = $options['json'];
         }
 
-        if (isset($options['query'])) {
+        if (isset($options['query']) && is_array($options['query'])) {
             $requestOptions['query'] = $options['query'];
         }
 
