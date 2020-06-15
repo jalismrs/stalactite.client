@@ -55,7 +55,22 @@ class ApiResetAuthTokenTest extends EndpointTest
 
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
+     */
+    public function testThrowLacksUid(): void
+    {
+        $this->expectException(AuthenticationServiceException::class);
+        $this->expectExceptionCode(AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp()->setUid(null), JwtFactory::create());
+    }
+
+    /**
+     * @throws ClientException
+     * @throws NormalizerException
      */
     public function testRequestMethodCalledOnce(): void
     {
