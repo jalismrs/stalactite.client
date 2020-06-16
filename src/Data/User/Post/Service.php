@@ -55,10 +55,14 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function addPosts(User $user, array $posts, Token $jwt): Response
+    public function addPosts(User $user, array $posts, Token $jwt): ?Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+        }
+
+        if (count($posts) === 0) {
+            return null;
         }
 
         try {
@@ -84,10 +88,14 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function removePosts(User $user, array $posts, Token $jwt): Response
+    public function removePosts(User $user, array $posts, Token $jwt): ?Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+        }
+
+        if (count($posts) === 0) {
+            return null;
         }
 
         try {
