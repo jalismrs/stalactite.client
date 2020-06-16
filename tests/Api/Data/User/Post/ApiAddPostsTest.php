@@ -57,6 +57,21 @@ class ApiAddPostsTest extends EndpointTest
     /**
      * @throws ClientException
      */
+    public function testRequestMethodNotCalledOnEmptyPostList(): void
+    {
+        $mockClient = $this->createMock(Client::class);
+        $mockClient->expects(static::never())
+            ->method('request');
+
+        $mockService = new Service($mockClient);
+
+        $response = $mockService->addPosts(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        self::assertNull($response);
+    }
+
+    /**
+     * @throws ClientException
+     */
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());

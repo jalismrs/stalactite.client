@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
@@ -11,13 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * PostTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Model\Data
- */
-class PostTest extends
-    TestCase
+class PermissionTest extends TestCase
 {
     /**
      * @throws ExpectationFailedException
@@ -26,12 +19,14 @@ class PostTest extends
      */
     public function testGroupCommon(): void
     {
-        $model = ModelFactory::getTestablePost();
+        $model = ModelFactory::getTestablePermission();
 
         $actual = Normalizer::getInstance()
             ->normalize($model);
 
-        $expected = [];
+        $expected = [
+
+        ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
@@ -43,27 +38,24 @@ class PostTest extends
      */
     public function testGroupMain(): void
     {
-        $normalizer = Normalizer::getInstance();
-        $normalizerContext = [
-            AbstractNormalizer::GROUPS => [
-                'main'
+        $serializer = Normalizer::getInstance();
+
+        $model = ModelFactory::getTestablePermission();
+
+        $actual = $serializer->normalize(
+            $model,
+            [
+                AbstractNormalizer::GROUPS => [
+                    'main',
+                ],
             ]
-        ];
-
-        $model = ModelFactory::getTestablePost();
-
-        $actual = $normalizer->normalize($model, $normalizerContext);
-
-        $permissions = [];
-        foreach ($model->getPermissions() as $permission) {
-            $permissions[] = $normalizer->normalize($permission, $normalizerContext);
-        }
+        );
 
         $expected = [
             'uid' => $model->getUid(),
-            'name' => $model->getName(),
-            'shortName' => $model->getShortName(),
-            'permissions' => $permissions
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
+            'operation' => $model->getOperation(),
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -76,26 +68,23 @@ class PostTest extends
      */
     public function testGroupCreate(): void
     {
-        $normalizer = Normalizer::getInstance();
-        $normalizerContext = [
-            AbstractNormalizer::GROUPS => [
-                'create',
-            ],
-        ];
+        $serializer = Normalizer::getInstance();
 
-        $model = ModelFactory::getTestablePost();
+        $model = ModelFactory::getTestablePermission();
 
-        $actual = $normalizer->normalize($model, $normalizerContext);
-
-        $permissions = [];
-        foreach ($model->getPermissions() as $permission) {
-            $permissions[] = $normalizer->normalize($permission, $normalizerContext);
-        }
+        $actual = $serializer->normalize(
+            $model,
+            [
+                AbstractNormalizer::GROUPS => [
+                    'create',
+                ],
+            ]
+        );
 
         $expected = [
-            'name' => $model->getName(),
-            'shortName' => $model->getShortName(),
-            'permissions' => $permissions
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
+            'operation' => $model->getOperation(),
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -110,7 +99,7 @@ class PostTest extends
     {
         $serializer = Normalizer::getInstance();
 
-        $model = ModelFactory::getTestablePost();
+        $model = ModelFactory::getTestablePermission();
 
         $actual = $serializer->normalize(
             $model,
@@ -122,8 +111,9 @@ class PostTest extends
         );
 
         $expected = [
-            'name' => $model->getName(),
-            'shortName' => $model->getShortName(),
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
+            'operation' => $model->getOperation(),
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);

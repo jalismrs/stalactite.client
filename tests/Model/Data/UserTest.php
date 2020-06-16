@@ -229,20 +229,4 @@ class UserTest extends
             [['not', 'a', 'post'], 0]
         ];
     }
-
-    public function testHasAdminPost(): void
-    {
-        $post = new Post();
-        $adminPost = new Post();
-        $adminPost->setAdminAccess(true);
-
-        $user = new User();
-        $user->setPosts([$post]);
-
-        $adminUser = new User();
-        $adminUser->setPosts([$user, $adminPost]);
-
-        self::assertFalse($user->hasAdminPost());
-        self::assertTrue($adminUser->hasAdminPost());
-    }
 }

@@ -1,21 +1,17 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Post;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\Post\Permission;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\User\Post\Service;
+use Jalismrs\Stalactite\Client\Data\Post\Permission\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
+use Jalismrs\Stalactite\Client\Util\Response;
 
-/**
- * Class ApiRemovePostsTest
- * @package Jalismrs\Stalactite\Client\Tests\Api\Data\User\Post
- */
-class ApiRemovePostsTest extends EndpointTest
+class RemovePermissionsTest extends EndpointTest
 {
     /**
      * @throws ClientException
@@ -23,22 +19,18 @@ class ApiRemovePostsTest extends EndpointTest
     public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
-        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
+        $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removePosts(
-            ModelFactory::getTestableUser()->setUid(null),
-            [ModelFactory::getTestablePost()],
-            JwtFactory::create()
-        );
+        $mockService->removePermissions(ModelFactory::getTestablePost()->setUid(null), [], JwtFactory::create());
     }
 
     /**
      * @throws ClientException
      */
-    public function testThrowOnInvalidPostsParameterRemovePosts(): void
+    public function testThrowOnInvalidPermissionList(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
@@ -46,13 +38,13 @@ class ApiRemovePostsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removePosts(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
+        $mockService->removePermissions(ModelFactory::getTestablePost(), ['not a permission'], JwtFactory::create());
     }
 
     /**
      * @throws ClientException
      */
-    public function testRequestMethodNotCalledOnEmptyPostList(): void
+    public function testRequestMethodNotCalledOnEmptyPermissionList(): void
     {
         $mockClient = $this->createMock(Client::class);
         $mockClient->expects(static::never())
@@ -60,7 +52,7 @@ class ApiRemovePostsTest extends EndpointTest
 
         $mockService = new Service($mockClient);
 
-        $response = $mockService->addPosts(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        $response = $mockService->removePermissions(ModelFactory::getTestablePost(), [], JwtFactory::create());
         self::assertNull($response);
     }
 
@@ -70,6 +62,7 @@ class ApiRemovePostsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->removePosts(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
+        $response = $mockService->removePermissions(ModelFactory::getTestablePost(), [ModelFactory::getTestablePermission()], JwtFactory::create());
+        self::assertInstanceOf(Response::class, $response);
     }
 }

@@ -4,6 +4,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Factory\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\Permission;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 
@@ -36,9 +37,23 @@ abstract class ModelFactory
         $model = new Post();
         $model
             ->setName('azerty')
-            ->setAdminAccess(false)
-            ->setAccess(false)
             ->setShortName('aze')
+            ->setUid('azertyuiop')
+            ->setPermissions([self::getTestablePermission()]);
+
+        return $model;
+    }
+
+    /**
+     * @return Permission
+     */
+    public static function getTestablePermission(): Permission
+    {
+        $model = new Permission();
+        $model
+            ->setScope('scope')
+            ->setResource('resource')
+            ->setOperation('operation')
             ->setUid('azertyuiop');
 
         return $model;
