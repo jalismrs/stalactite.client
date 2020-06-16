@@ -86,11 +86,24 @@ abstract class Schema
         'shortName' => [
             'type' => JsonRule::STRING_TYPE
         ],
-        'adminAccess' => [
-            'type' => JsonRule::BOOLEAN_TYPE
+        'permissions' => [
+            'type' => JsonRule::LIST_TYPE,
+            'schema' => self::PERMISSION
+        ]
+    ];
+
+    public const PERMISSION = [
+        'uid' => [
+            'type' => JsonRule::STRING_TYPE
         ],
-        'allowAccess' => [
-            'type' => JsonRule::BOOLEAN_TYPE
+        'scope' => [
+            'type' => JsonRule::STRING_TYPE
+        ],
+        'resource' => [
+            'type' => JsonRule::STRING_TYPE
+        ],
+        'operation' => [
+            'type' => JsonRule::STRING_TYPE
         ]
     ];
 }

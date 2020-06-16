@@ -4,15 +4,19 @@ declare(strict_types=1);
 namespace Jalismrs\Stalactite\Client\Data\Post;
 
 use hunomina\DataValidator\Schema\Json\JsonSchema;
+use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\Model\Permission;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\Data\Post\Permission\Service as PermissionService;
 use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
+use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
@@ -25,6 +29,17 @@ use function array_map;
  */
 class Service extends AbstractService
 {
+    private ?PermissionService $servicePermission = null;
+
+    public function permissions(): PermissionService
+    {
+        if ($this->servicePermission === null) {
+            $this->servicePermission = new PermissionService($this->getClient());
+        }
+
+        return $this->servicePermission;
+    }
+
     /**
      * @param Token $jwt
      * @return Response
@@ -70,13 +85,23 @@ class Service extends AbstractService
      */
     public function createPost(Post $post, Token $jwt): Response
     {
+        try {
+            $permissions = ModelHelper::getUids($post->getPermissions(), Permission::class);
+        } catch (InvalidArgumentException $e) {
+            $this->getLogger()->error($e);
+            throw new DataServiceException('Error while getting permission uids', DataServiceException::INVALID_MODEL, $e);
+        }
+
         $endpoint = new Endpoint('/data/posts', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
-        $data = Normalizer::getInstance()->normalize($post, [
-            AbstractNormalizer::GROUPS => ['create']
-        ]);
+        $data = array_merge(
+            Normalizer::getInstance()->normalize($post, [
+                AbstractNormalizer::GROUPS => ['create']
+            ]),
+            ['permissions' => $permissions]
+        );
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,

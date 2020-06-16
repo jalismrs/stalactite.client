@@ -23,24 +23,20 @@ abstract class ModelFactory
     public static function createUser(array $data): User
     {
         $model = new User();
-        $model
-            ->setAdmin($data['admin'] ?? false)
+        $model->setAdmin($data['admin'] ?? false)
             ->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
             ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
             ->setUid($data['uid'] ?? null);
 
-        if (isset($data['posts'])) {
-            foreach ($data['posts'] as $post) {
-                $model->addPost(self::createPost($post));
-            }
+        foreach ($data['posts'] ?? [] as $post) {
+            $model->addPost(self::createPost($post));
         }
 
-        if (isset($data['leads'])) {
-            foreach ($data['leads'] as $lead) {
-                $model->addLead(self::createPost($lead));
-            }
+        foreach ($data['leads'] ?? [] as $lead) {
+            $model->addLead(self::createPost($lead));
+
         }
 
         return $model;
@@ -58,12 +54,13 @@ abstract class ModelFactory
     public static function createPost(array $data): Post
     {
         $model = new Post();
-        $model
-            ->setAccess($data['allowAccess'] ?? false)
-            ->setAdminAccess($data['adminAccess'] ?? false)
-            ->setName($data['name'] ?? null)
+        $model->setName($data['name'] ?? null)
             ->setShortName($data['shortName'] ?? null)
             ->setUid($data['uid'] ?? null);
+
+        foreach ($data['permissions'] ?? [] as $permission) {
+            $model->addPermission(self::createPermission($permission));
+        }
 
         return $model;
     }
@@ -80,8 +77,7 @@ abstract class ModelFactory
     public static function createDomain(array $data): Domain
     {
         $model = new Domain();
-        $model
-            ->setApiKey($data['apiKey'] ?? null)
+        $model->setApiKey($data['apiKey'] ?? null)
             ->setExternalAuth($data['externalAuth'] ?? false)
             ->setGenerationDate($data['generationDate'] ?? null)
             ->setName($data['name'] ?? null)
@@ -103,11 +99,25 @@ abstract class ModelFactory
     public static function createCustomer(array $data): Customer
     {
         $model = new Customer();
-        $model
-            ->setEmail($data['email'] ?? null)
+        $model->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
             ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
+            ->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
+
+    /**
+     * @param array $data
+     * @return Permission
+     */
+    public static function createPermission(array $data): Permission
+    {
+        $model = new Permission();
+        $model->setScope($data['scope'] ?? false)
+            ->setResource($data['resource'] ?? false)
+            ->setOperation($data['operation'] ?? null)
             ->setUid($data['uid'] ?? null);
 
         return $model;

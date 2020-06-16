@@ -19,6 +19,9 @@ class Service extends AbstractService
     private ?Post\Service $servicePost = null;
 
     private ?User\Service $serviceUser = null;
+
+    private ?Permission\Service $servicePermission = null;
+    
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
@@ -79,5 +82,17 @@ class Service extends AbstractService
         }
 
         return $this->serviceUser;
+    }
+
+    /**
+     * @return Permission\Service
+     */
+    public function permissions(): Permission\Service
+    {
+        if ($this->servicePermission === null) {
+            $this->servicePermission = new Permission\Service($this->getClient());
+        }
+
+        return $this->servicePermission;
     }
 }

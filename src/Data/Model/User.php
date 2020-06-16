@@ -162,22 +162,6 @@ class User extends AbstractModel
     }
 
     /**
-     * hasAdminPost
-     *
-     * @return bool
-     */
-    public function hasAdminPost(): bool
-    {
-        foreach ($this->posts as $post) {
-            if ($post->hasAdminAccess()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * getPosts
      *
      * @return array
@@ -261,5 +245,29 @@ class User extends AbstractModel
         $this->leads[] = $leadModel;
 
         return $this;
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->admin) {
+            return true;
+        }
+
+        if ($this->hasExplicitPermission($permission)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasExplicitPermission(string $permission): bool
+    {
+        foreach ($this->posts as $post) {
+            if ($post->hasPermission($permission)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
