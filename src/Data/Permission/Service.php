@@ -6,7 +6,6 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Permission;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -26,7 +25,7 @@ class Service extends AbstractService
     public function getAllPermissions(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::PERMISSION, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $permission): Permission => ModelFactory::createPermission($permission), $response);
             });
@@ -45,7 +44,7 @@ class Service extends AbstractService
     public function getPermission(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::PERMISSION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
             ->setResponseFormatter(fn(array $response): Permission => ModelFactory::createPermission($response));
 
         return $this->getClient()->request($endpoint, [
@@ -64,7 +63,7 @@ class Service extends AbstractService
     public function createPermission(Permission $permission, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::PERMISSION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
             ->setResponseFormatter(static fn(array $response): Permission => ModelFactory::createPermission($response));
 
         $data = Normalizer::getInstance()->normalize($permission, [

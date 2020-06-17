@@ -10,11 +10,9 @@ use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\ResponseFactory;
-use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
@@ -49,7 +47,7 @@ class Service extends AbstractService
                     ],
                     'user' => [
                         'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => DataSchema::USER
+                        'schema' => User::getSchema()
                     ]
                 ]
             ],
@@ -61,7 +59,7 @@ class Service extends AbstractService
                     ],
                     'customer' => [
                         'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => DataSchema::CUSTOMER
+                        'schema' => Customer::getSchema()
                     ]
                 ]
             ]
@@ -95,7 +93,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/domains/%s/relations/users', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_USER_RELATION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(DomainUserRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainUserRelation => ModelFactory::createDomainUserRelation($response)
             );
@@ -125,7 +123,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/domains/%s/relations/customers', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_CUSTOMER_RELATION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(DomainCustomerRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($response)
             );

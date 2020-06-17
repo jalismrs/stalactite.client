@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
+use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 
 /**
@@ -10,12 +12,8 @@ use Jalismrs\Stalactite\Client\Data\Model\User;
  *
  * @package Jalismrs\Stalactite\Service\Access\Model
  */
-class DomainUserRelation extends
-    DomainRelation
+class DomainUserRelation extends DomainRelation
 {
-    /**
-     * @var User|null
-     */
     private ?User $user = null;
 
     /**
@@ -40,5 +38,22 @@ class DomainUserRelation extends
         $this->user = $userModel;
 
         return $this;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'domain' => [
+                'type' => JsonRule::OBJECT_TYPE,
+                'schema' => Domain::getSchema()
+            ],
+            'user' => [
+                'type' => JsonRule::OBJECT_TYPE,
+                'schema' => User::getSchema()
+            ]
+        ];
     }
 }

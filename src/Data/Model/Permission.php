@@ -2,6 +2,7 @@
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 class Permission extends AbstractModel
@@ -69,5 +70,23 @@ class Permission extends AbstractModel
     public function __toString(): string
     {
         return $this->scope . self::SEPARATOR . $this->resource . self::SEPARATOR . $this->operation;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'scope' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'resource' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'operation' => [
+                'type' => JsonRule::STRING_TYPE
+            ]
+        ];
     }
 }

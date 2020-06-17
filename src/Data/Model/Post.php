@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -12,18 +13,11 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  */
 class Post extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $name = null;
-
-    /**
-     * @var string|null
-     */
     private ?string $shortName = null;
 
     /**
-     * @var array
+     * @var Permission[]|array
      */
     private array $permissions = [];
 
@@ -114,5 +108,24 @@ class Post extends AbstractModel
         }
 
         return false;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'name' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'shortName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'permissions' => [
+                'type' => JsonRule::LIST_TYPE,
+                'schema' => Permission::getSchema()
+            ]
+        ];
     }
 }

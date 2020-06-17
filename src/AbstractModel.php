@@ -35,4 +35,6 @@ abstract class AbstractModel
 
         return $this;
     }
+
+    abstract public static function getSchema(): array;
 }

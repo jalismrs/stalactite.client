@@ -7,7 +7,6 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -56,7 +55,7 @@ class Service extends AbstractService
     public function getAllCustomers(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(
                     static fn(array $customer): Customer => ModelFactory::createCustomer($customer),
@@ -77,7 +76,7 @@ class Service extends AbstractService
     public function getByEmail(string $email, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
             ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
 
         return $this->getClient()->request($endpoint, [
@@ -95,7 +94,7 @@ class Service extends AbstractService
     public function getCustomer(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
             ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
 
         return $this->getClient()->request($endpoint, [
@@ -114,7 +113,7 @@ class Service extends AbstractService
     public function createCustomer(Customer $customer, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
             ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
 
         $data = Normalizer::getInstance()->normalize($customer, [

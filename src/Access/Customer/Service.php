@@ -9,10 +9,8 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
-use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
@@ -27,9 +25,6 @@ use function array_map;
  */
 class Service extends AbstractService
 {
-    /**
-     * @var Me\Service|null
-     */
     private ?Me\Service $serviceMe = null;
 
     /*
@@ -76,7 +71,7 @@ class Service extends AbstractService
             ],
             'domain' => [
                 'type' => JsonRule::OBJECT_TYPE,
-                'schema' => DataSchema::DOMAIN
+                'schema' => Domain::getSchema()
             ]
         ];
 
@@ -113,7 +108,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/customers/%s/access/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
             );

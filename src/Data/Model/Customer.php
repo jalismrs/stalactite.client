@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -10,24 +11,11 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class Customer extends
-    AbstractModel
+class Customer extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $googleId = null;
-    /**
-     * @var string|null
-     */
     private ?string $email = null;
-    /**
-     * @var string|null
-     */
     private ?string $firstName = null;
-    /**
-     * @var string|null
-     */
     private ?string $lastName = null;
 
     /**
@@ -124,5 +112,27 @@ class Customer extends
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'email' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'firstName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'lastName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'googleId' => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true
+            ]
+        ];
     }
 }

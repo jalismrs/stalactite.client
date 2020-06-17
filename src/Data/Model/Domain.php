@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -10,28 +11,12 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class Domain extends
-    AbstractModel
+class Domain extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $name = null;
-    /**
-     * @var string|null
-     */
     private ?string $type = null;
-    /**
-     * @var string|null
-     */
     private ?string $apiKey = null;
-    /**
-     * @var bool
-     */
     private bool $externalAuth = false;
-    /**
-     * @var string|null
-     */
     private ?string $generationDate = null;
 
     /**
@@ -152,5 +137,31 @@ class Domain extends
         $this->generationDate = $generationDate;
 
         return $this;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'name' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'type' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'apiKey' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'externalAuth' => [
+                'type' => JsonRule::BOOLEAN_TYPE
+            ],
+            'generationDate' => [
+                'type' => JsonRule::STRING_TYPE,
+                'date-format' => 'Y-m-d',
+                'null' => true
+            ]
+        ];
     }
 }

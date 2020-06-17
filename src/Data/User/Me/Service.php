@@ -8,7 +8,6 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -28,7 +27,7 @@ class Service extends AbstractService
     public function getMe(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
 
         return $this->getClient()->request($endpoint, [
@@ -44,7 +43,7 @@ class Service extends AbstractService
     public function getMyPosts(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/posts');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
@@ -62,7 +61,7 @@ class Service extends AbstractService
     public function getMyLeads(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/leads');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
@@ -80,7 +79,7 @@ class Service extends AbstractService
     public function getMySubordinates(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/subordinates');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
             });

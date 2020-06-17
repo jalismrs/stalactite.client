@@ -7,7 +7,6 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -27,7 +26,7 @@ class Service extends AbstractService
     public function getMe(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers/me');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::CUSTOMER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
             ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
 
         return $this->getClient()->request($endpoint, [

@@ -11,7 +11,6 @@ use Jalismrs\Stalactite\Client\Data\Model\Permission;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Data\Post\Permission\Service as PermissionService;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -48,7 +47,7 @@ class Service extends AbstractService
     public function getAllPosts(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
@@ -67,7 +66,7 @@ class Service extends AbstractService
     public function getPost(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema()))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         return $this->getClient()->request($endpoint, [
@@ -93,7 +92,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/data/posts', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema()))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         $data = array_merge(
@@ -168,7 +167,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/data/posts/%s/users');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
             });

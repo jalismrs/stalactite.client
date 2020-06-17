@@ -8,7 +8,6 @@ use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
@@ -34,7 +33,7 @@ class Service extends AbstractService
     public function getAllTrustedApps(Token $jwt): Response
     {
         $endpoint = new Endpoint('/auth/trustedApps');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(TrustedApp::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(
                     static fn(array $trustedApp): TrustedApp => ModelFactory::createTrustedApp($trustedApp),
@@ -56,7 +55,7 @@ class Service extends AbstractService
     public function getTrustedApp(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/auth/trustedApps/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
+        $endpoint->setResponseValidationSchema(new JsonSchema(TrustedApp::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );
@@ -77,7 +76,7 @@ class Service extends AbstractService
     public function createTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
     {
         $schema = new JsonSchema(array_merge(
-            Schema::TRUSTED_APP,
+            TrustedApp::getSchema(),
             ['resetToken' => ['type' => JsonRule::STRING_TYPE]]
         ));
 
@@ -164,7 +163,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/auth/trustedApps/%s/authToken/reset', 'PUT');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::TRUSTED_APP))
+        $endpoint->setResponseValidationSchema(new JsonSchema(TrustedApp::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): TrustedApp => ModelFactory::createTrustedApp($response)
             );

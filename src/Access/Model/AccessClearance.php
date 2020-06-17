@@ -3,27 +3,22 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Access\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
+use Jalismrs\Stalactite\Client\AbstractModel;
+
 /**
  * AccessClearance
  *
  * @package Jalismrs\Stalactite\Service\Access\Model
  */
-class AccessClearance
+class AccessClearance extends AbstractModel
 {
     public const NO_ACCESS = null;
     public const ADMIN_ACCESS = 'admin';
     public const USER_ACCESS = 'user';
 
-    /**
-     * @var bool
-     */
     private bool $granted;
-
-    /**
-     * @var string|null
-     * @todo check with default value in test
-     */
-    private ?string $type = null;
+    private ?string $type;
 
     /**
      * AccessClearance constructor.
@@ -96,5 +91,22 @@ class AccessClearance
     public function hasAdminAccessGranted(): bool
     {
         return $this->isGranted() && $this->type === self::ADMIN_ACCESS;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'granted' => [
+                'type' => JsonRule::BOOLEAN_TYPE
+            ],
+            'type' => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true,
+                'enum' => [
+                    self::USER_ACCESS,
+                    self::ADMIN_ACCESS
+                ]
+            ]
+        ];
     }
 }
