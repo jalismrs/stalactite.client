@@ -40,7 +40,7 @@ class ApiGetMySubordinatesTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getMySubordinates(JwtFactory::create());
+        $response = $mockService->getSubordinates(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
     }
@@ -51,6 +51,6 @@ class ApiGetMySubordinatesTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getMySubordinates(JwtFactory::create());
+        $mockService->getSubordinates(JwtFactory::create());
     }
 }

@@ -47,7 +47,7 @@ class ApiGetTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getTrustedApp(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
 
         self::assertInstanceOf(TrustedApp::class, $response->getBody());
     }
@@ -58,6 +58,6 @@ class ApiGetTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getTrustedApp(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
     }
 }

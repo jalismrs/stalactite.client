@@ -94,7 +94,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getAllUsers(Token $jwt): Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
@@ -136,7 +136,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getUser(string $uid, Token $jwt): Response
+    public function get(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
@@ -154,7 +154,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getUserSubordinates(string $uid, Token $jwt): Response
+    public function getSubordinates(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/%s/subordinates');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
@@ -175,7 +175,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function createUser(User $user, Token $jwt): Response
+    public function create(User $user, Token $jwt): Response
     {
         try {
             $leads = ModelHelper::getUids($user->getLeads(), Post::class);
@@ -214,7 +214,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function updateUser(User $user, Token $jwt): Response
+    public function update(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -240,7 +240,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function deleteUser(User $user, Token $jwt): Response
+    public function delete(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);

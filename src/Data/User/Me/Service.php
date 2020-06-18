@@ -24,7 +24,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getMe(Token $jwt): Response
+    public function get(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
@@ -40,7 +40,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getMyPosts(Token $jwt): Response
+    public function getPosts(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/posts');
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
@@ -58,7 +58,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getMyLeads(Token $jwt): Response
+    public function getLeads(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/leads');
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
@@ -76,7 +76,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getMySubordinates(Token $jwt): Response
+    public function getSubordinates(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/subordinates');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))

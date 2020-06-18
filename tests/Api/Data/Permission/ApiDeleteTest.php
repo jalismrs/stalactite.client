@@ -29,7 +29,7 @@ class ApiDeleteTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->deletePermission(ModelFactory::getTestablePermission()->setUid(null), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestablePermission()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -38,6 +38,6 @@ class ApiDeleteTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->deletePermission(ModelFactory::getTestablePermission(), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestablePermission(), JwtFactory::create());
     }
 }

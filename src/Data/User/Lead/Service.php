@@ -29,7 +29,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getAllLeads(User $user, Token $jwt): Response
+    public function getLeads(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);

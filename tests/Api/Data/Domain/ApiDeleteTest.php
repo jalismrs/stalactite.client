@@ -28,7 +28,7 @@ class ApiDeleteTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->deleteDomain(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -37,6 +37,6 @@ class ApiDeleteTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->deleteDomain(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestableDomain(), JwtFactory::create());
     }
 }

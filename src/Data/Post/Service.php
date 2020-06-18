@@ -44,7 +44,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getAllPosts(Token $jwt): Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts');
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
@@ -63,7 +63,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getPost(string $uid, Token $jwt): Response
+    public function get(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema()))
@@ -82,7 +82,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function createPost(Post $post, Token $jwt): Response
+    public function create(Post $post, Token $jwt): Response
     {
         try {
             $permissions = ModelHelper::getUids($post->getPermissions(), Permission::class);
@@ -115,7 +115,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function updatePost(Post $post, Token $jwt): Response
+    public function update(Post $post, Token $jwt): Response
     {
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
@@ -140,7 +140,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function deletePost(Post $post, Token $jwt): Response
+    public function delete(Post $post, Token $jwt): Response
     {
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);

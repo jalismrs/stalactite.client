@@ -30,7 +30,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getAllTrustedApps(Token $jwt): Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/auth/trustedApps');
         $endpoint->setResponseValidationSchema(new JsonSchema(TrustedApp::getSchema(), JsonSchema::LIST_TYPE))
@@ -52,7 +52,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getTrustedApp(string $uid, Token $jwt): Response
+    public function get(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/auth/trustedApps/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(TrustedApp::getSchema()))
@@ -73,7 +73,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function createTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
+    public function create(TrustedApp $trustedApp, Token $jwt): Response
     {
         $schema = new JsonSchema(array_merge(
             TrustedApp::getSchema(),
@@ -103,7 +103,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function updateTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
+    public function update(TrustedApp $trustedApp, Token $jwt): Response
     {
         if ($trustedApp->getUid() === null) {
             throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
@@ -131,7 +131,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function deleteTrustedApp(TrustedApp $trustedApp, Token $jwt): Response
+    public function delete(TrustedApp $trustedApp, Token $jwt): Response
     {
         if ($trustedApp->getUid() === null) {
             throw new AuthenticationServiceException('TrustedApp lacks a uid', AuthenticationServiceException::MISSING_TRUSTED_APP_UID);

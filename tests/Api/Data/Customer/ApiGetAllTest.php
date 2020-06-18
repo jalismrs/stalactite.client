@@ -45,7 +45,7 @@ class ApiGetAllTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getAllCustomers(JwtFactory::create());
+        $response = $mockService->all(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Customer::class, $response->getBody());
 
@@ -57,6 +57,6 @@ class ApiGetAllTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getAllCustomers(JwtFactory::create());
+        $mockService->all(JwtFactory::create());
     }
 }

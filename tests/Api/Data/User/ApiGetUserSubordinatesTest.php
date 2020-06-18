@@ -40,7 +40,7 @@ class ApiGetUserSubordinatesTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getUserSubordinates('fake user uid', JwtFactory::create());
+        $response = $mockService->getSubordinates('fake user uid', JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
     }
@@ -51,6 +51,6 @@ class ApiGetUserSubordinatesTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getUserSubordinates('fake user uid', JwtFactory::create());
+        $mockService->getSubordinates('fake user uid', JwtFactory::create());
     }
 }

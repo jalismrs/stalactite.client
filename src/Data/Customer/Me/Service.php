@@ -23,7 +23,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getMe(Token $jwt): Response
+    public function get(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/customers/me');
         $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))

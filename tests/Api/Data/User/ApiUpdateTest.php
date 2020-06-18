@@ -31,7 +31,7 @@ class ApiUpdateTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->updateUser(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        $mockService->update(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -41,6 +41,6 @@ class ApiUpdateTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->updateUser(ModelFactory::getTestableUser(), JwtFactory::create());
+        $mockService->update(ModelFactory::getTestableUser(), JwtFactory::create());
     }
 }

@@ -34,7 +34,7 @@ class ApiDeleteTest extends EndpointTest
 
         $trustedApp = ModelFactory::getTestableTrustedApp()->setUid(null);
 
-        $mockService->deleteTrustedApp($trustedApp, JwtFactory::create());
+        $mockService->delete($trustedApp, JwtFactory::create());
     }
 
     /**
@@ -45,6 +45,6 @@ class ApiDeleteTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->deleteTrustedApp(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
     }
 }

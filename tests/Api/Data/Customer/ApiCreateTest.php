@@ -48,7 +48,7 @@ class ApiCreateTest extends EndpointTest
             )
         );
 
-        $response = $mockService->createCustomer(ModelFactory::getTestableCustomer(), JwtFactory::create());
+        $response = $mockService->create(ModelFactory::getTestableCustomer(), JwtFactory::create());
 
         self::assertInstanceOf(Customer::class, $response->getBody());
     }
@@ -60,6 +60,6 @@ class ApiCreateTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->createCustomer(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
+        $mockService->create(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
     }
 }

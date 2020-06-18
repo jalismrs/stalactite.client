@@ -22,7 +22,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getAllPermissions(Token $jwt): Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions');
         $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema(), JsonSchema::LIST_TYPE))
@@ -41,7 +41,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function getPermission(string $uid, Token $jwt): Response
+    public function get(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
@@ -60,7 +60,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function createPermission(Permission $permission, Token $jwt): Response
+    public function create(Permission $permission, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
@@ -83,7 +83,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws NormalizerException
      */
-    public function updatePermission(Permission $permission, Token $jwt): Response
+    public function update(Permission $permission, Token $jwt): Response
     {
         if ($permission->getUid() === null) {
             throw new DataServiceException('Permission lacks an uid', DataServiceException::MISSING_PERMISSION_UID);
@@ -108,7 +108,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function deletePermission(Permission $permission, Token $jwt): Response
+    public function delete(Permission $permission, Token $jwt): Response
     {
         if ($permission->getUid() === null) {
             throw new DataServiceException('Permission lacks an uid', DataServiceException::MISSING_PERMISSION_UID);

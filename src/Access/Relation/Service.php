@@ -24,7 +24,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      */
-    public function deleteRelation(DomainRelation $domainRelation, Token $jwt): Response
+    public function delete(DomainRelation $domainRelation, Token $jwt): Response
     {
         if ($domainRelation->getUid() === null) {
             throw new AccessServiceException('DomainRelation lacks a uid', AccessServiceException::MISSING_DOMAIN_RELATION_UID);

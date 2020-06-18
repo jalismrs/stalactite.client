@@ -29,7 +29,7 @@ class ApiDeleteRelationTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation()->setUid(null), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestableDomainUserRelation()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -38,6 +38,6 @@ class ApiDeleteRelationTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->deleteRelation(ModelFactory::getTestableDomainUserRelation(), JwtFactory::create());
+        $mockService->delete(ModelFactory::getTestableDomainUserRelation(), JwtFactory::create());
     }
 }

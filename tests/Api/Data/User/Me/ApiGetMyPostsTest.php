@@ -40,7 +40,7 @@ class ApiGetMyPostsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getMyPosts(JwtFactory::create());
+        $response = $mockService->getPosts(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -51,6 +51,6 @@ class ApiGetMyPostsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getMyPosts(JwtFactory::create());
+        $mockService->getPosts(JwtFactory::create());
     }
 }

@@ -49,7 +49,7 @@ class ApiGetTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getPost(ModelFactory::getTestablePost()->getUid(), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestablePost()->getUid(), JwtFactory::create());
 
         self::assertInstanceOf(Post::class, $response->getBody());
     }
@@ -60,6 +60,6 @@ class ApiGetTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getPost(ModelFactory::getTestablePost()->getUid(), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestablePost()->getUid(), JwtFactory::create());
     }
 }

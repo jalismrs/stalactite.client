@@ -47,7 +47,7 @@ class ApiGetTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getPermission(ModelFactory::getTestablePermission()->getUid(), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestablePermission()->getUid(), JwtFactory::create());
 
         self::assertInstanceOf(Permission::class, $response->getBody());
     }
@@ -58,6 +58,6 @@ class ApiGetTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getPermission(ModelFactory::getTestablePermission()->getUid(), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestablePermission()->getUid(), JwtFactory::create());
     }
 }
