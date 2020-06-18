@@ -6,6 +6,21 @@
         https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
 >
     <!--
+        # Global ##############################################################
+    -->
+    <class name="Jalismrs\Stalactite\Client\ApiError">
+        <attribute name="type">
+            <group>main</group>
+        </attribute>
+        <attribute name="code">
+            <group>main</group>
+        </attribute>
+        <attribute name="message">
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <!--
         # Access ###############################################################
     -->
     <class name="Jalismrs\Stalactite\Client\Access\Model\AccessClearance">

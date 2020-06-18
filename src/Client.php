@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\DataValidator\Data\Json\JsonData;
 use hunomina\DataValidator\Exception\Json\InvalidDataException;
-use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
@@ -22,21 +21,14 @@ use Throwable;
  * Client
  *
  * @package Jalismrs\Stalactite\Client
+ * @todo test exception ::response attribute
  */
 class Client
 {
-    private const ERROR_SCHEMA = [
-        'error' => ['type' => JsonRule::INTEGER_TYPE]
-    ];
-
     private string $host;
-
     private ?string $userAgent = null;
-
     private ?HttpClientInterface $httpClient = null;
-
     private ?LoggerInterface $logger = null;
-
     private ?JsonSchema $errorSchema = null;
 
     public function __construct(string $host)
@@ -112,10 +104,13 @@ class Client
         return $this;
     }
 
+    /**
+     * @return JsonSchema
+     */
     private function getErrorSchema(): JsonSchema
     {
         if (!($this->errorSchema instanceof JsonSchema)) {
-            $this->errorSchema = new JsonSchema(self::ERROR_SCHEMA);
+            $this->errorSchema = new JsonSchema(ApiError::getSchema());
         }
 
         return $this->errorSchema;
@@ -198,18 +193,19 @@ class Client
      */
     private function handleError(ResponseInterface $response): Response
     {
-        $responseInfos = $this->getResponseInfos($response);
+        ['code' => $code, 'headers' => $headers, 'body' => $body] = $this->getResponseInfos($response);
 
         try {
-            $data = new JsonData($responseInfos['body']);
-            $this->getErrorSchema()->validate($data);
-        } catch (InvalidDataException $e) { // throw ClientException if invalid error format
+            $jsonBody = new JsonData($body);
+            $this->getErrorSchema()->validate($jsonBody);
+        } catch (InvalidDataException $e) {
             $clientException = new ClientException('Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
             $this->getLogger()->error($clientException);
             throw $clientException;
         }
 
-        return new Response($responseInfos['code'], $responseInfos['headers'], $data->getData());
+        $apiError = new ApiError($jsonBody['type'], $jsonBody['code'], $jsonBody['message']);
+        return new Response($code, $headers, $apiError);
     }
 
     /**
