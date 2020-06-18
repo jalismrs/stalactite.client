@@ -9,14 +9,13 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -26,9 +25,6 @@ use function array_map;
  */
 class Service extends AbstractService
 {
-    /**
-     * @var Me\Service|null
-     */
     private ?Me\Service $serviceMe = null;
 
     /*
@@ -59,11 +55,11 @@ class Service extends AbstractService
 
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(User $user, string $jwt): Response
+    public function getRelations(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
@@ -75,7 +71,7 @@ class Service extends AbstractService
             ],
             'domain' => [
                 'type' => JsonRule::OBJECT_TYPE,
-                'schema' => DataSchema::DOMAIN
+                'schema' => Domain::getSchema()
             ]
         ];
 
@@ -89,7 +85,7 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$user->getUid()]
         ]);
     }
@@ -97,11 +93,11 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAccessClearance(User $user, Domain $domain, string $jwt): Response
+    public function getAccessClearance(User $user, Domain $domain, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
@@ -112,13 +108,13 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/users/%s/access/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [
                 $user->getUid(),
                 $domain->getUid()

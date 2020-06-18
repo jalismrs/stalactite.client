@@ -10,15 +10,14 @@ use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Access\ResponseFactory;
-use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 
 /**
  * Service
@@ -29,11 +28,11 @@ class Service extends AbstractService
 {
     /**
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(Domain $domain, string $jwt): Response
+    public function getRelations(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -48,7 +47,7 @@ class Service extends AbstractService
                     ],
                     'user' => [
                         'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => DataSchema::USER
+                        'schema' => User::getSchema()
                     ]
                 ]
             ],
@@ -60,7 +59,7 @@ class Service extends AbstractService
                     ],
                     'customer' => [
                         'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => DataSchema::CUSTOMER
+                        'schema' => Customer::getSchema()
                     ]
                 ]
             ]
@@ -71,7 +70,7 @@ class Service extends AbstractService
             ->setResponseFormatter(ResponseFactory::domainGetRelations($domain));
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()]
         ]);
     }
@@ -79,11 +78,11 @@ class Service extends AbstractService
     /**
      * @param Domain $domain
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addUserRelation(Domain $domain, User $user, string $jwt): Response
+    public function addUserRelation(Domain $domain, User $user, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -94,13 +93,13 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/domains/%s/relations/users', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_USER_RELATION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(DomainUserRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainUserRelation => ModelFactory::createDomainUserRelation($response)
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()],
             'json' => ['user' => $user->getUid()]
         ]);
@@ -109,11 +108,11 @@ class Service extends AbstractService
     /**
      * @param Domain $domain
      * @param Customer $customer
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addCustomerRelation(Domain $domain, Customer $customer, string $jwt): Response
+    public function addCustomerRelation(Domain $domain, Customer $customer, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
@@ -124,13 +123,13 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/access/domains/%s/relations/customers', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::DOMAIN_CUSTOMER_RELATION))
+        $endpoint->setResponseValidationSchema(new JsonSchema(DomainCustomerRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($response)
             );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$domain->getUid()],
             'json' => ['customer' => $customer->getUid()]
         ]);

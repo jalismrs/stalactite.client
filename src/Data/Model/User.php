@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -12,30 +13,17 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  */
 class User extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $email = null;
-    /**
-     * @var string|null
-     */
     private ?string $googleId = null;
-    /**
-     * @var string|null
-     */
     private ?string $lastName = null;
-    /**
-     * @var string|null
-     */
     private ?string $firstName = null;
-    /**
-     * @var bool
-     */
     private bool $admin = false;
+
     /**
      * @var Post[]|array
      */
     private array $posts = [];
+
     /**
      * @var Post[]|array
      */
@@ -162,22 +150,6 @@ class User extends AbstractModel
     }
 
     /**
-     * hasAdminPost
-     *
-     * @return bool
-     */
-    public function hasAdminPost(): bool
-    {
-        foreach ($this->posts as $post) {
-            if ($post->hasAdminAccess()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * getPosts
      *
      * @return array
@@ -261,5 +233,54 @@ class User extends AbstractModel
         $this->leads[] = $leadModel;
 
         return $this;
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->admin) {
+            return true;
+        }
+
+        if ($this->hasExplicitPermission($permission)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasExplicitPermission(string $permission): bool
+    {
+        foreach ($this->posts as $post) {
+            if ($post->hasPermission($permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'firstName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'lastName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'email' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'googleId' => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true
+            ],
+            'admin' => [
+                'type' => JsonRule::BOOLEAN_TYPE
+            ],
+        ];
     }
 }

@@ -9,13 +9,12 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Access\Schema;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
-use Jalismrs\Stalactite\Client\Data\Schema as DataSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -26,11 +25,11 @@ use function array_map;
 class Service extends AbstractService
 {
     /**
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getRelations(string $jwt): Response
+    public function getRelations(Token $jwt): Response
     {
         $schema = [
             'uid' => [
@@ -38,7 +37,7 @@ class Service extends AbstractService
             ],
             'domain' => [
                 'type' => JsonRule::OBJECT_TYPE,
-                'schema' => DataSchema::DOMAIN
+                'schema' => Domain::getSchema()
             ]
         ];
 
@@ -52,30 +51,30 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt
+            'jwt' => (string)$jwt
         ]);
     }
 
     /**
      * @param Domain $domain
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAccessClearance(Domain $domain, string $jwt): Response
+    public function getAccessClearance(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
         }
 
         $endpoint = new Endpoint('/access/users/me/access/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::ACCESS_CLEARANCE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
             ->setResponseFormatter(static function (array $response): AccessClearance {
                 return ModelFactory::createAccessClearance($response);
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => $domain->getUid()
         ]);
     }

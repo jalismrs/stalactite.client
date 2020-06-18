@@ -9,15 +9,15 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 use function array_merge;
@@ -90,69 +90,92 @@ class Service extends AbstractService
      */
 
     /**
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAllUsers(string $jwt): Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt
+            'jwt' => (string)$jwt
         ]);
     }
 
     /**
-     * @param string $uid
-     * @param string $jwt
+     * @param string $email
+     * @param string $googleId
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getUser(string $uid, string $jwt): Response
+    public function getByEmailAndGoogleId(string $email, string $googleId, Token $jwt): Response
     {
-        $endpoint = new Endpoint('/data/users/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
+        $endpoint = new Endpoint('/data/users');
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
+            'query' => [
+                'email' => $email,
+                'googleId' => $googleId
+            ]
+        ]);
+    }
+
+
+    /**
+     * @param string $uid
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function get(string $uid, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
+            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
             'uriParameters' => [$uid]
         ]);
     }
 
     /**
      * @param string $uid
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getUserSubordinates(string $uid, string $jwt): Response
+    public function getSubordinates(string $uid, Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/%s/subordinates');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$uid]
         ]);
     }
 
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
-    public function createUser(User $user, string $jwt): Response
+    public function create(User $user, Token $jwt): Response
     {
         try {
             $leads = ModelHelper::getUids($user->getLeads(), Post::class);
@@ -163,7 +186,7 @@ class Service extends AbstractService
         }
 
         $endpoint = new Endpoint('/data/users', 'POST');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::USER))
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
 
         $data = array_merge(
@@ -179,19 +202,19 @@ class Service extends AbstractService
         );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => $data
         ]);
     }
 
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
-    public function updateUser(User $user, string $jwt): Response
+    public function update(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -205,7 +228,7 @@ class Service extends AbstractService
         );
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => $data,
             'uriParameters' => [$user->getUid()]
         ]);
@@ -213,11 +236,11 @@ class Service extends AbstractService
 
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function deleteUser(User $user, string $jwt): Response
+    public function delete(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
@@ -226,7 +249,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$user->getUid()]
         ]);
     }

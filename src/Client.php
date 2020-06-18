@@ -5,7 +5,6 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\DataValidator\Data\Json\JsonData;
 use hunomina\DataValidator\Exception\Json\InvalidDataException;
-use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
@@ -25,18 +24,10 @@ use Throwable;
  */
 class Client
 {
-    private const ERROR_SCHEMA = [
-        'error' => ['type' => JsonRule::INTEGER_TYPE]
-    ];
-
     private string $host;
-
     private ?string $userAgent = null;
-
     private ?HttpClientInterface $httpClient = null;
-
     private ?LoggerInterface $logger = null;
-
     private ?JsonSchema $errorSchema = null;
 
     public function __construct(string $host)
@@ -65,15 +56,15 @@ class Client
     {
         $requestOptions = [];
 
-        if (isset($options['jwt'])) {
+        if (isset($options['jwt']) && is_string($options['jwt'])) {
             $requestOptions['headers']['X-API-TOKEN'] = $options['jwt'];
         }
 
-        if (isset($options['json'])) {
+        if (isset($options['json']) && is_array($options['json'])) {
             $requestOptions['json'] = $options['json'];
         }
 
-        if (isset($options['query'])) {
+        if (isset($options['query']) && is_array($options['query'])) {
             $requestOptions['query'] = $options['query'];
         }
 
@@ -112,10 +103,13 @@ class Client
         return $this;
     }
 
+    /**
+     * @return JsonSchema
+     */
     private function getErrorSchema(): JsonSchema
     {
         if (!($this->errorSchema instanceof JsonSchema)) {
-            $this->errorSchema = new JsonSchema(self::ERROR_SCHEMA);
+            $this->errorSchema = new JsonSchema(ApiError::getSchema());
         }
 
         return $this->errorSchema;
@@ -160,7 +154,7 @@ class Client
         $method = $endpoint->getMethod();
         $uri = $endpoint->getUri();
 
-        // uri paramteters must be an array or will be ignored
+        // uri parameters must be an array or will be ignored
         if (isset($options['uriParameters']) && is_array($options['uriParameters'])) {
             $uri = sprintf($endpoint->getUri(), ...$options['uriParameters']);
             unset($options['uriParameters']);
@@ -179,7 +173,7 @@ class Client
             $response = $this->getHttpClient()->request($method, $uri, $requestOptions);
             $responseCode = $response->getStatusCode();
         } catch (TransportExceptionInterface $transportException) {
-            $clientException = new ClientException('Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $transportException);
+            $clientException = new ClientException(null, 'Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $transportException);
             $this->getLogger()->error($clientException);
             throw $clientException;
         }
@@ -198,18 +192,20 @@ class Client
      */
     private function handleError(ResponseInterface $response): Response
     {
-        $responseInfos = $this->getResponseInfos($response);
+        ['code' => $code, 'headers' => $headers, 'body' => $body] = $this->getResponseInfos($response);
 
         try {
-            $data = new JsonData($responseInfos['body']);
-            $this->getErrorSchema()->validate($data);
-        } catch (InvalidDataException $e) { // throw ClientException if invalid error format
-            $clientException = new ClientException('Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
+            $jsonBody = new JsonData($body);
+            $this->getErrorSchema()->validate($jsonBody);
+        } catch (InvalidDataException $e) {
+            $r = new Response($code, $headers, $body);
+            $clientException = new ClientException($r, 'Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
             $this->getLogger()->error($clientException);
             throw $clientException;
         }
 
-        return new Response($responseInfos['code'], $responseInfos['headers'], $data->getData());
+        $apiError = new ApiError($jsonBody['type'], $jsonBody['code'], $jsonBody['message']);
+        return new Response($code, $headers, $apiError);
     }
 
     /**
@@ -220,43 +216,45 @@ class Client
      */
     private function handleResponse(Endpoint $endpoint, ResponseInterface $response): Response
     {
-        $responseInfos = $this->getResponseInfos($response);
-        $content = $responseInfos['body'];
+        ['code' => $code, 'headers' => $headers, 'body' => $body] = $this->getResponseInfos($response);
 
         if ($schema = $endpoint->getResponseValidationSchema()) {
 
             // validate
             try {
-                $responseBody = new JsonData($responseInfos['body']);
+                $responseBodyAsJson = new JsonData($body);
             } catch (InvalidDataException $e) {
-                $clientException = new ClientException('Invalid json response from Stalactite API', ClientException::INVALID_JSON_RESPONSE, $e);
+                $r = new Response($code, $headers, $body);
+                $clientException = new ClientException($r, 'Invalid json response from Stalactite API', ClientException::INVALID_JSON_RESPONSE, $e);
                 $this->getLogger()->error($clientException);
                 throw $clientException;
             }
 
             try {
-                $schema->validate($responseBody);
+                $schema->validate($responseBodyAsJson);
             } catch (InvalidDataException $e) {
-                $clientException = new ClientException('Invalid Stalactite API response format', ClientException::INVALID_RESPONSE_FORMAT, $e);
+                $r = new Response($code, $headers, $responseBodyAsJson->getData());
+                $clientException = new ClientException($r, 'Invalid Stalactite API response format', ClientException::INVALID_RESPONSE_FORMAT, $e);
                 $this->getLogger()->error($clientException);
                 throw $clientException;
             }
 
-            $content = $responseBody->getData();
+            $body = $responseBodyAsJson->getData();
 
             // format the validated response - if needed
             if ($formatter = $endpoint->getResponseFormatter()) {
-                $content = $formatter($content);
+                $body = $formatter($body);
             }
         }
 
-        return new Response($responseInfos['code'], $responseInfos['headers'], $content);
+        return new Response($code, $headers, $body);
     }
 
     /**
      * @param ResponseInterface $response
      * @return array
      * @throws ClientException
+     * @codeCoverageIgnore
      */
     private function getResponseInfos(ResponseInterface $response): array
     {
@@ -267,7 +265,7 @@ class Client
                 'body' => $response->getContent(false)
             ];
         } catch (Throwable $t) {
-            $clientException = new ClientException('Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $t);
+            $clientException = new ClientException(null, 'Error while contacting Stalactite API', ClientException::REQUEST_FAILED, $t);
             $this->getLogger()->error($clientException);
             throw $clientException;
         }

@@ -5,8 +5,8 @@ namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCommon(): void
     {
@@ -41,7 +41,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMain(): void
     {
@@ -73,7 +73,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMin(): void
     {
@@ -105,7 +105,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCreate(): void
     {
@@ -135,7 +135,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdate(): void
     {
@@ -165,7 +165,7 @@ class UserTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdateMe(): void
     {
@@ -230,19 +230,42 @@ class UserTest extends
         ];
     }
 
-    public function testHasAdminPost(): void
+    /**
+     * @param User $user
+     * @param array $posts
+     * @param bool $hasExplicitPermission
+     * @param bool $hasPermission
+     * @dataProvider getUserProvider
+     */
+    public function testPermissions(User $user, array $posts, bool $hasExplicitPermission, bool $hasPermission): void
     {
-        $post = new Post();
-        $adminPost = new Post();
-        $adminPost->setAdminAccess(true);
+        $user->setPosts($posts);
+        $permission = ModelFactory::getTestablePermission();
 
-        $user = new User();
-        $user->setPosts([$post]);
+        self::assertSame($hasExplicitPermission, $user->hasExplicitPermission((string)$permission), 'explicit');
+        self::assertSame($hasPermission, $user->hasPermission((string)$permission), 'global');
+    }
 
-        $adminUser = new User();
-        $adminUser->setPosts([$user, $adminPost]);
+    /**
+     * @return array|array[]
+     */
+    public function getUserProvider(): array
+    {
+        $user = ModelFactory::getTestableUser();
+        $admin = ModelFactory::getTestableUser()->setAdmin(true);
 
-        self::assertFalse($user->hasAdminPost());
-        self::assertTrue($adminUser->hasAdminPost());
+        $postWithoutPermission = ModelFactory::getTestablePost();
+        $postWithPermission = ModelFactory::getTestablePost()->addPermission(ModelFactory::getTestablePermission());
+
+        return [
+            [$user, [], false, false],
+            [$user, [$postWithoutPermission], false, false],
+            [$user, [$postWithPermission], true, true],
+            [$user, [$postWithoutPermission, $postWithPermission], true, true],
+            [$admin, [], false, true],
+            [$admin, [$postWithoutPermission], false, true],
+            [$admin, [$postWithPermission], true, true],
+            [$admin, [$postWithoutPermission, $postWithPermission], true, true]
+        ];
     }
 }

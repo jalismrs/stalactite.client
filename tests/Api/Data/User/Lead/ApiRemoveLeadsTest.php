@@ -8,7 +8,8 @@ use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 
 /**
  * ApiRemoveLeadsTest
@@ -31,7 +32,7 @@ class ApiRemoveLeadsTest extends EndpointTest
         $mockService->removeLeads(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 
@@ -46,7 +47,7 @@ class ApiRemoveLeadsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removeLeads(ModelFactory::getTestableUser(), ['not a lead'], 'fake user jwt');
+        $mockService->removeLeads(ModelFactory::getTestableUser(), ['not a lead'], JwtFactory::create());
     }
 
     /**
@@ -55,6 +56,6 @@ class ApiRemoveLeadsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
+        $mockService->removeLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
     }
 }

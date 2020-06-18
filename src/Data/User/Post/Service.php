@@ -9,12 +9,12 @@ use Jalismrs\Stalactite\Client\AbstractService;
 use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\Schema;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 use function array_map;
 
 /**
@@ -25,24 +25,24 @@ class Service extends AbstractService
 {
     /**
      * @param User $user
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function getAllPosts(User $user, string $jwt): Response
+    public function getPosts(User $user, Token $jwt): Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
         }
 
         $endpoint = new Endpoint('/data/users/%s/posts');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Schema::POST, JsonSchema::LIST_TYPE))
+        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => [$user->getUid()]
         ]);
     }
@@ -50,14 +50,18 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param array $posts
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function addPosts(User $user, array $posts, string $jwt): Response
+    public function addPosts(User $user, array $posts, Token $jwt): ?Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+        }
+
+        if (count($posts) === 0) {
+            return null;
         }
 
         try {
@@ -70,7 +74,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s/posts', 'POST');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => ['posts' => $posts],
             'uriParameters' => [$user->getUid()]
         ]);
@@ -79,14 +83,18 @@ class Service extends AbstractService
     /**
      * @param User $user
      * @param array $posts
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function removePosts(User $user, array $posts, string $jwt): Response
+    public function removePosts(User $user, array $posts, Token $jwt): ?Response
     {
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+        }
+
+        if (count($posts) === 0) {
+            return null;
         }
 
         try {
@@ -99,7 +107,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s/posts', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'json' => ['posts' => $posts],
             'uriParameters' => [$user->getUid()]
         ]);

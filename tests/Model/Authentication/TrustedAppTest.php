@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Authentication;
 
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class TrustedAppTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCommon(): void
     {
@@ -39,7 +39,7 @@ class TrustedAppTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMain(): void
     {
@@ -69,7 +69,7 @@ class TrustedAppTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupReset(): void
     {
@@ -96,7 +96,7 @@ class TrustedAppTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCreate(): void
     {
@@ -124,7 +124,7 @@ class TrustedAppTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdate(): void
     {

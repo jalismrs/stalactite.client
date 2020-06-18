@@ -8,7 +8,8 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 
 /**
  * Class ApiRemovePostsTest
@@ -30,7 +31,7 @@ class ApiRemovePostsTest extends EndpointTest
         $mockService->removePosts(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 
@@ -45,7 +46,22 @@ class ApiRemovePostsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removePosts(ModelFactory::getTestableUser(), ['not a post'], 'fake user jwt');
+        $mockService->removePosts(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
+    }
+
+    /**
+     * @throws ClientException
+     */
+    public function testRequestMethodNotCalledOnEmptyPostList(): void
+    {
+        $mockClient = $this->createMock(Client::class);
+        $mockClient->expects(static::never())
+            ->method('request');
+
+        $mockService = new Service($mockClient);
+
+        $response = $mockService->addPosts(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        self::assertNull($response);
     }
 
     /**
@@ -54,6 +70,6 @@ class ApiRemovePostsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->removePosts(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], 'fake user jwt');
+        $mockService->removePosts(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
     }
 }

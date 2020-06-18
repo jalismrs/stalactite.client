@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class DomainTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCommon(): void
     {
@@ -39,7 +39,7 @@ class DomainTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupMain(): void
     {
@@ -71,7 +71,7 @@ class DomainTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupCreate(): void
     {
@@ -102,7 +102,7 @@ class DomainTest extends
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
-     * @throws SerializerException
+     * @throws NormalizerException
      */
     public function testGroupUpdate(): void
     {

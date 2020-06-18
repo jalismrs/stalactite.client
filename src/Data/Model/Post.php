@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -10,25 +11,15 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class Post extends
-    AbstractModel
+class Post extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $name = null;
-    /**
-     * @var string|null
-     */
     private ?string $shortName = null;
+
     /**
-     * @var bool
+     * @var Permission[]|array
      */
-    private bool $allowAccess = false;
-    /**
-     * @var bool
-     */
-    private bool $adminAccess = false;
+    private array $permissions = [];
 
     /**
      * getName
@@ -78,51 +69,63 @@ class Post extends
         return $this;
     }
 
+
     /**
-     * allowAccess
-     *
-     * @return bool
+     * @return array
      */
-    public function allowAccess(): bool
+    public function getPermissions(): array
     {
-        return $this->allowAccess;
+        return $this->permissions;
     }
 
     /**
-     * setAccess
-     *
-     * @param bool $allowAccess
-     *
-     * @return $this
+     * @param array $permissions
+     * @return Post
      */
-    public function setAccess(bool $allowAccess): self
+    public function setPermissions(array $permissions): Post
     {
-        $this->allowAccess = $allowAccess;
+        foreach ($permissions as $permission) {
+            if ($permission instanceof Permission) {
+                $this->addPermission($permission);
+            }
+        }
 
         return $this;
     }
 
-    /**
-     * hasAdminAccess
-     *
-     * @return bool
-     */
-    public function hasAdminAccess(): bool
+    public function addPermission(Permission $permission): self
     {
-        return $this->adminAccess;
+        $this->permissions[] = $permission;
+        return $this;
     }
 
-    /**
-     * setAdminAccess
-     *
-     * @param bool $adminAccess
-     *
-     * @return $this
-     */
-    public function setAdminAccess(bool $adminAccess): self
+    public function hasPermission(string $permission): bool
     {
-        $this->adminAccess = $adminAccess;
+        foreach ($this->permissions as $p) {
+            if ((string)$p === $permission) {
+                return true;
+            }
+        }
 
-        return $this;
+        return false;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'name' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'shortName' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'permissions' => [
+                'type' => JsonRule::LIST_TYPE,
+                'schema' => Permission::getSchema()
+            ]
+        ];
     }
 }

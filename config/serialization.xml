@@ -6,6 +6,21 @@
         https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
 >
     <!--
+        # Global ##############################################################
+    -->
+    <class name="Jalismrs\Stalactite\Client\ApiError">
+        <attribute name="type">
+            <group>main</group>
+        </attribute>
+        <attribute name="code">
+            <group>main</group>
+        </attribute>
+        <attribute name="message">
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <!--
         # Access ###############################################################
     -->
     <class name="Jalismrs\Stalactite\Client\Access\Model\AccessClearance">
@@ -122,17 +137,28 @@
         </attribute>
     </class>
 
+    <class name="Jalismrs\Stalactite\Client\Data\Model\Permission">
+        <attribute name="scope">
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute name="resource">
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute name="operation">
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute name="uid">
+            <group>main</group>
+        </attribute>
+    </class>
+
     <class name="Jalismrs\Stalactite\Client\Data\Model\Post">
-        <attribute name="adminAccess">
-            <group>main</group>
-            <group>create</group>
-            <group>update</group>
-        </attribute>
-        <attribute name="allowAccess">
-            <group>main</group>
-            <group>create</group>
-            <group>update</group>
-        </attribute>
         <attribute name="name">
             <group>main</group>
             <group>create</group>
@@ -142,6 +168,10 @@
             <group>main</group>
             <group>create</group>
             <group>update</group>
+        </attribute>
+        <attribute name="permissions">
+            <group>main</group>
+            <group>create</group>
         </attribute>
         <attribute name="uid">
             <group>main</group>

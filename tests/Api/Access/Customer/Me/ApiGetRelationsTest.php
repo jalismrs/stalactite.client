@@ -7,11 +7,13 @@ use Jalismrs\Stalactite\Client\Access\Customer\Me\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -23,7 +25,8 @@ class ApiGetRelationsTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
+     * @throws JsonException
      */
     public function testGetRelations(): void
     {
@@ -44,7 +47,7 @@ class ApiGetRelationsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getRelations('fake user jwt');
+        $response = $mockService->getRelations(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(DomainCustomerRelation::class, $response->getBody());
     }
@@ -55,6 +58,6 @@ class ApiGetRelationsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getRelations('fake user jwt');
+        $mockService->getRelations(JwtFactory::create());
     }
 }

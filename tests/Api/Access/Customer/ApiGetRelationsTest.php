@@ -7,13 +7,15 @@ use Jalismrs\Stalactite\Client\Access\Customer\Service;
 use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
-use Jalismrs\Stalactite\Client\Tests\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -25,7 +27,8 @@ class ApiGetRelationsTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
+     * @throws JsonException
      */
     public function testGetRelations(): void
     {
@@ -46,7 +49,7 @@ class ApiGetRelationsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getRelations(DataTestModelFactory::getTestableCustomer(), 'fake user jwt');
+        $response = $mockService->getRelations(DataTestModelFactory::getTestableCustomer(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(DomainCustomerRelation::class, $response->getBody());
     }
@@ -64,7 +67,7 @@ class ApiGetRelationsTest extends EndpointTest
 
         $mockService->getRelations(
             DataTestModelFactory::getTestableCustomer()->setUid(null),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 
@@ -77,7 +80,7 @@ class ApiGetRelationsTest extends EndpointTest
 
         $mockService->getRelations(
             DataTestModelFactory::getTestableCustomer(),
-            'fake user jwt'
+            JwtFactory::create()
         );
     }
 }

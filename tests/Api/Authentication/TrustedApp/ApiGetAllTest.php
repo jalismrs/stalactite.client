@@ -7,11 +7,13 @@ use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
 use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\SerializerException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -23,7 +25,8 @@ class ApiGetAllTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws SerializerException
+     * @throws NormalizerException
+     * @throws JsonException
      */
     public function testGetAll(): void
     {
@@ -47,7 +50,7 @@ class ApiGetAllTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getAllTrustedApps('fake user jwt');
+        $response = $mockService->all(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(TrustedApp::class, $response->getBody());
     }
@@ -58,6 +61,6 @@ class ApiGetAllTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getAllTrustedApps('fake user jwt');
+        $mockService->all(JwtFactory::create());
     }
 }

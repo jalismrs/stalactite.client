@@ -7,8 +7,9 @@ use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
+use JsonException;
 
 /**
  * ApiLoginTest
@@ -19,6 +20,7 @@ class ApiLoginTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws JsonException
      */
     public function testSchemaValidationOnLogin(): void
     {

@@ -9,6 +9,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Lcobucci\JWT\Token;
 
 /**
  * Service
@@ -19,11 +20,11 @@ class Service extends AbstractService
 {
     /**
      * @param DomainRelation $domainRelation
-     * @param string $jwt
+     * @param Token $jwt
      * @return Response
      * @throws ClientException
      */
-    public function deleteRelation(DomainRelation $domainRelation, string $jwt): Response
+    public function delete(DomainRelation $domainRelation, Token $jwt): Response
     {
         if ($domainRelation->getUid() === null) {
             throw new AccessServiceException('DomainRelation lacks a uid', AccessServiceException::MISSING_DOMAIN_RELATION_UID);
@@ -32,7 +33,7 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/access/relations/%s', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => $jwt,
+            'jwt' => (string)$jwt,
             'uriParameters' => $domainRelation->getUid()
         ]);
     }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
+use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
 /**
@@ -10,24 +11,11 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Authentication\Model
  */
-class TrustedApp extends
-    AbstractModel
+class TrustedApp extends AbstractModel
 {
-    /**
-     * @var string|null
-     */
     private ?string $name = null;
-    /**
-     * @var string|null
-     */
     private ?string $googleOAuthClientId = null;
-    /**
-     * @var string|null
-     */
     private ?string $authToken = null;
-    /**
-     * @var string|null
-     */
     private ?string $resetToken = null;
 
     /**
@@ -124,5 +112,23 @@ class TrustedApp extends
         $this->resetToken = $resetToken;
 
         return $this;
+    }
+
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'name' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'authToken' => [
+                'type' => JsonRule::STRING_TYPE
+            ],
+            'googleOAuthClientId' => [
+                'type' => JsonRule::STRING_TYPE
+            ]
+        ];
     }
 }
