@@ -108,6 +108,29 @@ class Service extends AbstractService
     }
 
     /**
+     * @param string $email
+     * @param string $googleId
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function getByEmailAndGoogleId(string $email, string $googleId, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users');
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
+            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'query' => [
+                'email' => $email,
+                'googleId' => $googleId
+            ]
+        ]);
+    }
+
+
+    /**
      * @param string $uid
      * @param Token $jwt
      * @return Response
