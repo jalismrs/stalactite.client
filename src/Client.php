@@ -21,7 +21,6 @@ use Throwable;
  * Client
  *
  * @package Jalismrs\Stalactite\Client
- * @todo test exception ::response attribute
  */
 class Client
 {

@@ -5,9 +5,13 @@ namespace Jalismrs\Stalactite\Client\Tests;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
+use Jalismrs\Stalactite\Client\ApiError;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
+use Jalismrs\Stalactite\Client\Util\Normalizer;
+use Jalismrs\Stalactite\Client\Util\Response;
 use JsonException;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -15,6 +19,8 @@ use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Throwable;
 
 /**
  * ClientTest
@@ -119,18 +125,22 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * @throws ClientException
-     */
     public function testExceptionThrownOnInvalidAPIHost(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::REQUEST_FAILED);
-
         $mockClient = new Client('invalidHost');
-
         $endpoint = new Endpoint('/');
-        $mockClient->request($endpoint);
+
+        $throwable = null;
+        try {
+            $mockClient->request($endpoint);
+        } catch (Throwable $t) {
+            $throwable = $t;
+        }
+
+        self::assertInstanceOf(ClientException::class, $throwable);
+        self::assertSame(ClientException::REQUEST_FAILED, $throwable->getCode());
+        /** @var ClientException $throwable */
+        self::assertNull($throwable->getResponse());
     }
 
     /**
@@ -182,14 +192,8 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * @throws ClientException
-     */
     public function testRequestWithInvalidJsonData(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_JSON_RESPONSE);
-
         $responseBody = 'invalid{}json';
 
         $mockClient = new Client('http://fakeHost');
@@ -203,24 +207,36 @@ class ClientTest extends TestCase
             'key' => ['type' => JsonRule::STRING_TYPE]
         ]));
 
-        $mockClient->request($endpoint);
+        $throwable = null;
+        try {
+            $mockClient->request($endpoint);
+        } catch (Throwable $t) {
+            $throwable = $t;
+        }
+
+        self::assertInstanceOf(ClientException::class, $throwable);
+        self::assertSame(ClientException::INVALID_JSON_RESPONSE, $throwable->getCode());
+
+        /** @var ClientException $throwable */
+
+        $response = $throwable->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame($responseBody, $response->getBody());
     }
 
     /**
-     * @throws ClientException
      * @throws JsonException
      */
     public function testRequestWithInvalidDataFormat(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_RESPONSE_FORMAT);
-
         // `key` item missing
-        $responseBody = json_encode([], JSON_THROW_ON_ERROR, 512);
+        $responseBody = [
+            'invalid' => 'body'
+        ];
 
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
-            MockHttpClientFactory::create($responseBody)
+            MockHttpClientFactory::create(json_encode($responseBody, JSON_THROW_ON_ERROR, 512))
         );
 
         $endpoint = new Endpoint('/');
@@ -229,7 +245,26 @@ class ClientTest extends TestCase
             'key' => ['type' => JsonRule::STRING_TYPE]
         ]));
 
-        $mockClient->request($endpoint);
+        $throwable = null;
+        try {
+            // this will throw : invalid response body schema
+            $mockClient->request($endpoint);
+        } catch (Throwable $t) {
+            $throwable = $t;
+        }
+
+        // test exception
+        self::assertInstanceOf(ClientException::class, $throwable);
+        self::assertSame(ClientException::INVALID_RESPONSE_FORMAT, $throwable->getCode());
+
+        /** @var ClientException $throwable */
+
+        // test exception response property
+        $response = $throwable->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        // the response body valid json string
+        // it should be transformed into a PHP array
+        self::assertSame($responseBody, $response->getBody());
     }
 
     /**
@@ -246,16 +281,16 @@ class ClientTest extends TestCase
         );
 
         $endpoint = new Endpoint('/');
-        $endpoint->setResponseValidationSchema(new JsonSchema([
-            'item' => ['type' => JsonRule::STRING_TYPE]
-        ]));
-        // cast `item` item into an integer
-        $endpoint->setResponseFormatter(
-            static function (array $response): array {
-                $response['item'] = (int)$response['item'];
-                return $response;
-            }
-        );
+        $endpoint
+            ->setResponseValidationSchema(new JsonSchema([
+                'item' => ['type' => JsonRule::STRING_TYPE]
+            ]))
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    $response['item'] = (int)$response['item']; // cast `item` item into an integer
+                    return $response;
+                }
+            );
 
         $response = $mockClient->request($endpoint);
 
@@ -278,7 +313,7 @@ class ClientTest extends TestCase
         );
 
         $endpoint = new Endpoint('/');
-        // not apply due to missing validation schema
+        // not applied due to missing validation schema
         $endpoint->setResponseFormatter(
             static function (string $response): string {
                 return str_replace('a', 'b', $response);
@@ -297,46 +332,64 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws JsonException
+     * @throws NormalizerException
      */
     public function testErrorResponse(): void
     {
-        $responseBody = ['error' => 1];
+        $apiError = new ApiError('type', 1, null);
 
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
-                json_encode($responseBody, JSON_THROW_ON_ERROR, 512),
-                ['http_code' => 500] // considered as an error <= 400
+                json_encode(
+                    Normalizer::getInstance()->normalize($apiError, [
+                        AbstractNormalizer::GROUPS => ['main']
+                    ]),
+                    JSON_THROW_ON_ERROR, 512
+                ),
+                ['http_code' => 400] // considered as an error
             )
         );
 
         $endpoint = new Endpoint('/');
         $response = $mockClient->request($endpoint);
 
-        // response not changed
-        self::assertSame(
-            $responseBody,
-            $response->getBody()
-        );
+        self::assertInstanceOf(ApiError::class, $response->getBody());
     }
 
-    /**
-     * @throws ClientException
-     */
     public function testInvalidErrorResponse(): void
     {
-        $this->expectException(ClientException::class);
-        $this->expectExceptionCode(ClientException::INVALID_RESPONSE);
+        $responseBody = 'invalid-api-error-format';
+        $responseCode = 404;
 
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
-                '', ['http_code' => 404] // invalid API error format
+                $responseBody, ['http_code' => $responseCode] // invalid API error format
             )
         );
 
         $endpoint = new Endpoint('/');
-        $mockClient->request($endpoint);
+
+        $throwable = null;
+        try {
+            // this will throw : response body is not a valid json
+            $mockClient->request($endpoint);
+        } catch (Throwable $t) {
+            $throwable = $t;
+        }
+
+        // test exception
+        self::assertInstanceOf(ClientException::class, $throwable);
+        self::assertSame(ClientException::INVALID_RESPONSE, $throwable->getCode());
+
+        /** @var ClientException $throwable */
+
+        // test exception response propery
+        $response = $throwable->getResponse();
+        self::assertInstanceOf(Response::class, $response);
+        self::assertSame($responseBody, $response->getBody());
+        self::assertSame($responseCode, $response->getCode());
     }
 
     /**
@@ -344,7 +397,7 @@ class ClientTest extends TestCase
      */
     public function testResponseKeepsApiResponseCode(): void
     {
-        $responseCode = 204; // not default library http code
+        $responseCode = 204; // not 200 (default response http code)
 
         $mockClient = new Client('http://fakeHost');
         $mockClient->setHttpClient(
@@ -356,10 +409,7 @@ class ClientTest extends TestCase
         $endpoint = new Endpoint('/');
         $response = $mockClient->request($endpoint);
 
-        self::assertSame(
-            $responseCode,
-            $response->getCode()
-        );
+        self::assertSame($responseCode, $response->getCode());
     }
 
     /**
