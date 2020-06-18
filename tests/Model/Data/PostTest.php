@@ -27,6 +27,7 @@ class PostTest extends
     public function testGroupCommon(): void
     {
         $model = ModelFactory::getTestablePost();
+        $model->addPermission(ModelFactory::getTestablePermission());
 
         $actual = Normalizer::getInstance()
             ->normalize($model);
@@ -45,12 +46,11 @@ class PostTest extends
     {
         $normalizer = Normalizer::getInstance();
         $normalizerContext = [
-            AbstractNormalizer::GROUPS => [
-                'main'
-            ]
+            AbstractNormalizer::GROUPS => ['main']
         ];
 
         $model = ModelFactory::getTestablePost();
+        $model->addPermission(ModelFactory::getTestablePermission());
 
         $actual = $normalizer->normalize($model, $normalizerContext);
 
@@ -78,12 +78,11 @@ class PostTest extends
     {
         $normalizer = Normalizer::getInstance();
         $normalizerContext = [
-            AbstractNormalizer::GROUPS => [
-                'create',
-            ],
+            AbstractNormalizer::GROUPS => ['create']
         ];
 
         $model = ModelFactory::getTestablePost();
+        $model->addPermission(ModelFactory::getTestablePermission());
 
         $actual = $normalizer->normalize($model, $normalizerContext);
 
@@ -111,13 +110,12 @@ class PostTest extends
         $serializer = Normalizer::getInstance();
 
         $model = ModelFactory::getTestablePost();
+        $model->addPermission(ModelFactory::getTestablePermission());
 
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS => [
-                    'update',
-                ],
+                AbstractNormalizer::GROUPS => ['update']
             ]
         );
 
@@ -127,5 +125,26 @@ class PostTest extends
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
+    }
+
+    public function testPermissions(): void
+    {
+        $post = ModelFactory::getTestablePost();
+
+        $permission = ModelFactory::getTestablePermission()->setScope('p1');
+        $permission2 = ModelFactory::getTestablePermission()->setScope('p2');
+
+        self::assertFalse($post->hasPermission((string)$permission));
+        self::assertFalse($post->hasPermission((string)$permission2));
+
+        $post->addPermission($permission);
+
+        self::assertTrue($post->hasPermission((string)$permission));
+        self::assertFalse($post->hasPermission((string)$permission2));
+
+        $post->addPermission($permission2);
+
+        self::assertTrue($post->hasPermission((string)$permission));
+        self::assertTrue($post->hasPermission((string)$permission2));
     }
 }

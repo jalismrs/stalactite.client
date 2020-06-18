@@ -38,8 +38,7 @@ abstract class ModelFactory
         $model
             ->setName('azerty')
             ->setShortName('aze')
-            ->setUid('azertyuiop')
-            ->setPermissions([self::getTestablePermission()]);
+            ->setUid('azertyuiop');
 
         return $model;
     }

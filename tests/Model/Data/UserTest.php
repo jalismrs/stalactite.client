@@ -229,4 +229,43 @@ class UserTest extends
             [['not', 'a', 'post'], 0]
         ];
     }
+
+    /**
+     * @param User $user
+     * @param array $posts
+     * @param bool $hasExplicitPermission
+     * @param bool $hasPermission
+     * @dataProvider getUserProvider
+     */
+    public function testPermissions(User $user, array $posts, bool $hasExplicitPermission, bool $hasPermission): void
+    {
+        $user->setPosts($posts);
+        $permission = ModelFactory::getTestablePermission();
+
+        self::assertSame($hasExplicitPermission, $user->hasExplicitPermission((string)$permission), 'explicit');
+        self::assertSame($hasPermission, $user->hasPermission((string)$permission), 'global');
+    }
+
+    /**
+     * @return array|array[]
+     */
+    public function getUserProvider(): array
+    {
+        $user = ModelFactory::getTestableUser();
+        $admin = ModelFactory::getTestableUser()->setAdmin(true);
+
+        $postWithoutPermission = ModelFactory::getTestablePost();
+        $postWithPermission = ModelFactory::getTestablePost()->addPermission(ModelFactory::getTestablePermission());
+
+        return [
+            [$user, [], false, false],
+            [$user, [$postWithoutPermission], false, false],
+            [$user, [$postWithPermission], true, true],
+            [$user, [$postWithoutPermission, $postWithPermission], true, true],
+            [$admin, [], false, true],
+            [$admin, [$postWithoutPermission], false, true],
+            [$admin, [$postWithPermission], true, true],
+            [$admin, [$postWithoutPermission, $postWithPermission], true, true]
+        ];
+    }
 }
