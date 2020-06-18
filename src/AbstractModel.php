@@ -8,7 +8,7 @@ namespace Jalismrs\Stalactite\Client;
  *
  * @package Jalismrs\Stalactite\Service
  */
-abstract class AbstractModel
+abstract class AbstractModel implements Schemable
 {
     protected ?string $uid = null;
 
@@ -35,6 +35,4 @@ abstract class AbstractModel
 
         return $this;
     }
-
-    abstract public static function getSchema(): array;
 }
