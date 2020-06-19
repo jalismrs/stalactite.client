@@ -48,7 +48,7 @@ class ApiGetAllTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getLeads(ModelFactory::getTestableUser(), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestableUser(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -64,7 +64,7 @@ class ApiGetAllTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->getLeads(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -74,7 +74,7 @@ class ApiGetAllTest extends EndpointTest
     {
         $mockService = new Service($this->createMockClient());
 
-        $mockService->getLeads(
+        $mockService->get(
             ModelFactory::getTestableUser(),
             JwtFactory::create()
         );

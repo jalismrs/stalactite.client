@@ -28,7 +28,7 @@ class ApiRemovePostsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removePosts(
+        $mockService->remove(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()
@@ -46,7 +46,7 @@ class ApiRemovePostsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->removePosts(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
+        $mockService->remove(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
     }
 
     /**
@@ -60,7 +60,7 @@ class ApiRemovePostsTest extends EndpointTest
 
         $mockService = new Service($mockClient);
 
-        $response = $mockService->addPosts(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        $response = $mockService->add(ModelFactory::getTestableUser(), [], JwtFactory::create());
         self::assertNull($response);
     }
 
@@ -70,6 +70,6 @@ class ApiRemovePostsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->removePosts(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
+        $mockService->remove(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
     }
 }

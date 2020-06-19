@@ -28,7 +28,7 @@ class ApiAddLeadsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->addLeads(
+        $mockService->add(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()
@@ -46,7 +46,7 @@ class ApiAddLeadsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->addLeads(ModelFactory::getTestableUser(), ['not a lead'], JwtFactory::create());
+        $mockService->add(ModelFactory::getTestableUser(), ['not a lead'], JwtFactory::create());
     }
 
     /**
@@ -55,6 +55,6 @@ class ApiAddLeadsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->addLeads(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost(),], JwtFactory::create());
+        $mockService->add(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost(),], JwtFactory::create());
     }
 }
