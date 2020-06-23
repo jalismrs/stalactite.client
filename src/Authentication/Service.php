@@ -160,8 +160,10 @@ class Service extends AbstractService
             ->getClient()
             ->request($endpoint, [
                 'json' => [
-                    'appName' => $trustedAppModel->getName(),
-                    'appToken' => $trustedAppModel->getAuthToken(),
+                    'app' => [
+                        'name' => $trustedAppModel->getName(),
+                        'token' => $trustedAppModel->getAuthToken()
+                    ],
                     'userGoogleJwt' => $userGoogleJwt,
                 ]
             ]);
