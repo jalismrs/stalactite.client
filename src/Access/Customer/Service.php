@@ -121,4 +121,24 @@ class Service extends AbstractService
             ]
         ]);
     }
+
+    /**
+     * @param Customer $customer
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function deleteRelations(Customer $customer, Token $jwt): Response
+    {
+        if ($customer->getUid() === null) {
+            throw new AccessServiceException('Customer lacks a uid', AccessServiceException::MISSING_CUSTOMER_UID);
+        }
+
+        $endpoint = new Endpoint('/access/customers/%s/relations', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$customer->getUid()]
+        ]);
+    }
 }

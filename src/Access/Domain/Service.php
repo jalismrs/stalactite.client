@@ -134,4 +134,24 @@ class Service extends AbstractService
             'json' => ['customer' => $customer->getUid()]
         ]);
     }
+
+    /**
+     * @param Domain $domain
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     */
+    public function deleteRelations(Domain $domain, Token $jwt): Response
+    {
+        if ($domain->getUid() === null) {
+            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+        }
+
+        $endpoint = new Endpoint('/access/domains/%s/relations', 'DELETE');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$domain->getUid()]
+        ]);
+    }
 }
