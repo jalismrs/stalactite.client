@@ -9,9 +9,16 @@ class Permission extends AbstractModel
 {
     private const SEPARATOR = '.';
 
-    private ?string $scope = null;
-    private ?string $resource = null;
-    private ?string $operation = null;
+    private ?string $scope;
+    private ?string $resource;
+    private ?string $operation;
+
+    public function __construct(?string $scope = null, ?string $resource = null, ?string $operation = null)
+    {
+        $this->scope = $scope;
+        $this->resource = $resource;
+        $this->operation = $operation;
+    }
 
     /**
      * @return string|null
@@ -75,18 +82,10 @@ class Permission extends AbstractModel
     public static function getSchema(): array
     {
         return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'scope' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'resource' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'operation' => [
-                'type' => JsonRule::STRING_TYPE
-            ]
+            'uid' => ['type' => JsonRule::STRING_TYPE],
+            'scope' => ['type' => JsonRule::STRING_TYPE],
+            'resource' => ['type' => JsonRule::STRING_TYPE],
+            'operation' => ['type' => JsonRule::STRING_TYPE]
         ];
     }
 }

@@ -114,11 +114,12 @@ abstract class ModelFactory
      */
     public static function createPermission(array $data): Permission
     {
-        $model = new Permission();
-        $model->setScope($data['scope'] ?? false)
-            ->setResource($data['resource'] ?? false)
-            ->setOperation($data['operation'] ?? null)
-            ->setUid($data['uid'] ?? null);
+        $model = new Permission(
+            $data['scope'] ?? false,
+            $data['resource'] ?? false,
+            $data['operation'] ?? null
+        );
+        $model->setUid($data['uid'] ?? null);
 
         return $model;
     }

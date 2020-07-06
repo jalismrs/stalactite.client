@@ -48,12 +48,8 @@ abstract class ModelFactory
      */
     public static function getTestablePermission(): Permission
     {
-        $model = new Permission();
-        $model
-            ->setScope('scope')
-            ->setResource('resource')
-            ->setOperation('operation')
-            ->setUid('azertyuiop');
+        $model = new Permission('scope', 'resource', 'operation');
+        $model->setUid('azertyuiop');
 
         return $model;
     }
