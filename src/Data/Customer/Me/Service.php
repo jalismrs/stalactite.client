@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class Service
@@ -22,6 +23,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function get(Token $jwt): Response
     {

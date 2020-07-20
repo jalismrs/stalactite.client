@@ -18,6 +18,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Service
@@ -31,6 +32,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function getRelations(Domain $domain, Token $jwt): Response
     {
@@ -81,6 +83,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function addUserRelation(Domain $domain, User $user, Token $jwt): Response
     {
@@ -111,6 +114,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function addCustomerRelation(Domain $domain, Customer $customer, Token $jwt): Response
     {
@@ -140,6 +144,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function deleteRelations(Domain $domain, Token $jwt): Response
     {

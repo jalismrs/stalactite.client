@@ -9,11 +9,13 @@ use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class ApiDeleteRelationsTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowUserLacksUid(): void
     {
@@ -31,6 +33,7 @@ class ApiDeleteRelationsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

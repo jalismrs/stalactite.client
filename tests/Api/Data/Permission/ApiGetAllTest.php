@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use JsonException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -26,6 +27,7 @@ class ApiGetAllTest extends EndpointTest
      * @throws JsonException
      * @throws NormalizerException
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testGetAll(): void
     {
@@ -52,6 +54,7 @@ class ApiGetAllTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

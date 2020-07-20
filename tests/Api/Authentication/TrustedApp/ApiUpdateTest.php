@@ -11,6 +11,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * ApiUpdateTest
@@ -23,6 +24,7 @@ class ApiUpdateTest extends EndpointTest
      * @throws AuthenticationServiceException
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function testThrowLacksUid(): void
     {
@@ -39,6 +41,7 @@ class ApiUpdateTest extends EndpointTest
      * @throws AuthenticationServiceException
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

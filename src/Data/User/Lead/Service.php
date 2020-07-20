@@ -28,6 +28,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function get(User $user, Token $jwt): Response
     {
@@ -53,6 +54,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function add(User $user, array $leads, Token $jwt): Response
     {
@@ -82,6 +84,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function remove(User $user, array $leads, Token $jwt): Response
     {

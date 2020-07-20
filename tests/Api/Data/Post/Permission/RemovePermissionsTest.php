@@ -10,11 +10,13 @@ use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Util\Response;
+use Psr\SimpleCache\InvalidArgumentException;
 
 class RemovePermissionsTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowLacksUid(): void
     {
@@ -29,6 +31,7 @@ class RemovePermissionsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowOnInvalidPermissionList(): void
     {
@@ -43,6 +46,7 @@ class RemovePermissionsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodNotCalledOnEmptyPermissionList(): void
     {
@@ -58,6 +62,7 @@ class RemovePermissionsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

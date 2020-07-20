@@ -93,6 +93,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function all(Token $jwt): Response
     {
@@ -113,6 +114,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getByEmailAndGoogleId(string $email, string $googleId, Token $jwt): Response
     {
@@ -135,6 +137,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function get(string $uid, Token $jwt): Response
     {
@@ -153,6 +156,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getSubordinates(string $uid, Token $jwt): Response
     {
@@ -174,6 +178,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function create(User $user, Token $jwt): Response
     {
@@ -213,6 +218,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function update(User $user, Token $jwt): Response
     {
@@ -239,6 +245,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function delete(User $user, Token $jwt): Response
     {

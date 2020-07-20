@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use JsonException;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * ApiLoginTest
@@ -21,6 +22,7 @@ class ApiLoginTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function testSchemaValidationOnLogin(): void
     {
@@ -47,6 +49,7 @@ class ApiLoginTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

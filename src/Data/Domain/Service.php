@@ -14,6 +14,7 @@ use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
@@ -28,6 +29,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function all(Token $jwt): Response
     {
@@ -50,6 +52,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function get(string $uid, Token $jwt): Response
     {
@@ -68,6 +71,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function getByName(string $name, Token $jwt): Response
     {
@@ -87,6 +91,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function getByNameAndApiKey(string $name, string $apiKey, Token $jwt): Response
     {
@@ -109,6 +114,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function create(Domain $domain, Token $jwt): Response
     {
@@ -132,6 +138,7 @@ class Service extends AbstractService
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function update(Domain $domain, Token $jwt): Response
     {
@@ -157,6 +164,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function delete(Domain $domain, Token $jwt): Response
     {

@@ -71,6 +71,7 @@ class Service extends AbstractService
      * @return bool
      * @throws ClientException
      * @throws JwtException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function validateJwt(Token $jwt): bool
     {
@@ -136,6 +137,7 @@ class Service extends AbstractService
     /**
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function getRSAPublicKey(): Response
     {
@@ -148,6 +150,7 @@ class Service extends AbstractService
      * @param string $userGoogleJwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function login(TrustedApp $trustedAppModel, string $userGoogleJwt): Response
     {

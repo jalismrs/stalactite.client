@@ -21,6 +21,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function addPermissions(Post $post, array $permissions, Token $jwt): ?Response
     {
@@ -54,6 +55,7 @@ class Service extends AbstractService
      * @param Token $jwt
      * @return Response
      * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function removePermissions(Post $post, array $permissions, Token $jwt): ?Response
     {
