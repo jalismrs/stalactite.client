@@ -11,6 +11,8 @@ use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -24,10 +26,13 @@ use Throwable;
  */
 class Client
 {
+    private const CACHE_KEY_FORMAT = '%s %s'; // {method} {uri}
+
     private string $host;
     private ?string $userAgent = null;
     private ?HttpClientInterface $httpClient = null;
     private ?LoggerInterface $logger = null;
+    private ?CacheInterface $cache = null;
     private ?JsonSchema $errorSchema = null;
 
     public function __construct(string $host)
@@ -48,7 +53,6 @@ class Client
     public function setUserAgent(?string $userAgent): self
     {
         $this->userAgent = $userAgent;
-
         return $this;
     }
 
@@ -83,8 +87,45 @@ class Client
     public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
-
         return $this;
+    }
+
+    /**
+     * @param CacheInterface|null $cache
+     * @return Client
+     */
+    public function setCache(?CacheInterface $cache): Client
+    {
+        $this->cache = $cache;
+        return $this;
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @param $data
+     * @throws InvalidArgumentException
+     */
+    public function cache(string $method, string $uri, $data): void
+    {
+        if ($this->cache instanceof CacheInterface) {
+            $this->cache->set(vsprintf(self::CACHE_KEY_FORMAT, [$method, $uri]), $data);
+        }
+    }
+
+    /**
+     * @param string $method
+     * @param string $uri
+     * @return mixed|null
+     * @throws InvalidArgumentException
+     */
+    public function getFromCache(string $method, string $uri)
+    {
+        if ($this->cache instanceof CacheInterface) {
+            return $this->cache->get(vsprintf(self::CACHE_KEY_FORMAT, [$method, $uri]));
+        }
+
+        return null;
     }
 
     public function getHttpClient(): HttpClientInterface
@@ -99,7 +140,6 @@ class Client
     public function setHttpClient(HttpClientInterface $httpClient): self
     {
         $this->httpClient = $httpClient;
-
         return $this;
     }
 
@@ -111,7 +151,6 @@ class Client
         if (!($this->errorSchema instanceof JsonSchema)) {
             $this->errorSchema = new JsonSchema(ApiError::getSchema());
         }
-
         return $this->errorSchema;
     }
 
@@ -147,6 +186,7 @@ class Client
      * @param array $options
      * @return Response
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function request(Endpoint $endpoint, array $options = []): Response
     {
@@ -158,6 +198,10 @@ class Client
         if (isset($options['uriParameters']) && is_array($options['uriParameters'])) {
             $uri = sprintf($endpoint->getUri(), ...$options['uriParameters']);
             unset($options['uriParameters']);
+        }
+
+        if ($cache = $this->getFromCache($method, $uri)) {
+            return new Response(200, [], $cache);
         }
 
         $requestOptions = self::getRequestOptions($options);
@@ -182,7 +226,13 @@ class Client
             return $this->handleError($response);
         }
 
-        return $this->handleResponse($endpoint, $response);
+        $response = $this->handleResponse($endpoint, $response);
+
+        if ($endpoint->isCacheable()) {
+            $this->cache($method, $uri, $response->getBody());
+        }
+
+        return $response;
     }
 
     /**
@@ -219,7 +269,6 @@ class Client
         ['code' => $code, 'headers' => $headers, 'body' => $body] = $this->getResponseInfos($response);
 
         if ($schema = $endpoint->getResponseValidationSchema()) {
-
             // validate
             try {
                 $responseBodyAsJson = new JsonData($body);
@@ -241,7 +290,7 @@ class Client
 
             $body = $responseBodyAsJson->getData();
 
-            // format the validated response - if needed
+            // only format the validated response (format validated)
             if ($formatter = $endpoint->getResponseFormatter()) {
                 $body = $formatter($body);
             }

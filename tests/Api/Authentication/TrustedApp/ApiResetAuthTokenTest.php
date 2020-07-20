@@ -15,6 +15,7 @@ use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use JsonException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -28,6 +29,7 @@ class ApiResetAuthTokenTest extends EndpointTest
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function testResetAuthToken(): void
     {
@@ -56,6 +58,7 @@ class ApiResetAuthTokenTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function testThrowLacksUid(): void
     {
@@ -71,6 +74,7 @@ class ApiResetAuthTokenTest extends EndpointTest
     /**
      * @throws ClientException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

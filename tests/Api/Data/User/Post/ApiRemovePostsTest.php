@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class ApiRemovePostsTest
@@ -19,6 +20,7 @@ class ApiRemovePostsTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowLacksUid(): void
     {
@@ -37,6 +39,7 @@ class ApiRemovePostsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {
@@ -51,6 +54,7 @@ class ApiRemovePostsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodNotCalledOnEmptyPostList(): void
     {
@@ -60,12 +64,13 @@ class ApiRemovePostsTest extends EndpointTest
 
         $mockService = new Service($mockClient);
 
-        $response = $mockService->add(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        $response = $mockService->remove(ModelFactory::getTestableUser(), [], JwtFactory::create());
         self::assertNull($response);
     }
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {

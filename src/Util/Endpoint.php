@@ -15,14 +15,17 @@ class Endpoint
 
     private string $method;
 
+    private bool $cacheable;
+
     private ?JsonSchema $responseValidationSchema = null;
 
     private ?Closure $responseFormatter = null;
 
-    public function __construct(string $uri, string $method = 'GET')
+    public function __construct(string $uri, string $method = 'GET', bool $cacheable = true)
     {
         $this->uri = $uri;
         $this->method = $method;
+        $this->cacheable = $cacheable;
     }
 
     /**
@@ -39,6 +42,14 @@ class Endpoint
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCacheable(): bool
+    {
+        return $this->cacheable;
     }
 
     /**

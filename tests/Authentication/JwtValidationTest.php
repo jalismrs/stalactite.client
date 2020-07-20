@@ -13,6 +13,7 @@ use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token;
 use PHPUnit\Framework\TestCase;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * JwtValidationTest
@@ -27,6 +28,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testValidToken(): void
     {
@@ -52,6 +54,7 @@ class JwtValidationTest extends TestCase
      * @param string $publicKey
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     private function checkToken(Token $token, string $publicKey): void
     {
@@ -78,6 +81,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testInvalidPublicKeyToken(): void
     {
@@ -104,6 +108,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testWrongIssuerToken(): void
     {
@@ -130,6 +135,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testExpiredToken(): void
     {
@@ -156,6 +162,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testInvalidUserTypeToken(): void
     {
@@ -182,6 +189,7 @@ class JwtValidationTest extends TestCase
     /**
      * @throws ClientException
      * @throws JwtException
+     * @throws InvalidArgumentException
      */
     public function testInvalidJwtStructureMissingClaimToken(): void
     {

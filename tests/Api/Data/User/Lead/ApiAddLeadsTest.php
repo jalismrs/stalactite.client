@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
+use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class ApiAddLeadsTest
@@ -19,6 +20,7 @@ class ApiAddLeadsTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowLacksUid(): void
     {
@@ -37,6 +39,7 @@ class ApiAddLeadsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testThrowOnInvalidLeadsParameterAddLeads(): void
     {
@@ -51,6 +54,7 @@ class ApiAddLeadsTest extends EndpointTest
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {
