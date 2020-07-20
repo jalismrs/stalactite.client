@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests;
+namespace Jalismrs\Stalactite\Client\Tests\Client;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
@@ -9,15 +9,15 @@ use Jalismrs\Stalactite\Client\ApiError;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
 use JsonException;
-use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
-use SebastianBergmann\RecursionContext\InvalidArgumentException;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Throwable;
@@ -29,14 +29,6 @@ use Throwable;
  */
 class ClientTest extends TestCase
 {
-    /**
-     * testGetHost
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
     public function testGetHost(): void
     {
         $host = 'http://fakeHost';
@@ -48,14 +40,6 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * testGetUserAgentDefault
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
     public function testGetUserAgentDefault(): void
     {
         $mockClient = new Client('http://fakeHost');
@@ -63,14 +47,6 @@ class ClientTest extends TestCase
         self::assertNull($mockClient->getUserAgent());
     }
 
-    /**
-     * testGetUserAgent
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
     public function testGetUserAgent(): void
     {
         $userAgent = 'fake user agent';
@@ -83,14 +59,6 @@ class ClientTest extends TestCase
         );
     }
 
-    /**
-     * testGetHttpClient
-     *
-     * @return void
-     *
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     */
     public function testGetHttpClient(): void
     {
         $httpClient = new MockHttpClient();
@@ -125,6 +93,9 @@ class ClientTest extends TestCase
         );
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testExceptionThrownOnInvalidAPIHost(): void
     {
         $mockClient = new Client('invalidHost');
@@ -145,6 +116,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testRequest(): void
     {
@@ -167,6 +139,7 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function testRequestWithValidationSchema(): void
     {
@@ -192,6 +165,9 @@ class ClientTest extends TestCase
         );
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testRequestWithInvalidJsonData(): void
     {
         $responseBody = 'invalid{}json';
@@ -226,6 +202,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function testRequestWithInvalidDataFormat(): void
     {
@@ -270,6 +247,7 @@ class ClientTest extends TestCase
     /**
      * @throws ClientException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
     public function testRequestWithValidationSchemaAndResponseFormatter(): void
     {
@@ -302,6 +280,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testFormatterNotAppliedIfNoValidationSchema(): void
     {
@@ -333,6 +312,7 @@ class ClientTest extends TestCase
      * @throws ClientException
      * @throws JsonException
      * @throws NormalizerException
+     * @throws InvalidArgumentException
      */
     public function testErrorResponse(): void
     {
@@ -357,6 +337,9 @@ class ClientTest extends TestCase
         self::assertInstanceOf(ApiError::class, $response->getBody());
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testInvalidErrorResponse(): void
     {
         $responseBody = 'invalid-api-error-format';
@@ -394,6 +377,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testResponseKeepsApiResponseCode(): void
     {
@@ -414,6 +398,7 @@ class ClientTest extends TestCase
 
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testResponseKeepsApiResponseHeaders(): void
     {
