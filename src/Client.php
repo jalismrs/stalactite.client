@@ -91,6 +91,15 @@ class Client
     }
 
     /**
+     * @return CacheInterface|null
+     * @codeCoverageIgnore
+     */
+    public function getCache(): ?CacheInterface
+    {
+        return $this->cache;
+    }
+
+    /**
      * @param CacheInterface|null $cache
      * @return Client
      */
