@@ -10,12 +10,10 @@ use PHPUnit\Framework\TestCase;
 class TpaJwtFactoryTest extends TestCase
 {
     private const DATA_API_SIGNATURE_SALT = 'dataApiSignatureSalt';
-    private const ACCESS_API_SIGNATURE_SALT = 'accessApiSignatureSalt';
 
     public function testApiSpecificJwt(): void
     {
         self::assertSame(TpaJwtFactory::DATA_API_JWT_AUDIENCE, TpaJwtFactory::data(self::DATA_API_SIGNATURE_SALT, null)->getClaim('aud'));
-        self::assertSame(TpaJwtFactory::ACCESS_API_JWT_AUDIENCE, TpaJwtFactory::access(self::ACCESS_API_SIGNATURE_SALT, null)->getClaim('aud'));
     }
 
     /**

@@ -8,14 +8,9 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 
-/**
- * Class TpaJwtFactory
- * @package Jalismrs\Stalactite\Client\Util
- */
 class TpaJwtFactory
 {
     public const DATA_API_JWT_AUDIENCE = 'data.microservice';
-    public const ACCESS_API_JWT_AUDIENCE = 'access.microservice';
 
     private const JWT_DURATION = 60;
 
@@ -47,10 +42,5 @@ class TpaJwtFactory
 
         $signer = new Sha256();
         return $builder->getToken($signer, new Key($challenge . $tokenSalt));
-    }
-
-    public static function access(string $tokenSalt, ?string $userAgent = null): Token
-    {
-        return self::forge($tokenSalt, self::ACCESS_API_JWT_AUDIENCE, $userAgent);
     }
 }
