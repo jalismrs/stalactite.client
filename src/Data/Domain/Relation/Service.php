@@ -27,7 +27,7 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function getRelations(Domain $domain, Token $jwt): Response
+    public function all(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
             throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);

@@ -58,7 +58,7 @@ class ApiGetRelationsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getRelations(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $response = $mockService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
 
         static::assertIsArray($response->getBody());
 
@@ -81,7 +81,7 @@ class ApiGetRelationsTest extends EndpointTest
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->getRelations(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
+        $mockService->all(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -91,6 +91,6 @@ class ApiGetRelationsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getRelations(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $mockService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
     }
 }
