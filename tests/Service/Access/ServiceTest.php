@@ -26,32 +26,6 @@ class ServiceTest extends AbstractServiceTest
         );
     }
 
-    public function testDomain(): void
-    {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->domains();
-        $mockService2 = $mockService->domains();
-
-        self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
-        );
-    }
-
-    public function testRelation(): void
-    {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->relations();
-        $mockService2 = $mockService->relations();
-
-        self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
-        );
-    }
-
     public function testUser(): void
     {
         $mockService = new Service(self::getMockClient());
