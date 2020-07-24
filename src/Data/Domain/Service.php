@@ -18,13 +18,19 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
-/**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data\DOmain
- */
 class Service extends AbstractService
 {
+    private ?Relation\Service $serviceRelation = null;
+
+    public function relations(): Relation\Service
+    {
+        if ($this->serviceRelation === null) {
+            $this->serviceRelation = new Relation\Service($this->getClient());
+        }
+
+        return $this->serviceRelation;
+    }
+
     /**
      * @param Token $jwt
      * @return Response

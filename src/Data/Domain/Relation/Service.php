@@ -1,30 +1,24 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Access\Domain;
+namespace Jalismrs\Stalactite\Client\Data\Domain\Relation;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
-use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
-use Jalismrs\Stalactite\Client\Access\ResponseFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
+use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-/**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Access\Domain
- */
 class Service extends AbstractService
 {
     /**
@@ -37,39 +31,44 @@ class Service extends AbstractService
     public function getRelations(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
-            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+            throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);
         }
 
         $schema = [
-            'users' => [
-                'type' => JsonRule::LIST_TYPE,
-                'schema' => [
-                    'uid' => [
-                        'type' => JsonRule::STRING_TYPE
-                    ],
-                    'user' => [
-                        'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => User::getSchema()
-                    ]
-                ]
-            ],
-            'customers' => [
-                'type' => JsonRule::LIST_TYPE,
-                'schema' => [
-                    'uid' => [
-                        'type' => JsonRule::STRING_TYPE
-                    ],
-                    'customer' => [
-                        'type' => JsonRule::OBJECT_TYPE,
-                        'schema' => Customer::getSchema()
-                    ]
-                ]
-            ]
+            'users' => ['type' => JsonRule::LIST_TYPE, 'schema' => [
+                'uid' => ['type' => JsonRule::STRING_TYPE],
+                'user' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => User::getSchema()]
+            ]],
+            'customers' => ['type' => JsonRule::LIST_TYPE, 'schema' => [
+                'uid' => ['type' => JsonRule::STRING_TYPE],
+                'customer' => ['type' => JsonRule::OBJECT_TYPE, 'schema' => Customer::getSchema()]
+            ]]
         ];
 
-        $endpoint = new Endpoint('/access/domains/%s/relations');
+        $endpoint = new Endpoint('/data/domains/%s/relations');
         $endpoint->setResponseValidationSchema(new JsonSchema($schema))
-            ->setResponseFormatter(ResponseFactory::domainGetRelations($domain));
+            ->setResponseFormatter(static function (array $response) use ($domain) : array {
+                return [
+                    'users' => array_map(
+                        static function (array $relation) use ($domain): DomainUserRelation {
+                            $domainUserRelation = ModelFactory::createDomainUserRelation($relation);
+                            $domainUserRelation->setDomain($domain);
+
+                            return $domainUserRelation;
+                        },
+                        $response['users']
+                    ),
+                    'customers' => array_map(
+                        static function (array $relation) use ($domain): DomainCustomerRelation {
+                            $domainCustomerRelation = ModelFactory::createDomainCustomerRelation($relation);
+                            $domainCustomerRelation->setDomain($domain);
+
+                            return $domainCustomerRelation;
+                        },
+                        $response['customers']
+                    )
+                ];
+            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,
@@ -88,14 +87,14 @@ class Service extends AbstractService
     public function addUserRelation(Domain $domain, User $user, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
-            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+            throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);
         }
 
         if ($user->getUid() === null) {
-            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_USER_UID);
+            throw new DataServiceException('User lacks a uid', DataServiceException::MISSING_USER_UID);
         }
 
-        $endpoint = new Endpoint('/access/domains/%s/relations/users', 'POST');
+        $endpoint = new Endpoint('/data/domains/%s/relations/users', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(DomainUserRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainUserRelation => ModelFactory::createDomainUserRelation($response)
@@ -119,14 +118,14 @@ class Service extends AbstractService
     public function addCustomerRelation(Domain $domain, Customer $customer, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
-            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+            throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);
         }
 
         if ($customer->getUid() === null) {
-            throw new AccessServiceException('Customer lacks a uid', AccessServiceException::MISSING_CUSTOMER_UID);
+            throw new DataServiceException('Customer lacks a uid', DataServiceException::MISSING_CUSTOMER_UID);
         }
 
-        $endpoint = new Endpoint('/access/domains/%s/relations/customers', 'POST');
+        $endpoint = new Endpoint('/data/domains/%s/relations/customers', 'POST');
         $endpoint->setResponseValidationSchema(new JsonSchema(DomainCustomerRelation::getSchema()))
             ->setResponseFormatter(
                 static fn(array $response): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($response)
@@ -146,13 +145,13 @@ class Service extends AbstractService
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function deleteRelations(Domain $domain, Token $jwt): Response
+    public function deleteAll(Domain $domain, Token $jwt): Response
     {
         if ($domain->getUid() === null) {
-            throw new AccessServiceException('Domain lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+            throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);
         }
 
-        $endpoint = new Endpoint('/access/domains/%s/relations', 'DELETE');
+        $endpoint = new Endpoint('/data/domains/%s/relations', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,
