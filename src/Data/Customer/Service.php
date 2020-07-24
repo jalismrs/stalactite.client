@@ -18,14 +18,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use function array_map;
 
-/**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data\Customer
- */
 class Service extends AbstractService
 {
     private ?Me\Service $serviceMe = null;
+    private ?Access\Service $serviceAccess = null;
+    private ?Relation\Service $serviceRelation = null;
 
     /*
      * -------------------------------------------------------------------------
@@ -40,6 +37,24 @@ class Service extends AbstractService
         }
 
         return $this->serviceMe;
+    }
+
+    public function access(): Access\Service
+    {
+        if ($this->serviceAccess === null) {
+            $this->serviceAccess = new Access\Service($this->getClient());
+        }
+
+        return $this->serviceAccess;
+    }
+
+    public function relations(): Relation\Service
+    {
+        if ($this->serviceRelation === null) {
+            $this->serviceRelation = new Relation\Service($this->getClient());
+        }
+
+        return $this->serviceRelation;
     }
 
     /*
