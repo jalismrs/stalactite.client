@@ -13,12 +13,29 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-/**
- * Class Service
- * @package Jalismrs\Stalactite\Client\Data\Customer\Me
- */
 class Service extends AbstractService
 {
+    private ?Access\Service $serviceAccess = null;
+    private ?Relation\Service $serviceRelation = null;
+
+    public function access(): Access\Service
+    {
+        if ($this->serviceAccess === null) {
+            $this->serviceAccess = new Access\Service($this->getClient());
+        }
+
+        return $this->serviceAccess;
+    }
+
+    public function relations(): Relation\Service
+    {
+        if ($this->serviceRelation === null) {
+            $this->serviceRelation = new Relation\Service($this->getClient());
+        }
+
+        return $this->serviceRelation;
+    }
+
     /**
      * @param Token $jwt
      * @return Response

@@ -6,11 +6,6 @@ namespace Jalismrs\Stalactite\Client\Tests\Service\Data;
 use Jalismrs\Stalactite\Client\Data\Service;
 use Jalismrs\Stalactite\Client\Tests\Service\AbstractServiceTest;
 
-/**
- * ServiceTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Service\Data
- */
 class ServiceTest extends AbstractServiceTest
 {
     public function testCustomer(): void
@@ -70,6 +65,19 @@ class ServiceTest extends AbstractServiceTest
         $mockService = new Service(self::getMockClient());
         $mockService1 = $mockService->users();
         $mockService2 = $mockService->users();
+
+        self::checkServices(
+            $mockService,
+            $mockService1,
+            $mockService2
+        );
+    }
+
+    public function testRelation(): void
+    {
+        $mockService = new Service(self::getMockClient());
+        $mockService1 = $mockService->relations();
+        $mockService2 = $mockService->relations();
 
         self::checkServices(
             $mockService,

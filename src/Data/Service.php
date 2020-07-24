@@ -5,11 +5,6 @@ namespace Jalismrs\Stalactite\Client\Data;
 
 use Jalismrs\Stalactite\Client\AbstractService;
 
-/**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Data
- */
 class Service extends AbstractService
 {
     private ?Customer\Service $serviceCustomer = null;
@@ -21,18 +16,15 @@ class Service extends AbstractService
     private ?User\Service $serviceUser = null;
 
     private ?Permission\Service $servicePermission = null;
-    
+
+    private ?Relation\Service $serviceRelation = null;
+
     /*
      * -------------------------------------------------------------------------
      * Clients -----------------------------------------------------------------
      * -------------------------------------------------------------------------
      */
 
-    /**
-     * customers
-     *
-     * @return Customer\Service
-     */
     public function customers(): Customer\Service
     {
         if ($this->serviceCustomer === null) {
@@ -42,11 +34,6 @@ class Service extends AbstractService
         return $this->serviceCustomer;
     }
 
-    /**
-     * domains
-     *
-     * @return Domain\Service
-     */
     public function domains(): Domain\Service
     {
         if ($this->serviceDomain === null) {
@@ -56,11 +43,6 @@ class Service extends AbstractService
         return $this->serviceDomain;
     }
 
-    /**
-     * posts
-     *
-     * @return Post\Service
-     */
     public function posts(): Post\Service
     {
         if ($this->servicePost === null) {
@@ -70,11 +52,6 @@ class Service extends AbstractService
         return $this->servicePost;
     }
 
-    /**
-     * users
-     *
-     * @return User\Service
-     */
     public function users(): User\Service
     {
         if ($this->serviceUser === null) {
@@ -84,9 +61,6 @@ class Service extends AbstractService
         return $this->serviceUser;
     }
 
-    /**
-     * @return Permission\Service
-     */
     public function permissions(): Permission\Service
     {
         if ($this->servicePermission === null) {
@@ -94,5 +68,14 @@ class Service extends AbstractService
         }
 
         return $this->servicePermission;
+    }
+
+    public function relations(): Relation\Service
+    {
+        if ($this->serviceRelation === null) {
+            $this->serviceRelation = new Relation\Service($this->getClient());
+        }
+
+        return $this->serviceRelation;
     }
 }

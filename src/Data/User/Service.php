@@ -30,10 +30,11 @@ use function array_merge;
 class Service extends AbstractService
 {
     private ?Lead\Service $serviceLead = null;
-
     private ?Me\Service $serviceMe = null;
-
     private ?PostService $servicePost = null;
+    private ?Access\Service $serviceAccess = null;
+    private ?Relation\Service $serviceRelation = null;
+    private ?Subordinate\Service $serviceSubordinate = null;
 
     /*
      * -------------------------------------------------------------------------
@@ -41,11 +42,6 @@ class Service extends AbstractService
      * -------------------------------------------------------------------------
      */
 
-    /**
-     * leads
-     *
-     * @return Lead\Service
-     */
     public function leads(): Lead\Service
     {
         if ($this->serviceLead === null) {
@@ -55,11 +51,6 @@ class Service extends AbstractService
         return $this->serviceLead;
     }
 
-    /**
-     * me
-     *
-     * @return Me\Service
-     */
     public function me(): Me\Service
     {
         if ($this->serviceMe === null) {
@@ -69,11 +60,6 @@ class Service extends AbstractService
         return $this->serviceMe;
     }
 
-    /**
-     * posts
-     *
-     * @return PostService
-     */
     public function posts(): PostService
     {
         if ($this->servicePost === null) {
@@ -81,6 +67,33 @@ class Service extends AbstractService
         }
 
         return $this->servicePost;
+    }
+
+    public function access(): Access\Service
+    {
+        if ($this->serviceAccess === null) {
+            $this->serviceAccess = new Access\Service($this->getClient());
+        }
+
+        return $this->serviceAccess;
+    }
+
+    public function relations(): Relation\Service
+    {
+        if ($this->serviceRelation === null) {
+            $this->serviceRelation = new Relation\Service($this->getClient());
+        }
+
+        return $this->serviceRelation;
+    }
+
+    public function subordinates(): Subordinate\Service
+    {
+        if ($this->serviceSubordinate === null) {
+            $this->serviceSubordinate = new Subordinate\Service($this->getClient());
+        }
+
+        return $this->serviceSubordinate;
     }
 
     /*
@@ -131,7 +144,6 @@ class Service extends AbstractService
         ]);
     }
 
-
     /**
      * @param string $uid
      * @param Token $jwt
@@ -144,27 +156,6 @@ class Service extends AbstractService
         $endpoint = new Endpoint('/data/users/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$uid]
-        ]);
-    }
-
-    /**
-     * @param string $uid
-     * @param Token $jwt
-     * @return Response
-     * @throws ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function getSubordinates(string $uid, Token $jwt): Response
-    {
-        $endpoint = new Endpoint('/data/users/%s/subordinates');
-        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
-            });
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,

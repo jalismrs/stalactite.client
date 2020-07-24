@@ -2,8 +2,11 @@
 
 namespace Jalismrs\Stalactite\Client\Tests\Factory\Data;
 
+use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Data\Model\Permission;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Data\Model\User;
@@ -83,6 +86,41 @@ abstract class ModelFactory
             ->setLastName('uiop')
             ->setGoogleId('0123456789')
             ->setUid('azertyuiop');
+
+        return $model;
+    }
+
+    /**
+     * @return DomainUserRelation
+     */
+    public static function getTestableDomainUserRelation(): DomainUserRelation
+    {
+        $model = new DomainUserRelation();
+        $model->setUser(self::getTestableUser())
+            ->setDomain(self::getTestableDomain())
+            ->setUid('azertyuiop');
+
+        return $model;
+    }
+
+    /**
+     * @return DomainCustomerRelation
+     */
+    public static function getTestableDomainCustomerRelation(): DomainCustomerRelation
+    {
+        $model = new DomainCustomerRelation();
+        $model->setCustomer(self::getTestableCustomer())
+            ->setDomain(self::getTestableDomain())
+            ->setUid('azertyuiop');
+
+        return $model;
+    }
+
+    public static function getTestableAccessClearance(): AccessClearance
+    {
+        $model = new AccessClearance();
+        $model->setGranted(false)
+            ->setType(AccessClearance::NO_ACCESS);
 
         return $model;
     }
