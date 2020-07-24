@@ -1,10 +1,10 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me\Post;
 
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
-use Jalismrs\Stalactite\Client\Data\User\Me\Service;
+use Jalismrs\Stalactite\Client\Data\User\Me\Post\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
@@ -42,7 +42,7 @@ class ApiGetMyPostsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getPosts(JwtFactory::create());
+        $response = $mockService->all(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -54,6 +54,6 @@ class ApiGetMyPostsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getPosts(JwtFactory::create());
+        $mockService->all(JwtFactory::create());
     }
 }

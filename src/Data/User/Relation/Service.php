@@ -1,38 +1,36 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Access\User\Me;
+namespace Jalismrs\Stalactite\Client\Data\User\Relation;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\AbstractService;
-use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
-use Jalismrs\Stalactite\Client\Access\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
+use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
+use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
-use function array_map;
 
-/**
- * Service
- *
- * @package Jalismrs\Stalactite\Service\Access\User\Me
- */
 class Service extends AbstractService
 {
     /**
+     * @param User $user
      * @param Token $jwt
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function getRelations(Token $jwt): Response
+    public function all(User $user, Token $jwt): Response
     {
+        if ($user->getUid() === null) {
+            throw new DataServiceException('User lacks a uid', DataServiceException::MISSING_USER_UID);
+        }
+
         $schema = [
             'uid' => [
                 'type' => JsonRule::STRING_TYPE
@@ -43,7 +41,7 @@ class Service extends AbstractService
             ]
         ];
 
-        $endpoint = new Endpoint('/access/users/me/relations');
+        $endpoint = new Endpoint('/data/users/%s/relations');
         $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
             ->setResponseFormatter(static function (array $response): array {
                 return array_map(
@@ -53,32 +51,29 @@ class Service extends AbstractService
             });
 
         return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$user->getUid()]
         ]);
     }
 
     /**
-     * @param Domain $domain
+     * @param User $user
      * @param Token $jwt
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function getAccessClearance(Domain $domain, Token $jwt): Response
+    public function deleteAll(User $user, Token $jwt): Response
     {
-        if ($domain->getUid() === null) {
-            throw new AccessServiceException('User lacks a uid', AccessServiceException::MISSING_DOMAIN_UID);
+        if ($user->getUid() === null) {
+            throw new DataServiceException('User lacks a uid', DataServiceException::MISSING_USER_UID);
         }
 
-        $endpoint = new Endpoint('/access/users/me/access/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
-            ->setResponseFormatter(static function (array $response): AccessClearance {
-                return ModelFactory::createAccessClearance($response);
-            });
+        $endpoint = new Endpoint('/data/users/%s/relations', 'DELETE');
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$jwt,
-            'uriParameters' => $domain->getUid()
+            'uriParameters' => [$user->getUid()]
         ]);
     }
 }

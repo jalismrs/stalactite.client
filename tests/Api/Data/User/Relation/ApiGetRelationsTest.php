@@ -1,10 +1,10 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Relation;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\User\Me\Service;
+use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
+use Jalismrs\Stalactite\Client\Data\User\Me\Relation\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
@@ -16,15 +16,15 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class ApiGetMySubordinatesTest extends EndpointTest
+class ApiGetRelationsTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
-     * @throws InvalidArgumentException
      */
-    public function testGetUserSubordinates(): void
+    public function testGetRelations(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -33,18 +33,19 @@ class ApiGetMySubordinatesTest extends EndpointTest
                 json_encode([
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableUser(),
+                            ModelFactory::getTestableDomainUserRelation(),
                             [
-                                AbstractNormalizer::GROUPS => ['main']
+                                AbstractNormalizer::GROUPS => ['main'],
+                                AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer']
                             ]
                         )
                 ], JSON_THROW_ON_ERROR)
             )
         );
 
-        $response = $mockService->getSubordinates(JwtFactory::create());
+        $response = $mockService->all(JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
+        self::assertContainsOnlyInstancesOf(DomainUserRelation::class, $response->getBody());
     }
 
     /**
@@ -54,6 +55,6 @@ class ApiGetMySubordinatesTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getSubordinates(JwtFactory::create());
+        $mockService->all(JwtFactory::create());
     }
 }

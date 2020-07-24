@@ -1,9 +1,8 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Service\Data\User;
+namespace Jalismrs\Stalactite\Client\Tests\Service\Data\User\Me;
 
-use Jalismrs\Stalactite\Client\Data\User\Service;
+use Jalismrs\Stalactite\Client\Data\User\Me\Service;
 use Jalismrs\Stalactite\Client\Tests\Service\AbstractServiceTest;
 
 class ServiceTest extends AbstractServiceTest
@@ -13,19 +12,6 @@ class ServiceTest extends AbstractServiceTest
         $mockService = new Service(self::getMockClient());
         $mockService1 = $mockService->leads();
         $mockService2 = $mockService->leads();
-
-        self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
-        );
-    }
-
-    public function testMe(): void
-    {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->me();
-        $mockService2 = $mockService->me();
 
         self::checkServices(
             $mockService,

@@ -1,17 +1,15 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Access\User;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Access;
 
-use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
-use Jalismrs\Stalactite\Client\Access\User\Service;
 use Jalismrs\Stalactite\Client\Client;
+use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
+use Jalismrs\Stalactite\Client\Data\User\Access\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
-use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
-use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -19,19 +17,15 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * Class ApiGetAccessClearanceTest
- * @package Jalismrs\Stalactite\Client\Tests\Api\Access\User
- */
-class ApiGetAccessClearanceTest extends EndpointTest
+class ApiGetClearanceTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
-     * @throws InvalidArgumentException
      */
-    public function testGetAccessClearance(): void
+    public function testGetClearance(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -50,9 +44,9 @@ class ApiGetAccessClearanceTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getAccessClearance(
-            DataTestModelFactory::getTestableUser(),
-            DataTestModelFactory::getTestableDomain(),
+        $response = $mockService->clearance(
+            ModelFactory::getTestableUser(),
+            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
 
@@ -63,17 +57,17 @@ class ApiGetAccessClearanceTest extends EndpointTest
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowUserLacksUid(): void
+    public function testThrowOnMissingCustomerUid(): void
     {
-        $this->expectException(AccessServiceException::class);
-        $this->expectExceptionCode(AccessServiceException::MISSING_USER_UID);
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->getAccessClearance(
-            DataTestModelFactory::getTestableUser()->setUid(null),
-            DataTestModelFactory::getTestableDomain(),
+        $mockService->clearance(
+            ModelFactory::getTestableUser()->setUid(null),
+            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }
@@ -82,17 +76,18 @@ class ApiGetAccessClearanceTest extends EndpointTest
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowDomainLacksUid(): void
+    public function testThrowOnMissingDomainUid(): void
     {
-        $this->expectException(AccessServiceException::class);
-        $this->expectExceptionCode(AccessServiceException::MISSING_DOMAIN_UID);
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->getAccessClearance(
-            DataTestModelFactory::getTestableUser(),
-            DataTestModelFactory::getTestableDomain()->setUid(null),
+
+        $mockService->clearance(
+            ModelFactory::getTestableUser(),
+            ModelFactory::getTestableDomain()->setUid(null),
             JwtFactory::create()
         );
     }
@@ -104,10 +99,9 @@ class ApiGetAccessClearanceTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-
-        $mockService->getAccessClearance(
-            DataTestModelFactory::getTestableUser(),
-            DataTestModelFactory::getTestableDomain(),
+        $mockService->clearance(
+            ModelFactory::getTestableUser(),
+            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }

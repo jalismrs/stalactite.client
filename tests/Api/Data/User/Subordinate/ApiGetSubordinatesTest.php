@@ -1,12 +1,13 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Subordinate;
 
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\Model\Post;
-use Jalismrs\Stalactite\Client\Data\User\Me\Service;
+use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\Data\User\Subordinate\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
 use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
@@ -16,15 +17,15 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class ApiGetMyLeadsTest extends EndpointTest
+class ApiGetSubordinatesTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws NormalizerException
-     * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NormalizerException
      */
-    public function testGet(): void
+    public function testGetUserSubordinates(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -33,7 +34,7 @@ class ApiGetMyLeadsTest extends EndpointTest
                 json_encode([
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestablePost(),
+                            ModelFactory::getTestableUser(),
                             [
                                 AbstractNormalizer::GROUPS => ['main']
                             ]
@@ -42,9 +43,24 @@ class ApiGetMyLeadsTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getLeads(JwtFactory::create());
+        $response = $mockService->all(ModelFactory::getTestableUser(), JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
+        self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
+    }
+
+    /**
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function testThrowOnMissingUserUid(): void
+    {
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
+
+        $mockClient = new Client('http://fakeHost');
+        $mockService = new Service($mockClient);
+
+        $mockService->all(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -54,6 +70,6 @@ class ApiGetMyLeadsTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getLeads(JwtFactory::create());
+        $mockService->all(ModelFactory::getTestableUser(), JwtFactory::create());
     }
 }

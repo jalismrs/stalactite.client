@@ -1,10 +1,10 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\User\Me\Subordinate;
 
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Data\User\Service;
+use Jalismrs\Stalactite\Client\Data\User\Me\Subordinate\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
@@ -16,7 +16,7 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class ApiGetUserSubordinatesTest extends EndpointTest
+class ApiGetMySubordinatesTest extends EndpointTest
 {
     /**
      * @throws ClientException
@@ -42,7 +42,7 @@ class ApiGetUserSubordinatesTest extends EndpointTest
             )
         );
 
-        $response = $mockService->getSubordinates('fake user uid', JwtFactory::create());
+        $response = $mockService->all(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
     }
@@ -54,6 +54,6 @@ class ApiGetUserSubordinatesTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->getSubordinates('fake user uid', JwtFactory::create());
+        $mockService->all(JwtFactory::create());
     }
 }
