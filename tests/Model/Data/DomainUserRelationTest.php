@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
+namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
-use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -16,8 +16,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Model\Access
  */
-class DomainUserRelationTest extends
-    TestCase
+class DomainUserRelationTest extends TestCase
 {
     /**
      * @throws ExpectationFailedException
@@ -28,8 +27,7 @@ class DomainUserRelationTest extends
     {
         $model = ModelFactory::getTestableDomainUserRelation();
 
-        $actual = Normalizer::getInstance()
-            ->normalize($model);
+        $actual = Normalizer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -49,31 +47,19 @@ class DomainUserRelationTest extends
 
         $actual = $serializer->normalize(
             $model,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'main',
-                ],
-            ]
+            [AbstractNormalizer::GROUPS => ['main']]
         );
 
         $expected = [
             'uid' => $model->getUid(),
             'domain' => $serializer->normalize(
                 $model->getDomain(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
+                [AbstractNormalizer::GROUPS => ['main']]
             ),
             'user' => $serializer->normalize(
                 $model->getUser(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
+                [AbstractNormalizer::GROUPS => ['main']]
+            )
         ];
 
         self::assertEquals($expected, $actual);
@@ -93,12 +79,8 @@ class DomainUserRelationTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS => [
-                    'main',
-                ],
-                AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                    'domain',
-                ],
+                AbstractNormalizer::GROUPS => ['main'],
+                AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain']
             ]
         );
 
@@ -106,12 +88,8 @@ class DomainUserRelationTest extends
             'uid' => $model->getUid(),
             'user' => $serializer->normalize(
                 $model->getUser(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
+                [AbstractNormalizer::GROUPS => ['main']]
+            )
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -131,12 +109,8 @@ class DomainUserRelationTest extends
         $actual = $serializer->normalize(
             $model,
             [
-                AbstractNormalizer::GROUPS => [
-                    'main',
-                ],
-                AbstractNormalizer::IGNORED_ATTRIBUTES => [
-                    'user',
-                ],
+                AbstractNormalizer::GROUPS => ['main'],
+                AbstractNormalizer::IGNORED_ATTRIBUTES => ['user']
             ]
         );
 
@@ -144,12 +118,8 @@ class DomainUserRelationTest extends
             'uid' => $model->getUid(),
             'domain' => $serializer->normalize(
                 $model->getDomain(),
-                [
-                    AbstractNormalizer::GROUPS => [
-                        'main',
-                    ],
-                ]
-            ),
+                [AbstractNormalizer::GROUPS => ['main']]
+            )
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);

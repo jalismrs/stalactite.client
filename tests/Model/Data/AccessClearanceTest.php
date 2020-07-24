@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Model\Access;
+namespace Jalismrs\Stalactite\Client\Tests\Model\Data;
 
-use Jalismrs\Stalactite\Client\Access\Model\AccessClearance;
+use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
-use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -17,8 +17,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Model\Access
  */
-class AccessClearanceTest extends
-    TestCase
+class AccessClearanceTest extends TestCase
 {
     /**
      * @throws ExpectationFailedException
@@ -29,8 +28,7 @@ class AccessClearanceTest extends
     {
         $model = ModelFactory::getTestableAccessClearance();
 
-        $actual = Normalizer::getInstance()
-            ->normalize($model);
+        $actual = Normalizer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -49,9 +47,7 @@ class AccessClearanceTest extends
         $actual = Normalizer::getInstance()
             ->normalize(
                 $model,
-                [
-                    AbstractNormalizer::GROUPS => ['main']
-                ]
+                [AbstractNormalizer::GROUPS => ['main']]
             );
 
         $expected = [

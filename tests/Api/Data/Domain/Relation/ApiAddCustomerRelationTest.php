@@ -1,17 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Access\Domain;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Data\Domain\Relation;
 
-use Jalismrs\Stalactite\Client\Access\Domain\Service;
-use Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Client;
+use Jalismrs\Stalactite\Client\Data\Domain\Relation\Service;
+use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
-use Jalismrs\Stalactite\Client\Exception\Service\AccessServiceException;
-use Jalismrs\Stalactite\Client\Tests\Factory\Access\ModelFactory;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\Api\EndpointTest;
-use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory as DataTestModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\Factory\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -19,12 +18,7 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * ApiAddUserRelationTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Api\Access\Domain
- */
-class ApiAddUserRelationTest extends EndpointTest
+class ApiAddCustomerRelationTest extends EndpointTest
 {
     /**
      * @throws ClientException
@@ -32,7 +26,7 @@ class ApiAddUserRelationTest extends EndpointTest
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testAddUserRelation(): void
+    public function testAddCustomerRelation(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -41,7 +35,7 @@ class ApiAddUserRelationTest extends EndpointTest
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableDomainUserRelation(),
+                            ModelFactory::getTestableDomainCustomerRelation(),
                             [
                                 AbstractNormalizer::GROUPS => ['main']
                             ]
@@ -51,13 +45,13 @@ class ApiAddUserRelationTest extends EndpointTest
             )
         );
 
-        $response = $mockService->addUserRelation(
-            DataTestModelFactory::getTestableDomain(),
-            DataTestModelFactory::getTestableUser(),
+        $response = $mockService->addCustomerRelation(
+            ModelFactory::getTestableDomain(),
+            ModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
 
-        static::assertInstanceOf(DomainUserRelation::class, $response->getBody());
+        static::assertInstanceOf(DomainCustomerRelation::class, $response->getBody());
     }
 
     /**
@@ -66,15 +60,15 @@ class ApiAddUserRelationTest extends EndpointTest
      */
     public function testThrowDomainLacksUid(): void
     {
-        $this->expectException(AccessServiceException::class);
-        $this->expectExceptionCode(AccessServiceException::MISSING_DOMAIN_UID);
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->addUserRelation(
-            DataTestModelFactory::getTestableDomain()->setUid(null),
-            DataTestModelFactory::getTestableUser(),
+        $mockService->addCustomerRelation(
+            ModelFactory::getTestableDomain()->setUid(null),
+            ModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
     }
@@ -83,17 +77,17 @@ class ApiAddUserRelationTest extends EndpointTest
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowUserLacksUid(): void
+    public function testThrowCustomerLacksUid(): void
     {
-        $this->expectException(AccessServiceException::class);
-        $this->expectExceptionCode(AccessServiceException::MISSING_USER_UID);
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_CUSTOMER_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->addUserRelation(
-            DataTestModelFactory::getTestableDomain(),
-            DataTestModelFactory::getTestableUser()->setUid(null),
+        $mockService->addCustomerRelation(
+            ModelFactory::getTestableDomain(),
+            ModelFactory::getTestableCustomer()->setUid(null),
             JwtFactory::create()
         );
     }
@@ -106,9 +100,9 @@ class ApiAddUserRelationTest extends EndpointTest
     {
         $mockService = new Service($this->createMockClient());
 
-        $mockService->addUserRelation(
-            DataTestModelFactory::getTestableDomain(),
-            DataTestModelFactory::getTestableUser(),
+        $mockService->addCustomerRelation(
+            ModelFactory::getTestableDomain(),
+            ModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
     }
