@@ -21,39 +21,6 @@
     </class>
 
     <!--
-        # Access ###############################################################
-    -->
-    <class name="Jalismrs\Stalactite\Client\Access\Model\AccessClearance">
-        <attribute name="granted">
-            <group>main</group>
-        </attribute>
-        <attribute name="type">
-            <group>main</group>
-        </attribute>
-    </class>
-
-    <class name="Jalismrs\Stalactite\Client\Access\Model\DomainRelation">
-        <attribute name="domain">
-            <group>main</group>
-        </attribute>
-        <attribute name="uid">
-            <group>main</group>
-        </attribute>
-    </class>
-
-    <class name="Jalismrs\Stalactite\Client\Access\Model\DomainCustomerRelation">
-        <attribute name="customer">
-            <group>main</group>
-        </attribute>
-    </class>
-
-    <class name="Jalismrs\Stalactite\Client\Access\Model\DomainUserRelation">
-        <attribute name="user">
-            <group>main</group>
-        </attribute>
-    </class>
-
-    <!--
         # Authentication #######################################################
     -->
     <class name="Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp">
@@ -212,6 +179,39 @@
         <attribute name="uid">
             <group>main</group>
             <group>min</group>
+        </attribute>
+    </class>
+
+    <class name="Jalismrs\Stalactite\Client\Data\Model\AccessClearance">
+        <attribute name="granted">
+            <group>main</group>
+        </attribute>
+        <attribute name="type">
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <class name="Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation">
+        <attribute name="customer">
+            <group>main</group>
+        </attribute>
+        <attribute name="domain">
+            <group>main</group>
+        </attribute>
+        <attribute name="uid">
+            <group>main</group>
+        </attribute>
+    </class>
+
+    <class name="Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation">
+        <attribute name="user">
+            <group>main</group>
+        </attribute>
+        <attribute name="domain">
+            <group>main</group>
+        </attribute>
+        <attribute name="uid">
+            <group>main</group>
         </attribute>
     </class>
 </serializer>
