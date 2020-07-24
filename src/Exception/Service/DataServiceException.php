@@ -11,4 +11,6 @@ class DataServiceException extends ServiceException
     public const MISSING_PERMISSION_UID = 12;
     public const MISSING_DOMAIN_UID = 13;
     public const MISSING_CUSTOMER_UID = 14;
+    public const MISSING_DOMAIN_USER_RELATION_UID = 15;
+    public const MISSING_DOMAIN_CUSTOMER_RELATION_UID = 16;
 }
