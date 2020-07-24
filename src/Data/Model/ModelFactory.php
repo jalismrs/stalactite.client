@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
+use Jalismrs\Stalactite\Client\Data\Model\ModelFactory as DataModelFactory;
+
 /**
  * Class ModelFactory
  *
@@ -11,15 +13,6 @@ namespace Jalismrs\Stalactite\Client\Data\Model;
  */
 abstract class ModelFactory
 {
-    /**
-     * createUserModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return User
-     */
     public static function createUser(array $data): User
     {
         $model = new User();
@@ -36,21 +29,11 @@ abstract class ModelFactory
 
         foreach ($data['leads'] ?? [] as $lead) {
             $model->addLead(self::createPost($lead));
-
         }
 
         return $model;
     }
 
-    /**
-     * createPostModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return Post
-     */
     public static function createPost(array $data): Post
     {
         $model = new Post();
@@ -65,15 +48,6 @@ abstract class ModelFactory
         return $model;
     }
 
-    /**
-     * createDomainModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return Domain
-     */
     public static function createDomain(array $data): Domain
     {
         $model = new Domain();
@@ -87,15 +61,6 @@ abstract class ModelFactory
         return $model;
     }
 
-    /**
-     * createCustomerModel
-     *
-     * @static
-     *
-     * @param array $data
-     *
-     * @return Customer
-     */
     public static function createCustomer(array $data): Customer
     {
         $model = new Customer();
@@ -108,10 +73,6 @@ abstract class ModelFactory
         return $model;
     }
 
-    /**
-     * @param array $data
-     * @return Permission
-     */
     public static function createPermission(array $data): Permission
     {
         $model = new Permission(
@@ -120,6 +81,35 @@ abstract class ModelFactory
             $data['operation'] ?? null
         );
         $model->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
+
+    public static function createDomainUserRelation(array $data): DomainUserRelation
+    {
+        $model = new DomainUserRelation();
+        $model->setUser(isset($data['user']) ? DataModelFactory::createUser($data['user']) : null)
+            ->setDomain(isset($data['domain']) ? DataModelFactory::createDomain($data['domain']) : null)
+            ->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
+
+    public static function createDomainCustomerRelation(array $data): DomainCustomerRelation
+    {
+        $model = new DomainCustomerRelation();
+        $model->setCustomer(isset($data['customer']) ? DataModelFactory::createCustomer($data['customer']) : null)
+            ->setDomain(isset($data['domain']) ? DataModelFactory::createDomain($data['domain']) : null)
+            ->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
+
+    public static function createAccessClearance(array $data): AccessClearance
+    {
+        $model = new AccessClearance();
+        $model->setGranted($data['granted'] ?? false)
+            ->setType($data['type'] ?? AccessClearance::NO_ACCESS);
 
         return $model;
     }
