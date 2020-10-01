@@ -15,4 +15,15 @@ abstract class ModelFactory
 
         return $model;
     }
+
+    public static function createServerApp(array $data): ServerApp
+    {
+        $model = new ServerApp();
+        $model
+            ->setTokenSignatureKey($data['tokenSignatureKey'] ?? null)
+            ->setName($data['name'] ?? null)
+            ->setUid($data['uid'] ?? null);
+
+        return $model;
+    }
 }

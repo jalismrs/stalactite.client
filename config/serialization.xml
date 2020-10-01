@@ -41,6 +41,21 @@
         </attribute>
     </class>
 
+    <class name="Jalismrs\Stalactite\Client\Authentication\Model\ServerApp">
+        <attribute name="tokenSignatureKey">
+            <group>main</group>
+            <group>resetTokenSignatureKey</group>
+        </attribute>
+        <attribute name="name">
+            <group>main</group>
+            <group>create</group>
+            <group>update</group>
+        </attribute>
+        <attribute name="uid">
+            <group>main</group>
+        </attribute>
+    </class>
+
     <!--
         # Data #################################################################
     -->
