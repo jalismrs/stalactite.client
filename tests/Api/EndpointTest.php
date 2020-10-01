@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Api;
 
@@ -12,8 +12,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Api
  */
-abstract class EndpointTest extends
-    TestCase
+abstract class EndpointTest extends TestCase
 {
     /**
      * createMockClient
@@ -22,17 +21,17 @@ abstract class EndpointTest extends
      *
      * @throws RuntimeException
      */
-    final protected function createMockClient() : Client
+    final protected function createMockClient(): Client
     {
         $mock = $this->createMock(Client::class);
-        
+
         $mock
             ->expects(static::once())
             ->method('request');
-        
+
         return $mock;
     }
-    
+
     /**
      * testRequestMethodCalledOnce
      *
