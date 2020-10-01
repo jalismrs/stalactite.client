@@ -104,6 +104,23 @@ class Service extends AbstractService
     }
 
     /**
+     * @param string $uid
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function exists(string $uid, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/customers/%s', 'HEAD');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
      * @param string $email
      * @param Token $jwt
      * @return Response

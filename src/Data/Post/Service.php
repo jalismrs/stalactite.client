@@ -78,6 +78,23 @@ class Service extends AbstractService
     }
 
     /**
+     * @param string $uid
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function exists(string $uid, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/posts/%s', 'HEAD');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
      * @param Post $post
      * @param Token $jwt
      * @return Response
