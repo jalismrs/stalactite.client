@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ClientApp;
 
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\ClientApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -29,12 +29,12 @@ class ApiUpdateTest extends EndpointTest
     public function testThrowLacksUid(): void
     {
         $this->expectException(AuthenticationServiceException::class);
-        $this->expectExceptionCode(AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+        $this->expectExceptionCode(AuthenticationServiceException::MISSING_CLIENT_APP_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->update(ModelFactory::getTestableTrustedApp()->setUid(null), JwtFactory::create());
+        $mockService->update(ModelFactory::getTestableClientApp()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -46,6 +46,6 @@ class ApiUpdateTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->update(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $mockService->update(ModelFactory::getTestableClientApp(), JwtFactory::create());
     }
 }

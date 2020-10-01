@@ -16,8 +16,8 @@ class ServiceTest extends AbstractServiceTest
     public function testTrustedApp(): void
     {
         $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->trustedApps();
-        $mockService2 = $mockService->trustedApps();
+        $mockService1 = $mockService->clientApps();
+        $mockService2 = $mockService->clientApps();
 
         self::checkServices(
             $mockService,

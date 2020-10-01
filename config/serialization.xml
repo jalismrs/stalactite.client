@@ -8,6 +8,7 @@
     <!--
         # Global ##############################################################
     -->
+
     <class name="Jalismrs\Stalactite\Client\ApiError">
         <attribute name="type">
             <group>main</group>
@@ -23,10 +24,8 @@
     <!--
         # Authentication #######################################################
     -->
-    <class name="Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp">
-        <attribute name="authToken">
-            <group>main</group>
-        </attribute>
+
+    <class name="Jalismrs\Stalactite\Client\Authentication\Model\ClientApp">
         <attribute name="googleOAuthClientId">
             <group>main</group>
             <group>create</group>
@@ -37,10 +36,6 @@
             <group>create</group>
             <group>update</group>
         </attribute>
-        <attribute name="resetToken">
-            <group>reset</group>
-            <group>delete</group>
-        </attribute>
         <attribute name="uid">
             <group>main</group>
         </attribute>
@@ -49,6 +44,7 @@
     <!--
         # Data #################################################################
     -->
+
     <class name="Jalismrs\Stalactite\Client\Data\Model\Customer">
         <attribute name="email">
             <group>main</group>

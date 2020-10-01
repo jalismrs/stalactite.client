@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ClientApp;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\ClientApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ClientApp;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -18,19 +18,19 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiCreateTest
+ * ApiGetTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp
  */
-class ApiCreateTest extends EndpointTest
+class ApiGetTest extends EndpointTest
 {
     /**
-     * @throws NormalizerException
      * @throws ClientException
+     * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testCreate(): void
+    public function testGet(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
@@ -39,32 +39,26 @@ class ApiCreateTest extends EndpointTest
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableTrustedApp(),
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'main',
-                                    'reset',
-                                ]
-                            ]
+                            ModelFactory::getTestableClientApp(),
+                            [AbstractNormalizer::GROUPS => ['main']]
                         ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
 
-        $response = $mockService->create(ModelFactory::getTestableTrustedApp()->setUid(null), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestableClientApp()->getUid(), JwtFactory::create());
 
-        self::assertInstanceOf(TrustedApp::class, $response->getBody());
+        self::assertInstanceOf(ClientApp::class, $response->getBody());
     }
 
     /**
      * @throws ClientException
-     * @throws NormalizerException
      * @throws InvalidArgumentException
      */
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->create(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestableClientApp()->getUid(), JwtFactory::create());
     }
 }
