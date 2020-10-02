@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ClientApp;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\ClientApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ClientApp;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -18,11 +18,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiGetAllTest
+ * ApiGetTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp
  */
-class ApiGetAllTest extends EndpointTest
+class ApiGetTest extends EndpointTest
 {
     /**
      * @throws ClientException
@@ -30,31 +30,26 @@ class ApiGetAllTest extends EndpointTest
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetAll(): void
+    public function testGet(): void
     {
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
-
         $mockClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    [
-                        Normalizer::getInstance()
-                            ->normalize(
-                                ModelFactory::getTestableTrustedApp(),
-                                [
-                                    AbstractNormalizer::GROUPS => ['main']
-                                ]
-                            )
-                    ],
+                    Normalizer::getInstance()
+                        ->normalize(
+                            ModelFactory::getTestableClientApp(),
+                            [AbstractNormalizer::GROUPS => ['main']]
+                        ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
 
-        $response = $mockService->all(JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestableClientApp()->getUid(), JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(TrustedApp::class, $response->getBody());
+        self::assertInstanceOf(ClientApp::class, $response->getBody());
     }
 
     /**
@@ -64,6 +59,6 @@ class ApiGetAllTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->all(JwtFactory::create());
+        $mockService->get(ModelFactory::getTestableClientApp()->getUid(), JwtFactory::create());
     }
 }

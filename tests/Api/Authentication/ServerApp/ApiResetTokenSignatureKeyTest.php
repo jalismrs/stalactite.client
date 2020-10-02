@@ -1,10 +1,9 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ServerApp;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
+use Jalismrs\Stalactite\Client\Authentication\ServerApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -18,21 +17,17 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * ApiResetAuthTokenTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp
- */
-class ApiResetAuthTokenTest extends EndpointTest
+class ApiResetTokenSignatureKeyTest extends EndpointTest
 {
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
-     * @throws InvalidArgumentException
      */
-    public function testResetAuthToken(): void
+    public function testResetTokenSignatureKey(): void
     {
+        $serverApp = ModelFactory::getTestableServerApp();
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
         $mockClient->setHttpClient(
@@ -40,38 +35,40 @@ class ApiResetAuthTokenTest extends EndpointTest
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableTrustedApp(),
-                            [
-                                AbstractNormalizer::GROUPS => ['main']
-                            ]
+                            $serverApp,
+                            [AbstractNormalizer::GROUPS => ['main']]
                         ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
 
-        $response = $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $response = $mockService->resetTokenSignatureKey($serverApp, JwtFactory::create());
 
-        self::assertInstanceOf(TrustedApp::class, $response->getBody());
+        self::assertInstanceOf(ServerApp::class, $response->getBody());
     }
 
     /**
      * @throws ClientException
-     * @throws NormalizerException
      * @throws InvalidArgumentException
+     * @throws NormalizerException
      */
     public function testThrowLacksUid(): void
     {
         $this->expectException(AuthenticationServiceException::class);
-        $this->expectExceptionCode(AuthenticationServiceException::MISSING_TRUSTED_APP_UID);
+        $this->expectExceptionCode(AuthenticationServiceException::MISSING_SERVER_APP_UID);
 
         $mockClient = new Client('http://fakeHost');
         $mockService = new Service($mockClient);
 
-        $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp()->setUid(null), JwtFactory::create());
+        $mockService->resetTokenSignatureKey(
+            ModelFactory::getTestableServerApp()->setUid(null),
+            JwtFactory::create()
+        );
     }
 
     /**
+     * @throws AuthenticationServiceException
      * @throws ClientException
      * @throws NormalizerException
      * @throws InvalidArgumentException
@@ -79,6 +76,6 @@ class ApiResetAuthTokenTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->resetAuthToken(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $mockService->resetTokenSignatureKey(ModelFactory::getTestableServerApp(), JwtFactory::create());
     }
 }

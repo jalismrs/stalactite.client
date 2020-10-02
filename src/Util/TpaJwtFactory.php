@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
@@ -10,37 +11,23 @@ use Lcobucci\JWT\Token;
 
 class TpaJwtFactory
 {
-    public const DATA_API_JWT_AUDIENCE = 'data.microservice';
-
     private const JWT_DURATION = 60;
 
-    public static function data(string $tokenSalt, ?string $userAgent = null): Token
-    {
-        return self::forge($tokenSalt, self::DATA_API_JWT_AUDIENCE, $userAgent);
-    }
-
     /**
-     * @param string $tokenSalt
-     * @param string $audience
-     * @param string|null $userAgent
+     * @param ServerApp $serverApp
+     * @param int $duration
      * @return Token
      */
-    public static function forge(string $tokenSalt, string $audience, ?string $userAgent = null): Token
+    public static function forge(ServerApp $serverApp, int $duration = self::JWT_DURATION): Token
     {
         $time = time();
-        $challenge = sha1((string)$time);
 
         $builder = (new Builder())
-            ->permittedFor($audience)
+            ->issuedBy($serverApp->getName())
             ->issuedAt($time)
-            ->expiresAt($time + self::JWT_DURATION)
-            ->withClaim('challenge', $challenge);
-
-        if ($userAgent) {
-            $builder->issuedBy($userAgent);
-        }
+            ->expiresAt($time + $duration);
 
         $signer = new Sha256();
-        return $builder->getToken($signer, new Key($challenge . $tokenSalt));
+        return $builder->getToken($signer, new Key($serverApp->getTokenSignatureKey()));
     }
 }

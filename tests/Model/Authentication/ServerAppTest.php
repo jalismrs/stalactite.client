@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Model\Authentication;
 
@@ -11,13 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-/**
- * TrustedAppTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Model\Authentication
- */
-class TrustedAppTest extends
-    TestCase
+class ServerAppTest extends TestCase
 {
     /**
      * @throws ExpectationFailedException
@@ -26,10 +19,9 @@ class TrustedAppTest extends
      */
     public function testGroupCommon(): void
     {
-        $model = ModelFactory::getTestableTrustedApp();
+        $model = ModelFactory::getTestableServerApp();
 
-        $actual = Normalizer::getInstance()
-            ->normalize($model);
+        $actual = Normalizer::getInstance()->normalize($model);
 
         $expected = [];
 
@@ -45,49 +37,14 @@ class TrustedAppTest extends
     {
         $serializer = Normalizer::getInstance();
 
-        $model = ModelFactory::getTestableTrustedApp();
+        $model = ModelFactory::getTestableServerApp();
 
-        $actual = $serializer->normalize(
-            $model,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'main',
-                ],
-            ]
-        );
+        $actual = $serializer->normalize($model, [AbstractNormalizer::GROUPS => ['main']]);
 
         $expected = [
             'uid' => $model->getUid(),
             'name' => $model->getName(),
-            'authToken' => $model->getAuthToken(),
-            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
-        ];
-
-        self::assertEqualsCanonicalizing($expected, $actual);
-    }
-
-    /**
-     * @throws ExpectationFailedException
-     * @throws InvalidArgumentException
-     * @throws NormalizerException
-     */
-    public function testGroupReset(): void
-    {
-        $serializer = Normalizer::getInstance();
-
-        $model = ModelFactory::getTestableTrustedApp();
-
-        $actual = $serializer->normalize(
-            $model,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'reset',
-                ],
-            ]
-        );
-
-        $expected = [
-            'resetToken' => $model->getResetToken(),
+            'tokenSignatureKey' => $model->getTokenSignatureKey()
         ];
 
         self::assertEqualsCanonicalizing($expected, $actual);
@@ -102,21 +59,11 @@ class TrustedAppTest extends
     {
         $serializer = Normalizer::getInstance();
 
-        $model = ModelFactory::getTestableTrustedApp();
+        $model = ModelFactory::getTestableServerApp();
 
-        $actual = $serializer->normalize(
-            $model,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'create',
-                ],
-            ]
-        );
+        $actual = $serializer->normalize($model, [AbstractNormalizer::GROUPS => ['create']]);
 
-        $expected = [
-            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
-            'name' => $model->getName(),
-        ];
+        $expected = ['name' => $model->getName()];
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }
@@ -130,21 +77,29 @@ class TrustedAppTest extends
     {
         $serializer = Normalizer::getInstance();
 
-        $model = ModelFactory::getTestableTrustedApp();
+        $model = ModelFactory::getTestableServerApp();
 
-        $actual = $serializer->normalize(
-            $model,
-            [
-                AbstractNormalizer::GROUPS => [
-                    'update',
-                ],
-            ]
-        );
+        $actual = $serializer->normalize($model, [AbstractNormalizer::GROUPS => ['update']]);
 
-        $expected = [
-            'googleOAuthClientId' => $model->getGoogleOAuthClientId(),
-            'name' => $model->getName(),
-        ];
+        $expected = ['name' => $model->getName()];
+
+        self::assertEqualsCanonicalizing($expected, $actual);
+    }
+
+    /**
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws NormalizerException
+     */
+    public function testGroupResetTokenSignatureKey(): void
+    {
+        $serializer = Normalizer::getInstance();
+
+        $model = ModelFactory::getTestableServerApp();
+
+        $actual = $serializer->normalize($model, [AbstractNormalizer::GROUPS => ['resetTokenSignatureKey']]);
+
+        $expected = ['resetTokenSignatureKey' => $model->getTokenSignatureKey()];
 
         self::assertEqualsCanonicalizing($expected, $actual);
     }

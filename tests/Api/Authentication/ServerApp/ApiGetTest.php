@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ServerApp;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
+use Jalismrs\Stalactite\Client\Authentication\ServerApp\Service;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -26,9 +26,9 @@ class ApiGetTest extends EndpointTest
 {
     /**
      * @throws ClientException
-     * @throws NormalizerException
-     * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NormalizerException
      */
     public function testGet(): void
     {
@@ -39,19 +39,17 @@ class ApiGetTest extends EndpointTest
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableTrustedApp(),
-                            [
-                                AbstractNormalizer::GROUPS => ['main']
-                            ]
+                            ModelFactory::getTestableServerApp(),
+                            [AbstractNormalizer::GROUPS => ['main']]
                         ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
 
-        $response = $mockService->get(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
+        $response = $mockService->get(ModelFactory::getTestableServerApp()->getUid(), JwtFactory::create());
 
-        self::assertInstanceOf(TrustedApp::class, $response->getBody());
+        self::assertInstanceOf(ServerApp::class, $response->getBody());
     }
 
     /**
@@ -61,6 +59,6 @@ class ApiGetTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->get(ModelFactory::getTestableTrustedApp()->getUid(), JwtFactory::create());
+        $mockService->get(ModelFactory::getTestableServerApp()->getUid(), JwtFactory::create());
     }
 }

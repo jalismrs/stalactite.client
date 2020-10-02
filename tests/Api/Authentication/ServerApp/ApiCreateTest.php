@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp;
+namespace Jalismrs\Stalactite\Client\Tests\Api\Authentication\ServerApp;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
-use Jalismrs\Stalactite\Client\Authentication\TrustedApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
+use Jalismrs\Stalactite\Client\Authentication\ServerApp\Service;
+use Jalismrs\Stalactite\Client\Authentication\Model\ClientApp;
 use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
@@ -18,9 +19,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiCreateTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication\TrustedApp
+ * Class ApiCreateTest
+ * @package Jalismrs\Stalactite\Client\Tests\Api\Authentication\ServerApp
  */
 class ApiCreateTest extends EndpointTest
 {
@@ -39,22 +39,17 @@ class ApiCreateTest extends EndpointTest
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            ModelFactory::getTestableTrustedApp(),
-                            [
-                                AbstractNormalizer::GROUPS => [
-                                    'main',
-                                    'reset',
-                                ]
-                            ]
+                            ModelFactory::getTestableServerApp(),
+                            [AbstractNormalizer::GROUPS => ['main']]
                         ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
 
-        $response = $mockService->create(ModelFactory::getTestableTrustedApp()->setUid(null), JwtFactory::create());
+        $response = $mockService->create(ModelFactory::getTestableServerApp()->setUid(null), JwtFactory::create());
 
-        self::assertInstanceOf(TrustedApp::class, $response->getBody());
+        self::assertInstanceOf(ServerApp::class, $response->getBody());
     }
 
     /**
@@ -65,6 +60,6 @@ class ApiCreateTest extends EndpointTest
     public function testRequestMethodCalledOnce(): void
     {
         $mockService = new Service($this->createMockClient());
-        $mockService->create(ModelFactory::getTestableTrustedApp(), JwtFactory::create());
+        $mockService->create(ModelFactory::getTestableServerApp()->setUid(null), JwtFactory::create());
     }
 }

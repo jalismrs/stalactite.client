@@ -2,24 +2,31 @@
 
 namespace Jalismrs\Stalactite\Client\Tests\Factory\Authentication;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\TrustedApp;
+use Jalismrs\Stalactite\Client\Authentication\Model\ClientApp;
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 
 abstract class ModelFactory
 {
     /**
-     * getTestableTrustedApp
-     *
-     * @static
-     * @return TrustedApp
+     * @return ClientApp
      */
-    public static function getTestableTrustedApp(): TrustedApp
+    public static function getTestableClientApp(): ClientApp
     {
-        $model = new TrustedApp();
+        $model = new ClientApp();
         $model
             ->setName('fake name')
             ->setGoogleOAuthClientId('qsdfghjklm')
-            ->setAuthToken('aqwzsxedcrfv')
-            ->setResetToken('tgbyhnujikol')
+            ->setUid('azertyuiop');
+
+        return $model;
+    }
+
+    public static function getTestableServerApp(): ServerApp
+    {
+        $model = new ServerApp();
+        $model
+            ->setName('fake name')
+            ->setTokenSignatureKey('qsdfghjklm')
             ->setUid('azertyuiop');
 
         return $model;

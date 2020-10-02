@@ -121,6 +121,44 @@ class Service extends AbstractService
         ]);
     }
 
+
+
+    /**
+     * @param string $uid
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function get(string $uid, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users/%s');
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
+            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
+    /**
+     * @param string $uid
+     * @param Token $jwt
+     * @return Response
+     * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function exists(string $uid, Token $jwt): Response
+    {
+        $endpoint = new Endpoint('/data/users/%s', 'HEAD');
+
+        return $this->getClient()->request($endpoint, [
+            'jwt' => (string)$jwt,
+            'uriParameters' => [$uid]
+        ]);
+    }
+
     /**
      * @param string $email
      * @param string $googleId
@@ -141,25 +179,6 @@ class Service extends AbstractService
                 'email' => $email,
                 'googleId' => $googleId
             ]
-        ]);
-    }
-
-    /**
-     * @param string $uid
-     * @param Token $jwt
-     * @return Response
-     * @throws ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function get(string $uid, Token $jwt): Response
-    {
-        $endpoint = new Endpoint('/data/users/%s');
-        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
-            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$uid]
         ]);
     }
 
