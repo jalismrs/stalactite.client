@@ -19,11 +19,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Throwable;
 
-/**
- * Client
- *
- * @package Jalismrs\Stalactite\Client
- */
 class Client
 {
     private const CACHE_KEY_FORMAT = '%s %s'; // {method} {uri}

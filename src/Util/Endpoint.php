@@ -5,11 +5,7 @@ namespace Jalismrs\Stalactite\Client\Util;
 use Closure;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 
-/**
- * Class Endpoint
- * @package Jalismrs\Stalactite\Client\Util
- */
-class Endpoint
+final class Endpoint
 {
     private string $uri;
 

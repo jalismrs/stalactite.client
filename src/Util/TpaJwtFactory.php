@@ -9,7 +9,7 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 
-class TpaJwtFactory
+final class TpaJwtFactory
 {
     private const JWT_DURATION = 60;
 
