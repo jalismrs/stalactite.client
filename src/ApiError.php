@@ -4,12 +4,7 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 
-/**
- * Class ApiError
- * @package Jalismrs\Stalactite\Client
- * Read only
- */
-class ApiError implements Schemable
+final class ApiError implements Schemable
 {
     private string $type;
     private int $code;

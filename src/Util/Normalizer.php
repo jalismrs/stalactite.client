@@ -13,12 +13,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use function array_replace_recursive;
 
-/**
- * Normalizer
- *
- * @package Jalismrs\Stalactite\Service\Util
- */
-class Normalizer
+final class Normalizer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
 

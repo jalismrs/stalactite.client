@@ -10,12 +10,7 @@ use function gettype;
 use function is_a;
 use function is_object;
 
-/**
- * ModelHelper
- *
- * @package Jalismrs\Stalactite\Service\Util
- */
-class ModelHelper
+final class ModelHelper
 {
     /**
      * getUids
