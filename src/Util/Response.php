@@ -3,13 +3,6 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
-/**
- * Response
- *
- * Wrapper class for API responses
- *
- * @package Jalismrs\Stalactite\Service
- */
 class Response
 {
     /** @var int $code */
