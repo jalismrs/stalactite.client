@@ -25,7 +25,7 @@ class Service extends AbstractService
      */
     public function validate(Token $token): Response
     {
-        $endpoint = new Endpoint('/tokens', 'HEAD');
+        $endpoint = new Endpoint('/auth/tokens', 'HEAD');
 
         return $this->getClient()->request($endpoint, [
             'jwt' => (string)$token
@@ -41,7 +41,7 @@ class Service extends AbstractService
      */
     public function login(ClientApp $clientApp, string $userGoogleJwt): Response
     {
-        $endpoint = new Endpoint('/tokens', 'POST');
+        $endpoint = new Endpoint('/auth/tokens', 'POST');
         $endpoint
             ->setResponseValidationSchema(new JsonSchema(['token' => ['type' => JsonRule::STRING_TYPE]]))
             ->setResponseFormatter(static function (array $response): array {
