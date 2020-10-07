@@ -227,7 +227,7 @@ class Client
         }
 
         if ($responseCode < 200 || $responseCode >= 300) { // not a 2XX => errors
-            return $this->handleError($response);
+            return $this->handleError($endpoint, $response);
         }
 
         $response = $this->handleResponse($endpoint, $response);
@@ -240,26 +240,31 @@ class Client
     }
 
     /**
+     * @param Endpoint $endpoint
      * @param ResponseInterface $response
      * @return Response
      * @throws ClientException
      */
-    private function handleError(ResponseInterface $response): Response
+    private function handleError(Endpoint $endpoint, ResponseInterface $response): Response
     {
         ['code' => $code, 'headers' => $headers, 'body' => $body] = $this->getResponseInfos($response);
 
-        try {
-            $jsonBody = new JsonData($body);
-            $this->getErrorSchema()->validate($jsonBody);
-        } catch (InvalidDataException $e) {
-            $r = new Response($code, $headers, $body);
-            $clientException = new ClientException($r, 'Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
-            $this->getLogger()->error($clientException);
-            throw $clientException;
+        // if there is a body or the response body is supposed to match a specific schema
+        // HTTP HEAD : no body => can "fail" without throwing
+        if ($body || $endpoint->getResponseValidationSchema()) {
+            try {
+                $jsonBody = new JsonData($body);
+                $this->getErrorSchema()->validate($jsonBody);
+            } catch (InvalidDataException $e) {
+                $r = new Response($code, $headers, $body);
+                $clientException = new ClientException($r, 'Invalid response from Stalactite API', ClientException::INVALID_RESPONSE, $e);
+                $this->getLogger()->error($clientException);
+                throw $clientException;
+            }
+            $body = new ApiError($jsonBody['type'], $jsonBody['code'], $jsonBody['message']);
         }
 
-        $apiError = new ApiError($jsonBody['type'], $jsonBody['code'], $jsonBody['message']);
-        return new Response($code, $headers, $apiError);
+        return new Response($code, $headers, $body);
     }
 
     /**
