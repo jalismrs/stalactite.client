@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class DomainCustomerRelationTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation
  */
 class DomainCustomerRelationTest extends
     TestCase

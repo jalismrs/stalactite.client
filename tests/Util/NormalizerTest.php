@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
  * Class NormalizerTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\Normalizer
  */
 class NormalizerTest extends
     TestCase

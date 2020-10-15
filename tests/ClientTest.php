@@ -20,6 +20,8 @@ use Throwable;
  * ClientTest
  *
  * @package Jalismrs\Stalactite\Client\Tests
+ *
+ * @covers \Jalismrs\Stalactite\Client\Client
  */
 class ClientTest extends
     TestCase

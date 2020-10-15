@@ -9,6 +9,8 @@ use Jalismrs\Stalactite\Client\Service;
  * Class ServiceTest
  *
  * @package Jalismrs\Stalactite\Client\Tests
+ *
+ * @covers \Jalismrs\Stalactite\Client\Service
  */
 class ServiceTest extends
     AbstractTestService

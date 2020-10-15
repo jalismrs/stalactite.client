@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class PermissionTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Model\Permission
  */
 class PermissionTest extends
     TestCase

@@ -15,6 +15,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class ClientCacheTest
  *
  * @package Jalismrs\Stalactite\Client\Tests
+ *
+ * @covers \Jalismrs\Stalactite\Client\Client
  */
 class ClientCacheTest extends
     TestCase

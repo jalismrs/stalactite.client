@@ -15,6 +15,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class EndpointUpdateTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Permission
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Permission\Service
  */
 class EndpointUpdateTest extends
     AbstractTestEndpoint

@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * ClientAppTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Authentication\Model\ClientApp
  */
 class ClientAppTest extends
     TestCase

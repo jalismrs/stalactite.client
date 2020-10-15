@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
  * Class TokenIdentifierTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\TokenIdentifier
  */
 class TokenIdentifierTest extends
     TestCase

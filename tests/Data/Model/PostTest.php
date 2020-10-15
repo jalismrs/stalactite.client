@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * PostTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Model\Post
  */
 class PostTest extends
     TestCase

@@ -13,6 +13,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class EndpointDeleteDomainCustomerRelationTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Relation
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Relation\Service
  */
 class EndpointDeleteDomainCustomerRelationTest extends
     AbstractTestEndpoint

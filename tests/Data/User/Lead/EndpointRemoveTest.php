@@ -14,6 +14,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class EndpointRemoveTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\User\Lead\Service
  */
 class EndpointRemoveTest extends
     AbstractTestEndpoint

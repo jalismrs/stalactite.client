@@ -11,6 +11,8 @@ use Psr\SimpleCache\InvalidArgumentException;
  * Class EndpointValidateTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\Token
+ *
+ * @covers \Jalismrs\Stalactite\Client\Authentication\Token\Service
  */
 class EndpointValidateTest extends
     AbstractTestEndpoint

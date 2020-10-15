@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
  * Class ResponseTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\Response
  */
 class ResponseTest extends
     TestCase

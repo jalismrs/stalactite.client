@@ -15,6 +15,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class AccessClearanceTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Model\AccessClearance
  */
 class AccessClearanceTest extends
     TestCase

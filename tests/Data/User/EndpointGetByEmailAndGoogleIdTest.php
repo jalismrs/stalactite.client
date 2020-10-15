@@ -19,6 +19,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class EndpointGetByEmailAndGoogleIdTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\User\Service
  */
 class EndpointGetByEmailAndGoogleIdTest extends
     AbstractTestEndpoint

@@ -12,6 +12,10 @@ use PHPUnit\Framework\TestCase;
  * Class TpaJwtFactoryTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\TpaJwtFactory
+ * @uses \Jalismrs\Stalactite\Client\AbstractModel
+ * @uses \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp
  */
 class TpaJwtFactoryTest extends
     TestCase

@@ -13,6 +13,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class ServerAppTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\Model
+ *
+ * @covers \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp
  */
 class ServerAppTest extends
     TestCase

@@ -20,6 +20,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class EndpointGetByNameAndApiKeyTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\Domain\Service
  */
 class EndpointGetByNameAndApiKeyTest extends
     AbstractTestEndpoint

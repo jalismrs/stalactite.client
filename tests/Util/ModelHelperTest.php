@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
  * ModelHelperTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\ModelHelper
  */
 class ModelHelperTest extends
     TestCase

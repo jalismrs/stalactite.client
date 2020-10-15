@@ -19,6 +19,8 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  * Class EndpointAllTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Lead
+ *
+ * @covers \Jalismrs\Stalactite\Client\Data\User\Me\Lead\Service
  */
 class EndpointAllTest extends
     AbstractTestEndpoint
