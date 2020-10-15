@@ -17,6 +17,11 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class EndpointAddCustomerRelationTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Domain\Relation
+ */
 class EndpointAddCustomerRelationTest extends
     AbstractTestEndpoint
 {

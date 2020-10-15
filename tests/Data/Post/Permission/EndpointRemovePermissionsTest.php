@@ -10,6 +10,11 @@ use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * Class EndpointRemovePermissionsTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Post\Permission
+ */
 class EndpointRemovePermissionsTest extends
     AbstractTestEndpoint
 {

@@ -8,6 +8,11 @@ use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * Class EndpointExistsTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Permission
+ */
 class EndpointExistsTest extends
     AbstractTestEndpoint
 {

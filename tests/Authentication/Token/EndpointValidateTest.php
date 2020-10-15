@@ -7,6 +7,11 @@ use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Lcobucci\JWT\Builder;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * Class EndpointValidateTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\Token
+ */
 class EndpointValidateTest extends
     AbstractTestEndpoint
 {

@@ -16,6 +16,11 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class EndpointGetClearanceTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Access
+ */
 class EndpointGetClearanceTest extends
     AbstractTestEndpoint
 {

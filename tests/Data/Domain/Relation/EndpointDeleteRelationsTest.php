@@ -9,6 +9,11 @@ use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * Class EndpointDeleteRelationsTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Domain\Relation
+ */
 class EndpointDeleteRelationsTest extends
     AbstractTestEndpoint
 {

@@ -9,6 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class ServerAppTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\Model
+ */
 class ServerAppTest extends
     TestCase
 {

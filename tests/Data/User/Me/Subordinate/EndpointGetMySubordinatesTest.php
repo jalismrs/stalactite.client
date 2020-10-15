@@ -15,6 +15,11 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class EndpointGetMySubordinatesTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Subordinate
+ */
 class EndpointGetMySubordinatesTest extends
     AbstractTestEndpoint
 {

@@ -9,6 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class PermissionTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ */
 class PermissionTest extends
     TestCase
 {

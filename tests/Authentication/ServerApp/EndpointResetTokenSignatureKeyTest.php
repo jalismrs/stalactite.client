@@ -16,6 +16,11 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class EndpointResetTokenSignatureKeyTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp
+ */
 class EndpointResetTokenSignatureKeyTest extends
     AbstractTestEndpoint
 {

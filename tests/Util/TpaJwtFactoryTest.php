@@ -8,16 +8,30 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use PHPUnit\Framework\TestCase;
 
-class TpaJwtFactoryTest extends TestCase
+/**
+ * Class TpaJwtFactoryTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Util
+ */
+class TpaJwtFactoryTest extends
+    TestCase
 {
-    public function testTpaJwtForge(): void
+    public function testTpaJwtForge() : void
     {
         $serverApp = ModelFactory::getTestableServerApp();
-        $token = TpaJwtFactory::forge($serverApp);
-
-        self::assertSame($serverApp->getName(), $token->getClaim('iss'));
-
+        $token     = TpaJwtFactory::forge($serverApp);
+        
+        self::assertSame(
+            $serverApp->getName(),
+            $token->getClaim('iss')
+        );
+        
         $signer = new Sha256();
-        self::assertTrue($token->verify($signer, new Key($serverApp->getTokenSignatureKey())));
+        self::assertTrue(
+            $token->verify(
+                $signer,
+                new Key($serverApp->getTokenSignatureKey())
+            )
+        );
     }
 }

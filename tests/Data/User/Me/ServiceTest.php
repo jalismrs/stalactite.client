@@ -4,6 +4,11 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me;
 
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
 
+/**
+ * Class ServiceTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me
+ */
 class ServiceTest extends
     AbstractTestService
 {

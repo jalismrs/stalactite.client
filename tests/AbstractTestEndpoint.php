@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Client;
 use PHPUnit\Framework\TestCase;
 
 /**
- * ApiAbstract
+ * Class AbstractTestEndpoint
  *
  * @package Jalismrs\Stalactite\Client\Tests
  */

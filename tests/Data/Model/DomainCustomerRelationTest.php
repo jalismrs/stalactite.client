@@ -10,6 +10,11 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class DomainCustomerRelationTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Model
+ */
 class DomainCustomerRelationTest extends
     TestCase
 {

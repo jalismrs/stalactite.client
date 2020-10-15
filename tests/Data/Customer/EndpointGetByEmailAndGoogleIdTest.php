@@ -15,6 +15,11 @@ use JsonException;
 use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class EndpointGetByEmailAndGoogleIdTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
+ */
 class EndpointGetByEmailAndGoogleIdTest extends
     AbstractTestEndpoint
 {
