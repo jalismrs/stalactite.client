@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -37,7 +37,7 @@ class EndpointUpdateTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->update(
-            ModelFactory::getTestableServerApp()
+            TestableModelFactory::getTestableServerApp()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -55,7 +55,7 @@ class EndpointUpdateTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->update(
-            ModelFactory::getTestableServerApp(),
+            TestableModelFactory::getTestableServerApp(),
             JwtFactory::create()
         );
     }

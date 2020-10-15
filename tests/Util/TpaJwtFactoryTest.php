@@ -2,7 +2,7 @@
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Util\TpaJwtFactory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
@@ -22,7 +22,7 @@ class TpaJwtFactoryTest extends
 {
     public function testTpaJwtForge() : void
     {
-        $serverApp = ModelFactory::getTestableServerApp();
+        $serverApp = TestableModelFactory::getTestableServerApp();
         $token     = TpaJwtFactory::forge($serverApp);
         
         self::assertSame(

@@ -27,7 +27,7 @@ class DomainUserRelationTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableDomainUserRelation();
+        $model = TestableModelFactory::getTestableDomainUserRelation();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -49,7 +49,7 @@ class DomainUserRelationTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomainUserRelation();
+        $model = TestableModelFactory::getTestableDomainUserRelation();
         
         $actual = $serializer->normalize(
             $model,
@@ -83,7 +83,7 @@ class DomainUserRelationTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomainUserRelation();
+        $model = TestableModelFactory::getTestableDomainUserRelation();
         
         $actual = $serializer->normalize(
             $model,
@@ -116,7 +116,7 @@ class DomainUserRelationTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomainUserRelation();
+        $model = TestableModelFactory::getTestableDomainUserRelation();
         
         $actual = $serializer->normalize(
             $model,

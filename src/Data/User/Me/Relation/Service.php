@@ -14,37 +14,57 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\User\Me\Relation
+ */
+class Service extends
+    AbstractService
 {
     /**
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt): Response
+    public function all(Token $jwt) : Response
     {
         $schema = [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
+            'uid'    => [
+                'type' => JsonRule::STRING_TYPE,
             ],
             'domain' => [
-                'type' => JsonRule::OBJECT_TYPE,
-                'schema' => Domain::getSchema()
-            ]
+                'type'   => JsonRule::OBJECT_TYPE,
+                'schema' => Domain::getSchema(),
+            ],
         ];
-
+        
         $endpoint = new Endpoint('/data/users/me/relations');
-        $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(
-                    static fn(array $relation): DomainUserRelation => ModelFactory::createDomainUserRelation($relation),
-                    $response
-                );
-            });
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt
-        ]);
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(
+                $schema,
+                JsonSchema::LIST_TYPE
+            )
+        )
+                 ->setResponseFormatter(
+                     static function(array $response) : array {
+                         return array_map(
+                             static fn(array $relation) : DomainUserRelation => ModelFactory::createDomainUserRelation(
+                                 $relation
+                             ),
+                             $response
+                         );
+                     }
+                 );
+        
+        return $this->getClient()
+                    ->request(
+                        $endpoint,
+                        [
+                            'jwt' => (string)$jwt,
+                        ]
+                    );
     }
 }

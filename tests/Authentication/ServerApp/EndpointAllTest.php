@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -43,7 +43,7 @@ class EndpointAllTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableServerApp(),
+                                      TestableModelFactory::getTestableServerApp(),
                                       [AbstractNormalizer::GROUPS => ['main']]
                                   ),
                     ],

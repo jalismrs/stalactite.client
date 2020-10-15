@@ -26,7 +26,7 @@ class PermissionTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestablePermission();
+        $model = TestableModelFactory::getTestablePermission();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -50,7 +50,7 @@ class PermissionTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestablePermission();
+        $model = TestableModelFactory::getTestablePermission();
         
         $actual = $serializer->normalize(
             $model,
@@ -83,7 +83,7 @@ class PermissionTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestablePermission();
+        $model = TestableModelFactory::getTestablePermission();
         
         $actual = $serializer->normalize(
             $model,
@@ -115,7 +115,7 @@ class PermissionTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestablePermission();
+        $model = TestableModelFactory::getTestablePermission();
         
         $actual = $serializer->normalize(
             $model,
@@ -135,6 +135,21 @@ class PermissionTest extends
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
+        );
+    }
+    
+    /**
+     * testToString
+     *
+     * @return void
+     */
+    public function testToString() : void
+    {
+        $model = TestableModelFactory::getTestablePermission();
+        
+        self::assertSame(
+            "scope.resource.operation",
+            (string)$model
         );
     }
 }

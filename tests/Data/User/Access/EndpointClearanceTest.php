@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -42,7 +42,7 @@ class EndpointClearanceTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestableAccessClearance(),
+                                  TestableModelFactory::getTestableAccessClearance(),
                                   [
                                       AbstractNormalizer::GROUPS => ['main'],
                                   ]
@@ -55,8 +55,8 @@ class EndpointClearanceTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->clearance(
-            ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
         
@@ -78,9 +78,9 @@ class EndpointClearanceTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->clearance(
-            ModelFactory::getTestableUser()
-                        ->setUid(null),
-            ModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableUser()
+                                ->setUid(null),
+            TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }
@@ -97,9 +97,9 @@ class EndpointClearanceTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->clearance(
-            ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain()
-                        ->setUid(null),
+            TestableModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableDomain()
+                                ->setUid(null),
             JwtFactory::create()
         );
     }
@@ -114,8 +114,8 @@ class EndpointClearanceTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->clearance(
-            ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }

@@ -10,7 +10,7 @@ use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -46,7 +46,7 @@ class EndpointAllTest extends
                         'users'     => [
                             Normalizer::getInstance()
                                       ->normalize(
-                                          ModelFactory::getTestableDomainUserRelation(),
+                                          TestableModelFactory::getTestableDomainUserRelation(),
                                           [
                                               AbstractNormalizer::GROUPS             => ['main'],
                                               AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
@@ -56,7 +56,7 @@ class EndpointAllTest extends
                         'customers' => [
                             Normalizer::getInstance()
                                       ->normalize(
-                                          ModelFactory::getTestableDomainCustomerRelation(),
+                                          TestableModelFactory::getTestableDomainCustomerRelation(),
                                           [
                                               AbstractNormalizer::GROUPS             => ['main'],
                                               AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
@@ -72,7 +72,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->all(
-            ModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
         
@@ -109,7 +109,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->all(
-            ModelFactory::getTestableDomain()
+            TestableModelFactory::getTestableDomain()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -125,7 +125,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->all(
-            ModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }

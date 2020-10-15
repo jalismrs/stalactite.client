@@ -1,38 +1,48 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client;
 
 /**
- * AbstractModel
+ * Class AbstractModel
  *
- * @package Jalismrs\Stalactite\Service
+ * @package Jalismrs\Stalactite\Client
  */
-abstract class AbstractModel implements Schemable
+abstract class AbstractModel implements
+    Schemable
 {
+    /**
+     * uid
+     *
+     * @var string|null
+     */
     protected ?string $uid = null;
-
+    
     /**
      * getUid
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getUid(): ?string
+    public function getUid() : ?string
     {
         return $this->uid;
     }
-
+    
     /**
      * setUid
      *
-     * @param null|string $uid
+     * @param string|null $uid
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setUid(?string $uid): self
+    public function setUid(?string $uid) : self
     {
         $this->uid = $uid;
-
+        
         return $this;
     }
 }

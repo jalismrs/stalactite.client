@@ -27,7 +27,7 @@ class CustomerTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableCustomer();
+        $model = TestableModelFactory::getTestableCustomer();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -47,7 +47,7 @@ class CustomerTest extends
      */
     public function testGroupMain() : void
     {
-        $model = ModelFactory::getTestableCustomer();
+        $model = TestableModelFactory::getTestableCustomer();
         
         $actual = Normalizer::getInstance()
                             ->normalize(
@@ -80,7 +80,7 @@ class CustomerTest extends
      */
     public function testGroupCreate() : void
     {
-        $model = ModelFactory::getTestableCustomer();
+        $model = TestableModelFactory::getTestableCustomer();
         
         $actual = Normalizer::getInstance()
                             ->normalize(
@@ -111,7 +111,7 @@ class CustomerTest extends
      */
     public function testGroupUpdate() : void
     {
-        $model = ModelFactory::getTestableCustomer();
+        $model = TestableModelFactory::getTestableCustomer();
         
         $actual = Normalizer::getInstance()
                             ->normalize(

@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -36,7 +36,7 @@ class EndpointResetTokenSignatureKeyTest extends
      */
     public function testResetTokenSignatureKey() : void
     {
-        $serverApp = ModelFactory::getTestableServerApp();
+        $serverApp = TestableModelFactory::getTestableServerApp();
         
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -78,7 +78,7 @@ class EndpointResetTokenSignatureKeyTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->resetTokenSignatureKey(
-            ModelFactory::getTestableServerApp()
+            TestableModelFactory::getTestableServerApp()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -96,7 +96,7 @@ class EndpointResetTokenSignatureKeyTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->resetTokenSignatureKey(
-            ModelFactory::getTestableServerApp(),
+            TestableModelFactory::getTestableServerApp(),
             JwtFactory::create()
         );
     }

@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -41,7 +41,7 @@ class EndpointGetByEmailAndGoogleIdTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestableCustomer(),
+                                  TestableModelFactory::getTestableCustomer(),
                                   [
                                       AbstractNormalizer::GROUPS => ['main'],
                                   ]
@@ -51,7 +51,7 @@ class EndpointGetByEmailAndGoogleIdTest extends
             )
         );
         
-        $customerModel = ModelFactory::getTestableCustomer();
+        $customerModel = TestableModelFactory::getTestableCustomer();
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
@@ -76,7 +76,7 @@ class EndpointGetByEmailAndGoogleIdTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $customerModel = ModelFactory::getTestableCustomer();
+        $customerModel = TestableModelFactory::getTestableCustomer();
         $systemUnderTest->getByEmailAndGoogleId(
             $customerModel->getEmail(),
             $customerModel->getGoogleId(),

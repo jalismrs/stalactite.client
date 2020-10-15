@@ -1,52 +1,108 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use Jalismrs\Stalactite\Client\AbstractModel;
 
-class ClientApp extends AbstractModel
+/**
+ * Class ClientApp
+ *
+ * @package Jalismrs\Stalactite\Client\Authentication\Model
+ */
+class ClientApp extends
+    AbstractModel
 {
+    /**
+     * name
+     *
+     * @var string|null
+     */
     private ?string $name = null;
+    /**
+     * googleOAuthClientId
+     *
+     * @var string|null
+     */
     private ?string $googleOAuthClientId = null;
-
-    public function getName(): ?string
+    
+    /**
+     * getSchema
+     *
+     * @static
+     * @return array[]
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getSchema() : array
+    {
+        return [
+            'uid'                 => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'name'                => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'googleOAuthClientId' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+        ];
+    }
+    
+    /**
+     * getName
+     *
+     * @return string|null
+     *
+     * @codeCoverageIgnore
+     */
+    public function getName() : ?string
     {
         return $this->name;
     }
-
-    public function setName(?string $name): self
+    
+    /**
+     * setName
+     *
+     * @param string|null $name
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
+     */
+    public function setName(?string $name) : self
     {
         $this->name = $name;
-
+        
         return $this;
     }
-
-    public function getGoogleOAuthClientId(): ?string
+    
+    /**
+     * getGoogleOAuthClientId
+     *
+     * @return string|null
+     *
+     * @codeCoverageIgnore
+     */
+    public function getGoogleOAuthClientId() : ?string
     {
         return $this->googleOAuthClientId;
     }
-
-    public function setGoogleOAuthClientId(?string $googleOAuthClientId): self
+    
+    /**
+     * setGoogleOAuthClientId
+     *
+     * @param string|null $googleOAuthClientId
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
+     */
+    public function setGoogleOAuthClientId(?string $googleOAuthClientId) : self
     {
         $this->googleOAuthClientId = $googleOAuthClientId;
-
+        
         return $this;
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'name' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'googleOAuthClientId' => [
-                'type' => JsonRule::STRING_TYPE
-            ]
-        ];
     }
 }

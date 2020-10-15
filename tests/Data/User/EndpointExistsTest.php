@@ -4,7 +4,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -30,7 +30,7 @@ class EndpointExistsTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->exists(
-            ModelFactory::getTestableUser()
+            TestableModelFactory::getTestableUser()
                         ->getUid(),
             JwtFactory::create()
         );

@@ -7,7 +7,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -42,7 +42,7 @@ class EndpointCreateTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestableServerApp(),
+                                  TestableModelFactory::getTestableServerApp(),
                                   [AbstractNormalizer::GROUPS => ['main']]
                               ),
                     JSON_THROW_ON_ERROR
@@ -53,7 +53,7 @@ class EndpointCreateTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->create(
-            ModelFactory::getTestableServerApp()
+            TestableModelFactory::getTestableServerApp()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -75,7 +75,7 @@ class EndpointCreateTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->create(
-            ModelFactory::getTestableServerApp()
+            TestableModelFactory::getTestableServerApp()
                         ->setUid(null),
             JwtFactory::create()
         );

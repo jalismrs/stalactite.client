@@ -10,7 +10,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\Model
  */
-class ModelFactory
+class TestableModelFactory
 {
     /**
      * getTestableClientApp

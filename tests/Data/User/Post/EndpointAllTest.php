@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -44,7 +44,7 @@ class EndpointAllTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestablePost(),
+                                      TestableModelFactory::getTestablePost(),
                                       [
                                           AbstractNormalizer::GROUPS => ['main'],
                                       ]
@@ -58,7 +58,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->get(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             JwtFactory::create()
         );
         
@@ -80,7 +80,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->get(
-            ModelFactory::getTestableUser()
+            TestableModelFactory::getTestableUser()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -96,7 +96,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->get(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             JwtFactory::create()
         );
     }

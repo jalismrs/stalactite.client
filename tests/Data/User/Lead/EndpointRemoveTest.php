@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -34,9 +34,9 @@ class EndpointRemoveTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->remove(
-            ModelFactory::getTestableUser()
-                        ->setUid(null),
-            [ModelFactory::getTestablePost()],
+            TestableModelFactory::getTestableUser()
+                                ->setUid(null),
+            [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
@@ -53,7 +53,7 @@ class EndpointRemoveTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->remove(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             ['not a lead'],
             JwtFactory::create()
         );
@@ -69,8 +69,8 @@ class EndpointRemoveTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->remove(
-            ModelFactory::getTestableUser(),
-            [ModelFactory::getTestablePost()],
+            TestableModelFactory::getTestableUser(),
+            [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }

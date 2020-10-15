@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Customer\Me;
 
@@ -13,43 +13,56 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\Customer\Me
+ */
+class Service extends
+    AbstractService
 {
-    private ?Access\Service $serviceAccess = null;
+    private ?Access\Service   $serviceAccess = null;
     private ?Relation\Service $serviceRelation = null;
-
-    public function access(): Access\Service
+    
+    public function access() : Access\Service
     {
         if ($this->serviceAccess === null) {
             $this->serviceAccess = new Access\Service($this->getClient());
         }
-
+        
         return $this->serviceAccess;
     }
-
-    public function relations(): Relation\Service
+    
+    public function relations() : Relation\Service
     {
         if ($this->serviceRelation === null) {
             $this->serviceRelation = new Relation\Service($this->getClient());
         }
-
+        
         return $this->serviceRelation;
     }
-
+    
     /**
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function get(Token $jwt): Response
+    public function get(Token $jwt) : Response
     {
         $endpoint = new Endpoint('/data/customers/me');
         $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
-            ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt
-        ]);
+                 ->setResponseFormatter(
+                     static fn(array $response) : Customer => ModelFactory::createCustomer($response)
+                 );
+        
+        return $this->getClient()
+                    ->request(
+                        $endpoint,
+                        [
+                            'jwt' => (string)$jwt,
+                        ]
+                    );
     }
 }

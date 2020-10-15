@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -44,7 +44,7 @@ class EndpointGetUsersTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableUser(),
+                                      TestableModelFactory::getTestableUser(),
                                       [
                                           AbstractNormalizer::GROUPS => ['main'],
                                       ]
@@ -58,7 +58,7 @@ class EndpointGetUsersTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->getUsers(
-            ModelFactory::getTestablePost(),
+            TestableModelFactory::getTestablePost(),
             JwtFactory::create()
         );
         
@@ -80,7 +80,7 @@ class EndpointGetUsersTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->getUsers(
-            ModelFactory::getTestablePost()
+            TestableModelFactory::getTestablePost()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -96,7 +96,7 @@ class EndpointGetUsersTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->getUsers(
-            ModelFactory::getTestablePost(),
+            TestableModelFactory::getTestablePost(),
             JwtFactory::create()
         );
     }

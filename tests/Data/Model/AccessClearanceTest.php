@@ -28,7 +28,7 @@ class AccessClearanceTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableAccessClearance();
+        $model = TestableModelFactory::getTestableAccessClearance();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -48,7 +48,7 @@ class AccessClearanceTest extends
      */
     public function testGroupMain() : void
     {
-        $model = ModelFactory::getTestableAccessClearance();
+        $model = TestableModelFactory::getTestableAccessClearance();
         
         $actual = Normalizer::getInstance()
                             ->normalize(

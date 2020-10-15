@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\Token;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use JsonException;
@@ -50,7 +50,7 @@ class EndpointLoginTest extends
         
         // assert valid return and response content
         $response = $systemUnderTest->login(
-            ModelFactory::getTestableClientApp(),
+            TestableModelFactory::getTestableClientApp(),
             'fakeUserGoogleToken'
         );
         
@@ -88,7 +88,7 @@ class EndpointLoginTest extends
         
         // assert valid return and response content
         $systemUnderTest->login(
-            ModelFactory::getTestableClientApp(),
+            TestableModelFactory::getTestableClientApp(),
             'fakeUserGoogleToken'
         );
     }
@@ -103,7 +103,7 @@ class EndpointLoginTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->login(
-            ModelFactory::getTestableClientApp(),
+            TestableModelFactory::getTestableClientApp(),
             'fakeUserGoogleToken'
         );
     }

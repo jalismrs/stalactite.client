@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -11,162 +11,243 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class User extends AbstractModel
+class User extends
+    AbstractModel
 {
+    /**
+     * email
+     *
+     * @var string|null
+     */
     private ?string $email = null;
+    /**
+     * googleId
+     *
+     * @var string|null
+     */
     private ?string $googleId = null;
+    /**
+     * lastName
+     *
+     * @var string|null
+     */
     private ?string $lastName = null;
+    /**
+     * firstName
+     *
+     * @var string|null
+     */
     private ?string $firstName = null;
+    /**
+     * admin
+     *
+     * @var bool
+     */
     private bool $admin = false;
-
     /**
      * @var Post[]|array
      */
     private array $posts = [];
-
     /**
      * @var Post[]|array
      */
     private array $leads = [];
-
+    
+    /**
+     * getSchema
+     *
+     * @static
+     * @return array[]
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getSchema() : array
+    {
+        return [
+            'uid'       => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'firstName' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'lastName'  => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'email'     => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'googleId'  => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true,
+            ],
+            'admin'     => [
+                'type' => JsonRule::BOOLEAN_TYPE,
+            ],
+        ];
+    }
+    
     /**
      * getEmail
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getEmail(): ?string
+    public function getEmail() : ?string
     {
         return $this->email;
     }
-
+    
     /**
      * setEmail
      *
-     * @param null|string $email
+     * @param string|null $email
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setEmail(?string $email): self
+    public function setEmail(?string $email) : self
     {
         $this->email = $email;
-
+        
         return $this;
     }
-
+    
     /**
      * getGoogleId
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getGoogleId(): ?string
+    public function getGoogleId() : ?string
     {
         return $this->googleId;
     }
-
+    
     /**
      * setGoogleId
      *
-     * @param null|string $googleId
+     * @param string|null $googleId
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setGoogleId(?string $googleId): self
+    public function setGoogleId(?string $googleId) : self
     {
         $this->googleId = $googleId;
-
+        
         return $this;
     }
-
+    
     /**
      * getLastName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getLastName(): ?string
+    public function getLastName() : ?string
     {
         return $this->lastName;
     }
-
+    
     /**
      * setLastName
      *
-     * @param null|string $lastName
+     * @param string|null $lastName
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setLastName(?string $lastName): self
+    public function setLastName(?string $lastName) : self
     {
         $this->lastName = $lastName;
-
+        
         return $this;
     }
-
+    
     /**
      * getFirstName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getFirstName(): ?string
+    public function getFirstName() : ?string
     {
         return $this->firstName;
     }
-
+    
     /**
      * setFirstName
      *
-     * @param null|string $firstName
+     * @param string|null $firstName
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setFirstName(?string $firstName): self
+    public function setFirstName(?string $firstName) : self
     {
         $this->firstName = $firstName;
-
+        
         return $this;
     }
-
+    
     /**
      * isAdmin
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
-    public function isAdmin(): bool
+    public function isAdmin() : bool
     {
         return $this->admin;
     }
-
+    
     /**
      * setAdmin
      *
      * @param bool $admin
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setAdmin(bool $admin): self
+    public function setAdmin(bool $admin) : self
     {
         $this->admin = $admin;
-
+        
         return $this;
     }
-
+    
     /**
      * getPosts
      *
-     * @return array
+     * @return array|\Jalismrs\Stalactite\Client\Data\Model\Post[]
+     *
+     * @codeCoverageIgnore
      */
-    public function getPosts(): array
+    public function getPosts() : array
     {
         return $this->posts;
     }
-
+    
     /**
      * setPosts
      *
      * @param array $posts
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setPosts(array $posts): self
+    public function setPosts(array $posts) : self
     {
         $this->posts = [];
         foreach ($posts as $post) {
@@ -174,42 +255,48 @@ class User extends AbstractModel
                 $this->addPost($post);
             }
         }
-
+        
         return $this;
     }
-
+    
     /**
      * addPost
      *
-     * @param Post $postModel
+     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $postModel
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function addPost(Post $postModel): self
+    public function addPost(Post $postModel) : self
     {
         $this->posts[] = $postModel;
-
+        
         return $this;
     }
-
+    
     /**
      * getLeads
      *
-     * @return array
+     * @return array|\Jalismrs\Stalactite\Client\Data\Model\Post[]
+     *
+     * @codeCoverageIgnore
      */
-    public function getLeads(): array
+    public function getLeads() : array
     {
         return $this->leads;
     }
-
+    
     /**
      * setLeads
      *
      * @param array $leads
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setLeads(array $leads): self
+    public function setLeads(array $leads) : self
     {
         $this->leads = [];
         foreach ($leads as $lead) {
@@ -217,70 +304,61 @@ class User extends AbstractModel
                 $this->addLead($lead);
             }
         }
-
+        
         return $this;
     }
-
+    
     /**
      * addLead
      *
-     * @param Post $leadModel
+     * @param \Jalismrs\Stalactite\Client\Data\Model\Post $leadModel
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function addLead(Post $leadModel): self
+    public function addLead(Post $leadModel) : self
     {
         $this->leads[] = $leadModel;
-
+        
         return $this;
     }
-
-    public function hasPermission(string $permission): bool
+    
+    /**
+     * hasPermission
+     *
+     * @param string $permission
+     *
+     * @return bool
+     */
+    public function hasPermission(string $permission) : bool
     {
         if ($this->admin) {
             return true;
         }
-
+        
         if ($this->hasExplicitPermission($permission)) {
             return true;
         }
-
+        
         return false;
     }
-
-    public function hasExplicitPermission(string $permission): bool
+    
+    /**
+     * hasExplicitPermission
+     *
+     * @param string $permission
+     *
+     * @return bool
+     */
+    public function hasExplicitPermission(string $permission) : bool
     {
         foreach ($this->posts as $post) {
             if ($post->hasPermission($permission)) {
                 return true;
             }
         }
-
+        
         return false;
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'firstName' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'lastName' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'email' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'googleId' => [
-                'type' => JsonRule::STRING_TYPE,
-                'null' => true
-            ],
-            'admin' => [
-                'type' => JsonRule::BOOLEAN_TYPE
-            ],
-        ];
     }
 }

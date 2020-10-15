@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests
  *
- * @covers \Jalismrs\Stalactite\Client\Client
+ * @covers  \Jalismrs\Stalactite\Client\Client
  */
 class ClientCacheTest extends
     TestCase
@@ -91,8 +91,9 @@ class ClientCacheTest extends
      *
      * @dataProvider provideEndpointCache
      */
-    public function testEndpointCache(Endpoint $endpoint) : void
-    {
+    public function testEndpointCache(
+        Endpoint $endpoint
+    ) : void {
         $this->mockClient
             ->expects(self::once())
             ->method('getFromCache')
@@ -121,12 +122,12 @@ class ClientCacheTest extends
     {
         return [
             'cacheable'     => [
-                new Endpoint(
+                'endpoint' => new Endpoint(
                     '/test'
                 ),
             ],
             'not cacheable' => [
-                new Endpoint(
+                'endpoint' => new Endpoint(
                     '/test',
                     'GET',
                     false
@@ -219,12 +220,12 @@ class ClientCacheTest extends
     {
         return [
             'success' => [
-                'test',
-                [],
-                true,
+                'responseBody' => 'test',
+                'options'      => [],
+                'shouldCache'  => true,
             ],
             'error'   => [
-                json_encode(
+                'responseBody' => json_encode(
                     Normalizer::getInstance()
                               ->normalize(
                                   new ApiError(
@@ -238,10 +239,10 @@ class ClientCacheTest extends
                               ),
                     JSON_THROW_ON_ERROR,
                 ),
-                [
+                'options'      => [
                     'http_code' => 500,
                 ],
-                false,
+                'shouldCache'  => false,
             ],
         ];
     }

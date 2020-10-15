@@ -5,9 +5,10 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Relation;
 use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -42,7 +43,7 @@ class EndpointAllTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableDomainUserRelation(),
+                                      TestableModelFactory::getTestableDomainUserRelation(),
                                       [
                                           AbstractNormalizer::GROUPS             => ['main'],
                                           AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
@@ -57,7 +58,7 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->all(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             JwtFactory::create()
         );
         
@@ -77,8 +78,31 @@ class EndpointAllTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->all(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             JwtFactory::create()
         );
     }
+    
+    /**
+     * testThrowLacksUid
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->all(
+            TestableModelFactory::getTestableUser()
+                                ->setUid(null),
+            JwtFactory::create()
+        );
+    }
+    
 }

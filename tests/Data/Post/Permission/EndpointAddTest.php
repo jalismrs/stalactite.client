@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Post\Permission;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Util\Response;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -34,7 +34,7 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost()
+            TestableModelFactory::getTestablePost()
                         ->setUid(null),
             [],
             JwtFactory::create()
@@ -53,7 +53,7 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
+            TestableModelFactory::getTestablePost(),
             ['not a permission'],
             JwtFactory::create()
         );
@@ -70,7 +70,7 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $response = $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
+            TestableModelFactory::getTestablePost(),
             [],
             JwtFactory::create()
         );
@@ -88,8 +88,8 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $response = $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
-            [ModelFactory::getTestablePermission()],
+            TestableModelFactory::getTestablePost(),
+            [TestableModelFactory::getTestablePermission()],
             JwtFactory::create()
         );
         self::assertInstanceOf(

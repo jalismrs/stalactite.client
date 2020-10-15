@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -34,9 +34,9 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->add(
-            ModelFactory::getTestableUser()
-                        ->setUid(null),
-            [ModelFactory::getTestablePost()],
+            TestableModelFactory::getTestableUser()
+                                ->setUid(null),
+            [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
@@ -53,7 +53,7 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->add(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             ['not a post'],
             JwtFactory::create()
         );
@@ -70,7 +70,7 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $response = $systemUnderTest->add(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             [],
             JwtFactory::create()
         );
@@ -88,8 +88,8 @@ class EndpointAddTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->add(
-            ModelFactory::getTestableUser(),
-            [ModelFactory::getTestablePost()],
+            TestableModelFactory::getTestableUser(),
+            [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }

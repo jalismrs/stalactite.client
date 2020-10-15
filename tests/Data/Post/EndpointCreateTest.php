@@ -6,9 +6,10 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Post
  *
- * @covers \Jalismrs\Stalactite\Client\Data\Post\Service
+ * @covers  \Jalismrs\Stalactite\Client\Data\Post\Service
  */
 class EndpointCreateTest extends
     AbstractTestEndpoint
@@ -42,7 +43,7 @@ class EndpointCreateTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestablePost(),
+                                  TestableModelFactory::getTestablePost(),
                                   [
                                       AbstractNormalizer::GROUPS => ['main'],
                                   ]
@@ -55,7 +56,7 @@ class EndpointCreateTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->create(
-            ModelFactory::getTestablePost(),
+            TestableModelFactory::getTestablePost(),
             JwtFactory::create()
         );
         
@@ -72,12 +73,12 @@ class EndpointCreateTest extends
      */
     public function testRequestMethodCalledOnce() : void
     {
-        $mockClient = $this->createMockClient();
+        $mockClient      = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->create(
-            ModelFactory::getTestablePost()
-                        ->setUid(null),
+            TestableModelFactory::getTestablePost()
+                                ->setUid(null),
             JwtFactory::create()
         );
     }

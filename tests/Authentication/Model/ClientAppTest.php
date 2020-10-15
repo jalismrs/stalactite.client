@@ -27,7 +27,7 @@ class ClientAppTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableClientApp();
+        $model = TestableModelFactory::getTestableClientApp();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -49,7 +49,7 @@ class ClientAppTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableClientApp();
+        $model = TestableModelFactory::getTestableClientApp();
         
         $actual = $serializer->normalize(
             $model,
@@ -77,7 +77,7 @@ class ClientAppTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableClientApp();
+        $model = TestableModelFactory::getTestableClientApp();
         
         $actual = $serializer->normalize(
             $model,
@@ -104,7 +104,7 @@ class ClientAppTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableClientApp();
+        $model = TestableModelFactory::getTestableClientApp();
         
         $actual = $serializer->normalize(
             $model,

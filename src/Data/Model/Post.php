@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -11,121 +11,172 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class Post extends AbstractModel
+class Post extends
+    AbstractModel
 {
-    private ?string $name = null;
+    /**
+     * name
+     *
+     * @var string|null
+     */
+    private ?string $name      = null;
+    /**
+     * shortName
+     *
+     * @var string|null
+     */
     private ?string $shortName = null;
-
     /**
      * @var Permission[]|array
      */
     private array $permissions = [];
-
+    
+    /**
+     * getSchema
+     *
+     * @static
+     * @return array[]
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getSchema() : array
+    {
+        return [
+            'uid'         => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'name'        => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'shortName'   => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'permissions' => [
+                'type'   => JsonRule::LIST_TYPE,
+                'schema' => Permission::getSchema(),
+            ],
+        ];
+    }
+    
     /**
      * getName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getName(): ?string
+    public function getName() : ?string
     {
         return $this->name;
     }
-
+    
     /**
      * setName
      *
-     * @param null|string $name
+     * @param string|null $name
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setName(?string $name): self
+    public function setName(?string $name) : self
     {
         $this->name = $name;
-
+        
         return $this;
     }
-
+    
     /**
      * getShortName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
-    public function getShortName(): ?string
+    public function getShortName() : ?string
     {
         return $this->shortName;
     }
-
+    
     /**
      * setShortName
      *
-     * @param null|string $shortName
+     * @param string|null $shortName
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setShortName(?string $shortName): self
+    public function setShortName(?string $shortName) : self
     {
         $this->shortName = $shortName;
-
+        
         return $this;
     }
-
-
+    
     /**
-     * @return array
+     * getPermissions
+     *
+     * @return array|\Jalismrs\Stalactite\Client\Data\Model\Permission[]
+     *
+     * @codeCoverageIgnore
      */
-    public function getPermissions(): array
+    public function getPermissions() : array
     {
         return $this->permissions;
     }
-
+    
     /**
+     * setPermissions
+     *
      * @param array $permissions
-     * @return Post
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
      */
-    public function setPermissions(array $permissions): Post
+    public function setPermissions(array $permissions) : Post
     {
         foreach ($permissions as $permission) {
             if ($permission instanceof Permission) {
                 $this->addPermission($permission);
             }
         }
-
+        
         return $this;
     }
-
-    public function addPermission(Permission $permission): self
+    
+    /**
+     * addPermission
+     *
+     * @param \Jalismrs\Stalactite\Client\Data\Model\Permission $permission
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
+     */
+    public function addPermission(Permission $permission) : self
     {
         $this->permissions[] = $permission;
+        
         return $this;
     }
-
-    public function hasPermission(string $permission): bool
+    
+    /**
+     * hasPermission
+     *
+     * @param string $permission
+     *
+     * @return bool
+     */
+    public function hasPermission(string $permission) : bool
     {
         foreach ($this->permissions as $p) {
             if ((string)$p === $permission) {
                 return true;
             }
         }
-
+        
         return false;
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'name' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'shortName' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'permissions' => [
-                'type' => JsonRule::LIST_TYPE,
-                'schema' => Permission::getSchema()
-            ]
-        ];
     }
 }

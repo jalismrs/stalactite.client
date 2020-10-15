@@ -16,64 +16,101 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\Customer\Relation
+ */
+class Service extends
+    AbstractService
 {
     /**
      * @param Customer $customer
-     * @param Token $jwt
+     * @param Token    $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Customer $customer, Token $jwt): Response
-    {
+    public function all(
+        Customer $customer,
+        Token $jwt
+    ) : Response {
         if ($customer->getUid() === null) {
-            throw new DataServiceException('Customer lacks a uid', DataServiceException::MISSING_CUSTOMER_UID);
+            throw new DataServiceException(
+                'Customer lacks a uid',
+                DataServiceException::MISSING_CUSTOMER_UID
+            );
         }
-
+        
         $schema = [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
+            'uid'    => [
+                'type' => JsonRule::STRING_TYPE,
             ],
             'domain' => [
-                'type' => JsonRule::OBJECT_TYPE,
-                'schema' => Domain::getSchema()
-            ]
+                'type'   => JsonRule::OBJECT_TYPE,
+                'schema' => Domain::getSchema(),
+            ],
         ];
-
+        
         $endpoint = new Endpoint('/data/customers/%s/relations');
-        $endpoint->setResponseValidationSchema(new JsonSchema($schema, JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(
-                    static fn(array $relation): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($relation),
-                    $response
-                );
-            });
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$customer->getUid()]
-        ]);
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(
+                $schema,
+                JsonSchema::LIST_TYPE
+            )
+        )
+                 ->setResponseFormatter(
+                     static function(array $response) : array {
+                         return array_map(
+                             static fn(array $relation
+                             ) : DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($relation),
+                             $response
+                         );
+                     }
+                 );
+        
+        return $this->getClient()
+                    ->request(
+                        $endpoint,
+                        [
+                            'jwt'           => (string)$jwt,
+                            'uriParameters' => [$customer->getUid()],
+                        ]
+                    );
     }
-
+    
     /**
      * @param Customer $customer
-     * @param Token $jwt
+     * @param Token    $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function deleteAll(Customer $customer, Token $jwt): Response
-    {
+    public function deleteAll(
+        Customer $customer,
+        Token $jwt
+    ) : Response {
         if ($customer->getUid() === null) {
-            throw new DataServiceException('Customer lacks a uid', DataServiceException::MISSING_CUSTOMER_UID);
+            throw new DataServiceException(
+                'Customer lacks a uid',
+                DataServiceException::MISSING_CUSTOMER_UID
+            );
         }
-
-        $endpoint = new Endpoint('/data/customers/%s/relations', 'DELETE');
-
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$customer->getUid()]
-        ]);
+        
+        $endpoint = new Endpoint(
+            '/data/customers/%s/relations',
+            'DELETE'
+        );
+        
+        return $this->getClient()
+                    ->request(
+                        $endpoint,
+                        [
+                            'jwt'           => (string)$jwt,
+                            'uriParameters' => [$customer->getUid()],
+                        ]
+                    );
     }
 }

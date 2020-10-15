@@ -29,7 +29,7 @@ class UserTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -51,7 +51,7 @@ class UserTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = $serializer->normalize(
             $model,
@@ -86,7 +86,7 @@ class UserTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = $serializer->normalize(
             $model,
@@ -121,7 +121,7 @@ class UserTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = $serializer->normalize(
             $model,
@@ -154,7 +154,7 @@ class UserTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = $serializer->normalize(
             $model,
@@ -187,7 +187,7 @@ class UserTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableUser();
+        $model = TestableModelFactory::getTestableUser();
         
         $actual = $serializer->normalize(
             $model,
@@ -305,7 +305,7 @@ class UserTest extends
         bool $hasPermission
     ) : void {
         $user->setPosts($posts);
-        $permission = ModelFactory::getTestablePermission();
+        $permission = TestableModelFactory::getTestablePermission();
         
         self::assertSame(
             $hasExplicitPermission,
@@ -324,13 +324,13 @@ class UserTest extends
      */
     public function getUserProvider() : array
     {
-        $user  = ModelFactory::getTestableUser();
-        $admin = ModelFactory::getTestableUser()
-                             ->setAdmin(true);
+        $user  = TestableModelFactory::getTestableUser();
+        $admin = TestableModelFactory::getTestableUser()
+                                     ->setAdmin(true);
         
-        $postWithoutPermission = ModelFactory::getTestablePost();
-        $postWithPermission    = ModelFactory::getTestablePost()
-                                             ->addPermission(ModelFactory::getTestablePermission());
+        $postWithoutPermission = TestableModelFactory::getTestablePost();
+        $postWithPermission    = TestableModelFactory::getTestablePost()
+                                                     ->addPermission(TestableModelFactory::getTestablePermission());
         
         return [
             [

@@ -15,7 +15,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Model
  *
- * @covers \Jalismrs\Stalactite\Client\Data\Model\Post
+ * @covers  \Jalismrs\Stalactite\Client\Data\Model\Post
  */
 class PostTest extends
     TestCase
@@ -27,8 +27,8 @@ class PostTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestablePost();
-        $model->addPermission(ModelFactory::getTestablePermission());
+        $model = TestableModelFactory::getTestablePost();
+        $model->addPermission(TestableModelFactory::getTestablePermission());
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -53,8 +53,8 @@ class PostTest extends
             AbstractNormalizer::GROUPS => ['main'],
         ];
         
-        $model = ModelFactory::getTestablePost();
-        $model->addPermission(ModelFactory::getTestablePermission());
+        $model = TestableModelFactory::getTestablePost();
+        $model->addPermission(TestableModelFactory::getTestablePermission());
         
         $actual = $normalizer->normalize(
             $model,
@@ -94,8 +94,8 @@ class PostTest extends
             AbstractNormalizer::GROUPS => ['create'],
         ];
         
-        $model = ModelFactory::getTestablePost();
-        $model->addPermission(ModelFactory::getTestablePermission());
+        $model = TestableModelFactory::getTestablePost();
+        $model->addPermission(TestableModelFactory::getTestablePermission());
         
         $actual = $normalizer->normalize(
             $model,
@@ -131,8 +131,8 @@ class PostTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestablePost();
-        $model->addPermission(ModelFactory::getTestablePermission());
+        $model = TestableModelFactory::getTestablePost();
+        $model->addPermission(TestableModelFactory::getTestablePermission());
         
         $actual = $serializer->normalize(
             $model,
@@ -154,12 +154,12 @@ class PostTest extends
     
     public function testPermissions() : void
     {
-        $post = ModelFactory::getTestablePost();
+        $post = TestableModelFactory::getTestablePost();
         
-        $permission  = ModelFactory::getTestablePermission()
-                                   ->setScope('p1');
-        $permission2 = ModelFactory::getTestablePermission()
-                                   ->setScope('p2');
+        $permission  = TestableModelFactory::getTestablePermission()
+                                           ->setScope('p1');
+        $permission2 = TestableModelFactory::getTestablePermission()
+                                           ->setScope('p2');
         
         self::assertFalse($post->hasPermission((string)$permission));
         self::assertFalse($post->hasPermission((string)$permission2));

@@ -21,7 +21,7 @@ use Throwable;
  *
  * @package Jalismrs\Stalactite\Client\Tests
  *
- * @covers \Jalismrs\Stalactite\Client\Client
+ * @covers  \Jalismrs\Stalactite\Client\Client
  */
 class ClientTest extends
     TestCase
@@ -29,12 +29,21 @@ class ClientTest extends
     /**
      * testGetHttpClient
      *
+     * @param bool $withUserAgent
+     *
      * @return void
+     *
+     * @dataProvider provideGetHttpClient
      */
-    public function testGetHttpClient() : void
-    {
+    public function testGetHttpClient(
+        bool $withUserAgent
+    ) : void {
         $httpClient      = new MockHttpClient();
         $systemUnderTest = ClientFactory::createBasicClient();
+        
+        if ($withUserAgent) {
+            $systemUnderTest->setUserAgent('user agent');
+        }
         
         $output = $systemUnderTest->getHttpClient();
         
@@ -550,5 +559,22 @@ class ClientTest extends
             $responseHeaders,
             $output
         );
+    }
+    
+    /**
+     * provideGetHttpClient
+     *
+     * @return array
+     */
+    public function provideGetHttpClient(): array
+    {
+        return [
+            'without user agent' => [
+                'withUserAgent' => false
+            ],
+            'with user agent' => [
+                'withUserAgent' => true
+            ],
+        ];
     }
 }

@@ -8,7 +8,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -42,7 +42,7 @@ class EndpointGetByNameAndApiKeyTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestableDomain(),
+                                  TestableModelFactory::getTestableDomain(),
                                   [
                                       AbstractNormalizer::GROUPS => ['main'],
                                   ]
@@ -52,7 +52,7 @@ class EndpointGetByNameAndApiKeyTest extends
             )
         );
         
-        $domain = ModelFactory::getTestableDomain();
+        $domain = TestableModelFactory::getTestableDomain();
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
@@ -77,7 +77,7 @@ class EndpointGetByNameAndApiKeyTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $domain = ModelFactory::getTestableDomain();
+        $domain = TestableModelFactory::getTestableDomain();
         $systemUnderTest->getByNameAndApiKey(
             $domain->getName(),
             $domain->getApiKey(),

@@ -9,7 +9,7 @@ use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -43,7 +43,7 @@ class EndpointAddCustomerRelationTest extends
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
-                                  ModelFactory::getTestableDomainCustomerRelation(),
+                                  TestableModelFactory::getTestableDomainCustomerRelation(),
                                   [
                                       AbstractNormalizer::GROUPS => ['main'],
                                   ]
@@ -56,8 +56,8 @@ class EndpointAddCustomerRelationTest extends
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
         $response = $systemUnderTest->addCustomerRelation(
-            ModelFactory::getTestableDomain(),
-            ModelFactory::getTestableCustomer(),
+            TestableModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
         
@@ -79,9 +79,9 @@ class EndpointAddCustomerRelationTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->addCustomerRelation(
-            ModelFactory::getTestableDomain()
-                        ->setUid(null),
-            ModelFactory::getTestableCustomer(),
+            TestableModelFactory::getTestableDomain()
+                                ->setUid(null),
+            TestableModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
     }
@@ -98,9 +98,9 @@ class EndpointAddCustomerRelationTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->addCustomerRelation(
-            ModelFactory::getTestableDomain(),
-            ModelFactory::getTestableCustomer()
-                        ->setUid(null),
+            TestableModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableCustomer()
+                                ->setUid(null),
             JwtFactory::create()
         );
     }
@@ -115,8 +115,8 @@ class EndpointAddCustomerRelationTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->addCustomerRelation(
-            ModelFactory::getTestableDomain(),
-            ModelFactory::getTestableCustomer(),
+            TestableModelFactory::getTestableDomain(),
+            TestableModelFactory::getTestableCustomer(),
             JwtFactory::create()
         );
     }

@@ -27,7 +27,7 @@ class DomainTest extends
      */
     public function testGroupCommon() : void
     {
-        $model = ModelFactory::getTestableDomain();
+        $model = TestableModelFactory::getTestableDomain();
         
         $actual = Normalizer::getInstance()
                             ->normalize($model);
@@ -49,7 +49,7 @@ class DomainTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomain();
+        $model = TestableModelFactory::getTestableDomain();
         
         $actual = $serializer->normalize(
             $model,
@@ -84,7 +84,7 @@ class DomainTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomain();
+        $model = TestableModelFactory::getTestableDomain();
         
         $actual = $serializer->normalize(
             $model,
@@ -118,7 +118,7 @@ class DomainTest extends
     {
         $serializer = Normalizer::getInstance();
         
-        $model = ModelFactory::getTestableDomain();
+        $model = TestableModelFactory::getTestableDomain();
         
         $actual = $serializer->normalize(
             $model,

@@ -6,7 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -34,7 +34,7 @@ class EndpointDeleteTest extends
         $systemUnderTest = $this->createSystemUnderTest();
         
         $systemUnderTest->delete(
-            ModelFactory::getTestableUser()
+            TestableModelFactory::getTestableUser()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -50,7 +50,7 @@ class EndpointDeleteTest extends
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->delete(
-            ModelFactory::getTestableUser(),
+            TestableModelFactory::getTestableUser(),
             JwtFactory::create()
         );
     }
