@@ -2,7 +2,7 @@
 
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
-use Jalismrs\Stalactite\Client\Tests\Factory\Authentication\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\TpaJwtFactory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;

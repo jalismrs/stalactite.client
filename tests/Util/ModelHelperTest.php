@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
