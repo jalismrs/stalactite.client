@@ -2,23 +2,24 @@
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
-use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
-use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
-class ServiceTest extends AbstractTestService
+class ServiceTest extends
+    AbstractTestService
 {
-    public function testPermission(): void
+    use SystemUnderTestTrait;
+    
+    public function testPermission() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->permissions();
-        $testService2 = $testService->permissions();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->permissions();
+        $service2 = $systemUnderTest->permissions();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
 }

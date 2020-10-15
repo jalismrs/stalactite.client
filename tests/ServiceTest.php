@@ -12,32 +12,53 @@ use Jalismrs\Stalactite\Client\Service;
  */
 class ServiceTest extends AbstractTestService
 {
+    /**
+     * testAuthentication
+     *
+     * @return void
+     */
     public function testAuthentication(): void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        
-        $testService1 = $testService->authentication();
-        $testService2 = $testService->authentication();
+        $systemUnderTest = $this->createSystemUnderTest();
+    
+        $service1 = $systemUnderTest->authentication();
+        $service2 = $systemUnderTest->authentication();
 
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
+    
+    /**
+     * testData
+     *
+     * @return void
+     */
     public function testData(): void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->data();
-        $testService2 = $testService->data();
+        $systemUnderTest = $this->createSystemUnderTest();
+    
+        $service1 = $systemUnderTest->data();
+        $service2 = $systemUnderTest->data();
 
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
+    }
+    
+    /**
+     * createSystemUnderTest
+     *
+     * @return \Jalismrs\Stalactite\Client\Service
+     */
+    private function createSystemUnderTest(): Service
+    {
+        $testClient = ClientFactory::createClient();
+        
+        return new Service($testClient);
     }
 }

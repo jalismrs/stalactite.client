@@ -1,10 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -15,36 +13,46 @@ use Psr\SimpleCache\InvalidArgumentException;
 
 /**
  * Class ApiUpdateTest
+ *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
  */
-class EndpointUpdateTest extends AbstractTestEndpoint
+class EndpointUpdateTest extends
+    AbstractTestEndpoint
 {
+    use SystemUnderTestTrait;
+    
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid(): void
+    public function testThrowLacksUid() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_CUSTOMER_UID);
-
-        $testClient = new Client('http://fakeHost');
-        $testService = new Service($testClient);
-
-        $testService->update(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->update(
+            ModelFactory::getTestableCustomer()
+                        ->setUid(null),
+            JwtFactory::create()
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce(): void
+    public function testRequestMethodCalledOnce() : void
     {
         $mockClient = $this->createMockClient();
-        $testService = new Service($mockClient);
+        $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $testService->update(ModelFactory::getTestableCustomer(), JwtFactory::create());
+        $systemUnderTest->update(
+            ModelFactory::getTestableCustomer(),
+            JwtFactory::create()
+        );
     }
 }

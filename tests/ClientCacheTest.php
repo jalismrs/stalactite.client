@@ -4,17 +4,18 @@ namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\ApiError;
 use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
-use JsonException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
-use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
+/**
+ * Class ClientCacheTest
+ *
+ * @package Jalismrs\Stalactite\Client\Tests
+ */
 class ClientCacheTest extends
     TestCase
 {
@@ -30,33 +31,19 @@ class ClientCacheTest extends
      * @var \PHPUnit\Framework\MockObject\MockObject|\Jalismrs\Stalactite\Client\Client
      */
     private MockObject $mockClient;
+    /**
+     * testClient
+     *
+     * @var \Jalismrs\Stalactite\Client\Client
+     */
+    private Client $testClient;
     
     /**
-     * setUp
+     * testSetCache
      *
      * @return void
-     */
-    protected function setUp() : void
-    {
-        $this->mockCache = $this->createMock(CacheInterface::class);
-        
-        $this->mockClient = $this
-            ->getMockBuilder(Client::class)
-            ->onlyMethods(
-                [
-                    'cache',
-                    'getFromCache',
-                    'getHttpClient',
-                ]
-            )
-            ->setConstructorArgs(['http://fakeHost'])
-            ->getMock();
-        
-        $this->mockClient->setCache($this->mockCache);
-    }
-    
-    /**
-     * @throws InvalidArgumentException
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testSetCache() : void
     {
@@ -64,7 +51,7 @@ class ClientCacheTest extends
             ->expects(self::once())
             ->method('set');
         
-        $this->mockClient->cache(
+        $this->testClient->cache(
             'GET',
             '/test',
             'test'
@@ -72,26 +59,35 @@ class ClientCacheTest extends
     }
     
     /**
-     * @throws InvalidArgumentException
+     * testGetFromCache
+     *
+     * @return void
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testGetFromCache() : void
     {
         $this->mockCache
             ->expects(self::once())
             ->method('get');
-    
-        $this->mockClient->getFromCache(
+        
+        $this->testClient->getFromCache(
             'GET',
             '/test'
         );
     }
     
     /**
-     * @param Endpoint $endpoint
+     * testEndpointCache
      *
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     * @dataProvider getEndpoints
+     * @param \Jalismrs\Stalactite\Client\Util\Endpoint $endpoint
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     *
+     * @dataProvider provideEndpointCache
      */
     public function testEndpointCache(Endpoint $endpoint) : void
     {
@@ -115,13 +111,19 @@ class ClientCacheTest extends
     }
     
     /**
-     * @return array|array[]
+     * provideEndpointCache
+     *
+     * @return \Jalismrs\Stalactite\Client\Util\Endpoint[][]
      */
-    public function getEndpoints() : array
+    public function provideEndpointCache() : array
     {
         return [
-            [new Endpoint('/test')],
-            [
+            'cacheable'     => [
+                new Endpoint(
+                    '/test'
+                ),
+            ],
+            'not cacheable' => [
                 new Endpoint(
                     '/test',
                     'GET',
@@ -132,8 +134,12 @@ class ClientCacheTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
+     * testCacheHit
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testCacheHit() : void
     {
@@ -160,13 +166,18 @@ class ClientCacheTest extends
     }
     
     /**
+     * testCacheSetOnSuccess
+     *
      * @param string $responseBody
      * @param array  $options
      * @param bool   $shouldCache
      *
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     * @dataProvider getMockHttpClients
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     *
+     * @dataProvider provideCacheSetOnSuccess
      */
     public function testCacheSetOnSuccess(
         string $responseBody,
@@ -195,20 +206,22 @@ class ClientCacheTest extends
     }
     
     /**
-     * @return array|array[]
-     * @throws JsonException
-     * @throws NormalizerException
+     * provideCacheSetOnSuccess
+     *
+     * @return array[]
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\NormalizerException
+     * @throws \JsonException
      */
-    public function getMockHttpClients() : array
+    public function provideCacheSetOnSuccess() : array
     {
         return [
-            [
+            'success' => [
                 'test',
                 [],
                 true,
             ],
-            // success
-            [
+            'error'   => [
                 json_encode(
                     Normalizer::getInstance()
                               ->normalize(
@@ -223,10 +236,37 @@ class ClientCacheTest extends
                               ),
                     JSON_THROW_ON_ERROR,
                 ),
-                ['http_code' => 500],
+                [
+                    'http_code' => 500,
+                ],
                 false,
-            ]
-            // error
+            ],
         ];
+    }
+    
+    /**
+     * setUp
+     *
+     * @return void
+     */
+    protected function setUp() : void
+    {
+        $this->mockCache = $this->createMock(CacheInterface::class);
+        
+        $this->mockClient = $this
+            ->getMockBuilder(Client::class)
+            ->onlyMethods(
+                [
+                    'cache',
+                    'getFromCache',
+                    'getHttpClient',
+                ]
+            )
+            ->setConstructorArgs(['http://fakeHost'])
+            ->getMock();
+        $this->testClient = ClientFactory::createClient();
+        
+        $this->mockClient->setCache($this->mockCache);
+        $this->testClient->setCache($this->mockCache);
     }
 }

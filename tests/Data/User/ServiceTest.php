@@ -1,95 +1,96 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
-use Jalismrs\Stalactite\Client\Data\User\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
-use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
-class ServiceTest extends AbstractTestService
+class ServiceTest extends
+    AbstractTestService
 {
-    public function testLead(): void
+    use SystemUnderTestTrait;
+    
+    public function testLead() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->leads();
-        $testService2 = $testService->leads();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->leads();
+        $service2 = $systemUnderTest->leads();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
-    public function testMe(): void
+    
+    public function testMe() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->me();
-        $testService2 = $testService->me();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->me();
+        $service2 = $systemUnderTest->me();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
-    public function testPost(): void
+    
+    public function testPost() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->posts();
-        $testService2 = $testService->posts();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->posts();
+        $service2 = $systemUnderTest->posts();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
-    public function testAccess(): void
+    
+    public function testAccess() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->access();
-        $testService2 = $testService->access();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->access();
+        $service2 = $systemUnderTest->access();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
-    public function testRelation(): void
+    
+    public function testRelation() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->relations();
-        $testService2 = $testService->relations();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->relations();
+        $service2 = $systemUnderTest->relations();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
-
-    public function testSubordinate(): void
+    
+    public function testSubordinate() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->subordinates();
-        $testService2 = $testService->subordinates();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->subordinates();
+        $service2 = $systemUnderTest->subordinates();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
 }

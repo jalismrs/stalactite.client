@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\Client;
-use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**

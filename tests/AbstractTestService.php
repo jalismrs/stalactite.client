@@ -15,23 +15,29 @@ abstract class AbstractTestService extends
     TestCase
 {
     /**
-     * @param AbstractService $testService
-     * @param AbstractService $testService1
-     * @param AbstractService $testService2
+     * checkServices
+     *
+     * @static
+     *
+     * @param \Jalismrs\Stalactite\Client\AbstractService $parentService
+     * @param \Jalismrs\Stalactite\Client\AbstractService $service1
+     * @param \Jalismrs\Stalactite\Client\AbstractService $service2
+     *
+     * @return void
      */
     final protected static function checkServices(
-        AbstractService $testService,
-        AbstractService $testService1,
-        AbstractService $testService2
+        AbstractService $parentService,
+        AbstractService $service1,
+        AbstractService $service2
     ) : void {
         self::assertSame(
-            $testService->getClient(),
-            $testService1->getClient()
+            $parentService->getClient(),
+            $service1->getClient()
         );
         
         self::assertSame(
-            $testService1,
-            $testService2
+            $service1,
+            $service2
         );
     }
 }

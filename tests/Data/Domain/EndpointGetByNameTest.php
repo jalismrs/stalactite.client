@@ -1,14 +1,13 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\Domain\Service;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
+use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
@@ -19,48 +18,65 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
  * Class ApiGetByNameTest
+ *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
  */
-class EndpointGetByNameTest extends AbstractTestEndpoint
+class EndpointGetByNameTest extends
+    AbstractTestEndpoint
 {
+    use SystemUnderTestTrait;
+    
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetByName(): void
+    public function testGetByName() : void
     {
-        $testClient = new Client('http://fakeHost');
-        $testService = new Service($testClient);
+        $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
-                        ->normalize(
-                            ModelFactory::getTestableDomain(),
-                            [
-                                AbstractNormalizer::GROUPS => ['main']
-                            ]
-                        ), JSON_THROW_ON_ERROR
+                              ->normalize(
+                                  ModelFactory::getTestableDomain(),
+                                  [
+                                      AbstractNormalizer::GROUPS => ['main'],
+                                  ]
+                              ),
+                    JSON_THROW_ON_ERROR
                 )
             )
         );
-
-        $response = $testService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
-
-        self::assertInstanceOf(Domain::class, $response->getBody());
+        
+        $systemUnderTest = $this->createSystemUnderTest($testClient);
+        
+        $response = $systemUnderTest->getByName(
+            ModelFactory::getTestableDomain()
+                        ->getName(),
+            JwtFactory::create()
+        );
+        
+        self::assertInstanceOf(
+            Domain::class,
+            $response->getBody()
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce(): void
+    public function testRequestMethodCalledOnce() : void
     {
         $mockClient = $this->createMockClient();
-        $testService = new Service($mockClient);
+        $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $testService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
+        $systemUnderTest->getByName(
+            ModelFactory::getTestableDomain()
+                        ->getName(),
+            JwtFactory::create()
+        );
     }
 }

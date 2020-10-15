@@ -1,10 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\User\Lead\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -17,51 +15,61 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
  */
-class EndpointRemoveLeadsTest extends AbstractTestEndpoint
+class EndpointRemoveLeadsTest extends
+    AbstractTestEndpoint
 {
+    use SystemUnderTestTrait;
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid(): void
+    public function testThrowLacksUid() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
-
-        $testClient = new Client('http://fakeHost');
-        $testService = new Service($testClient);
-
-        $testService->remove(
-            ModelFactory::getTestableUser()->setUid(null),
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser()
+                        ->setUid(null),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPostsParameterRemoveLeads(): void
+    public function testThrowOnInvalidPostsParameterRemoveLeads() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
-
-        $testClient = new Client('http://fakeHost');
-        $testService = new Service($testClient);
-
-        $testService->remove(ModelFactory::getTestableUser(), ['not a lead'], JwtFactory::create());
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser(),
+            ['not a lead'],
+            JwtFactory::create()
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce(): void
+    public function testRequestMethodCalledOnce() : void
     {
         $mockClient = $this->createMockClient();
-        $testService = new Service($mockClient);
+        $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $testService->remove(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser(),
+            [ModelFactory::getTestablePost()],
+            JwtFactory::create()
+        );
     }
 }

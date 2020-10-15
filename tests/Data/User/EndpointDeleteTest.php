@@ -1,10 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
-use Jalismrs\Stalactite\Client\Client;
-use Jalismrs\Stalactite\Client\Data\User\Service;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -17,32 +15,41 @@ use Psr\SimpleCache\InvalidArgumentException;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User
  */
-class EndpointDeleteTest extends AbstractTestEndpoint
+class EndpointDeleteTest extends
+    AbstractTestEndpoint
 {
+    use SystemUnderTestTrait;
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowMissingUid(): void
+    public function testThrowMissingUid() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
-
-        $testClient = new Client('http://fakeHost');
-        $testService = new Service($testClient);
-
-        $testService->delete(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->delete(
+            ModelFactory::getTestableUser()
+                        ->setUid(null),
+            JwtFactory::create()
+        );
     }
-
+    
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce(): void
+    public function testRequestMethodCalledOnce() : void
     {
         $mockClient = $this->createMockClient();
-        $testService = new Service($mockClient);
+        $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $testService->delete(ModelFactory::getTestableUser(), JwtFactory::create());
+        $systemUnderTest->delete(
+            ModelFactory::getTestableUser(),
+            JwtFactory::create()
+        );
     }
 }

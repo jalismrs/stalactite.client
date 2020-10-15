@@ -21,7 +21,7 @@ class ClientFactory
      */
     public static function createClient() : Client
     {
-        $testClient = new Client('http://fakeHost');
+        $testClient = self::createBasicClient();
         
         $testClient
             ->setHttpClient(new MockHttpClient())
@@ -29,5 +29,16 @@ class ClientFactory
             ->setUserAgent('fake user agent');
         
         return $testClient;
+    }
+    
+    /**
+     * createBasicClient
+     *
+     * @static
+     * @return \Jalismrs\Stalactite\Client\Client
+     */
+    public static function createBasicClient(): Client
+    {
+        return new Client('http://fakeHost');
     }
 }

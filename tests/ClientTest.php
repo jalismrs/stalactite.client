@@ -6,17 +6,12 @@ namespace Jalismrs\Stalactite\Client\Tests;
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\ApiError;
-use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
-use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
-use JsonException;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
 use Psr\Log\Test\TestLogger;
-use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Throwable;
@@ -29,85 +24,62 @@ use Throwable;
 class ClientTest extends
     TestCase
 {
-    public function testGetHost() : void
-    {
-        $host       = 'http://fakeHost';
-        $testClient = new Client($host);
-        
-        self::assertSame(
-            $host,
-            $testClient->getHost()
-        );
-    }
-    
-    public function testGetUserAgentDefault() : void
-    {
-        $testClient = new Client('http://fakeHost');
-        
-        self::assertNull($testClient->getUserAgent());
-    }
-    
-    public function testGetUserAgent() : void
-    {
-        $userAgent  = 'fake user agent';
-        $testClient = new Client('http://fakeHost');
-        $testClient->setUserAgent($userAgent);
-        
-        self::assertSame(
-            $userAgent,
-            $testClient->getUserAgent()
-        );
-    }
-    
+    /**
+     * testGetHttpClient
+     *
+     * @return void
+     */
     public function testGetHttpClient() : void
     {
-        $httpClient = new MockHttpClient();
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient($httpClient);
+        $httpClient      = new MockHttpClient();
+        $systemUnderTest = ClientFactory::createBasicClient();
         
-        self::assertSame(
+        $output = $systemUnderTest->getHttpClient();
+        
+        self::assertNotSame(
             $httpClient,
-            $testClient->getHttpClient()
-        );
-    }
-    
-    public function testGetLogger() : void
-    {
-        $logger     = new TestLogger();
-        $testClient = new Client('http://fakeHost');
-        $testClient->setLogger($logger);
-        
-        self::assertSame(
-            $logger,
-            $testClient->getLogger()
-        );
-    }
-    
-    public function testGetLoggerDefault() : void
-    {
-        $testClient = new Client('http://fakeHost');
-        
-        self::assertInstanceOf(
-            NullLogger::class,
-            $testClient->getLogger()
+            $output
         );
     }
     
     /**
-     * @throws InvalidArgumentException
+     * testGetLogger
+     *
+     * @return void
+     */
+    public function testGetLogger() : void
+    {
+        $logger          = new TestLogger();
+        $systemUnderTest = ClientFactory::createBasicClient();
+        
+        $output = $systemUnderTest->getLogger();
+        
+        self::assertNotSame(
+            $logger,
+            $output
+        );
+    }
+    
+    /**
+     * testExceptionThrownOnInvalidAPIHost
+     *
+     * @return void
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testExceptionThrownOnInvalidAPIHost() : void
     {
-        $testClient = new Client('invalidHost');
-        $endpoint   = new Endpoint('/');
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $endpoint        = new Endpoint('/');
         
         $throwable = null;
         try {
-            $testClient->request($endpoint);
+            $systemUnderTest->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
         
+        /** @var ClientException $throwable */
         self::assertInstanceOf(
             ClientException::class,
             $throwable
@@ -116,43 +88,54 @@ class ClientTest extends
             ClientException::REQUEST_FAILED,
             $throwable->getCode()
         );
-        /** @var ClientException $throwable */
-        self::assertNull($throwable->getResponse());
+        self::assertNull(
+            $throwable->getResponse()
+        );
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
+     * testRequest
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testRequest() : void
     {
         $responseBody = 'response body';
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
         $endpoint = new Endpoint('/');
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getBody();
         
         self::assertSame(
             $responseBody,
-            $response->getBody()
+            $output
         );
     }
     
     /**
-     * @throws ClientException
-     * @throws JsonException
-     * @throws InvalidArgumentException
+     * testRequestWithValidationSchema
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \JsonException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testRequestWithValidationSchema() : void
     {
         $responseBody = ['key' => 'value'];
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     $responseBody,
@@ -170,23 +153,29 @@ class ClientTest extends
             )
         );
         
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getBody();
         
         self::assertSame(
             $responseBody,
-            $response->getBody()
+            $output
         );
     }
     
     /**
-     * @throws InvalidArgumentException
+     * testRequestWithInvalidJsonData
+     *
+     * @return void
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testRequestWithInvalidJsonData() : void
     {
         $responseBody = 'invalid{}json';
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
@@ -202,7 +191,7 @@ class ClientTest extends
         
         $throwable = null;
         try {
-            $testClient->request($endpoint);
+            $systemUnderTest->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -230,8 +219,12 @@ class ClientTest extends
     }
     
     /**
-     * @throws JsonException
-     * @throws InvalidArgumentException
+     * testRequestWithInvalidDataFormat
+     *
+     * @return void
+     *
+     * @throws \JsonException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testRequestWithInvalidDataFormat() : void
     {
@@ -240,8 +233,8 @@ class ClientTest extends
             'invalid' => 'body',
         ];
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     $responseBody,
@@ -263,7 +256,7 @@ class ClientTest extends
         $throwable = null;
         try {
             // this will throw : invalid response body schema
-            $testClient->request($endpoint);
+            $systemUnderTest->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -295,14 +288,18 @@ class ClientTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws JsonException
-     * @throws InvalidArgumentException
+     * testRequestWithValidationSchemaAndResponseFormatter
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \JsonException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testRequestWithValidationSchemaAndResponseFormatter() : void
     {
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
@@ -330,24 +327,30 @@ class ClientTest extends
                 }
             );
         
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getBody();
         
         self::assertSame(
             ['item' => 1],
-            $response->getBody()
+            $output
         );
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
+     * testFormatterNotAppliedIfNoValidationSchema
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testFormatterNotAppliedIfNoValidationSchema() : void
     {
         $responseBody = 'abcdef';
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
@@ -363,20 +366,26 @@ class ClientTest extends
             }
         );
         
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getBody();
         
         // response not changed
         self::assertSame(
             $responseBody,
-            $response->getBody()
+            $output
         );
     }
     
     /**
-     * @throws ClientException
-     * @throws JsonException
-     * @throws NormalizerException
-     * @throws InvalidArgumentException
+     * testErrorResponse
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Jalismrs\Stalactite\Client\Exception\NormalizerException
+     * @throws \JsonException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testErrorResponse() : void
     {
@@ -386,8 +395,8 @@ class ClientTest extends
             null
         );
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -404,24 +413,30 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getBody();
         
         self::assertInstanceOf(
             ApiError::class,
-            $response->getBody()
+            $output
         );
     }
     
     /**
-     * @throws InvalidArgumentException
+     * testInvalidErrorResponse
+     *
+     * @return void
+     *
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testInvalidErrorResponse() : void
     {
         $responseBody = 'invalid-api-error-format';
         $responseCode = 404;
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 $responseBody,
                 ['http_code' => $responseCode] // invalid API error format
@@ -433,7 +448,7 @@ class ClientTest extends
         $throwable = null;
         try {
             // this will throw : response body is not a valid json
-            $testClient->request($endpoint);
+            $systemUnderTest->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -467,15 +482,19 @@ class ClientTest extends
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
+     * testResponseKeepsApiResponseCode
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testResponseKeepsApiResponseCode() : void
     {
         $responseCode = 204; // not 200 (default response http code)
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 '',
                 [
@@ -485,17 +504,23 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getCode();
         
         self::assertSame(
             $responseCode,
-            $response->getCode()
+            $output
         );
     }
     
     /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
+     * testResponseKeepsApiResponseHeaders
+     *
+     * @return void
+     *
+     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function testResponseKeepsApiResponseHeaders() : void
     {
@@ -504,8 +529,8 @@ class ClientTest extends
             'fake-header2' => ['fakeValue2'],
         ];
         
-        $testClient = new Client('http://fakeHost');
-        $testClient->setHttpClient(
+        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest->setHttpClient(
             MockHttpClientFactory::create(
                 '',
                 [
@@ -515,11 +540,13 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $testClient->request($endpoint);
+        $response = $systemUnderTest->request($endpoint);
+        
+        $output = $response->getHeaders();
         
         self::assertSame(
             $responseHeaders,
-            $response->getHeaders()
+            $output
         );
     }
 }

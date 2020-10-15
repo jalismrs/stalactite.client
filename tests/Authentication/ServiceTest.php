@@ -1,30 +1,31 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication;
 
-use Jalismrs\Stalactite\Client\Authentication\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
-use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
 /**
  * ServiceTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Authentication
  */
-class ServiceTest extends AbstractTestService
+class ServiceTest extends
+    AbstractTestService
 {
-    public function testTrustedApp(): void
+    use SystemUnderTestTrait;
+    
+    public function testTrustedApp() : void
     {
-        $testClient = ClientFactory::createClient();
-        $testService = new Service($testClient);
-        $testService1 = $testService->clientApps();
-        $testService2 = $testService->clientApps();
-
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $service1 = $systemUnderTest->clientApps();
+        $service2 = $systemUnderTest->clientApps();
+        
         self::checkServices(
-            $testService,
-            $testService1,
-            $testService2
+            $systemUnderTest,
+            $service1,
+            $service2
         );
     }
 }
