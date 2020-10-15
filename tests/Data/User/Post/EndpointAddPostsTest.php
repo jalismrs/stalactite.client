@@ -28,10 +28,10 @@ class EndpointAddPostsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->add(
+        $testService->add(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()
@@ -47,10 +47,10 @@ class EndpointAddPostsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->add(
+        $testService->add(
             ModelFactory::getTestableUser(),
             ['not a post'],
             JwtFactory::create()
@@ -63,13 +63,12 @@ class EndpointAddPostsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodNotCalledOnEmptyPostList(): void
     {
-        $mockClient = $this->createMock(Client::class);
-        $mockClient->expects(static::never())
-            ->method('request');
+        $mockClient = $this->createMockClient(false);
+    
+        $testService = new Service($mockClient);
 
-        $mockService = new Service($mockClient);
-
-        $response = $mockService->add(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        $response = $testService->add(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        
         self::assertNull($response);
     }
 
@@ -79,7 +78,9 @@ class EndpointAddPostsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->add(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->add(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
     }
 }

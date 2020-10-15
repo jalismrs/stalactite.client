@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -32,9 +33,8 @@ class EndpointCreateTest extends AbstractTestEndpoint
      */
     public function testCreate(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = ClientFactory::createClient();
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -46,8 +46,10 @@ class EndpointCreateTest extends AbstractTestEndpoint
                 )
             )
         );
+        
+        $testService = new Service($testClient);
 
-        $response = $mockService->create(ModelFactory::getTestableClientApp()->setUid(null), JwtFactory::create());
+        $response = $testService->create(ModelFactory::getTestableClientApp()->setUid(null), JwtFactory::create());
 
         self::assertInstanceOf(ClientApp::class, $response->getBody());
     }
@@ -59,7 +61,9 @@ class EndpointCreateTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->create(ModelFactory::getTestableClientApp(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->create(ModelFactory::getTestableClientApp(), JwtFactory::create());
     }
 }

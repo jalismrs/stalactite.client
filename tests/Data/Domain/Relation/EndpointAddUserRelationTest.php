@@ -28,9 +28,9 @@ class EndpointAddUserRelationTest extends AbstractTestEndpoint
      */
     public function testAddUserRelation(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -45,7 +45,7 @@ class EndpointAddUserRelationTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->addUserRelation(
+        $response = $testService->addUserRelation(
             ModelFactory::getTestableDomain(),
             ModelFactory::getTestableUser(),
             JwtFactory::create()
@@ -63,10 +63,10 @@ class EndpointAddUserRelationTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->addUserRelation(
+        $testService->addUserRelation(
             ModelFactory::getTestableDomain()->setUid(null),
             ModelFactory::getTestableUser(),
             JwtFactory::create()
@@ -82,10 +82,10 @@ class EndpointAddUserRelationTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->addUserRelation(
+        $testService->addUserRelation(
             ModelFactory::getTestableDomain(),
             ModelFactory::getTestableUser()->setUid(null),
             JwtFactory::create()
@@ -98,9 +98,11 @@ class EndpointAddUserRelationTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
 
-        $mockService->addUserRelation(
+        $testService->addUserRelation(
             ModelFactory::getTestableDomain(),
             ModelFactory::getTestableUser(),
             JwtFactory::create()

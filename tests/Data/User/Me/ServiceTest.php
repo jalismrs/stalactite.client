@@ -4,71 +4,77 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me;
 
 use Jalismrs\Stalactite\Client\Data\User\Me\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
+use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
 class ServiceTest extends AbstractTestService
 {
     public function testLead(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->leads();
-        $mockService2 = $mockService->leads();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->leads();
+        $testService2 = $testService->leads();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testPost(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->posts();
-        $mockService2 = $mockService->posts();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->posts();
+        $testService2 = $testService->posts();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testAccess(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->access();
-        $mockService2 = $mockService->access();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->access();
+        $testService2 = $testService->access();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testRelation(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->relations();
-        $mockService2 = $mockService->relations();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->relations();
+        $testService2 = $testService->relations();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testSubordinate(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->subordinates();
-        $mockService2 = $mockService->subordinates();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->subordinates();
+        $testService2 = $testService->subordinates();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 }

@@ -33,9 +33,9 @@ class EndpointGetUsersTest extends AbstractTestEndpoint
      */
     public function testGetUsers(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     Normalizer::getInstance()
@@ -49,7 +49,7 @@ class EndpointGetUsersTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->getUsers(ModelFactory::getTestablePost(), JwtFactory::create());
+        $response = $testService->getUsers(ModelFactory::getTestablePost(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
     }
@@ -63,10 +63,10 @@ class EndpointGetUsersTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->getUsers(ModelFactory::getTestablePost()->setUid(null), JwtFactory::create());
+        $testService->getUsers(ModelFactory::getTestablePost()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -75,7 +75,9 @@ class EndpointGetUsersTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->getUsers(ModelFactory::getTestablePost(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->getUsers(ModelFactory::getTestablePost(), JwtFactory::create());
     }
 }

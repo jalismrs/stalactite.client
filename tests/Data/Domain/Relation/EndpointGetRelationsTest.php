@@ -29,9 +29,9 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
      */
     public function testGetRelations(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     'users' => [
@@ -58,7 +58,7 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $response = $testService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
 
         static::assertIsArray($response->getBody());
 
@@ -78,10 +78,10 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->all(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
+        $testService->all(ModelFactory::getTestableDomain()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -90,7 +90,9 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->all(ModelFactory::getTestableDomain(), JwtFactory::create());
     }
 }

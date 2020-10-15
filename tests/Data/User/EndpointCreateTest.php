@@ -32,9 +32,9 @@ class EndpointCreateTest extends AbstractTestEndpoint
      */
     public function testCreate(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -49,7 +49,7 @@ class EndpointCreateTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->create(ModelFactory::getTestableUser(), JwtFactory::create());
+        $response = $testService->create(ModelFactory::getTestableUser(), JwtFactory::create());
 
         self::assertInstanceOf(User::class, $response->getBody());
     }
@@ -61,7 +61,9 @@ class EndpointCreateTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->create(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->create(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 }

@@ -31,10 +31,10 @@ class EndpointUpdateTest extends AbstractTestEndpoint
         $this->expectException(AuthenticationServiceException::class);
         $this->expectExceptionCode(AuthenticationServiceException::MISSING_CLIENT_APP_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->update(ModelFactory::getTestableClientApp()->setUid(null), JwtFactory::create());
+        $testService->update(ModelFactory::getTestableClientApp()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -45,7 +45,9 @@ class EndpointUpdateTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->update(ModelFactory::getTestableClientApp(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->update(ModelFactory::getTestableClientApp(), JwtFactory::create());
     }
 }

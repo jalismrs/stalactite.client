@@ -17,7 +17,9 @@ class EndpointValidateTest extends AbstractTestEndpoint
     public function testRequestMethodCalledOnce(): void
     {
         $mockToken = (new Builder())->relatedTo('test-user')->getToken();
-        $mockService = new Service($this->createMockClient());
-        $mockService->validate($mockToken);
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->validate($mockToken);
     }
 }

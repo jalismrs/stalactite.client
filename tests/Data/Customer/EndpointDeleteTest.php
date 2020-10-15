@@ -27,10 +27,10 @@ class EndpointDeleteTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_CUSTOMER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->delete(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
+        $testService->delete(ModelFactory::getTestableCustomer()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -39,7 +39,9 @@ class EndpointDeleteTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->delete(ModelFactory::getTestableCustomer(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->delete(ModelFactory::getTestableCustomer(), JwtFactory::create());
     }
 }

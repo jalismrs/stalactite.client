@@ -32,9 +32,9 @@ class EndpointGetAllTest extends AbstractTestEndpoint
      */
     public function testGetAll(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     Normalizer::getInstance()
@@ -50,7 +50,7 @@ class EndpointGetAllTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->get(ModelFactory::getTestableUser(), JwtFactory::create());
+        $response = $testService->get(ModelFactory::getTestableUser(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -64,10 +64,10 @@ class EndpointGetAllTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->get(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        $testService->get(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -76,9 +76,11 @@ class EndpointGetAllTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
 
-        $mockService->get(
+        $testService->get(
             ModelFactory::getTestableUser(),
             JwtFactory::create()
         );

@@ -5,6 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
 use Jalismrs\Stalactite\Client\Data\Customer\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
+use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
 /**
  * ServiceTest
@@ -15,40 +16,43 @@ class ServiceTest extends AbstractTestService
 {
     public function testMe(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->me();
-        $mockService2 = $mockService->me();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->me();
+        $testService2 = $testService->me();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testAccess(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->access();
-        $mockService2 = $mockService->access();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->access();
+        $testService2 = $testService->access();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testRelation(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->relations();
-        $mockService2 = $mockService->relations();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->relations();
+        $testService2 = $testService->relations();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 }

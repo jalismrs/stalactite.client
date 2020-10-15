@@ -32,64 +32,64 @@ class ClientTest extends
     public function testGetHost() : void
     {
         $host       = 'http://fakeHost';
-        $mockClient = new Client($host);
+        $testClient = new Client($host);
         
         self::assertSame(
             $host,
-            $mockClient->getHost()
+            $testClient->getHost()
         );
     }
     
     public function testGetUserAgentDefault() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $testClient = new Client('http://fakeHost');
         
-        self::assertNull($mockClient->getUserAgent());
+        self::assertNull($testClient->getUserAgent());
     }
     
     public function testGetUserAgent() : void
     {
         $userAgent  = 'fake user agent';
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setUserAgent($userAgent);
+        $testClient = new Client('http://fakeHost');
+        $testClient->setUserAgent($userAgent);
         
         self::assertSame(
             $userAgent,
-            $mockClient->getUserAgent()
+            $testClient->getUserAgent()
         );
     }
     
     public function testGetHttpClient() : void
     {
         $httpClient = new MockHttpClient();
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient($httpClient);
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient($httpClient);
         
         self::assertSame(
             $httpClient,
-            $mockClient->getHttpClient()
+            $testClient->getHttpClient()
         );
     }
     
     public function testGetLogger() : void
     {
         $logger     = new TestLogger();
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setLogger($logger);
+        $testClient = new Client('http://fakeHost');
+        $testClient->setLogger($logger);
         
         self::assertSame(
             $logger,
-            $mockClient->getLogger()
+            $testClient->getLogger()
         );
     }
     
     public function testGetLoggerDefault() : void
     {
-        $mockClient = new Client('http://fakeHost');
+        $testClient = new Client('http://fakeHost');
         
         self::assertInstanceOf(
             NullLogger::class,
-            $mockClient->getLogger()
+            $testClient->getLogger()
         );
     }
     
@@ -98,12 +98,12 @@ class ClientTest extends
      */
     public function testExceptionThrownOnInvalidAPIHost() : void
     {
-        $mockClient = new Client('invalidHost');
+        $testClient = new Client('invalidHost');
         $endpoint   = new Endpoint('/');
         
         $throwable = null;
         try {
-            $mockClient->request($endpoint);
+            $testClient->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -128,13 +128,13 @@ class ClientTest extends
     {
         $responseBody = 'response body';
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
         $endpoint = new Endpoint('/');
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertSame(
             $responseBody,
@@ -151,8 +151,8 @@ class ClientTest extends
     {
         $responseBody = ['key' => 'value'];
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     $responseBody,
@@ -170,7 +170,7 @@ class ClientTest extends
             )
         );
         
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertSame(
             $responseBody,
@@ -185,8 +185,8 @@ class ClientTest extends
     {
         $responseBody = 'invalid{}json';
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
@@ -202,7 +202,7 @@ class ClientTest extends
         
         $throwable = null;
         try {
-            $mockClient->request($endpoint);
+            $testClient->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -240,8 +240,8 @@ class ClientTest extends
             'invalid' => 'body',
         ];
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     $responseBody,
@@ -263,7 +263,7 @@ class ClientTest extends
         $throwable = null;
         try {
             // this will throw : invalid response body schema
-            $mockClient->request($endpoint);
+            $testClient->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -301,8 +301,8 @@ class ClientTest extends
      */
     public function testRequestWithValidationSchemaAndResponseFormatter() : void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
@@ -330,7 +330,7 @@ class ClientTest extends
                 }
             );
         
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertSame(
             ['item' => 1],
@@ -346,8 +346,8 @@ class ClientTest extends
     {
         $responseBody = 'abcdef';
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create($responseBody)
         );
         
@@ -363,7 +363,7 @@ class ClientTest extends
             }
         );
         
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         // response not changed
         self::assertSame(
@@ -386,8 +386,8 @@ class ClientTest extends
             null
         );
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -404,7 +404,7 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertInstanceOf(
             ApiError::class,
@@ -420,8 +420,8 @@ class ClientTest extends
         $responseBody = 'invalid-api-error-format';
         $responseCode = 404;
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 $responseBody,
                 ['http_code' => $responseCode] // invalid API error format
@@ -433,7 +433,7 @@ class ClientTest extends
         $throwable = null;
         try {
             // this will throw : response body is not a valid json
-            $mockClient->request($endpoint);
+            $testClient->request($endpoint);
         } catch (Throwable $t) {
             $throwable = $t;
         }
@@ -474,8 +474,8 @@ class ClientTest extends
     {
         $responseCode = 204; // not 200 (default response http code)
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 '',
                 [
@@ -485,7 +485,7 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertSame(
             $responseCode,
@@ -504,8 +504,8 @@ class ClientTest extends
             'fake-header2' => ['fakeValue2'],
         ];
         
-        $mockClient = new Client('http://fakeHost');
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 '',
                 [
@@ -515,7 +515,7 @@ class ClientTest extends
         );
         
         $endpoint = new Endpoint('/');
-        $response = $mockClient->request($endpoint);
+        $response = $testClient->request($endpoint);
         
         self::assertSame(
             $responseHeaders,

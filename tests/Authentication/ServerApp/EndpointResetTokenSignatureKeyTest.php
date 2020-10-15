@@ -28,9 +28,9 @@ class EndpointResetTokenSignatureKeyTest extends AbstractTestEndpoint
     public function testResetTokenSignatureKey(): void
     {
         $serverApp = ModelFactory::getTestableServerApp();
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -43,7 +43,7 @@ class EndpointResetTokenSignatureKeyTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->resetTokenSignatureKey($serverApp, JwtFactory::create());
+        $response = $testService->resetTokenSignatureKey($serverApp, JwtFactory::create());
 
         self::assertInstanceOf(ServerApp::class, $response->getBody());
     }
@@ -58,10 +58,10 @@ class EndpointResetTokenSignatureKeyTest extends AbstractTestEndpoint
         $this->expectException(AuthenticationServiceException::class);
         $this->expectExceptionCode(AuthenticationServiceException::MISSING_SERVER_APP_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->resetTokenSignatureKey(
+        $testService->resetTokenSignatureKey(
             ModelFactory::getTestableServerApp()->setUid(null),
             JwtFactory::create()
         );
@@ -75,7 +75,9 @@ class EndpointResetTokenSignatureKeyTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->resetTokenSignatureKey(ModelFactory::getTestableServerApp(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->resetTokenSignatureKey(ModelFactory::getTestableServerApp(), JwtFactory::create());
     }
 }

@@ -4,19 +4,21 @@ namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
 use Jalismrs\Stalactite\Client\Data\Post\Service;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestService;
+use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 
 class ServiceTest extends AbstractTestService
 {
     public function testPermission(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->permissions();
-        $mockService2 = $mockService->permissions();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->permissions();
+        $testService2 = $testService->permissions();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 }

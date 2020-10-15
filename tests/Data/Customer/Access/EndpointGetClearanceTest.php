@@ -27,9 +27,9 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
      */
     public function testGetClearance(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -44,7 +44,7 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->clearance(
+        $response = $testService->clearance(
             ModelFactory::getTestableCustomer(),
             ModelFactory::getTestableDomain(),
             JwtFactory::create()
@@ -62,10 +62,10 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_CUSTOMER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->clearance(
+        $testService->clearance(
             ModelFactory::getTestableCustomer()->setUid(null),
             ModelFactory::getTestableDomain(),
             JwtFactory::create()
@@ -81,11 +81,11 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
 
-        $mockService->clearance(
+        $testService->clearance(
             ModelFactory::getTestableCustomer(),
             ModelFactory::getTestableDomain()->setUid(null),
             JwtFactory::create()
@@ -98,8 +98,10 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->clearance(
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->clearance(
             ModelFactory::getTestableCustomer(),
             ModelFactory::getTestableDomain(),
             JwtFactory::create()

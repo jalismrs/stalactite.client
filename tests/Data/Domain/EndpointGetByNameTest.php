@@ -31,9 +31,9 @@ class EndpointGetByNameTest extends AbstractTestEndpoint
      */
     public function testGetByName(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -47,7 +47,7 @@ class EndpointGetByNameTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
+        $response = $testService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
 
         self::assertInstanceOf(Domain::class, $response->getBody());
     }
@@ -58,7 +58,9 @@ class EndpointGetByNameTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->getByName(ModelFactory::getTestableDomain()->getName(), JwtFactory::create());
     }
 }

@@ -27,9 +27,9 @@ class EndpointGetSubordinates extends AbstractTestEndpoint
      */
     public function testGetUserSubordinates(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     Normalizer::getInstance()
@@ -43,7 +43,7 @@ class EndpointGetSubordinates extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->all(ModelFactory::getTestableUser(), JwtFactory::create());
+        $response = $testService->all(ModelFactory::getTestableUser(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(User::class, $response->getBody());
     }
@@ -57,10 +57,10 @@ class EndpointGetSubordinates extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->all(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
+        $testService->all(ModelFactory::getTestableUser()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -69,7 +69,9 @@ class EndpointGetSubordinates extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->all(ModelFactory::getTestableUser(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->all(ModelFactory::getTestableUser(), JwtFactory::create());
     }
 }

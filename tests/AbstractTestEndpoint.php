@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
@@ -12,30 +12,36 @@ use PHPUnit\Framework\TestCase;
  *
  * @package Jalismrs\Stalactite\Client\Tests
  */
-abstract class AbstractTestEndpoint extends TestCase
+abstract class AbstractTestEndpoint extends
+    TestCase
 {
-    /**
-     * createMockClient
-     *
-     * @return Client
-     *
-     * @throws RuntimeException
-     */
-    final protected function createMockClient(): Client
-    {
-        $mock = $this->createMock(Client::class);
-
-        $mock
-            ->expects(static::once())
-            ->method('request');
-
-        return $mock;
-    }
-
     /**
      * testRequestMethodCalledOnce
      *
      * @return void
      */
-    abstract public function testRequestMethodCalledOnce(): void;
+    abstract public function testRequestMethodCalledOnce() : void;
+    
+    /**
+     * createMockClient
+     *
+     * @param bool $requestCalled
+     *
+     * @return \Jalismrs\Stalactite\Client\Client
+     */
+    final protected function createMockClient(
+        bool $requestCalled = true
+    ) : Client {
+        $mockClient = $this->createMock(Client::class);
+        
+        $mockClient
+            ->expects(
+                $requestCalled
+                    ? self::once()
+                    : self::never()
+            )
+            ->method('request');
+        
+        return $mockClient;
+    }
 }

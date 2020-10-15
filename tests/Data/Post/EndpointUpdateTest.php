@@ -29,10 +29,10 @@ class EndpointUpdateTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->update(ModelFactory::getTestablePost()->setUid(null), JwtFactory::create());
+        $testService->update(ModelFactory::getTestablePost()->setUid(null), JwtFactory::create());
     }
 
     /**
@@ -42,7 +42,9 @@ class EndpointUpdateTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->update(ModelFactory::getTestablePost(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->update(ModelFactory::getTestablePost(), JwtFactory::create());
     }
 }

@@ -26,9 +26,9 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
      */
     public function testGetRelations(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     Normalizer::getInstance()
@@ -43,7 +43,7 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->all(ModelFactory::getTestableCustomer(), JwtFactory::create());
+        $response = $testService->all(ModelFactory::getTestableCustomer(), JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(DomainCustomerRelation::class, $response->getBody());
     }
@@ -54,7 +54,9 @@ class EndpointGetRelationsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->all(ModelFactory::getTestableCustomer(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->all(ModelFactory::getTestableCustomer(), JwtFactory::create());
     }
 }

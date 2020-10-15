@@ -27,10 +27,10 @@ class EndpointRemovePostsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->remove(
+        $testService->remove(
             ModelFactory::getTestableUser()->setUid(null),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()
@@ -46,10 +46,10 @@ class EndpointRemovePostsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->remove(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
+        $testService->remove(ModelFactory::getTestableUser(), ['not a post'], JwtFactory::create());
     }
 
     /**
@@ -58,13 +58,11 @@ class EndpointRemovePostsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodNotCalledOnEmptyPostList(): void
     {
-        $mockClient = $this->createMock(Client::class);
-        $mockClient->expects(static::never())
-            ->method('request');
+        $mockClient = $this->createMockClient(false);
+    
+        $testService = new Service($mockClient);
 
-        $mockService = new Service($mockClient);
-
-        $response = $mockService->remove(ModelFactory::getTestableUser(), [], JwtFactory::create());
+        $response = $testService->remove(ModelFactory::getTestableUser(), [], JwtFactory::create());
         self::assertNull($response);
     }
 
@@ -74,7 +72,9 @@ class EndpointRemovePostsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->remove(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->remove(ModelFactory::getTestableUser(), [ModelFactory::getTestablePost()], JwtFactory::create());
     }
 }

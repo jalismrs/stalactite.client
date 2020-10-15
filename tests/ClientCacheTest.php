@@ -19,31 +19,40 @@ class ClientCacheTest extends
     TestCase
 {
     /**
-     * @var Client|MockObject $client
+     * mockCache
+     *
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\SimpleCache\CacheInterface
      */
-    private MockObject $client;
+    private MockObject $mockCache;
+    /**
+     * mockClient
+     *
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Jalismrs\Stalactite\Client\Client
+     */
+    private MockObject $mockClient;
     
     /**
-     * @var MockObject|CacheInterface $cache
+     * setUp
+     *
+     * @return void
      */
-    private MockObject $cache;
-    
-    public function setUp() : void
+    protected function setUp() : void
     {
-        $this->cache = $this->createMock(CacheInterface::class);
+        $this->mockCache = $this->createMock(CacheInterface::class);
         
-        $this->client = $this->getMockBuilder(Client::class)
-                             ->onlyMethods(
-                                 [
-                                     'cache',
-                                     'getFromCache',
-                                     'getHttpClient',
-                                 ]
-                             )
-                             ->setConstructorArgs(['http://fakeHost'])
-                             ->getMock();
+        $this->mockClient = $this
+            ->getMockBuilder(Client::class)
+            ->onlyMethods(
+                [
+                    'cache',
+                    'getFromCache',
+                    'getHttpClient',
+                ]
+            )
+            ->setConstructorArgs(['http://fakeHost'])
+            ->getMock();
         
-        $this->client->setCache($this->cache);
+        $this->mockClient->setCache($this->mockCache);
     }
     
     /**
@@ -51,12 +60,11 @@ class ClientCacheTest extends
      */
     public function testSetCache() : void
     {
-        $client = new Client('http://fakeHost');
-        $client->setCache($this->cache);
+        $this->mockCache
+            ->expects(self::once())
+            ->method('set');
         
-        $this->cache->expects(self::once())
-                    ->method('set');
-        $client->cache(
+        $this->mockClient->cache(
             'GET',
             '/test',
             'test'
@@ -68,12 +76,11 @@ class ClientCacheTest extends
      */
     public function testGetFromCache() : void
     {
-        $client = new Client('http://fakeHost');
-        $client->setCache($this->cache);
-        
-        $this->cache->expects(self::once())
-                    ->method('get');
-        $client->getFromCache(
+        $this->mockCache
+            ->expects(self::once())
+            ->method('get');
+    
+        $this->mockClient->getFromCache(
             'GET',
             '/test'
         );
@@ -88,20 +95,23 @@ class ClientCacheTest extends
      */
     public function testEndpointCache(Endpoint $endpoint) : void
     {
-        $this->client->expects(self::once())
-                     ->method('getFromCache')
-                     ->willReturn(null);
-        $this->client->expects(self::once())
-                     ->method('getHttpClient')
-                     ->willReturn(MockHttpClientFactory::create('test'));
-        $this->client->expects(
-            $endpoint->isCacheable()
-                ? self::once()
-                : self::never()
-        )
-                     ->method('cache');
+        $this->mockClient
+            ->expects(self::once())
+            ->method('getFromCache')
+            ->willReturn(null);
+        $this->mockClient
+            ->expects(self::once())
+            ->method('getHttpClient')
+            ->willReturn(MockHttpClientFactory::create('test'));
+        $this->mockClient
+            ->expects(
+                $endpoint->isCacheable()
+                    ? self::once()
+                    : self::never()
+            )
+            ->method('cache');
         
-        $this->client->request($endpoint);
+        $this->mockClient->request($endpoint);
     }
     
     /**
@@ -130,16 +140,19 @@ class ClientCacheTest extends
         $endpoint       = new Endpoint('/test'); // cacheable
         $cachedResponse = 'test';
         
-        $this->client->expects(self::never())
-                     ->method('getHttpClient');     // http client not called
-        $this->client->expects(self::never())
-                     ->method('cache');             // cache not set
-        $this->client->expects(self::once())
-                     ->method('getFromCache')
-                     ->willReturn($cachedResponse); // cache checked
+        $this->mockClient
+            ->expects(self::never())
+            ->method('getHttpClient');     // http client not called
+        $this->mockClient
+            ->expects(self::never())
+            ->method('cache');             // cache not set
+        $this->mockClient
+            ->expects(self::once())
+            ->method('getFromCache')
+            ->willReturn($cachedResponse); // cache checked
         
         // get cached value
-        $response = $this->client->request($endpoint);
+        $response = $this->mockClient->request($endpoint);
         self::assertSame(
             $cachedResponse,
             $response->getBody()
@@ -160,7 +173,7 @@ class ClientCacheTest extends
         array $options,
         bool $shouldCache
     ) : void {
-        $this->client
+        $this->mockClient
             ->expects(self::once())
             ->method('getHttpClient')
             ->willReturn(
@@ -170,14 +183,15 @@ class ClientCacheTest extends
                 )
             );
         
-        $this->client->expects(
-            $shouldCache
-                ? self::once()
-                : self::never()
-        )
-                     ->method('cache');
+        $this->mockClient
+            ->expects(
+                $shouldCache
+                    ? self::once()
+                    : self::never()
+            )
+            ->method('cache');
         
-        $this->client->request(new Endpoint('/test'));
+        $this->mockClient->request(new Endpoint('/test'));
     }
     
     /**

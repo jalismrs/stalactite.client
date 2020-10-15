@@ -31,9 +31,9 @@ class EndpointGetByNameAndApiKeyTest extends AbstractTestEndpoint
      */
     public function testGetByName(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -49,7 +49,7 @@ class EndpointGetByNameAndApiKeyTest extends AbstractTestEndpoint
 
         $domain = ModelFactory::getTestableDomain();
 
-        $response = $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
+        $response = $testService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
 
         self::assertInstanceOf(Domain::class, $response->getBody());
     }
@@ -60,8 +60,10 @@ class EndpointGetByNameAndApiKeyTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
         $domain = ModelFactory::getTestableDomain();
-        $mockService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
+        $testService->getByNameAndApiKey($domain->getName(), $domain->getApiKey(), JwtFactory::create());
     }
 }

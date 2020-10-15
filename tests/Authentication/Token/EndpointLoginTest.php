@@ -29,9 +29,9 @@ class EndpointLoginTest extends AbstractTestEndpoint
     public function testLogin(): void
     {
         $mockToken = (new Builder())->relatedTo('test-user')->getToken();
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     ['token' => (string)$mockToken],
@@ -41,7 +41,7 @@ class EndpointLoginTest extends AbstractTestEndpoint
         );
 
         // assert valid return and response content
-        $response = $mockService->login(
+        $response = $testService->login(
             ModelFactory::getTestableClientApp(),
             'fakeUserGoogleToken'
         );
@@ -60,9 +60,9 @@ class EndpointLoginTest extends AbstractTestEndpoint
         $this->expectException(AuthenticationServiceException::class);
         $this->expectExceptionCode(AuthenticationServiceException::INVALID_TOKEN);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     ['token' => 'yolo'],
@@ -72,7 +72,7 @@ class EndpointLoginTest extends AbstractTestEndpoint
         );
 
         // assert valid return and response content
-        $mockService->login(ModelFactory::getTestableClientApp(), 'fakeUserGoogleToken');
+        $testService->login(ModelFactory::getTestableClientApp(), 'fakeUserGoogleToken');
     }
 
     /**
@@ -81,7 +81,9 @@ class EndpointLoginTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->login(ModelFactory::getTestableClientApp(), 'fakeUserGoogleToken');
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->login(ModelFactory::getTestableClientApp(), 'fakeUserGoogleToken');
     }
 }

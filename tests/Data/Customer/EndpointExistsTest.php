@@ -17,7 +17,9 @@ class EndpointExistsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->exists(ModelFactory::getTestableCustomer()->getUid(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->exists(ModelFactory::getTestableCustomer()->getUid(), JwtFactory::create());
     }
 }

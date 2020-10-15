@@ -22,10 +22,10 @@ class EndpointDeleteRelationsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->deleteAll(
+        $testService->deleteAll(
             ModelFactory::getTestableDomain()->setUid(null),
             JwtFactory::create()
         );
@@ -37,9 +37,11 @@ class EndpointDeleteRelationsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
 
-        $mockService->deleteAll(
+        $testService->deleteAll(
             ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );

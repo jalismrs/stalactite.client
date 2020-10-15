@@ -26,9 +26,9 @@ class EndpointGetMyPostsTest extends AbstractTestEndpoint
      */
     public function testGetMyPosts(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode([
                     Normalizer::getInstance()
@@ -42,7 +42,7 @@ class EndpointGetMyPostsTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->all(JwtFactory::create());
+        $response = $testService->all(JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(Post::class, $response->getBody());
     }
@@ -53,7 +53,9 @@ class EndpointGetMyPostsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->all(JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->all(JwtFactory::create());
     }
 }

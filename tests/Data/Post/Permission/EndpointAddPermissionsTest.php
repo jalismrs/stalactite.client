@@ -23,10 +23,10 @@ class EndpointAddPermissionsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->addPermissions(ModelFactory::getTestablePost()->setUid(null), [], JwtFactory::create());
+        $testService->addPermissions(ModelFactory::getTestablePost()->setUid(null), [], JwtFactory::create());
     }
 
     /**
@@ -38,10 +38,10 @@ class EndpointAddPermissionsTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
-        $mockService->addPermissions(ModelFactory::getTestablePost(), ['not a permission'], JwtFactory::create());
+        $testService->addPermissions(ModelFactory::getTestablePost(), ['not a permission'], JwtFactory::create());
     }
 
     /**
@@ -50,13 +50,12 @@ class EndpointAddPermissionsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodNotCalledOnEmptyPermissionList(): void
     {
-        $mockClient = $this->createMock(Client::class);
-        $mockClient->expects(static::never())
-            ->method('request');
+        $mockClient = $this->createMockClient(false);
+    
+        $testService = new Service($mockClient);
 
-        $mockService = new Service($mockClient);
-
-        $response = $mockService->addPermissions(ModelFactory::getTestablePost(), [], JwtFactory::create());
+        $response = $testService->addPermissions(ModelFactory::getTestablePost(), [], JwtFactory::create());
+        
         self::assertNull($response);
     }
 
@@ -66,8 +65,10 @@ class EndpointAddPermissionsTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $response = $mockService->addPermissions(ModelFactory::getTestablePost(), [ModelFactory::getTestablePermission()], JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $response = $testService->addPermissions(ModelFactory::getTestablePost(), [ModelFactory::getTestablePermission()], JwtFactory::create());
         self::assertInstanceOf(Response::class, $response);
     }
 }

@@ -27,9 +27,9 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
      */
     public function testGetClearance(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -44,7 +44,7 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->clearance(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $response = $testService->clearance(ModelFactory::getTestableDomain(), JwtFactory::create());
 
         self::assertInstanceOf(AccessClearance::class, $response->getBody());
     }
@@ -58,11 +58,11 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
 
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
 
 
-        $mockService->clearance(
+        $testService->clearance(
             ModelFactory::getTestableDomain()->setUid(null),
             JwtFactory::create()
         );
@@ -74,7 +74,9 @@ class EndpointGetClearanceTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->clearance(ModelFactory::getTestableDomain(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->clearance(ModelFactory::getTestableDomain(), JwtFactory::create());
     }
 }

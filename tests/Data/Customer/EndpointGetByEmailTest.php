@@ -26,9 +26,9 @@ class EndpointGetByEmailTest extends AbstractTestEndpoint
      */
     public function testGetByEmailAndGoogleId(): void
     {
-        $mockClient = new Client('http://fakeHost');
-        $mockService = new Service($mockClient);
-        $mockClient->setHttpClient(
+        $testClient = new Client('http://fakeHost');
+        $testService = new Service($testClient);
+        $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
@@ -43,7 +43,7 @@ class EndpointGetByEmailTest extends AbstractTestEndpoint
             )
         );
 
-        $response = $mockService->getByEmail(ModelFactory::getTestableCustomer()->getEmail(), JwtFactory::create());
+        $response = $testService->getByEmail(ModelFactory::getTestableCustomer()->getEmail(), JwtFactory::create());
 
         self::assertInstanceOf(Customer::class, $response->getBody());
     }
@@ -54,7 +54,9 @@ class EndpointGetByEmailTest extends AbstractTestEndpoint
      */
     public function testRequestMethodCalledOnce(): void
     {
-        $mockService = new Service($this->createMockClient());
-        $mockService->getByEmail(ModelFactory::getTestableCustomer()->getEmail(), JwtFactory::create());
+        $mockClient = $this->createMockClient();
+        $testService = new Service($mockClient);
+        
+        $testService->getByEmail(ModelFactory::getTestableCustomer()->getEmail(), JwtFactory::create());
     }
 }

@@ -14,27 +14,30 @@ class ServiceTest extends AbstractTestService
 {
     public function testAuthentication(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->authentication();
-        $mockService2 = $mockService->authentication();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        
+        $testService1 = $testService->authentication();
+        $testService2 = $testService->authentication();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 
     public function testData(): void
     {
-        $mockService = new Service(self::getMockClient());
-        $mockService1 = $mockService->data();
-        $mockService2 = $mockService->data();
+        $testClient = ClientFactory::createClient();
+        $testService = new Service($testClient);
+        $testService1 = $testService->data();
+        $testService2 = $testService->data();
 
         self::checkServices(
-            $mockService,
-            $mockService1,
-            $mockService2
+            $testService,
+            $testService1,
+            $testService2
         );
     }
 }
