@@ -12,9 +12,9 @@ use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * ApiUpdateTest
+ * Class EndpointUpdateTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\ClientApp
  */
 class EndpointUpdateTest extends
     AbstractTestEndpoint

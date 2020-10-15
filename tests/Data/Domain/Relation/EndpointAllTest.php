@@ -19,11 +19,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetRelationsTest
+ * Class EndpointAllTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Domain\Relation
  */
-class EndpointGetRelationsTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;

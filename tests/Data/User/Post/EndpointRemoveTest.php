@@ -1,21 +1,21 @@
 <?php
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Post\Permission;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
-use Jalismrs\Stalactite\Client\Util\Response;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class EndpointAddPermissionsTest
+ * Class EndpointRemoveTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Post\Permission
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
  */
-class EndpointAddPermissionsTest extends
+class EndpointRemoveTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -27,14 +27,14 @@ class EndpointAddPermissionsTest extends
     public function testThrowLacksUid() : void
     {
         $this->expectException(DataServiceException::class);
-        $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
+        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost()
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser()
                         ->setUid(null),
-            [],
+            [ModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
@@ -43,16 +43,16 @@ class EndpointAddPermissionsTest extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPermissionList() : void
+    public function testThrowOnInvalidPostsParameterRemovePosts() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
-            ['not a permission'],
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser(),
+            ['not a post'],
             JwtFactory::create()
         );
     }
@@ -61,18 +61,17 @@ class EndpointAddPermissionsTest extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodNotCalledOnEmptyPermissionList() : void
+    public function testRequestMethodNotCalledOnEmptyPostList() : void
     {
         $mockClient = $this->createMockClient(false);
         
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $response = $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
+        $response = $systemUnderTest->remove(
+            ModelFactory::getTestableUser(),
             [],
             JwtFactory::create()
         );
-        
         self::assertNull($response);
     }
     
@@ -85,14 +84,10 @@ class EndpointAddPermissionsTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $response = $systemUnderTest->addPermissions(
-            ModelFactory::getTestablePost(),
-            [ModelFactory::getTestablePermission()],
+        $systemUnderTest->remove(
+            ModelFactory::getTestableUser(),
+            [ModelFactory::getTestablePost()],
             JwtFactory::create()
-        );
-        self::assertInstanceOf(
-            Response::class,
-            $response
         );
     }
 }

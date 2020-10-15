@@ -18,7 +18,7 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiGetUsersTest
+ * Class EndpointGetUsersTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Post
  */

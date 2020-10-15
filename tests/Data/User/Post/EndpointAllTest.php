@@ -1,10 +1,12 @@
 <?php
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Relation;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
-use Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
+use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
@@ -16,22 +18,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetRelationsTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Relation
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
  */
-class EndpointGetRelationsTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
-     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
-    public function testGetRelations() : void
+    public function testRequest() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -40,10 +42,9 @@ class EndpointGetRelationsTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableDomainUserRelation(),
+                                      ModelFactory::getTestablePost(),
                                       [
-                                          AbstractNormalizer::GROUPS             => ['main'],
-                                          AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
+                                          AbstractNormalizer::GROUPS => ['main'],
                                       ]
                                   ),
                     ],
@@ -54,11 +55,32 @@ class EndpointGetRelationsTest extends
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
-        $response = $systemUnderTest->all(JwtFactory::create());
+        $response = $systemUnderTest->get(
+            ModelFactory::getTestableUser(),
+            JwtFactory::create()
+        );
         
         self::assertContainsOnlyInstancesOf(
-            DomainUserRelation::class,
+            Post::class,
             $response->getBody()
+        );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function testThrowLacksUid() : void
+    {
+        $this->expectException(DataServiceException::class);
+        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
+        
+        $systemUnderTest = $this->createSystemUnderTest();
+        
+        $systemUnderTest->get(
+            ModelFactory::getTestableUser()
+                        ->setUid(null),
+            JwtFactory::create()
         );
     }
     
@@ -68,9 +90,12 @@ class EndpointGetRelationsTest extends
      */
     public function testRequestMethodCalledOnce() : void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $systemUnderTest->all(JwtFactory::create());
+        $systemUnderTest->get(
+            ModelFactory::getTestableUser(),
+            JwtFactory::create()
+        );
     }
 }

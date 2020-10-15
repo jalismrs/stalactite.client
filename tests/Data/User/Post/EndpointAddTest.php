@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -11,11 +11,11 @@ use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * ApiRemoveLeadsTest
+ * Class EndpointAddTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Post
  */
-class EndpointRemoveLeadsTest extends
+class EndpointAddTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -31,7 +31,7 @@ class EndpointRemoveLeadsTest extends
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->remove(
+        $systemUnderTest->add(
             ModelFactory::getTestableUser()
                         ->setUid(null),
             [ModelFactory::getTestablePost()],
@@ -43,18 +43,37 @@ class EndpointRemoveLeadsTest extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPostsParameterRemoveLeads() : void
+    public function testThrowOnInvalidPostsParameterAddPosts() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->remove(
+        $systemUnderTest->add(
             ModelFactory::getTestableUser(),
-            ['not a lead'],
+            ['not a post'],
             JwtFactory::create()
         );
+    }
+    
+    /**
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function testRequestMethodNotCalledOnEmptyPostList() : void
+    {
+        $mockClient = $this->createMockClient(false);
+        
+        $systemUnderTest = $this->createSystemUnderTest($mockClient);
+        
+        $response = $systemUnderTest->add(
+            ModelFactory::getTestableUser(),
+            [],
+            JwtFactory::create()
+        );
+        
+        self::assertNull($response);
     }
     
     /**
@@ -66,7 +85,7 @@ class EndpointRemoveLeadsTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $systemUnderTest->remove(
+        $systemUnderTest->add(
             ModelFactory::getTestableUser(),
             [ModelFactory::getTestablePost()],
             JwtFactory::create()

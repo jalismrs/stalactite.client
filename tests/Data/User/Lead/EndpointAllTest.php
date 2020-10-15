@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Access;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 
-use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -17,34 +18,38 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetClearanceTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Access
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Lead
  */
-class EndpointGetClearanceTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
-     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
-    public function testGetClearance() : void
+    public function testRequest() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    Normalizer::getInstance()
-                              ->normalize(
-                                  ModelFactory::getTestableAccessClearance(),
-                                  [
-                                      AbstractNormalizer::GROUPS => ['main'],
-                                  ]
-                              ),
+                    [
+                        Normalizer::getInstance()
+                                  ->normalize(
+                                      ModelFactory::getTestablePost(),
+                                      [
+                                          AbstractNormalizer::GROUPS => [
+                                              'main',
+                                          ],
+                                      ]
+                                  ),
+                    ],
                     JSON_THROW_ON_ERROR
                 )
             )
@@ -52,14 +57,13 @@ class EndpointGetClearanceTest extends
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
-        $response = $systemUnderTest->clearance(
+        $response = $systemUnderTest->get(
             ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
         
-        self::assertInstanceOf(
-            AccessClearance::class,
+        self::assertContainsOnlyInstancesOf(
+            Post::class,
             $response->getBody()
         );
     }
@@ -68,35 +72,15 @@ class EndpointGetClearanceTest extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnMissingCustomerUid() : void
+    public function testThrowLacksUid() : void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->clearance(
+        $systemUnderTest->get(
             ModelFactory::getTestableUser()
-                        ->setUid(null),
-            ModelFactory::getTestableDomain(),
-            JwtFactory::create()
-        );
-    }
-    
-    /**
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     */
-    public function testThrowOnMissingDomainUid() : void
-    {
-        $this->expectException(DataServiceException::class);
-        $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
-        
-        $systemUnderTest = $this->createSystemUnderTest();
-        
-        $systemUnderTest->clearance(
-            ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -111,9 +95,8 @@ class EndpointGetClearanceTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $systemUnderTest->clearance(
+        $systemUnderTest->get(
             ModelFactory::getTestableUser(),
-            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }

@@ -11,7 +11,7 @@ use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class ApiDeleteTest
+ * Class EndpointDeleteTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
  */

@@ -1,8 +1,8 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Post;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Subordinate;
 
-use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -16,11 +16,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetMyPostsTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Post
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Subordinate
  */
-class EndpointGetMyPostsTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -31,7 +31,7 @@ class EndpointGetMyPostsTest extends
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetMyPosts() : void
+    public function testGetUserSubordinates() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -40,7 +40,7 @@ class EndpointGetMyPostsTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestablePost(),
+                                      ModelFactory::getTestableUser(),
                                       [
                                           AbstractNormalizer::GROUPS => ['main'],
                                       ]
@@ -56,7 +56,7 @@ class EndpointGetMyPostsTest extends
         $response = $systemUnderTest->all(JwtFactory::create());
         
         self::assertContainsOnlyInstancesOf(
-            Post::class,
+            User::class,
             $response->getBody()
         );
     }

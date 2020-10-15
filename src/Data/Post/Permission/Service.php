@@ -25,6 +25,8 @@ class Service extends AbstractService
      */
     public function addPermissions(Post $post, array $permissions, Token $jwt): ?Response
     {
+        // TODO: rename 'add'
+    
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
         }
@@ -59,6 +61,8 @@ class Service extends AbstractService
      */
     public function removePermissions(Post $post, array $permissions, Token $jwt): ?Response
     {
+        // TODO: rename 'remove'
+        
         if ($post->getUid() === null) {
             throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
         }

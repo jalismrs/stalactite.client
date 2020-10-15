@@ -1,13 +1,14 @@
 <?php
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Lead;
+namespace Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp;
 
-use Jalismrs\Stalactite\Client\Data\Model\Post;
+use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
+use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
-use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -16,22 +17,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetMyLeadsTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Lead
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp
  */
-class EndpointGetMyLeadsTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @throws NormalizerException
+     * @throws JsonException
+     * @throws InvalidArgumentException
      */
-    public function testGet() : void
+    public function testRequest() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -40,10 +41,8 @@ class EndpointGetMyLeadsTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestablePost(),
-                                      [
-                                          AbstractNormalizer::GROUPS => ['main'],
-                                      ]
+                                      ModelFactory::getTestableServerApp(),
+                                      [AbstractNormalizer::GROUPS => ['main']]
                                   ),
                     ],
                     JSON_THROW_ON_ERROR
@@ -56,7 +55,7 @@ class EndpointGetMyLeadsTest extends
         $response = $systemUnderTest->all(JwtFactory::create());
         
         self::assertContainsOnlyInstancesOf(
-            Post::class,
+            ServerApp::class,
             $response->getBody()
         );
     }

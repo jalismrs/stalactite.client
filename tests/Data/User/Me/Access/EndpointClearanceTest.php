@@ -1,8 +1,8 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Subordinate;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Access;
 
-use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
@@ -17,11 +17,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetSubordinates
+ * Class EndpointClearanceTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Subordinate
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Access
  */
-class EndpointGetSubordinates extends
+class EndpointClearanceTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -32,21 +32,19 @@ class EndpointGetSubordinates extends
      * @throws JsonException
      * @throws NormalizerException
      */
-    public function testGetUserSubordinates() : void
+    public function testGetClearance() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    [
-                        Normalizer::getInstance()
-                                  ->normalize(
-                                      ModelFactory::getTestableUser(),
-                                      [
-                                          AbstractNormalizer::GROUPS => ['main'],
-                                      ]
-                                  ),
-                    ],
+                    Normalizer::getInstance()
+                              ->normalize(
+                                  ModelFactory::getTestableAccessClearance(),
+                                  [
+                                      AbstractNormalizer::GROUPS => ['main'],
+                                  ]
+                              ),
                     JSON_THROW_ON_ERROR
                 )
             )
@@ -54,13 +52,13 @@ class EndpointGetSubordinates extends
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
-        $response = $systemUnderTest->all(
-            ModelFactory::getTestableUser(),
+        $response = $systemUnderTest->clearance(
+            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
         
-        self::assertContainsOnlyInstancesOf(
-            User::class,
+        self::assertInstanceOf(
+            AccessClearance::class,
             $response->getBody()
         );
     }
@@ -69,15 +67,15 @@ class EndpointGetSubordinates extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnMissingUserUid() : void
+    public function testThrowOnMissingDomainUid() : void
     {
         $this->expectException(DataServiceException::class);
-        $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
+        $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
         
         $systemUnderTest = $this->createSystemUnderTest();
         
-        $systemUnderTest->all(
-            ModelFactory::getTestableUser()
+        $systemUnderTest->clearance(
+            ModelFactory::getTestableDomain()
                         ->setUid(null),
             JwtFactory::create()
         );
@@ -92,8 +90,8 @@ class EndpointGetSubordinates extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $systemUnderTest->all(
-            ModelFactory::getTestableUser(),
+        $systemUnderTest->clearance(
+            ModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }

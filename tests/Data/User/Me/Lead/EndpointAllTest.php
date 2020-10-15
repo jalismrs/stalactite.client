@@ -1,9 +1,8 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Lead;
 
-use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -17,22 +16,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class ApiGetAllTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Lead
  */
-class EndpointGetAllTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
-     * @throws NormalizerException
-     * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NormalizerException
      */
-    public function testGetAll() : void
+    public function testGet() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -41,7 +40,7 @@ class EndpointGetAllTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableCustomer(),
+                                      ModelFactory::getTestablePost(),
                                       [
                                           AbstractNormalizer::GROUPS => ['main'],
                                       ]
@@ -57,10 +56,9 @@ class EndpointGetAllTest extends
         $response = $systemUnderTest->all(JwtFactory::create());
         
         self::assertContainsOnlyInstancesOf(
-            Customer::class,
+            Post::class,
             $response->getBody()
         );
-        
     }
     
     /**

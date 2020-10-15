@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Relation;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
-use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
+use Jalismrs\Stalactite\Client\Data\Model\Customer;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -16,22 +17,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetRelationsTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Relation
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
  */
-class EndpointGetRelationsTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
-     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
+     * @throws InvalidArgumentException
      */
-    public function testGetRelations() : void
+    public function testRequest() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -40,10 +41,9 @@ class EndpointGetRelationsTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableDomainCustomerRelation(),
+                                      ModelFactory::getTestableCustomer(),
                                       [
-                                          AbstractNormalizer::GROUPS             => ['main'],
-                                          AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
+                                          AbstractNormalizer::GROUPS => ['main'],
                                       ]
                                   ),
                     ],
@@ -57,9 +57,10 @@ class EndpointGetRelationsTest extends
         $response = $systemUnderTest->all(JwtFactory::create());
         
         self::assertContainsOnlyInstancesOf(
-            DomainCustomerRelation::class,
+            Customer::class,
             $response->getBody()
         );
+        
     }
     
     /**
@@ -68,7 +69,7 @@ class EndpointGetRelationsTest extends
      */
     public function testRequestMethodCalledOnce() : void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->all(JwtFactory::create());

@@ -1,14 +1,13 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Relation;
 
-use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
+use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Jalismrs\Stalactite\Client\Tests\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
 use Jalismrs\Stalactite\Client\Tests\MockHttpClientFactory;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -17,22 +16,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * ApiGetAllTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Authentication\TrustedApp
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Relation
  */
-class EndpointGetAllTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
-     * @throws InvalidArgumentException
      */
-    public function testGetAll() : void
+    public function testGetRelations() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -41,8 +40,11 @@ class EndpointGetAllTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableServerApp(),
-                                      [AbstractNormalizer::GROUPS => ['main']]
+                                      ModelFactory::getTestableDomainCustomerRelation(),
+                                      [
+                                          AbstractNormalizer::GROUPS             => ['main'],
+                                          AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
+                                      ]
                                   ),
                     ],
                     JSON_THROW_ON_ERROR
@@ -55,7 +57,7 @@ class EndpointGetAllTest extends
         $response = $systemUnderTest->all(JwtFactory::create());
         
         self::assertContainsOnlyInstancesOf(
-            ServerApp::class,
+            DomainCustomerRelation::class,
             $response->getBody()
         );
     }
@@ -66,7 +68,7 @@ class EndpointGetAllTest extends
      */
     public function testRequestMethodCalledOnce() : void
     {
-        $mockClient = $this->createMockClient();
+        $mockClient      = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
         $systemUnderTest->all(JwtFactory::create());

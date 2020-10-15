@@ -32,6 +32,8 @@ class Service extends AbstractService
      */
     public function get(User $user, Token $jwt): Response
     {
+        // TODO: rename 'all'
+        
         if ($user->getUid() === null) {
             throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
         }

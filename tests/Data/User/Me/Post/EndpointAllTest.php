@@ -1,7 +1,6 @@
 <?php
-declare(strict_types = 1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Post;
 
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
@@ -17,11 +16,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class ApiGetAllTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Post
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Post
  */
-class EndpointGetAllTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -32,7 +31,7 @@ class EndpointGetAllTest extends
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetAll() : void
+    public function testGetMyPosts() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(

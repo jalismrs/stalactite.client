@@ -15,9 +15,9 @@ use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Class ApiLoginTest
+ * Class EndpointLoginTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Authentication
+ * @package Jalismrs\Stalactite\Client\Tests\Authentication\Token
  */
 class EndpointLoginTest extends
     AbstractTestEndpoint

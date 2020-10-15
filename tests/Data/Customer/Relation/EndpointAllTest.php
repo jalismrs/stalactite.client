@@ -1,8 +1,8 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Subordinate;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Customer\Relation;
 
-use Jalismrs\Stalactite\Client\Data\Model\User;
+use Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -16,22 +16,22 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetMySubordinatesTest
+ * Class EndpointAllTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Subordinate
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer\Relation
  */
-class EndpointGetMySubordinatesTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
     
     /**
      * @throws ClientException
+     * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
-     * @throws InvalidArgumentException
      */
-    public function testGetUserSubordinates() : void
+    public function testGetRelations() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -40,9 +40,10 @@ class EndpointGetMySubordinatesTest extends
                     [
                         Normalizer::getInstance()
                                   ->normalize(
-                                      ModelFactory::getTestableUser(),
+                                      ModelFactory::getTestableDomainCustomerRelation(),
                                       [
-                                          AbstractNormalizer::GROUPS => ['main'],
+                                          AbstractNormalizer::GROUPS             => ['main'],
+                                          AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
                                       ]
                                   ),
                     ],
@@ -53,10 +54,13 @@ class EndpointGetMySubordinatesTest extends
         
         $systemUnderTest = $this->createSystemUnderTest($testClient);
         
-        $response = $systemUnderTest->all(JwtFactory::create());
+        $response = $systemUnderTest->all(
+            ModelFactory::getTestableCustomer(),
+            JwtFactory::create()
+        );
         
         self::assertContainsOnlyInstancesOf(
-            User::class,
+            DomainCustomerRelation::class,
             $response->getBody()
         );
     }
@@ -67,9 +71,12 @@ class EndpointGetMySubordinatesTest extends
      */
     public function testRequestMethodCalledOnce() : void
     {
-        $mockClient = $this->createMockClient();
+        $mockClient      = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
         
-        $systemUnderTest->all(JwtFactory::create());
+        $systemUnderTest->all(
+            ModelFactory::getTestableCustomer(),
+            JwtFactory::create()
+        );
     }
 }

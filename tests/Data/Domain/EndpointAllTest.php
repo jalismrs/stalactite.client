@@ -17,11 +17,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class ApiGetAllTest
+ * Class EndpointAllTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
  */
-class EndpointGetAllTest extends
+class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -32,7 +32,7 @@ class EndpointGetAllTest extends
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetAll() : void
+    public function testRequest() : void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(

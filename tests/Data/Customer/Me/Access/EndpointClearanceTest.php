@@ -1,6 +1,6 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\User\Me\Access;
+namespace Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Access;
 
 use Jalismrs\Stalactite\Client\Data\Model\AccessClearance;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
@@ -17,11 +17,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetClearanceTest
+ * Class EndpointClearanceTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\User\Me\Access
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer\Me\Access
  */
-class EndpointGetClearanceTest extends
+class EndpointClearanceTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
