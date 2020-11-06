@@ -8,11 +8,14 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Throwable;
 
 /**
- * ClientException
+ * Class ClientException
  *
  * @package Jalismrs\Stalactite\Client\Exception
+ *
+ * @codeCoverageIgnore
  */
-class ClientException extends Exception
+class ClientException extends
+    Exception
 {
     /**
      * An error occurred while performing an HTTP request
@@ -40,14 +43,33 @@ class ClientException extends Exception
 
     private ?Response $response;
 
-    public function __construct(?Response $response = null, $message = "", $code = 0, Throwable $previous = null)
+    /**
+     * ClientException constructor.
+     *
+     * @param Response|null $response
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct(
+        ?Response $response = null,
+        $message = "",
+        $code = 0,
+        Throwable $previous = null
+    )
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct(
+            $message,
+            $code,
+            $previous
+        );
         $this->response = $response;
     }
 
     /**
-     * @return Response
+     * getResponse
+     *
+     * @return Response|null
      */
     public function getResponse(): ?Response
     {

@@ -5,7 +5,13 @@ namespace Jalismrs\Stalactite\Client\Data;
 
 use Jalismrs\Stalactite\Client\AbstractService;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data
+ */
+class Service extends
+    AbstractService
 {
     private ?Customer\Service $serviceCustomer = null;
 

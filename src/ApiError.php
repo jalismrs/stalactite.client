@@ -4,13 +4,47 @@ namespace Jalismrs\Stalactite\Client;
 
 use hunomina\DataValidator\Rule\Json\JsonRule;
 
-final class ApiError implements Schemable
+/**
+ * Class ApiError
+ *
+ * @package Jalismrs\Stalactite\Client
+ */
+final class ApiError implements
+    Schemable
 {
+    /**
+     * type
+     *
+     * @var string
+     */
     private string $type;
+    /**
+     * code
+     *
+     * @var int
+     */
     private int $code;
+    /**
+     * message
+     *
+     * @var string|null
+     */
     private ?string $message;
 
-    public function __construct(string $type, int $code, ?string $message = null)
+    /**
+     * ApiError constructor.
+     *
+     * @param string $type
+     * @param int $code
+     * @param string|null $message
+     *
+     * @codeCoverageIgnore
+     */
+    public function __construct(
+        string $type,
+        int $code,
+        ?string $message = null
+    )
     {
         $this->type = $type;
         $this->code = $code;
@@ -18,7 +52,31 @@ final class ApiError implements Schemable
     }
 
     /**
+     * getSchema
+     *
+     * @static
+     * @return array[]
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getSchema(): array
+    {
+        return [
+            'type' => ['type' => JsonRule::STRING_TYPE],
+            'code' => ['type' => JsonRule::INTEGER_TYPE],
+            'message' => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true,
+            ],
+        ];
+    }
+
+    /**
+     * getType
+     *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getType(): string
     {
@@ -26,7 +84,11 @@ final class ApiError implements Schemable
     }
 
     /**
+     * getCode
+     *
      * @return int
+     *
+     * @codeCoverageIgnore
      */
     public function getCode(): int
     {
@@ -34,19 +96,14 @@ final class ApiError implements Schemable
     }
 
     /**
+     * getMessage
+     *
      * @return string|null
+     *
+     * @codeCoverageIgnore
      */
     public function getMessage(): ?string
     {
         return $this->message;
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            'type' => ['type' => JsonRule::STRING_TYPE],
-            'code' => ['type' => JsonRule::INTEGER_TYPE],
-            'message' => ['type' => JsonRule::STRING_TYPE, 'null' => true],
-        ];
     }
 }

@@ -13,12 +13,18 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\User\Me
+ */
+class Service extends
+    AbstractService
 {
-    private ?Lead\Service $serviceLead = null;
-    private ?Post\Service $servicePost = null;
-    private ?Access\Service $serviceAccess = null;
-    private ?Relation\Service $serviceRelation = null;
+    private ?Lead\Service        $serviceLead = null;
+    private ?Post\Service        $servicePost = null;
+    private ?Access\Service      $serviceAccess = null;
+    private ?Relation\Service    $serviceRelation = null;
     private ?Subordinate\Service $serviceSubordinate = null;
 
     public function leads(): Lead\Service
@@ -68,6 +74,7 @@ class Service extends AbstractService
 
     /**
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
@@ -78,8 +85,12 @@ class Service extends AbstractService
         $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
             ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
 }

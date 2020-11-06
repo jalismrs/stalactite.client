@@ -14,19 +14,32 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\User\Me\Access
+ */
+class Service extends
+    AbstractService
 {
     /**
      * @param Domain $domain
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function clearance(Domain $domain, Token $jwt): Response
+    public function clearance(
+        Domain $domain,
+        Token $jwt
+    ): Response
     {
         if ($domain->getUid() === null) {
-            throw new DataServiceException('Domain lacks a uid', DataServiceException::MISSING_DOMAIN_UID);
+            throw new DataServiceException(
+                'Domain lacks a uid',
+                DataServiceException::MISSING_DOMAIN_UID
+            );
         }
 
         $endpoint = new Endpoint('/data/users/me/access/%s');
@@ -35,9 +48,13 @@ class Service extends AbstractService
                 static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
             );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$domain->getUid()]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$domain->getUid()],
+                ]
+            );
     }
 }

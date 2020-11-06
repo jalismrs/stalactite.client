@@ -8,11 +8,19 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory as DataModelFactory;
 /**
  * Class ModelFactory
  *
- * @package Jalismrs\Stalactite\Service\Data\Model
- * Factory to instantiate models from arrays
+ * @package Jalismrs\Stalactite\Client\Data\Model
  */
-abstract class ModelFactory
+class ModelFactory
 {
+    /**
+     * createUser
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return User
+     */
     public static function createUser(array $data): User
     {
         $model = new User();
@@ -34,6 +42,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createPost
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return Post
+     */
     public static function createPost(array $data): Post
     {
         $model = new Post();
@@ -48,6 +65,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createDomain
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return Domain
+     */
     public static function createDomain(array $data): Domain
     {
         $model = new Domain();
@@ -61,6 +87,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createCustomer
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return Customer
+     */
     public static function createCustomer(array $data): Customer
     {
         $model = new Customer();
@@ -73,11 +108,20 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createPermission
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return Permission
+     */
     public static function createPermission(array $data): Permission
     {
         $model = new Permission(
-            $data['scope'] ?? false,
-            $data['resource'] ?? false,
+            $data['scope'] ?? null,
+            $data['resource'] ?? null,
             $data['operation'] ?? null
         );
         $model->setUid($data['uid'] ?? null);
@@ -85,6 +129,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createDomainUserRelation
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return DomainUserRelation
+     */
     public static function createDomainUserRelation(array $data): DomainUserRelation
     {
         $model = new DomainUserRelation();
@@ -95,6 +148,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createDomainCustomerRelation
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return DomainCustomerRelation
+     */
     public static function createDomainCustomerRelation(array $data): DomainCustomerRelation
     {
         $model = new DomainCustomerRelation();
@@ -105,6 +167,15 @@ abstract class ModelFactory
         return $model;
     }
 
+    /**
+     * createAccessClearance
+     *
+     * @static
+     *
+     * @param array $data
+     *
+     * @return AccessClearance
+     */
     public static function createAccessClearance(array $data): AccessClearance
     {
         $model = new AccessClearance();

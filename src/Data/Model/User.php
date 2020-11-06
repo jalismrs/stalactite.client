@@ -11,28 +11,87 @@ use Jalismrs\Stalactite\Client\AbstractModel;
  *
  * @package Jalismrs\Stalactite\Service\Data\Model
  */
-class User extends AbstractModel
+class User extends
+    AbstractModel
 {
+    /**
+     * email
+     *
+     * @var string|null
+     */
     private ?string $email = null;
+    /**
+     * googleId
+     *
+     * @var string|null
+     */
     private ?string $googleId = null;
+    /**
+     * lastName
+     *
+     * @var string|null
+     */
     private ?string $lastName = null;
+    /**
+     * firstName
+     *
+     * @var string|null
+     */
     private ?string $firstName = null;
+    /**
+     * admin
+     *
+     * @var bool
+     */
     private bool $admin = false;
-
     /**
      * @var Post[]|array
      */
     private array $posts = [];
-
     /**
      * @var Post[]|array
      */
     private array $leads = [];
 
     /**
+     * getSchema
+     *
+     * @static
+     * @return array[]
+     *
+     * @codeCoverageIgnore
+     */
+    public static function getSchema(): array
+    {
+        return [
+            'uid' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'firstName' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'lastName' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'email' => [
+                'type' => JsonRule::STRING_TYPE,
+            ],
+            'googleId' => [
+                'type' => JsonRule::STRING_TYPE,
+                'null' => true,
+            ],
+            'admin' => [
+                'type' => JsonRule::BOOLEAN_TYPE,
+            ],
+        ];
+    }
+
+    /**
      * getEmail
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
     public function getEmail(): ?string
     {
@@ -42,9 +101,11 @@ class User extends AbstractModel
     /**
      * setEmail
      *
-     * @param null|string $email
+     * @param string|null $email
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setEmail(?string $email): self
     {
@@ -56,7 +117,9 @@ class User extends AbstractModel
     /**
      * getGoogleId
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
     public function getGoogleId(): ?string
     {
@@ -66,9 +129,11 @@ class User extends AbstractModel
     /**
      * setGoogleId
      *
-     * @param null|string $googleId
+     * @param string|null $googleId
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setGoogleId(?string $googleId): self
     {
@@ -80,7 +145,9 @@ class User extends AbstractModel
     /**
      * getLastName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
     public function getLastName(): ?string
     {
@@ -90,9 +157,11 @@ class User extends AbstractModel
     /**
      * setLastName
      *
-     * @param null|string $lastName
+     * @param string|null $lastName
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setLastName(?string $lastName): self
     {
@@ -104,7 +173,9 @@ class User extends AbstractModel
     /**
      * getFirstName
      *
-     * @return null|string
+     * @return string|null
+     *
+     * @codeCoverageIgnore
      */
     public function getFirstName(): ?string
     {
@@ -114,9 +185,11 @@ class User extends AbstractModel
     /**
      * setFirstName
      *
-     * @param null|string $firstName
+     * @param string|null $firstName
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setFirstName(?string $firstName): self
     {
@@ -129,6 +202,8 @@ class User extends AbstractModel
      * isAdmin
      *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isAdmin(): bool
     {
@@ -141,6 +216,8 @@ class User extends AbstractModel
      * @param bool $admin
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setAdmin(bool $admin): self
     {
@@ -152,7 +229,9 @@ class User extends AbstractModel
     /**
      * getPosts
      *
-     * @return array
+     * @return array|Post[]
+     *
+     * @codeCoverageIgnore
      */
     public function getPosts(): array
     {
@@ -165,6 +244,8 @@ class User extends AbstractModel
      * @param array $posts
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setPosts(array $posts): self
     {
@@ -184,6 +265,8 @@ class User extends AbstractModel
      * @param Post $postModel
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function addPost(Post $postModel): self
     {
@@ -195,7 +278,9 @@ class User extends AbstractModel
     /**
      * getLeads
      *
-     * @return array
+     * @return array|Post[]
+     *
+     * @codeCoverageIgnore
      */
     public function getLeads(): array
     {
@@ -208,6 +293,8 @@ class User extends AbstractModel
      * @param array $leads
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setLeads(array $leads): self
     {
@@ -227,6 +314,8 @@ class User extends AbstractModel
      * @param Post $leadModel
      *
      * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function addLead(Post $leadModel): self
     {
@@ -235,6 +324,13 @@ class User extends AbstractModel
         return $this;
     }
 
+    /**
+     * hasPermission
+     *
+     * @param string $permission
+     *
+     * @return bool
+     */
     public function hasPermission(string $permission): bool
     {
         if ($this->admin) {
@@ -248,6 +344,13 @@ class User extends AbstractModel
         return false;
     }
 
+    /**
+     * hasExplicitPermission
+     *
+     * @param string $permission
+     *
+     * @return bool
+     */
     public function hasExplicitPermission(string $permission): bool
     {
         foreach ($this->posts as $post) {
@@ -257,30 +360,5 @@ class User extends AbstractModel
         }
 
         return false;
-    }
-
-    public static function getSchema(): array
-    {
-        return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'firstName' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'lastName' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'email' => [
-                'type' => JsonRule::STRING_TYPE
-            ],
-            'googleId' => [
-                'type' => JsonRule::STRING_TYPE,
-                'null' => true
-            ],
-            'admin' => [
-                'type' => JsonRule::BOOLEAN_TYPE
-            ],
-        ];
     }
 }

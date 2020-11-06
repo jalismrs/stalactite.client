@@ -5,7 +5,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use InvalidArgumentException;
 use Jalismrs\Stalactite\Client\Data\Model\User;
-use Jalismrs\Stalactite\Client\Tests\Factory\Data\ModelFactory;
+use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
  * ModelHelperTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
+ *
+ * @covers \Jalismrs\Stalactite\Client\Util\ModelHelper
  */
 class ModelHelperTest extends
     TestCase
@@ -25,10 +27,10 @@ class ModelHelperTest extends
      */
     public function testGetUids() : void
     {
-        $domain  = ModelFactory::getTestableDomain()
-                               ->setUid('azerty');
-        $domain2 = ModelFactory::getTestableDomain()
-                               ->setUid('uiop');
+        $domain  = TestableModelFactory::getTestableDomain()
+                                       ->setUid('azerty');
+        $domain2 = TestableModelFactory::getTestableDomain()
+                                       ->setUid('uiop');
         
         static::assertEquals(
             [
@@ -67,7 +69,7 @@ class ModelHelperTest extends
         
         ModelHelper::getUids(
             [
-                ModelFactory::getTestableDomain(),
+                TestableModelFactory::getTestableDomain(),
             ],
             User::class
         );

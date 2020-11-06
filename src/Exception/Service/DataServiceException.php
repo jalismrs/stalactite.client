@@ -2,7 +2,15 @@
 
 namespace Jalismrs\Stalactite\Client\Exception\Service;
 
-class DataServiceException extends ServiceException
+/**
+ * Class DataServiceException
+ *
+ * @package Jalismrs\Stalactite\Client\Exception\Service
+ *
+ * @codeCoverageIgnore
+ */
+class DataServiceException extends
+    ServiceException
 {
     public const INVALID_MODEL = 1;
 

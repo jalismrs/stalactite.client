@@ -7,13 +7,15 @@ use Jalismrs\Stalactite\Client\AbstractService;
 
 /**
  * Class Service
+ *
  * @package Jalismrs\Stalactite\Client\Authentication
  */
-class Service extends AbstractService
+class Service extends
+    AbstractService
 {
     private ?ClientApp\Service $clientAppService = null;
     private ?ServerApp\Service $serverAppService = null;
-    private ?Token\Service $tokenService = null;
+    private ?Token\Service     $tokenService = null;
 
     /*
      * -------------------------------------------------------------------------

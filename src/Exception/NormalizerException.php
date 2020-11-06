@@ -6,10 +6,13 @@ namespace Jalismrs\Stalactite\Client\Exception;
 use Exception;
 
 /**
- * NormalizerException
+ * Class NormalizerException
  *
  * @package Jalismrs\Stalactite\Client\Exception
+ *
+ * @codeCoverageIgnore
  */
-class NormalizerException extends Exception
+class NormalizerException extends
+    Exception
 {
 }

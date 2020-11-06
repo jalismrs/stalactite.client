@@ -13,30 +13,57 @@ use Jalismrs\Stalactite\Client\Util\Response;
 use Lcobucci\JWT\Token;
 use Psr\SimpleCache\InvalidArgumentException;
 
-class Service extends AbstractService
+/**
+ * Class Service
+ *
+ * @package Jalismrs\Stalactite\Client\Data\User\Subordinate
+ */
+class Service extends
+    AbstractService
 {
     /**
      * @param User $user
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(User $user, Token $jwt): Response
+    public function all(
+        User $user,
+        Token $jwt
+    ): Response
     {
         if ($user->getUid() === null) {
-            throw new DataServiceException('User lacks an uid', DataServiceException::MISSING_USER_UID);
+            throw new DataServiceException(
+                'User lacks an uid',
+                DataServiceException::MISSING_USER_UID
+            );
         }
 
         $endpoint = new Endpoint('/data/users/%s/subordinates');
-        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
-            });
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(
+                User::getSchema(),
+                JsonSchema::LIST_TYPE
+            )
+        )
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $user): User => ModelFactory::createUser($user),
+                        $response
+                    );
+                }
+            );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$user->getUid()]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
 }

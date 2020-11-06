@@ -6,8 +6,22 @@ use Lcobucci\JWT\Signer\Hmac;
 use Lcobucci\JWT\Signer\Rsa;
 use Lcobucci\JWT\Token;
 
+/**
+ * Class TokenIdentifier
+ *
+ * @package Jalismrs\Stalactite\Client\Util
+ */
 final class TokenIdentifier
 {
+    /**
+     * isAppToken
+     *
+     * @static
+     *
+     * @param Token $token
+     *
+     * @return bool
+     */
     public static function isAppToken(Token $token): bool
     {
         $signer = new Rsa\Sha256();
@@ -16,6 +30,15 @@ final class TokenIdentifier
             && $token->hasClaim('type');
     }
 
+    /**
+     * isTpaToken
+     *
+     * @static
+     *
+     * @param Token $token
+     *
+     * @return bool
+     */
     public static function isTpaToken(Token $token): bool
     {
         $signer = new Hmac\Sha256();

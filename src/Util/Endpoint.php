@@ -5,18 +5,53 @@ namespace Jalismrs\Stalactite\Client\Util;
 use Closure;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 
+/**
+ * Class Endpoint
+ *
+ * @package Jalismrs\Stalactite\Client\Util
+ */
 final class Endpoint
 {
+    /**
+     * uri
+     *
+     * @var string
+     */
     private string $uri;
-
+    /**
+     * method
+     *
+     * @var string
+     */
     private string $method;
-
+    /**
+     * cacheable
+     *
+     * @var bool
+     */
     private bool $cacheable;
-
+    /**
+     * responseValidationSchema
+     *
+     * @var JsonSchema|null
+     */
     private ?JsonSchema $responseValidationSchema = null;
-
+    /**
+     * responseFormatter
+     *
+     * @var Closure|null
+     */
     private ?Closure $responseFormatter = null;
 
+    /**
+     * Endpoint constructor.
+     *
+     * @param string $uri
+     * @param string $method
+     * @param bool $cacheable
+     *
+     * @codeCoverageIgnore
+     */
     public function __construct(string $uri, string $method = 'GET', bool $cacheable = true)
     {
         $this->uri = $uri;
@@ -25,7 +60,11 @@ final class Endpoint
     }
 
     /**
+     * getUri
+     *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getUri(): string
     {
@@ -33,7 +72,11 @@ final class Endpoint
     }
 
     /**
+     * getMethod
+     *
      * @return string
+     *
+     * @codeCoverageIgnore
      */
     public function getMethod(): string
     {
@@ -41,7 +84,11 @@ final class Endpoint
     }
 
     /**
+     * isCacheable
+     *
      * @return bool
+     *
+     * @codeCoverageIgnore
      */
     public function isCacheable(): bool
     {
@@ -49,7 +96,11 @@ final class Endpoint
     }
 
     /**
+     * getResponseValidationSchema
+     *
      * @return JsonSchema|null
+     *
+     * @codeCoverageIgnore
      */
     public function getResponseValidationSchema(): ?JsonSchema
     {
@@ -57,8 +108,13 @@ final class Endpoint
     }
 
     /**
+     * setResponseValidationSchema
+     *
      * @param JsonSchema|null $responseValidationSchema
-     * @return Endpoint
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setResponseValidationSchema(?JsonSchema $responseValidationSchema): Endpoint
     {
@@ -67,7 +123,11 @@ final class Endpoint
     }
 
     /**
+     * getResponseFormatter
+     *
      * @return Closure|null
+     *
+     * @codeCoverageIgnore
      */
     public function getResponseFormatter(): ?Closure
     {
@@ -75,8 +135,13 @@ final class Endpoint
     }
 
     /**
+     * setResponseFormatter
+     *
      * @param Closure|null $responseFormatter
-     * @return Endpoint
+     *
+     * @return $this
+     *
+     * @codeCoverageIgnore
      */
     public function setResponseFormatter(?Closure $responseFormatter): Endpoint
     {

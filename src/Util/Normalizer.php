@@ -13,20 +13,38 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use function array_replace_recursive;
 
+/**
+ * Class Normalizer
+ *
+ * @package Jalismrs\Stalactite\Client\Util
+ */
 final class Normalizer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
 
     private const CONTEXT = [
-        AbstractNormalizer::GROUPS => ['common']
+        AbstractNormalizer::GROUPS => ['common'],
     ];
 
+    /**
+     * instance
+     *
+     * @static
+     * @var $this |null
+     */
     private static ?self $instance = null;
 
+    /**
+     * serializer
+     *
+     * @var Serializer
+     */
     private Serializer $serializer;
 
     /**
      * Normalizer constructor.
+     *
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
@@ -34,13 +52,16 @@ final class Normalizer
             [
                 new ObjectNormalizer(
                     new ClassMetadataFactory(new XmlFileLoader(self::CONFIG_FILE))
-                )
+                ),
             ],
             [new JsonEncoder()]
         );
     }
 
     /**
+     * getInstance
+     *
+     * @static
      * @return static
      */
     public static function getInstance(): self
@@ -53,17 +74,35 @@ final class Normalizer
     }
 
     /**
-     * @param $data
+     * normalize
+     *
+     * @param       $data
      * @param array $context
+     *
      * @return array
+     *
      * @throws NormalizerException
      */
-    public function normalize($data, array $context = []): array
+    public function normalize(
+        $data,
+        array $context = []
+    ): array
     {
         try {
-            return $this->serializer->normalize($data, 'json', array_replace_recursive(self::CONTEXT, $context));
-        } catch (ExceptionInterface $e) {
-            throw new NormalizerException('Error while normalizing data', 0, $e);
+            return $this->serializer->normalize(
+                $data,
+                'json',
+                array_replace_recursive(
+                    self::CONTEXT,
+                    $context
+                )
+            );
+        } catch (ExceptionInterface $exception) {
+            throw new NormalizerException(
+                'Error while normalizing data',
+                0,
+                $exception
+            );
         }
     }
 }

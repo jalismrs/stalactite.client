@@ -9,13 +9,23 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Token;
 
+/**
+ * Class TpaJwtFactory
+ *
+ * @package Jalismrs\Stalactite\Client\Util
+ */
 final class TpaJwtFactory
 {
     private const JWT_DURATION = 60;
 
     /**
+     * forge
+     *
+     * @static
+     *
      * @param ServerApp $serverApp
      * @param int $duration
+     *
      * @return Token
      */
     public static function forge(ServerApp $serverApp, int $duration = self::JWT_DURATION): Token

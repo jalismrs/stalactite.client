@@ -7,8 +7,12 @@ use RuntimeException;
 
 /**
  * Class ServiceException
+ *
  * @package Jalismrs\Stalactite\Client\Exception\Service
+ *
+ * @codeCoverageIgnore
  */
-class ServiceException extends RuntimeException
+class ServiceException extends
+    RuntimeException
 {
 }

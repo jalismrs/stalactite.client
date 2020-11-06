@@ -10,6 +10,11 @@ use function gettype;
 use function is_a;
 use function is_object;
 
+/**
+ * Class ModelHelper
+ *
+ * @package Jalismrs\Stalactite\Client\Util
+ */
 final class ModelHelper
 {
     /**
@@ -19,8 +24,8 @@ final class ModelHelper
      *
      * @param array $models
      * @param string|null $class
+     *
      * @return array
-     * @throws InvalidArgumentException
      */
     public static function getUids(array $models, string $class = null): array
     {

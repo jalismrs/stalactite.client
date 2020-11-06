@@ -24,9 +24,11 @@ use function array_map;
 
 /**
  * Class Service
+ *
  * @package Jalismrs\Stalactite\Client\Data\Post
  */
-class Service extends AbstractService
+class Service extends
+    AbstractService
 {
     private ?PermissionService $servicePermission = null;
 
@@ -41,6 +43,7 @@ class Service extends AbstractService
 
     /**
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -48,156 +51,267 @@ class Service extends AbstractService
     public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/posts');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema(), JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(static fn(array $post): Post => ModelFactory::createPost($post), $response);
-            });
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(
+                Post::getSchema(),
+                JsonSchema::LIST_TYPE
+            )
+        )
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $post): Post => ModelFactory::createPost($post),
+                        $response
+                    );
+                }
+            );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
 
     /**
      * @param string $uid
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function get(string $uid, Token $jwt): Response
+    public function get(
+        string $uid,
+        Token $jwt
+    ): Response
     {
         $endpoint = new Endpoint('/data/posts/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema()))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$uid]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
 
     /**
      * @param string $uid
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function exists(string $uid, Token $jwt): Response
+    public function exists(
+        string $uid,
+        Token $jwt
+    ): Response
     {
-        $endpoint = new Endpoint('/data/posts/%s', 'HEAD');
+        $endpoint = new Endpoint(
+            '/data/posts/%s',
+            'HEAD'
+        );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$uid]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
 
     /**
      * @param Post $post
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function create(Post $post, Token $jwt): Response
+    public function create(
+        Post $post,
+        Token $jwt
+    ): Response
     {
         try {
-            $permissions = ModelHelper::getUids($post->getPermissions(), Permission::class);
+            $permissions = ModelHelper::getUids(
+                $post->getPermissions(),
+                Permission::class
+            );
+            // @codeCoverageIgnoreStart
         } catch (InvalidArgumentException $e) {
-            $this->getLogger()->error($e);
-            throw new DataServiceException('Error while getting permission uids', DataServiceException::INVALID_MODEL, $e);
+            $this->getLogger()
+                ->error($e);
+            throw new DataServiceException(
+                'Error while getting permission uids',
+                DataServiceException::INVALID_MODEL,
+                $e
+            );
         }
+        // @codeCoverageIgnoreEnd
 
-        $endpoint = new Endpoint('/data/posts', 'POST');
+        $endpoint = new Endpoint(
+            '/data/posts',
+            'POST'
+        );
         $endpoint->setResponseValidationSchema(new JsonSchema(Post::getSchema()))
             ->setResponseFormatter(static fn(array $response): Post => ModelFactory::createPost($response));
 
         $data = array_merge(
-            Normalizer::getInstance()->normalize($post, [
-                AbstractNormalizer::GROUPS => ['create']
-            ]),
+            Normalizer::getInstance()
+                ->normalize(
+                    $post,
+                    [
+                        AbstractNormalizer::GROUPS => ['create'],
+                    ]
+                ),
             ['permissions' => $permissions]
         );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'json' => $data
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                ]
+            );
     }
 
     /**
      * @param Post $post
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws NormalizerException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function update(Post $post, Token $jwt): Response
+    public function update(
+        Post $post,
+        Token $jwt
+    ): Response
     {
         if ($post->getUid() === null) {
-            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
+            throw new DataServiceException(
+                'Post lacks an uid',
+                DataServiceException::MISSING_POST_UID
+            );
         }
 
-        $endpoint = new Endpoint('/data/posts/%s', 'PUT');
+        $endpoint = new Endpoint(
+            '/data/posts/%s',
+            'PUT'
+        );
 
-        $data = Normalizer::getInstance()->normalize($post, [
-            AbstractNormalizer::GROUPS => ['update']
-        ]);
+        $data = Normalizer::getInstance()
+            ->normalize(
+                $post,
+                [
+                    AbstractNormalizer::GROUPS => ['update'],
+                ]
+            );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'json' => $data,
-            'uriParameters' => [$post->getUid()]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                    'uriParameters' => [$post->getUid()],
+                ]
+            );
     }
 
     /**
      * @param Post $post
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function delete(Post $post, Token $jwt): Response
+    public function delete(
+        Post $post,
+        Token $jwt
+    ): Response
     {
         if ($post->getUid() === null) {
-            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
+            throw new DataServiceException(
+                'Post lacks an uid',
+                DataServiceException::MISSING_POST_UID
+            );
         }
 
-        $endpoint = new Endpoint('/data/posts/%s', 'DELETE');
+        $endpoint = new Endpoint(
+            '/data/posts/%s',
+            'DELETE'
+        );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$post->getUid()]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$post->getUid()],
+                ]
+            );
     }
 
     /**
      * @param Post $post
      * @param Token $jwt
+     *
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function getUsers(Post $post, Token $jwt): Response
+    public function getUsers(
+        Post $post,
+        Token $jwt
+    ): Response
     {
         if ($post->getUid() === null) {
-            throw new DataServiceException('Post lacks an uid', DataServiceException::MISSING_POST_UID);
+            throw new DataServiceException(
+                'Post lacks an uid',
+                DataServiceException::MISSING_POST_UID
+            );
         }
 
         $endpoint = new Endpoint('/data/posts/%s/users');
-        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema(), JsonSchema::LIST_TYPE))
-            ->setResponseFormatter(static function (array $response): array {
-                return array_map(static fn(array $user): User => ModelFactory::createUser($user), $response);
-            });
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(
+                User::getSchema(),
+                JsonSchema::LIST_TYPE
+            )
+        )
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $user): User => ModelFactory::createUser($user),
+                        $response
+                    );
+                }
+            );
 
-        return $this->getClient()->request($endpoint, [
-            'jwt' => (string)$jwt,
-            'uriParameters' => [$post->getUid()]
-        ]);
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$post->getUid()],
+                ]
+            );
     }
 }
