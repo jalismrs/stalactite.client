@@ -30,25 +30,25 @@ class Service extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function validate(Token $token) : Response
+    public function validate(Token $token): Response
     {
         $endpoint = new Endpoint(
             '/auth/tokens',
             'HEAD'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$token,
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$token,
+                ]
+            );
     }
-    
+
     /**
      * @param ClientApp $clientApp
-     * @param string    $userGoogleJwt
+     * @param string $userGoogleJwt
      *
      * @return Response
      * @throws ClientException
@@ -57,7 +57,8 @@ class Service extends
     public function login(
         ClientApp $clientApp,
         string $userGoogleJwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint(
             '/auth/tokens',
             'POST'
@@ -65,7 +66,7 @@ class Service extends
         $endpoint
             ->setResponseValidationSchema(new JsonSchema(['token' => ['type' => JsonRule::STRING_TYPE]]))
             ->setResponseFormatter(
-                static function(array $response) : array {
+                static function (array $response): array {
                     try {
                         $token = (new Parser())->parse($response['token']);
                     } catch (Throwable $t) {
@@ -74,11 +75,11 @@ class Service extends
                             AuthenticationServiceException::INVALID_TOKEN
                         );
                     }
-                    
+
                     return ['token' => $token];
                 }
             );
-        
+
         return $this
             ->getClient()
             ->request(

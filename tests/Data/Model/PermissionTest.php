@@ -24,34 +24,34 @@ class PermissionTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestablePermission();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [
-        
+
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestablePermission();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -60,31 +60,31 @@ class PermissionTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'       => $model->getUid(),
-            'scope'     => $model->getScope(),
-            'resource'  => $model->getResource(),
+            'uid' => $model->getUid(),
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
             'operation' => $model->getOperation(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestablePermission();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -93,30 +93,30 @@ class PermissionTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'scope'     => $model->getScope(),
-            'resource'  => $model->getResource(),
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
             'operation' => $model->getOperation(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestablePermission();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -125,28 +125,28 @@ class PermissionTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'scope'     => $model->getScope(),
-            'resource'  => $model->getResource(),
+            'scope' => $model->getScope(),
+            'resource' => $model->getResource(),
             'operation' => $model->getOperation(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * testToString
      *
      * @return void
      */
-    public function testToString() : void
+    public function testToString(): void
     {
         $model = TestableModelFactory::getTestablePermission();
-        
+
         self::assertSame(
             "scope.resource.operation",
             (string)$model

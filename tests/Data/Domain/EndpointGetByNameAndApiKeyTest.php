@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
@@ -27,56 +27,56 @@ class EndpointGetByNameAndApiKeyTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetByName() : void
+    public function testGetByName(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
-                              ->normalize(
-                                  TestableModelFactory::getTestableDomain(),
-                                  [
-                                      AbstractNormalizer::GROUPS => ['main'],
-                                  ]
-                              ),
+                        ->normalize(
+                            TestableModelFactory::getTestableDomain(),
+                            [
+                                AbstractNormalizer::GROUPS => ['main'],
+                            ]
+                        ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $domain = TestableModelFactory::getTestableDomain();
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->getByNameAndApiKey(
             $domain->getName(),
             $domain->getApiKey(),
             JwtFactory::create()
         );
-        
+
         self::assertInstanceOf(
             Domain::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $domain = TestableModelFactory::getTestableDomain();
         $systemUnderTest->getByNameAndApiKey(
             $domain->getName(),

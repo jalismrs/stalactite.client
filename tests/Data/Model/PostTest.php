@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
@@ -25,42 +25,42 @@ class PostTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestablePost();
         $model->addPermission(TestableModelFactory::getTestablePermission());
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
-        $normalizer        = Normalizer::getInstance();
+        $normalizer = Normalizer::getInstance();
         $normalizerContext = [
             AbstractNormalizer::GROUPS => ['main'],
         ];
-        
+
         $model = TestableModelFactory::getTestablePost();
         $model->addPermission(TestableModelFactory::getTestablePermission());
-        
+
         $actual = $normalizer->normalize(
             $model,
             $normalizerContext
         );
-        
+
         $permissions = [];
         foreach ($model->getPermissions() as $permission) {
             $permissions[] = $normalizer->normalize(
@@ -68,40 +68,40 @@ class PostTest extends
                 $normalizerContext
             );
         }
-        
+
         $expected = [
-            'uid'         => $model->getUid(),
-            'name'        => $model->getName(),
-            'shortName'   => $model->getShortName(),
+            'uid' => $model->getUid(),
+            'name' => $model->getName(),
+            'shortName' => $model->getShortName(),
             'permissions' => $permissions,
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
-        $normalizer        = Normalizer::getInstance();
+        $normalizer = Normalizer::getInstance();
         $normalizerContext = [
             AbstractNormalizer::GROUPS => ['create'],
         ];
-        
+
         $model = TestableModelFactory::getTestablePost();
         $model->addPermission(TestableModelFactory::getTestablePermission());
-        
+
         $actual = $normalizer->normalize(
             $model,
             $normalizerContext
         );
-        
+
         $permissions = [];
         foreach ($model->getPermissions() as $permission) {
             $permissions[] = $normalizer->normalize(
@@ -109,68 +109,68 @@ class PostTest extends
                 $normalizerContext
             );
         }
-        
+
         $expected = [
-            'name'        => $model->getName(),
-            'shortName'   => $model->getShortName(),
+            'name' => $model->getName(),
+            'shortName' => $model->getShortName(),
             'permissions' => $permissions,
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestablePost();
         $model->addPermission(TestableModelFactory::getTestablePermission());
-        
+
         $actual = $serializer->normalize(
             $model,
             [
                 AbstractNormalizer::GROUPS => ['update'],
             ]
         );
-        
+
         $expected = [
-            'name'      => $model->getName(),
+            'name' => $model->getName(),
             'shortName' => $model->getShortName(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
-    public function testPermissions() : void
+
+    public function testPermissions(): void
     {
         $post = TestableModelFactory::getTestablePost();
-        
-        $permission  = TestableModelFactory::getTestablePermission()
-                                           ->setScope('p1');
+
+        $permission = TestableModelFactory::getTestablePermission()
+            ->setScope('p1');
         $permission2 = TestableModelFactory::getTestablePermission()
-                                           ->setScope('p2');
-        
+            ->setScope('p2');
+
         self::assertFalse($post->hasPermission((string)$permission));
         self::assertFalse($post->hasPermission((string)$permission2));
-        
+
         $post->addPermission($permission);
-        
+
         self::assertTrue($post->hasPermission((string)$permission));
         self::assertFalse($post->hasPermission((string)$permission2));
-        
+
         $post->addPermission($permission2);
-        
+
         self::assertTrue($post->hasPermission((string)$permission));
         self::assertTrue($post->hasPermission((string)$permission2));
     }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
@@ -26,7 +26,7 @@ class ServerApp extends
      * @var string|null
      */
     private ?string $tokenSignatureKey = null;
-    
+
     /**
      * getSchema
      *
@@ -35,13 +35,13 @@ class ServerApp extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'               => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'name'              => [
+            'name' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'tokenSignatureKey' => [
@@ -49,7 +49,7 @@ class ServerApp extends
             ],
         ];
     }
-    
+
     /**
      * getName
      *
@@ -57,11 +57,11 @@ class ServerApp extends
      *
      * @codeCoverageIgnore
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -71,13 +71,13 @@ class ServerApp extends
      *
      * @codeCoverageIgnore
      */
-    public function setName(?string $name) : ServerApp
+    public function setName(?string $name): ServerApp
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getTokenSignatureKey
      *
@@ -85,11 +85,11 @@ class ServerApp extends
      *
      * @codeCoverageIgnore
      */
-    public function getTokenSignatureKey() : ?string
+    public function getTokenSignatureKey(): ?string
     {
         return $this->tokenSignatureKey;
     }
-    
+
     /**
      * setTokenSignatureKey
      *
@@ -99,10 +99,10 @@ class ServerApp extends
      *
      * @codeCoverageIgnore
      */
-    public function setTokenSignatureKey(?string $tokenSignatureKey) : ServerApp
+    public function setTokenSignatureKey(?string $tokenSignatureKey): ServerApp
     {
         $this->tokenSignatureKey = $tokenSignatureKey;
-        
+
         return $this;
     }
 }

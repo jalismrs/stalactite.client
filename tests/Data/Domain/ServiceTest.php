@@ -15,14 +15,14 @@ class ServiceTest extends
     AbstractTestService
 {
     use SystemUnderTestTrait;
-    
-    public function testLead() : void
+
+    public function testLead(): void
     {
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $service1 = $systemUnderTest->relations();
         $service2 = $systemUnderTest->relations();
-        
+
         self::checkServices(
             $systemUnderTest,
             $service1,

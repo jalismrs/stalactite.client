@@ -15,14 +15,14 @@ abstract class AbstractService
     /**
      * client
      *
-     * @var \Jalismrs\Stalactite\Client\Client
+     * @var Client
      */
     private Client $client;
-    
+
     /**
      * AbstractService constructor.
      *
-     * @param \Jalismrs\Stalactite\Client\Client $client
+     * @param Client $client
      *
      * @codeCoverageIgnore
      */
@@ -30,11 +30,11 @@ abstract class AbstractService
     {
         $this->client = $client;
     }
-    
+
     /**
      * getLogger
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      *
      * @codeCoverageIgnore
      */
@@ -43,11 +43,11 @@ abstract class AbstractService
         return $this->getClient()
             ->getLogger();
     }
-    
+
     /**
      * getClient
      *
-     * @return \Jalismrs\Stalactite\Client\Client
+     * @return Client
      *
      * @codeCoverageIgnore
      */

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
@@ -21,11 +21,11 @@ use function array_replace_recursive;
 final class Normalizer
 {
     private const CONFIG_FILE = __DIR__ . '/../../config/serialization.xml';
-    
+
     private const CONTEXT = [
         AbstractNormalizer::GROUPS => ['common'],
     ];
-    
+
     /**
      * instance
      *
@@ -33,14 +33,14 @@ final class Normalizer
      * @var $this |null
      */
     private static ?self $instance = null;
-    
+
     /**
      * serializer
      *
-     * @var \Symfony\Component\Serializer\Serializer
+     * @var Serializer
      */
     private Serializer $serializer;
-    
+
     /**
      * Normalizer constructor.
      *
@@ -57,22 +57,22 @@ final class Normalizer
             [new JsonEncoder()]
         );
     }
-    
+
     /**
      * getInstance
      *
      * @static
      * @return static
      */
-    public static function getInstance() : self
+    public static function getInstance(): self
     {
         if (!(self::$instance instanceof self)) {
             self::$instance = new self();
         }
-        
+
         return self::$instance;
     }
-    
+
     /**
      * normalize
      *
@@ -81,12 +81,13 @@ final class Normalizer
      *
      * @return array
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\NormalizerException
+     * @throws NormalizerException
      */
     public function normalize(
         $data,
         array $context = []
-    ) : array {
+    ): array
+    {
         try {
             return $this->serializer->normalize(
                 $data,

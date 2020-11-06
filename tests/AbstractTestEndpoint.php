@@ -26,7 +26,7 @@ abstract class AbstractTestEndpoint extends
      *
      * @param bool $requestCalled
      *
-     * @return \Jalismrs\Stalactite\Client\Client
+     * @return Client
      */
     final protected function createMockClient(
         bool $requestCalled = true

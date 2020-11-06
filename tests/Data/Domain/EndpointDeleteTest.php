@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
@@ -21,34 +21,34 @@ class EndpointDeleteTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->delete(
             TestableModelFactory::getTestableDomain()
-                        ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->delete(
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()

@@ -15,14 +15,14 @@ class ServiceTest extends
     AbstractTestService
 {
     use SystemUnderTestTrait;
-    
-    public function testPermission() : void
+
+    public function testPermission(): void
     {
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $service1 = $systemUnderTest->permissions();
         $service2 = $systemUnderTest->permissions();
-        
+
         self::checkServices(
             $systemUnderTest,
             $service1,

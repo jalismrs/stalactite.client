@@ -22,9 +22,9 @@ class TestableModelFactory
      * getTestablePermission
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Permission
+     * @return Permission
      */
-    public static function getTestablePermission() : Permission
+    public static function getTestablePermission(): Permission
     {
         $model = new Permission(
             'scope',
@@ -32,33 +32,33 @@ class TestableModelFactory
             'operation'
         );
         $model->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * getTestableDomainUserRelation
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation
+     * @return DomainUserRelation
      */
-    public static function getTestableDomainUserRelation() : DomainUserRelation
+    public static function getTestableDomainUserRelation(): DomainUserRelation
     {
         $model = new DomainUserRelation();
         $model->setUser(self::getTestableUser())
-              ->setDomain(self::getTestableDomain())
-              ->setUid('azertyuiop');
-        
+            ->setDomain(self::getTestableDomain())
+            ->setUid('azertyuiop');
+
         return $model;
     }
-    
+
     /**
      * getTestableUser
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\User
+     * @return User
      */
-    public static function getTestableUser() : User
+    public static function getTestableUser(): User
     {
         $model = new User();
         $model
@@ -70,17 +70,17 @@ class TestableModelFactory
             ->addPost(self::getTestablePost())
             ->addLead(self::getTestablePost())
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * getTestableDomain
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Domain
+     * @return Domain
      */
-    public static function getTestableDomain() : Domain
+    public static function getTestableDomain(): Domain
     {
         $model = new Domain();
         $model
@@ -90,50 +90,50 @@ class TestableModelFactory
             ->setExternalAuth(false)
             ->setGenerationDate('2000-01-01')
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * getTestablePost
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Post
+     * @return Post
      */
-    public static function getTestablePost() : Post
+    public static function getTestablePost(): Post
     {
         $model = new Post();
         $model
             ->setName('azerty')
             ->setShortName('aze')
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * getTestableDomainCustomerRelation
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation
+     * @return DomainCustomerRelation
      */
-    public static function getTestableDomainCustomerRelation() : DomainCustomerRelation
+    public static function getTestableDomainCustomerRelation(): DomainCustomerRelation
     {
         $model = new DomainCustomerRelation();
         $model->setCustomer(self::getTestableCustomer())
-              ->setDomain(self::getTestableDomain())
-              ->setUid('azertyuiop');
-        
+            ->setDomain(self::getTestableDomain())
+            ->setUid('azertyuiop');
+
         return $model;
     }
-    
+
     /**
      * getTestableCustomer
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Customer
+     * @return Customer
      */
-    public static function getTestableCustomer() : Customer
+    public static function getTestableCustomer(): Customer
     {
         $model = new Customer();
         $model
@@ -142,22 +142,22 @@ class TestableModelFactory
             ->setLastName('uiop')
             ->setGoogleId('0123456789')
             ->setUid('azertyuiop');
-        
+
         return $model;
     }
-    
+
     /**
      * getTestableAccessClearance
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Data\Model\AccessClearance
+     * @return AccessClearance
      */
-    public static function getTestableAccessClearance() : AccessClearance
+    public static function getTestableAccessClearance(): AccessClearance
     {
         $model = new AccessClearance();
         $model->setGranted(false)
-              ->setType(AccessClearance::NO_ACCESS);
-        
+            ->setType(AccessClearance::NO_ACCESS);
+
         return $model;
     }
 }

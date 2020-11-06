@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
@@ -25,32 +25,32 @@ class DomainTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestableDomain();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -59,33 +59,33 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'            => $model->getUid(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'uid' => $model->getUid(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -94,32 +94,32 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableDomain();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -128,15 +128,15 @@ class DomainTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'apiKey'         => $model->getApiKey(),
-            'externalAuth'   => $model->hasExternalAuth(),
+            'apiKey' => $model->getApiKey(),
+            'externalAuth' => $model->hasExternalAuth(),
             'generationDate' => $model->getGenerationDate(),
-            'name'           => $model->getName(),
-            'type'           => $model->getType(),
+            'name' => $model->getName(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual

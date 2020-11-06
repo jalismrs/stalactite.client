@@ -17,7 +17,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\ClientApp
+     * @return ClientApp
      */
     public static function createClientApp(array $data): ClientApp
     {
@@ -29,7 +29,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createServerApp
      *
@@ -37,7 +37,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp
+     * @return ServerApp
      */
     public static function createServerApp(array $data): ServerApp
     {

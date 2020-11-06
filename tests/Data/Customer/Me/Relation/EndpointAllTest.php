@@ -26,14 +26,14 @@ class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
      */
-    public function testGetRelations() : void
+    public function testGetRelations(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -41,38 +41,38 @@ class EndpointAllTest extends
                 json_encode(
                     [
                         Normalizer::getInstance()
-                                  ->normalize(
-                                      TestableModelFactory::getTestableDomainCustomerRelation(),
-                                      [
-                                          AbstractNormalizer::GROUPS             => ['main'],
-                                          AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
-                                      ]
-                                  ),
+                            ->normalize(
+                                TestableModelFactory::getTestableDomainCustomerRelation(),
+                                [
+                                    AbstractNormalizer::GROUPS => ['main'],
+                                    AbstractNormalizer::IGNORED_ATTRIBUTES => ['customer'],
+                                ]
+                            ),
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->all(JwtFactory::create());
-        
+
         self::assertContainsOnlyInstancesOf(
             DomainCustomerRelation::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->all(JwtFactory::create());
     }
 }

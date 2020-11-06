@@ -17,9 +17,9 @@ trait SystemUnderTestTrait
     /**
      * createSystemUnderTest
      *
-     * @param \Jalismrs\Stalactite\Client\Client|null $client
+     * @param Client|null $client
      *
-     * @return \Jalismrs\Stalactite\Client\Authentication\Service
+     * @return Service
      */
     private function createSystemUnderTest(
         Client $client = null

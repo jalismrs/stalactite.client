@@ -21,14 +21,14 @@ class ModelFactoryTest extends
      *
      * @return void
      */
-    public function testCreateAccessClearance() : void
+    public function testCreateAccessClearance(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createAccessClearance($data);
-        
+
         // assert
         self::assertFalse(
             $output->isGranted()
@@ -38,20 +38,20 @@ class ModelFactoryTest extends
             $output->getType()
         );
     }
-    
+
     /**
      * testCreateCustomer
      *
      * @return void
      */
-    public function testCreateCustomer() : void
+    public function testCreateCustomer(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createCustomer($data);
-        
+
         // assert
         self::assertNull(
             $output->getEmail()
@@ -69,20 +69,20 @@ class ModelFactoryTest extends
             $output->getUid()
         );
     }
-    
+
     /**
      * testCreateDomain
      *
      * @return void
      */
-    public function testCreateDomain() : void
+    public function testCreateDomain(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createDomain($data);
-        
+
         // assert
         self::assertNull(
             $output->getApiKey()
@@ -103,20 +103,20 @@ class ModelFactoryTest extends
             $output->getUid()
         );
     }
-    
+
     /**
      * testCreateDomainCustomerRelation
      *
      * @return void
      */
-    public function testCreateDomainCustomerRelation() : void
+    public function testCreateDomainCustomerRelation(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createDomainCustomerRelation($data);
-        
+
         // assert
         self::assertNull(
             $output->getCustomer()
@@ -128,20 +128,20 @@ class ModelFactoryTest extends
             $output->getUid()
         );
     }
-    
+
     /**
      * testCreateDomainUserRelation
      *
      * @return void
      */
-    public function testCreateDomainUserRelation() : void
+    public function testCreateDomainUserRelation(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createDomainUserRelation($data);
-        
+
         // assert
         self::assertNull(
             $output->getDomain()
@@ -153,20 +153,20 @@ class ModelFactoryTest extends
             $output->getUser()
         );
     }
-    
+
     /**
      * testCreatePermission
      *
      * @return void
      */
-    public function testCreatePermission() : void
+    public function testCreatePermission(): void
     {
         // arrange
         $data = [];
-        
+
         // act
         $output = ModelFactory::createPermission($data);
-        
+
         // assert
         self::assertNull(
             $output->getOperation()
@@ -181,13 +181,13 @@ class ModelFactoryTest extends
             $output->getUid()
         );
     }
-    
+
     /**
      * testCreatePost
      *
      * @return void
      */
-    public function testCreatePost() : void
+    public function testCreatePost(): void
     {
         // arrange
         $data = [
@@ -195,10 +195,10 @@ class ModelFactoryTest extends
                 [],
             ],
         ];
-        
+
         // act
         $output = ModelFactory::createPost($data);
-        
+
         // assert
         self::assertNull(
             $output->getName()
@@ -214,13 +214,13 @@ class ModelFactoryTest extends
             $output->getPermissions()
         );
     }
-    
+
     /**
      * testCreateUser
      *
      * @return void
      */
-    public function testCreateUser() : void
+    public function testCreateUser(): void
     {
         // arrange
         $data = [
@@ -231,10 +231,10 @@ class ModelFactoryTest extends
                 [],
             ],
         ];
-        
+
         // act
         $output = ModelFactory::createUser($data);
-        
+
         // assert
         self::assertFalse(
             $output->isAdmin()

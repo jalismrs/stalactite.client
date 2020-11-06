@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Domain;
 
@@ -27,16 +27,16 @@ class Service extends
     AbstractService
 {
     private ?Relation\Service $serviceRelation = null;
-    
-    public function relations() : Relation\Service
+
+    public function relations(): Relation\Service
     {
         if ($this->serviceRelation === null) {
             $this->serviceRelation = new Relation\Service($this->getClient());
         }
-        
+
         return $this->serviceRelation;
     }
-    
+
     /**
      * @param Token $jwt
      *
@@ -44,7 +44,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt) : Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/domains');
         $endpoint->setResponseValidationSchema(
@@ -53,27 +53,27 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $domain) : Domain => ModelFactory::createDomain($domain),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $domain): Domain => ModelFactory::createDomain($domain),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
-    
+
     /**
      * @param string $uid
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -82,24 +82,25 @@ class Service extends
     public function get(
         string $uid,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint('/data/domains/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Domain::getSchema()))
-                 ->setResponseFormatter(static fn(array $response) : Domain => ModelFactory::createDomain($response));
-        
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$uid],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
-    
+
     /**
      * @param string $uid
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -108,25 +109,26 @@ class Service extends
     public function exists(
         string $uid,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint(
             '/data/domains/%s',
             'HEAD'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$uid],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
-    
+
     /**
      * @param string $name
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -135,25 +137,26 @@ class Service extends
     public function getByName(
         string $name,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint('/data/domains');
         $endpoint->setResponseValidationSchema(new JsonSchema(Domain::getSchema()))
-                 ->setResponseFormatter(static fn(array $response) : Domain => ModelFactory::createDomain($response));
-        
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'   => (string)$jwt,
-                            'query' => ['name' => $name],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => ['name' => $name],
+                ]
+            );
     }
-    
+
     /**
      * @param string $name
      * @param string $apiKey
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -163,27 +166,28 @@ class Service extends
         string $name,
         string $apiKey,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint('/data/domains');
         $endpoint->setResponseValidationSchema(new JsonSchema(Domain::getSchema()))
-                 ->setResponseFormatter(static fn(array $response) : Domain => ModelFactory::createDomain($response));
-        
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'   => (string)$jwt,
-                            'query' => [
-                                'name'   => $name,
-                                'apiKey' => $apiKey,
-                            ],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => [
+                        'name' => $name,
+                        'apiKey' => $apiKey,
+                    ],
+                ]
+            );
     }
-    
+
     /**
      * @param Domain $domain
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -193,35 +197,36 @@ class Service extends
     public function create(
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint(
             '/data/domains',
             'POST'
         );
         $endpoint->setResponseValidationSchema(new JsonSchema(Domain::getSchema()))
-                 ->setResponseFormatter(static fn(array $response) : Domain => ModelFactory::createDomain($response));
-        
+            ->setResponseFormatter(static fn(array $response): Domain => ModelFactory::createDomain($response));
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $domain,
-                              [
-                                  AbstractNormalizer::GROUPS => ['create'],
-                              ]
-                          );
-        
+            ->normalize(
+                $domain,
+                [
+                    AbstractNormalizer::GROUPS => ['create'],
+                ]
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'  => (string)$jwt,
-                            'json' => $data,
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                ]
+            );
     }
-    
+
     /**
      * @param Domain $domain
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -231,41 +236,42 @@ class Service extends
     public function update(
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($domain->getUid() === null) {
             throw new DataServiceException(
                 'Domain lacks an uid',
                 DataServiceException::MISSING_DOMAIN_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/domains/%s',
             'PUT'
         );
-        
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $domain,
-                              [
-                                  AbstractNormalizer::GROUPS => ['update'],
-                              ]
-                          );
-        
+            ->normalize(
+                $domain,
+                [
+                    AbstractNormalizer::GROUPS => ['update'],
+                ]
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => $data,
-                            'uriParameters' => [$domain->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                    'uriParameters' => [$domain->getUid()],
+                ]
+            );
     }
-    
+
     /**
      * @param Domain $domain
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -274,26 +280,27 @@ class Service extends
     public function delete(
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($domain->getUid() === null) {
             throw new DataServiceException(
                 'Domain lacks an uid',
                 DataServiceException::MISSING_DOMAIN_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/domains/%s',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$domain->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$domain->getUid()],
+                ]
+            );
     }
 }

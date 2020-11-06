@@ -37,7 +37,7 @@ class ServiceTest extends
     /**
      * createSystemUnderTest
      *
-     * @return \Jalismrs\Stalactite\Client\Service
+     * @return Service
      */
     private function createSystemUnderTest() : Service
     {

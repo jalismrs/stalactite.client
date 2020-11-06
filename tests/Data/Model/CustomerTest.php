@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
@@ -25,110 +25,110 @@ class CustomerTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestableCustomer();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $model = TestableModelFactory::getTestableCustomer();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize(
-                                $model,
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'main',
-                                    ],
-                                ]
-                            );
-        
+            ->normalize(
+                $model,
+                [
+                    AbstractNormalizer::GROUPS => [
+                        'main',
+                    ],
+                ]
+            );
+
         $expected = [
-            'uid'       => $model->getUid(),
-            'googleId'  => $model->getGoogleId(),
-            'email'     => $model->getEmail(),
+            'uid' => $model->getUid(),
+            'googleId' => $model->getGoogleId(),
+            'email' => $model->getEmail(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
+            'lastName' => $model->getLastName(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $model = TestableModelFactory::getTestableCustomer();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize(
-                                $model,
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'create',
-                                    ],
-                                ]
-                            );
-        
+            ->normalize(
+                $model,
+                [
+                    AbstractNormalizer::GROUPS => [
+                        'create',
+                    ],
+                ]
+            );
+
         $expected = [
-            'email'     => $model->getEmail(),
+            'email' => $model->getEmail(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
+            'lastName' => $model->getLastName(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $model = TestableModelFactory::getTestableCustomer();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize(
-                                $model,
-                                [
-                                    AbstractNormalizer::GROUPS => [
-                                        'update',
-                                    ],
-                                ]
-                            );
-        
+            ->normalize(
+                $model,
+                [
+                    AbstractNormalizer::GROUPS => [
+                        'update',
+                    ],
+                ]
+            );
+
         $expected = [
-            'email'     => $model->getEmail(),
+            'email' => $model->getEmail(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
+            'lastName' => $model->getLastName(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual

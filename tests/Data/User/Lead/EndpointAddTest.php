@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Lead;
 
@@ -21,53 +21,53 @@ class EndpointAddTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser()
-                                ->setUid(null),
+                ->setUid(null),
             [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidLeadsParameterAddLeads() : void
+    public function testThrowOnInvalidLeadsParameterAddLeads(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser(),
             ['not a lead'],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser(),
             [TestableModelFactory::getTestablePost(),],

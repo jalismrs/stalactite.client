@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\Model;
 
@@ -26,7 +26,7 @@ class ClientApp extends
      * @var string|null
      */
     private ?string $googleOAuthClientId = null;
-    
+
     /**
      * getSchema
      *
@@ -35,13 +35,13 @@ class ClientApp extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'                 => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'name'                => [
+            'name' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'googleOAuthClientId' => [
@@ -49,7 +49,7 @@ class ClientApp extends
             ],
         ];
     }
-    
+
     /**
      * getName
      *
@@ -57,11 +57,11 @@ class ClientApp extends
      *
      * @codeCoverageIgnore
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -71,13 +71,13 @@ class ClientApp extends
      *
      * @codeCoverageIgnore
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getGoogleOAuthClientId
      *
@@ -85,11 +85,11 @@ class ClientApp extends
      *
      * @codeCoverageIgnore
      */
-    public function getGoogleOAuthClientId() : ?string
+    public function getGoogleOAuthClientId(): ?string
     {
         return $this->googleOAuthClientId;
     }
-    
+
     /**
      * setGoogleOAuthClientId
      *
@@ -99,10 +99,10 @@ class ClientApp extends
      *
      * @codeCoverageIgnore
      */
-    public function setGoogleOAuthClientId(?string $googleOAuthClientId) : self
+    public function setGoogleOAuthClientId(?string $googleOAuthClientId): self
     {
         $this->googleOAuthClientId = $googleOAuthClientId;
-        
+
         return $this;
     }
 }

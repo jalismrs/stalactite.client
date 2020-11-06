@@ -15,28 +15,28 @@ class ServiceTest extends
     AbstractTestService
 {
     use SystemUnderTestTrait;
-    
-    public function testAccess() : void
+
+    public function testAccess(): void
     {
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $service1 = $systemUnderTest->access();
         $service2 = $systemUnderTest->access();
-        
+
         self::checkServices(
             $systemUnderTest,
             $service1,
             $service2
         );
     }
-    
-    public function testRelation() : void
+
+    public function testRelation(): void
     {
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $service1 = $systemUnderTest->relations();
         $service2 = $systemUnderTest->relations();
-        
+
         self::checkServices(
             $systemUnderTest,
             $service1,

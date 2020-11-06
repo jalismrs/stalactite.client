@@ -19,9 +19,9 @@ abstract class AbstractTestService extends
      *
      * @static
      *
-     * @param \Jalismrs\Stalactite\Client\AbstractService $parentService
-     * @param \Jalismrs\Stalactite\Client\AbstractService $service1
-     * @param \Jalismrs\Stalactite\Client\AbstractService $service2
+     * @param AbstractService $parentService
+     * @param AbstractService $service1
+     * @param AbstractService $service2
      *
      * @return void
      */

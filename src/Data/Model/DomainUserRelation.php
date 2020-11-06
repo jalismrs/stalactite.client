@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -17,16 +17,16 @@ class DomainUserRelation extends
     /**
      * domain
      *
-     * @var \Jalismrs\Stalactite\Client\Data\Model\Domain|null
+     * @var Domain|null
      */
     private ?Domain $domain = null;
     /**
      * user
      *
-     * @var \Jalismrs\Stalactite\Client\Data\Model\User|null
+     * @var User|null
      */
     private ?User $user = null;
-    
+
     /**
      * getSchema
      *
@@ -35,76 +35,76 @@ class DomainUserRelation extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'    => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'domain' => [
-                'type'   => JsonRule::OBJECT_TYPE,
+                'type' => JsonRule::OBJECT_TYPE,
                 'schema' => Domain::getSchema(),
             ],
-            'user'   => [
-                'type'   => JsonRule::OBJECT_TYPE,
+            'user' => [
+                'type' => JsonRule::OBJECT_TYPE,
                 'schema' => User::getSchema(),
             ],
         ];
     }
-    
+
     /**
      * getDomain
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Domain|null
+     * @return Domain|null
      *
      * @codeCoverageIgnore
      */
-    public function getDomain() : ?Domain
+    public function getDomain(): ?Domain
     {
         return $this->domain;
     }
-    
+
     /**
      * setDomain
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\Domain|null $domainModel
+     * @param Domain|null $domainModel
      *
      * @return $this
      *
      * @codeCoverageIgnore
      */
-    public function setDomain(?Domain $domainModel) : self
+    public function setDomain(?Domain $domainModel): self
     {
         $this->domain = $domainModel;
-        
+
         return $this;
     }
-    
+
     /**
      * getUser
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\User|null
+     * @return User|null
      *
      * @codeCoverageIgnore
      */
-    public function getUser() : ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
-    
+
     /**
      * setUser
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\User|null $userModel
+     * @param User|null $userModel
      *
      * @return $this
      *
      * @codeCoverageIgnore
      */
-    public function setUser(?User $userModel) : self
+    public function setUser(?User $userModel): self
     {
         $this->user = $userModel;
-        
+
         return $this;
     }
 }

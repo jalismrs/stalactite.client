@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
@@ -17,15 +17,16 @@ trait SystemUnderTestTrait
     /**
      * createSystemUnderTest
      *
-     * @param \Jalismrs\Stalactite\Client\Client|null $client
+     * @param Client|null $client
      *
-     * @return \Jalismrs\Stalactite\Client\Data\User\Service
+     * @return Service
      */
     private function createSystemUnderTest(
         Client $client = null
-    ) : Service {
+    ): Service
+    {
         $client = $client ?? ClientFactory::createClient();
-        
+
         return new Service($client);
     }
 }

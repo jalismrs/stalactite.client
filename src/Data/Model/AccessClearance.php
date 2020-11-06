@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -14,10 +14,10 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class AccessClearance extends
     AbstractModel
 {
-    public const NO_ACCESS    = null;
+    public const NO_ACCESS = null;
     public const ADMIN_ACCESS = 'admin';
-    public const USER_ACCESS  = 'user';
-    
+    public const USER_ACCESS = 'user';
+
     /**
      * granted
      *
@@ -30,11 +30,11 @@ class AccessClearance extends
      * @var string|null
      */
     private ?string $type;
-    
+
     /**
      * AccessClearance constructor.
      *
-     * @param bool        $granted
+     * @param bool $granted
      * @param string|null $type
      *
      * @codeCoverageIgnore
@@ -42,11 +42,12 @@ class AccessClearance extends
     public function __construct(
         bool $granted = false,
         ?string $type = null
-    ) {
+    )
+    {
         $this->granted = $granted;
-        $this->type    = $type ?? self::NO_ACCESS;
+        $this->type = $type ?? self::NO_ACCESS;
     }
-    
+
     /**
      * getSchema
      *
@@ -55,13 +56,13 @@ class AccessClearance extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
             'granted' => [
                 'type' => JsonRule::BOOLEAN_TYPE,
             ],
-            'type'    => [
+            'type' => [
                 'type' => JsonRule::STRING_TYPE,
                 'null' => true,
                 'enum' => [
@@ -71,7 +72,7 @@ class AccessClearance extends
             ],
         ];
     }
-    
+
     /**
      * getType
      *
@@ -79,11 +80,11 @@ class AccessClearance extends
      *
      * @codeCoverageIgnore
      */
-    public function getType() : ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
-    
+
     /**
      * setType
      *
@@ -93,25 +94,25 @@ class AccessClearance extends
      *
      * @codeCoverageIgnore
      */
-    public function setType(?string $type) : self
+    public function setType(?string $type): self
     {
         $this->type = $type;
-        
+
         return $this;
     }
-    
+
     /**
      * hasUserAccessGranted
      *
      * @return bool
      */
-    public function hasUserAccessGranted() : bool
+    public function hasUserAccessGranted(): bool
     {
         return $this->isGranted()
             &&
             $this->type === self::USER_ACCESS;
     }
-    
+
     /**
      * isGranted
      *
@@ -119,11 +120,11 @@ class AccessClearance extends
      *
      * @codeCoverageIgnore
      */
-    public function isGranted() : bool
+    public function isGranted(): bool
     {
         return $this->granted;
     }
-    
+
     /**
      * setGranted
      *
@@ -133,19 +134,19 @@ class AccessClearance extends
      *
      * @codeCoverageIgnore
      */
-    public function setGranted(bool $granted) : self
+    public function setGranted(bool $granted): self
     {
         $this->granted = $granted;
-        
+
         return $this;
     }
-    
+
     /**
      * hasAdminAccessGranted
      *
      * @return bool
      */
-    public function hasAdminAccessGranted() : bool
+    public function hasAdminAccessGranted(): bool
     {
         return $this->isGranted()
             &&

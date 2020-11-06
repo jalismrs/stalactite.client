@@ -19,7 +19,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\User
+     * @return User
      */
     public static function createUser(array $data): User
     {
@@ -41,7 +41,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createPost
      *
@@ -49,7 +49,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Post
+     * @return Post
      */
     public static function createPost(array $data): Post
     {
@@ -64,7 +64,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createDomain
      *
@@ -72,7 +72,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Domain
+     * @return Domain
      */
     public static function createDomain(array $data): Domain
     {
@@ -86,7 +86,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createCustomer
      *
@@ -94,7 +94,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Customer
+     * @return Customer
      */
     public static function createCustomer(array $data): Customer
     {
@@ -107,7 +107,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createPermission
      *
@@ -115,7 +115,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\Permission
+     * @return Permission
      */
     public static function createPermission(array $data): Permission
     {
@@ -128,7 +128,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createDomainUserRelation
      *
@@ -136,7 +136,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\DomainUserRelation
+     * @return DomainUserRelation
      */
     public static function createDomainUserRelation(array $data): DomainUserRelation
     {
@@ -147,7 +147,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createDomainCustomerRelation
      *
@@ -155,7 +155,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\DomainCustomerRelation
+     * @return DomainCustomerRelation
      */
     public static function createDomainCustomerRelation(array $data): DomainCustomerRelation
     {
@@ -166,7 +166,7 @@ class ModelFactory
 
         return $model;
     }
-    
+
     /**
      * createAccessClearance
      *
@@ -174,7 +174,7 @@ class ModelFactory
      *
      * @param array $data
      *
-     * @return \Jalismrs\Stalactite\Client\Data\Model\AccessClearance
+     * @return AccessClearance
      */
     public static function createAccessClearance(array $data): AccessClearance
     {

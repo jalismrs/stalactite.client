@@ -15,7 +15,7 @@ class JwtFactory
      * create
      *
      * @static
-     * @return \Lcobucci\JWT\Token
+     * @return Token
      */
     public static function create(): Token
     {

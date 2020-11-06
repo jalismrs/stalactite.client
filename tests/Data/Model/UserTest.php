@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
@@ -27,32 +27,32 @@ class UserTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -61,33 +61,33 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'       => $model->getUid(),
+            'uid' => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'googleId'  => $model->getGoogleId(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'googleId' => $model->getGoogleId(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMin() : void
+    public function testGroupMin(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -96,33 +96,33 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
-            'uid'       => $model->getUid(),
+            'uid' => $model->getUid(),
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'googleId'  => $model->getGoogleId(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'googleId' => $model->getGoogleId(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCreate() : void
+    public function testGroupCreate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -131,31 +131,31 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdate() : void
+    public function testGroupUpdate(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -164,31 +164,31 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
-            'email'     => $model->getEmail(),
-            'admin'     => $model->isAdmin(),
+            'lastName' => $model->getLastName(),
+            'email' => $model->getEmail(),
+            'admin' => $model->isAdmin(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupUpdateMe() : void
+    public function testGroupUpdateMe(): void
     {
         $serializer = Normalizer::getInstance();
-        
+
         $model = TestableModelFactory::getTestableUser();
-        
+
         $actual = $serializer->normalize(
             $model,
             [
@@ -197,31 +197,32 @@ class UserTest extends
                 ],
             ]
         );
-        
+
         $expected = [
             'firstName' => $model->getFirstName(),
-            'lastName'  => $model->getLastName(),
+            'lastName' => $model->getLastName(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @param array $posts
-     * @param int   $expectedCount
+     * @param int $expectedCount
      *
      * @dataProvider getPosts
      */
     public function testSetPosts(
         array $posts,
         int $expectedCount
-    ) : void {
+    ): void
+    {
         $user = new User();
         $user->setPosts($posts);
-        
+
         self::assertCount(
             $expectedCount,
             $user->getPosts()
@@ -231,20 +232,21 @@ class UserTest extends
             $user->getPosts()
         );
     }
-    
+
     /**
      * @param array $leads
-     * @param int   $expectedCount
+     * @param int $expectedCount
      *
      * @dataProvider getPosts
      */
     public function testSetLeads(
         array $leads,
         int $expectedCount
-    ) : void {
+    ): void
+    {
         $user = new User();
         $user->setLeads($leads);
-        
+
         self::assertCount(
             $expectedCount,
             $user->getLeads()
@@ -254,11 +256,11 @@ class UserTest extends
             $user->getLeads()
         );
     }
-    
+
     /**
      * @return array
      */
-    public function getPosts() : array
+    public function getPosts(): array
     {
         return [
             [
@@ -289,12 +291,12 @@ class UserTest extends
             ],
         ];
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $posts
-     * @param bool  $hasExplicitPermission
-     * @param bool  $hasPermission
+     * @param bool $hasExplicitPermission
+     * @param bool $hasPermission
      *
      * @dataProvider getUserProvider
      */
@@ -303,10 +305,11 @@ class UserTest extends
         array $posts,
         bool $hasExplicitPermission,
         bool $hasPermission
-    ) : void {
+    ): void
+    {
         $user->setPosts($posts);
         $permission = TestableModelFactory::getTestablePermission();
-        
+
         self::assertSame(
             $hasExplicitPermission,
             $user->hasExplicitPermission((string)$permission),
@@ -318,20 +321,20 @@ class UserTest extends
             'global'
         );
     }
-    
+
     /**
      * @return array|array[]
      */
-    public function getUserProvider() : array
+    public function getUserProvider(): array
     {
-        $user  = TestableModelFactory::getTestableUser();
+        $user = TestableModelFactory::getTestableUser();
         $admin = TestableModelFactory::getTestableUser()
-                                     ->setAdmin(true);
-        
+            ->setAdmin(true);
+
         $postWithoutPermission = TestableModelFactory::getTestablePost();
-        $postWithPermission    = TestableModelFactory::getTestablePost()
-                                                     ->addPermission(TestableModelFactory::getTestablePermission());
-        
+        $postWithPermission = TestableModelFactory::getTestablePost()
+            ->addPermission(TestableModelFactory::getTestablePermission());
+
         return [
             [
                 $user,

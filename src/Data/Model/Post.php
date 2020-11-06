@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -19,7 +19,7 @@ class Post extends
      *
      * @var string|null
      */
-    private ?string $name      = null;
+    private ?string $name = null;
     /**
      * shortName
      *
@@ -30,7 +30,7 @@ class Post extends
      * @var Permission[]|array
      */
     private array $permissions = [];
-    
+
     /**
      * getSchema
      *
@@ -39,25 +39,25 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'         => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'name'        => [
+            'name' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'shortName'   => [
+            'shortName' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'permissions' => [
-                'type'   => JsonRule::LIST_TYPE,
+                'type' => JsonRule::LIST_TYPE,
                 'schema' => Permission::getSchema(),
             ],
         ];
     }
-    
+
     /**
      * getName
      *
@@ -65,11 +65,11 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -79,13 +79,13 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getShortName
      *
@@ -93,11 +93,11 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public function getShortName() : ?string
+    public function getShortName(): ?string
     {
         return $this->shortName;
     }
-    
+
     /**
      * setShortName
      *
@@ -107,25 +107,25 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public function setShortName(?string $shortName) : self
+    public function setShortName(?string $shortName): self
     {
         $this->shortName = $shortName;
-        
+
         return $this;
     }
-    
+
     /**
      * getPermissions
      *
-     * @return array|\Jalismrs\Stalactite\Client\Data\Model\Permission[]
+     * @return array|Permission[]
      *
      * @codeCoverageIgnore
      */
-    public function getPermissions() : array
+    public function getPermissions(): array
     {
         return $this->permissions;
     }
-    
+
     /**
      * setPermissions
      *
@@ -135,33 +135,33 @@ class Post extends
      *
      * @codeCoverageIgnore
      */
-    public function setPermissions(array $permissions) : Post
+    public function setPermissions(array $permissions): Post
     {
         foreach ($permissions as $permission) {
             if ($permission instanceof Permission) {
                 $this->addPermission($permission);
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * addPermission
      *
-     * @param \Jalismrs\Stalactite\Client\Data\Model\Permission $permission
+     * @param Permission $permission
      *
      * @return $this
      *
      * @codeCoverageIgnore
      */
-    public function addPermission(Permission $permission) : self
+    public function addPermission(Permission $permission): self
     {
         $this->permissions[] = $permission;
-        
+
         return $this;
     }
-    
+
     /**
      * hasPermission
      *
@@ -169,14 +169,14 @@ class Post extends
      *
      * @return bool
      */
-    public function hasPermission(string $permission) : bool
+    public function hasPermission(string $permission): bool
     {
         foreach ($this->permissions as $p) {
             if ((string)$p === $permission) {
                 return true;
             }
         }
-        
+
         return false;
     }
 }

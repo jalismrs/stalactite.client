@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
@@ -28,14 +28,14 @@ class EndpointGetUsersTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetUsers() : void
+    public function testGetUsers(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -43,58 +43,58 @@ class EndpointGetUsersTest extends
                 json_encode(
                     [
                         Normalizer::getInstance()
-                                  ->normalize(
-                                      TestableModelFactory::getTestableUser(),
-                                      [
-                                          AbstractNormalizer::GROUPS => ['main'],
-                                      ]
-                                  ),
+                            ->normalize(
+                                TestableModelFactory::getTestableUser(),
+                                [
+                                    AbstractNormalizer::GROUPS => ['main'],
+                                ]
+                            ),
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->getUsers(
             TestableModelFactory::getTestablePost(),
             JwtFactory::create()
         );
-        
+
         self::assertContainsOnlyInstancesOf(
             User::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->getUsers(
             TestableModelFactory::getTestablePost()
-                        ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->getUsers(
             TestableModelFactory::getTestablePost(),
             JwtFactory::create()

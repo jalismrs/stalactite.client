@@ -9,7 +9,7 @@ class Permission extends
     AbstractModel
 {
     private const SEPARATOR = '.';
-    
+
     /**
      * scope
      *
@@ -28,7 +28,7 @@ class Permission extends
      * @var string|null
      */
     private ?string $operation;
-    
+
     /**
      * Permission constructor.
      *
@@ -42,12 +42,13 @@ class Permission extends
         ?string $scope = null,
         ?string $resource = null,
         ?string $operation = null
-    ) {
-        $this->scope     = $scope;
-        $this->resource  = $resource;
+    )
+    {
+        $this->scope = $scope;
+        $this->resource = $resource;
         $this->operation = $operation;
     }
-    
+
     /**
      * getSchema
      *
@@ -56,16 +57,16 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'       => ['type' => JsonRule::STRING_TYPE],
-            'scope'     => ['type' => JsonRule::STRING_TYPE],
-            'resource'  => ['type' => JsonRule::STRING_TYPE],
+            'uid' => ['type' => JsonRule::STRING_TYPE],
+            'scope' => ['type' => JsonRule::STRING_TYPE],
+            'resource' => ['type' => JsonRule::STRING_TYPE],
             'operation' => ['type' => JsonRule::STRING_TYPE],
         ];
     }
-    
+
     /**
      * getScope
      *
@@ -73,11 +74,11 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function getScope() : ?string
+    public function getScope(): ?string
     {
         return $this->scope;
     }
-    
+
     /**
      * setScope
      *
@@ -87,13 +88,13 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function setScope(?string $scope) : self
+    public function setScope(?string $scope): self
     {
         $this->scope = $scope;
-        
+
         return $this;
     }
-    
+
     /**
      * getResource
      *
@@ -101,11 +102,11 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function getResource() : ?string
+    public function getResource(): ?string
     {
         return $this->resource;
     }
-    
+
     /**
      * setResource
      *
@@ -115,13 +116,13 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function setResource(?string $resource) : self
+    public function setResource(?string $resource): self
     {
         $this->resource = $resource;
-        
+
         return $this;
     }
-    
+
     /**
      * getOperation
      *
@@ -129,11 +130,11 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function getOperation() : ?string
+    public function getOperation(): ?string
     {
         return $this->operation;
     }
-    
+
     /**
      * setOperation
      *
@@ -143,19 +144,19 @@ class Permission extends
      *
      * @codeCoverageIgnore
      */
-    public function setOperation(?string $operation) : self
+    public function setOperation(?string $operation): self
     {
         $this->operation = $operation;
-        
+
         return $this;
     }
-    
+
     /**
      * __toString
      *
      * @return string
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->scope . self::SEPARATOR . $this->resource . self::SEPARATOR . $this->operation;
     }

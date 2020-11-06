@@ -21,72 +21,72 @@ class EndpointAddTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_POST_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->addPermissions(
             TestableModelFactory::getTestablePost()
-                        ->setUid(null),
+                ->setUid(null),
             [],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPermissionList() : void
+    public function testThrowOnInvalidPermissionList(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->addPermissions(
             TestableModelFactory::getTestablePost(),
             ['not a permission'],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodNotCalledOnEmptyPermissionList() : void
+    public function testRequestMethodNotCalledOnEmptyPermissionList(): void
     {
         $mockClient = $this->createMockClient(false);
-        
+
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $response = $systemUnderTest->addPermissions(
             TestableModelFactory::getTestablePost(),
             [],
             JwtFactory::create()
         );
-        
+
         self::assertNull($response);
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $response = $systemUnderTest->addPermissions(
             TestableModelFactory::getTestablePost(),
             [TestableModelFactory::getTestablePermission()],

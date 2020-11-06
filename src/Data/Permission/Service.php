@@ -31,7 +31,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt) : Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/permissions');
         $endpoint->setResponseValidationSchema(
@@ -40,27 +40,27 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $permission) : Permission => ModelFactory::createPermission($permission),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $permission): Permission => ModelFactory::createPermission($permission),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
-    
+
     /**
      * @param string $uid
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -69,24 +69,25 @@ class Service extends
     public function get(
         string $uid,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint('/data/permissions/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
-                 ->setResponseFormatter(fn(array $response) : Permission => ModelFactory::createPermission($response));
-        
+            ->setResponseFormatter(fn(array $response): Permission => ModelFactory::createPermission($response));
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$uid],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
-    
+
     /**
      * @param string $uid
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -95,25 +96,26 @@ class Service extends
     public function exists(
         string $uid,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint(
             '/data/permissions/%s',
             'HEAD'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$uid],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
-    
+
     /**
      * @param Permission $permission
-     * @param Token      $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -123,37 +125,38 @@ class Service extends
     public function create(
         Permission $permission,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint(
             '/data/permissions',
             'POST'
         );
         $endpoint->setResponseValidationSchema(new JsonSchema(Permission::getSchema()))
-                 ->setResponseFormatter(
-                     static fn(array $response) : Permission => ModelFactory::createPermission($response)
-                 );
-        
+            ->setResponseFormatter(
+                static fn(array $response): Permission => ModelFactory::createPermission($response)
+            );
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $permission,
-                              [
-                                  AbstractNormalizer::GROUPS => ['create'],
-                              ]
-                          );
-        
+            ->normalize(
+                $permission,
+                [
+                    AbstractNormalizer::GROUPS => ['create'],
+                ]
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'  => (string)$jwt,
-                            'json' => $data,
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                ]
+            );
     }
-    
+
     /**
      * @param Permission $permission
-     * @param Token      $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -163,41 +166,42 @@ class Service extends
     public function update(
         Permission $permission,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($permission->getUid() === null) {
             throw new DataServiceException(
                 'Permission lacks an uid',
                 DataServiceException::MISSING_PERMISSION_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/permissions/%s',
             'PUT'
         );
-        
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $permission,
-                              [
-                                  AbstractNormalizer::GROUPS => ['update'],
-                              ]
-                          );
-        
+            ->normalize(
+                $permission,
+                [
+                    AbstractNormalizer::GROUPS => ['update'],
+                ]
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => $data,
-                            'uriParameters' => [$permission->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                    'uriParameters' => [$permission->getUid()],
+                ]
+            );
     }
-    
+
     /**
      * @param Permission $permission
-     * @param Token      $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -206,26 +210,27 @@ class Service extends
     public function delete(
         Permission $permission,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($permission->getUid() === null) {
             throw new DataServiceException(
                 'Permission lacks an uid',
                 DataServiceException::MISSING_PERMISSION_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/permissions/%s',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$permission->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$permission->getUid()],
+                ]
+            );
     }
 }

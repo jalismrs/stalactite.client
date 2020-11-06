@@ -27,92 +27,92 @@ class EndpointClearanceTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      * @throws JsonException
      */
-    public function testGetClearance() : void
+    public function testGetClearance(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
-                              ->normalize(
-                                  TestableModelFactory::getTestableAccessClearance(),
-                                  [
-                                      AbstractNormalizer::GROUPS => ['main'],
-                                  ]
-                              ),
+                        ->normalize(
+                            TestableModelFactory::getTestableAccessClearance(),
+                            [
+                                AbstractNormalizer::GROUPS => ['main'],
+                            ]
+                        ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->clearance(
             TestableModelFactory::getTestableCustomer(),
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
-        
+
         self::assertInstanceOf(
             AccessClearance::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnMissingCustomerUid() : void
+    public function testThrowOnMissingCustomerUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_CUSTOMER_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->clearance(
             TestableModelFactory::getTestableCustomer()
-                                ->setUid(null),
+                ->setUid(null),
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnMissingDomainUid() : void
+    public function testThrowOnMissingDomainUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->clearance(
             TestableModelFactory::getTestableCustomer(),
             TestableModelFactory::getTestableDomain()
-                                ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->clearance(
             TestableModelFactory::getTestableCustomer(),
             TestableModelFactory::getTestableDomain(),

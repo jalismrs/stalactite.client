@@ -20,34 +20,34 @@ class EndpointDeleteAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowDomainLacksUid() : void
+    public function testThrowDomainLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->deleteAll(
             TestableModelFactory::getTestableDomain()
-                        ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->deleteAll(
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()

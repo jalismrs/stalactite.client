@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -38,7 +38,7 @@ class Customer extends
      * @var string|null
      */
     private ?string $lastName = null;
-    
+
     /**
      * getSchema
      *
@@ -47,28 +47,28 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'       => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'email'     => [
+            'email' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'firstName' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'lastName'  => [
+            'lastName' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'googleId'  => [
+            'googleId' => [
                 'type' => JsonRule::STRING_TYPE,
                 'null' => true,
             ],
         ];
     }
-    
+
     /**
      * getGoogleId
      *
@@ -76,11 +76,11 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function getGoogleId() : ?string
+    public function getGoogleId(): ?string
     {
         return $this->googleId;
     }
-    
+
     /**
      * setGoogleId
      *
@@ -90,13 +90,13 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function setGoogleId(?string $googleId) : self
+    public function setGoogleId(?string $googleId): self
     {
         $this->googleId = $googleId;
-        
+
         return $this;
     }
-    
+
     /**
      * getEmail
      *
@@ -104,11 +104,11 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function getEmail() : ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
-    
+
     /**
      * setEmail
      *
@@ -118,13 +118,13 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function setEmail(?string $email) : self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
-        
+
         return $this;
     }
-    
+
     /**
      * getFirstName
      *
@@ -132,11 +132,11 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function getFirstName() : ?string
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
-    
+
     /**
      * setFirstName
      *
@@ -146,13 +146,13 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function setFirstName(?string $firstName) : self
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
-        
+
         return $this;
     }
-    
+
     /**
      * getLastName
      *
@@ -160,11 +160,11 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function getLastName() : ?string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
-    
+
     /**
      * setLastName
      *
@@ -174,10 +174,10 @@ class Customer extends
      *
      * @codeCoverageIgnore
      */
-    public function setLastName(?string $lastName) : self
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
-        
+
         return $this;
     }
 }

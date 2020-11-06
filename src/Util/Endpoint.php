@@ -33,22 +33,22 @@ final class Endpoint
     /**
      * responseValidationSchema
      *
-     * @var \hunomina\DataValidator\Schema\Json\JsonSchema|null
+     * @var JsonSchema|null
      */
     private ?JsonSchema $responseValidationSchema = null;
     /**
      * responseFormatter
      *
-     * @var \Closure|null
+     * @var Closure|null
      */
     private ?Closure $responseFormatter = null;
-    
+
     /**
      * Endpoint constructor.
      *
      * @param string $uri
      * @param string $method
-     * @param bool   $cacheable
+     * @param bool $cacheable
      *
      * @codeCoverageIgnore
      */
@@ -58,7 +58,7 @@ final class Endpoint
         $this->method = $method;
         $this->cacheable = $cacheable;
     }
-    
+
     /**
      * getUri
      *
@@ -70,7 +70,7 @@ final class Endpoint
     {
         return $this->uri;
     }
-    
+
     /**
      * getMethod
      *
@@ -82,7 +82,7 @@ final class Endpoint
     {
         return $this->method;
     }
-    
+
     /**
      * isCacheable
      *
@@ -94,11 +94,11 @@ final class Endpoint
     {
         return $this->cacheable;
     }
-    
+
     /**
      * getResponseValidationSchema
      *
-     * @return \hunomina\DataValidator\Schema\Json\JsonSchema|null
+     * @return JsonSchema|null
      *
      * @codeCoverageIgnore
      */
@@ -106,11 +106,11 @@ final class Endpoint
     {
         return $this->responseValidationSchema;
     }
-    
+
     /**
      * setResponseValidationSchema
      *
-     * @param \hunomina\DataValidator\Schema\Json\JsonSchema|null $responseValidationSchema
+     * @param JsonSchema|null $responseValidationSchema
      *
      * @return $this
      *
@@ -121,11 +121,11 @@ final class Endpoint
         $this->responseValidationSchema = $responseValidationSchema;
         return $this;
     }
-    
+
     /**
      * getResponseFormatter
      *
-     * @return \Closure|null
+     * @return Closure|null
      *
      * @codeCoverageIgnore
      */
@@ -133,11 +133,11 @@ final class Endpoint
     {
         return $this->responseFormatter;
     }
-    
+
     /**
      * setResponseFormatter
      *
-     * @param \Closure|null $responseFormatter
+     * @param Closure|null $responseFormatter
      *
      * @return $this
      *

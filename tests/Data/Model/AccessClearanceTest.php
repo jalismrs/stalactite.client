@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Model;
 
@@ -26,82 +26,84 @@ class AccessClearanceTest extends
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupCommon() : void
+    public function testGroupCommon(): void
     {
         $model = TestableModelFactory::getTestableAccessClearance();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize($model);
-        
+            ->normalize($model);
+
         $expected = [];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @throws ExpectationFailedException
      * @throws InvalidArgumentException
      * @throws NormalizerException
      */
-    public function testGroupMain() : void
+    public function testGroupMain(): void
     {
         $model = TestableModelFactory::getTestableAccessClearance();
-        
+
         $actual = Normalizer::getInstance()
-                            ->normalize(
-                                $model,
-                                [AbstractNormalizer::GROUPS => ['main']]
-                            );
-        
+            ->normalize(
+                $model,
+                [AbstractNormalizer::GROUPS => ['main']]
+            );
+
         $expected = [
             'granted' => $model->isGranted(),
-            'type'    => $model->getType(),
+            'type' => $model->getType(),
         ];
-        
+
         self::assertEqualsCanonicalizing(
             $expected,
             $actual
         );
     }
-    
+
     /**
      * @param AccessClearance $accessClearance
-     * @param string          $expected
+     * @param string $expected
      *
      * @dataProvider getAccessClearances
      */
     public function testHasUserAccessGranted(
         AccessClearance $accessClearance,
         string $expected = ''
-    ) : void {
+    ): void
+    {
         if ($expected === 'user') {
             self::assertTrue($accessClearance->hasUserAccessGranted());
         } else {
             self::assertFalse($accessClearance->hasUserAccessGranted());
         }
     }
-    
+
     /**
      * @param AccessClearance $accessClearance
-     * @param string          $expected
+     * @param string $expected
      *
      * @dataProvider getAccessClearances
      */
     public function testHasAdminAccessGranted(
         AccessClearance $accessClearance,
         string $expected = ''
-    ) : void {
+    ): void
+    {
         if ($expected === 'admin') {
             self::assertTrue($accessClearance->hasAdminAccessGranted());
         } else {
             self::assertFalse($accessClearance->hasAdminAccessGranted());
         }
     }
-    
-    public function getAccessClearances() : array
+
+    public function getAccessClearances(): array
     {
         return [
             [

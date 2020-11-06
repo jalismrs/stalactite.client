@@ -24,9 +24,9 @@ class Service extends
     AbstractService
 {
     /**
-     * @param User   $user
+     * @param User $user
      * @param Domain $domain
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -36,37 +36,38 @@ class Service extends
         User $user,
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks a uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         if ($domain->getUid() === null) {
             throw new DataServiceException(
                 'Domain lacks a uid',
                 DataServiceException::MISSING_DOMAIN_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/users/%s/access/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
-                 ->setResponseFormatter(
-                     static fn(array $response) : AccessClearance => ModelFactory::createAccessClearance($response)
-                 );
-        
+            ->setResponseFormatter(
+                static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [
-                                $user->getUid(),
-                                $domain->getUid(),
-                            ],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [
+                        $user->getUid(),
+                        $domain->getUid(),
+                    ],
+                ]
+            );
     }
 }

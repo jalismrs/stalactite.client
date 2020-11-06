@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain\Relation;
 
@@ -29,55 +29,55 @@ class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetRelations() : void
+    public function testGetRelations(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     [
-                        'users'     => [
+                        'users' => [
                             Normalizer::getInstance()
-                                      ->normalize(
-                                          TestableModelFactory::getTestableDomainUserRelation(),
-                                          [
-                                              AbstractNormalizer::GROUPS             => ['main'],
-                                              AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
-                                          ]
-                                      ),
+                                ->normalize(
+                                    TestableModelFactory::getTestableDomainUserRelation(),
+                                    [
+                                        AbstractNormalizer::GROUPS => ['main'],
+                                        AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
+                                    ]
+                                ),
                         ],
                         'customers' => [
                             Normalizer::getInstance()
-                                      ->normalize(
-                                          TestableModelFactory::getTestableDomainCustomerRelation(),
-                                          [
-                                              AbstractNormalizer::GROUPS             => ['main'],
-                                              AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
-                                          ]
-                                      ),
+                                ->normalize(
+                                    TestableModelFactory::getTestableDomainCustomerRelation(),
+                                    [
+                                        AbstractNormalizer::GROUPS => ['main'],
+                                        AbstractNormalizer::IGNORED_ATTRIBUTES => ['domain'],
+                                    ]
+                                ),
                         ],
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->all(
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()
         );
-        
+
         static::assertIsArray($response->getBody());
-        
+
         static::assertArrayHasKey(
             'users',
             $response->getBody()
@@ -86,7 +86,7 @@ class EndpointAllTest extends
             'customers',
             $response->getBody()
         );
-        
+
         static::assertContainsOnlyInstancesOf(
             DomainUserRelation::class,
             $response->getBody()['users']
@@ -96,34 +96,34 @@ class EndpointAllTest extends
             $response->getBody()['customers']
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_DOMAIN_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->all(
             TestableModelFactory::getTestableDomain()
-                        ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->all(
             TestableModelFactory::getTestableDomain(),
             JwtFactory::create()

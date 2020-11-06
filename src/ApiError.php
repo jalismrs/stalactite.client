@@ -30,12 +30,12 @@ final class ApiError implements
      * @var string|null
      */
     private ?string $message;
-    
+
     /**
      * ApiError constructor.
      *
-     * @param string      $type
-     * @param int         $code
+     * @param string $type
+     * @param int $code
      * @param string|null $message
      *
      * @codeCoverageIgnore
@@ -44,12 +44,13 @@ final class ApiError implements
         string $type,
         int $code,
         ?string $message = null
-    ) {
-        $this->type    = $type;
-        $this->code    = $code;
+    )
+    {
+        $this->type = $type;
+        $this->code = $code;
         $this->message = $message;
     }
-    
+
     /**
      * getSchema
      *
@@ -58,18 +59,18 @@ final class ApiError implements
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'type'    => ['type' => JsonRule::STRING_TYPE],
-            'code'    => ['type' => JsonRule::INTEGER_TYPE],
+            'type' => ['type' => JsonRule::STRING_TYPE],
+            'code' => ['type' => JsonRule::INTEGER_TYPE],
             'message' => [
                 'type' => JsonRule::STRING_TYPE,
                 'null' => true,
             ],
         ];
     }
-    
+
     /**
      * getType
      *
@@ -77,11 +78,11 @@ final class ApiError implements
      *
      * @codeCoverageIgnore
      */
-    public function getType() : string
+    public function getType(): string
     {
         return $this->type;
     }
-    
+
     /**
      * getCode
      *
@@ -89,11 +90,11 @@ final class ApiError implements
      *
      * @codeCoverageIgnore
      */
-    public function getCode() : int
+    public function getCode(): int
     {
         return $this->code;
     }
-    
+
     /**
      * getMessage
      *
@@ -101,7 +102,7 @@ final class ApiError implements
      *
      * @codeCoverageIgnore
      */
-    public function getMessage() : ?string
+    public function getMessage(): ?string
     {
         return $this->message;
     }

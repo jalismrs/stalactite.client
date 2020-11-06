@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Post;
 
@@ -26,7 +26,7 @@ class Service extends
     AbstractService
 {
     /**
-     * @param User  $user
+     * @param User $user
      * @param Token $jwt
      *
      * @return Response
@@ -36,16 +36,17 @@ class Service extends
     public function get(
         User $user,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         // TODO: rename 'all'
-        
+
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/users/%s/posts');
         $endpoint->setResponseValidationSchema(
             new JsonSchema(
@@ -53,27 +54,27 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $post) : Post => ModelFactory::createPost($post),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$user->getUid()],
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $post): Post => ModelFactory::createPost($post),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $posts
      * @param Token $jwt
      *
@@ -85,18 +86,19 @@ class Service extends
         User $user,
         array $posts,
         Token $jwt
-    ) : ?Response {
+    ): ?Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         if (count($posts) === 0) {
             return null;
         }
-        
+
         try {
             $posts = ModelHelper::getUids(
                 $posts,
@@ -104,32 +106,32 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting posts uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/users/%s/posts',
             'POST'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['posts' => $posts],
-                            'uriParameters' => [$user->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['posts' => $posts],
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $posts
      * @param Token $jwt
      *
@@ -141,18 +143,19 @@ class Service extends
         User $user,
         array $posts,
         Token $jwt
-    ) : ?Response {
+    ): ?Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         if (count($posts) === 0) {
             return null;
         }
-        
+
         try {
             $posts = ModelHelper::getUids(
                 $posts,
@@ -160,27 +163,27 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting posts uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/users/%s/posts',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['posts' => $posts],
-                            'uriParameters' => [$user->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['posts' => $posts],
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
 }

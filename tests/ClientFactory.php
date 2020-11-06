@@ -17,7 +17,7 @@ class ClientFactory
      * createClient
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Client
+     * @return Client
      */
     public static function createClient() : Client
     {
@@ -35,7 +35,7 @@ class ClientFactory
      * createBasicClient
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Client
+     * @return Client
      */
     public static function createBasicClient(): Client
     {

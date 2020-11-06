@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\User\Lead;
 
@@ -26,7 +26,7 @@ class Service extends
     AbstractService
 {
     /**
-     * @param User  $user
+     * @param User $user
      * @param Token $jwt
      *
      * @return Response
@@ -36,7 +36,8 @@ class Service extends
     public function get(
         User $user,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         // TODO: rename 'all'
         if ($user->getUid() === null) {
             throw new DataServiceException(
@@ -44,7 +45,7 @@ class Service extends
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/users/%s/leads');
         $endpoint->setResponseValidationSchema(
             new JsonSchema(
@@ -52,27 +53,27 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $post) : Post => ModelFactory::createPost($post),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$user->getUid()],
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $post): Post => ModelFactory::createPost($post),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $leads
      * @param Token $jwt
      *
@@ -84,14 +85,15 @@ class Service extends
         User $user,
         array $leads,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         try {
             $leads = ModelHelper::getUids(
                 $leads,
@@ -99,32 +101,32 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting leads uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/users/%s/leads',
             'POST'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['leads' => $leads],
-                            'uriParameters' => [$user->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['leads' => $leads],
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param array $leads
      * @param Token $jwt
      *
@@ -136,14 +138,15 @@ class Service extends
         User $user,
         array $leads,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         try {
             $leads = ModelHelper::getUids(
                 $leads,
@@ -151,27 +154,27 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting leads uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/users/%s/leads',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['leads' => $leads],
-                            'uriParameters' => [$user->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['leads' => $leads],
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
 }

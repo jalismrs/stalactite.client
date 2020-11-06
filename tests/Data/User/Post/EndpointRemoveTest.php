@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
@@ -21,54 +21,54 @@ class EndpointRemoveTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->remove(
             TestableModelFactory::getTestableUser()
-                                ->setUid(null),
+                ->setUid(null),
             [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPostsParameterRemovePosts() : void
+    public function testThrowOnInvalidPostsParameterRemovePosts(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->remove(
             TestableModelFactory::getTestableUser(),
             ['not a post'],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodNotCalledOnEmptyPostList() : void
+    public function testRequestMethodNotCalledOnEmptyPostList(): void
     {
         $mockClient = $this->createMockClient(false);
-        
+
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $response = $systemUnderTest->remove(
             TestableModelFactory::getTestableUser(),
             [],
@@ -76,16 +76,16 @@ class EndpointRemoveTest extends
         );
         self::assertNull($response);
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->remove(
             TestableModelFactory::getTestableUser(),
             [TestableModelFactory::getTestablePost()],

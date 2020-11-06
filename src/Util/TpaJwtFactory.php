@@ -17,16 +17,16 @@ use Lcobucci\JWT\Token;
 final class TpaJwtFactory
 {
     private const JWT_DURATION = 60;
-    
+
     /**
      * forge
      *
      * @static
      *
-     * @param \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp $serverApp
-     * @param int                                                        $duration
+     * @param ServerApp $serverApp
+     * @param int $duration
      *
-     * @return \Lcobucci\JWT\Token
+     * @return Token
      */
     public static function forge(ServerApp $serverApp, int $duration = self::JWT_DURATION): Token
     {

@@ -26,7 +26,7 @@ class Service extends
 {
     /**
      * @param Customer $customer
-     * @param Token    $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -35,24 +35,25 @@ class Service extends
     public function all(
         Customer $customer,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($customer->getUid() === null) {
             throw new DataServiceException(
                 'Customer lacks a uid',
                 DataServiceException::MISSING_CUSTOMER_UID
             );
         }
-        
+
         $schema = [
-            'uid'    => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'domain' => [
-                'type'   => JsonRule::OBJECT_TYPE,
+                'type' => JsonRule::OBJECT_TYPE,
                 'schema' => Domain::getSchema(),
             ],
         ];
-        
+
         $endpoint = new Endpoint('/data/customers/%s/relations');
         $endpoint->setResponseValidationSchema(
             new JsonSchema(
@@ -60,29 +61,29 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $relation
-                             ) : DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($relation),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$customer->getUid()],
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $relation
+                        ): DomainCustomerRelation => ModelFactory::createDomainCustomerRelation($relation),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$customer->getUid()],
+                ]
+            );
     }
-    
+
     /**
      * @param Customer $customer
-     * @param Token    $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -91,26 +92,27 @@ class Service extends
     public function deleteAll(
         Customer $customer,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($customer->getUid() === null) {
             throw new DataServiceException(
                 'Customer lacks a uid',
                 DataServiceException::MISSING_CUSTOMER_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/customers/%s/relations',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$customer->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$customer->getUid()],
+                ]
+            );
     }
 }

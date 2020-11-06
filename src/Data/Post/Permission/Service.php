@@ -22,7 +22,7 @@ class Service extends
     AbstractService
 {
     /**
-     * @param Post  $post
+     * @param Post $post
      * @param array $permissions
      * @param Token $jwt
      *
@@ -34,20 +34,21 @@ class Service extends
         Post $post,
         array $permissions,
         Token $jwt
-    ) : ?Response {
+    ): ?Response
+    {
         // TODO: rename 'add'
-        
+
         if ($post->getUid() === null) {
             throw new DataServiceException(
                 'Post lacks an uid',
                 DataServiceException::MISSING_POST_UID
             );
         }
-        
+
         if (count($permissions) === 0) {
             return null;
         }
-        
+
         try {
             $permissions = ModelHelper::getUids(
                 $permissions,
@@ -55,32 +56,32 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting permissions uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/posts/%s/permissions',
             'POST'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['permissions' => $permissions],
-                            'uriParameters' => [$post->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['permissions' => $permissions],
+                    'uriParameters' => [$post->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param Post  $post
+     * @param Post $post
      * @param array $permissions
      * @param Token $jwt
      *
@@ -92,20 +93,21 @@ class Service extends
         Post $post,
         array $permissions,
         Token $jwt
-    ) : ?Response {
+    ): ?Response
+    {
         // TODO: rename 'remove'
-        
+
         if ($post->getUid() === null) {
             throw new DataServiceException(
                 'Post lacks an uid',
                 DataServiceException::MISSING_POST_UID
             );
         }
-        
+
         if (count($permissions) === 0) {
             return null;
         }
-        
+
         try {
             $permissions = ModelHelper::getUids(
                 $permissions,
@@ -113,27 +115,27 @@ class Service extends
             );
         } catch (InvalidArgumentException $e) {
             $this->getLogger()
-                 ->error($e);
+                ->error($e);
             throw new DataServiceException(
                 'Error while getting permissions uids',
                 DataServiceException::INVALID_MODEL,
                 $e
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/posts/%s/permissions',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'json'          => ['permissions' => $permissions],
-                            'uriParameters' => [$post->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => ['permissions' => $permissions],
+                    'uriParameters' => [$post->getUid()],
+                ]
+            );
     }
 }

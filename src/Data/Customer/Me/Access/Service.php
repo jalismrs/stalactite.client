@@ -24,7 +24,7 @@ class Service extends
 {
     /**
      * @param Domain $domain
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -33,27 +33,28 @@ class Service extends
     public function clearance(
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($domain->getUid() === null) {
             throw new DataServiceException(
                 'Domain lacks a uid',
                 DataServiceException::MISSING_DOMAIN_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/customers/me/access/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
-                 ->setResponseFormatter(
-                     static fn(array $response) : AccessClearance => ModelFactory::createAccessClearance($response)
-                 );
-        
+            ->setResponseFormatter(
+                static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                            'uriParameters' => [$domain->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$domain->getUid()],
+                ]
+            );
     }
 }

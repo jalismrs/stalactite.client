@@ -18,7 +18,7 @@ final class TokenIdentifier
      *
      * @static
      *
-     * @param \Lcobucci\JWT\Token $token
+     * @param Token $token
      *
      * @return bool
      */
@@ -29,13 +29,13 @@ final class TokenIdentifier
             && $token->hasClaim('sub')
             && $token->hasClaim('type');
     }
-    
+
     /**
      * isTpaToken
      *
      * @static
      *
-     * @param \Lcobucci\JWT\Token $token
+     * @param Token $token
      *
      * @return bool
      */

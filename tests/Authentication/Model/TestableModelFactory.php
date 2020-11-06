@@ -16,7 +16,7 @@ class TestableModelFactory
      * getTestableClientApp
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\ClientApp
+     * @return ClientApp
      */
     public static function getTestableClientApp(): ClientApp
     {
@@ -33,7 +33,7 @@ class TestableModelFactory
      * getTestableServerApp
      *
      * @static
-     * @return \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp
+     * @return ServerApp
      */
     public static function getTestableServerApp(): ServerApp
     {

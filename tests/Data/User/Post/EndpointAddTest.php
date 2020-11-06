@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\User\Post;
 
@@ -21,72 +21,72 @@ class EndpointAddTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowLacksUid() : void
+    public function testThrowLacksUid(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::MISSING_USER_UID);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser()
-                                ->setUid(null),
+                ->setUid(null),
             [TestableModelFactory::getTestablePost()],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testThrowOnInvalidPostsParameterAddPosts() : void
+    public function testThrowOnInvalidPostsParameterAddPosts(): void
     {
         $this->expectException(DataServiceException::class);
         $this->expectExceptionCode(DataServiceException::INVALID_MODEL);
-        
+
         $systemUnderTest = $this->createSystemUnderTest();
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser(),
             ['not a post'],
             JwtFactory::create()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodNotCalledOnEmptyPostList() : void
+    public function testRequestMethodNotCalledOnEmptyPostList(): void
     {
         $mockClient = $this->createMockClient(false);
-        
+
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $response = $systemUnderTest->add(
             TestableModelFactory::getTestableUser(),
             [],
             JwtFactory::create()
         );
-        
+
         self::assertNull($response);
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->add(
             TestableModelFactory::getTestableUser(),
             [TestableModelFactory::getTestablePost()],

@@ -22,7 +22,7 @@ class Service extends
     AbstractService
 {
     /**
-     * @param User  $user
+     * @param User $user
      * @param Token $jwt
      *
      * @return Response
@@ -32,14 +32,15 @@ class Service extends
     public function all(
         User $user,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks an uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/users/%s/subordinates');
         $endpoint->setResponseValidationSchema(
             new JsonSchema(
@@ -47,22 +48,22 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $user) : User => ModelFactory::createUser($user),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$user->getUid()],
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $user): User => ModelFactory::createUser($user),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
 }

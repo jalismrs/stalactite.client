@@ -25,7 +25,7 @@ class Service extends
     AbstractService
 {
     /**
-     * @param User  $user
+     * @param User $user
      * @param Token $jwt
      *
      * @return Response
@@ -35,24 +35,25 @@ class Service extends
     public function all(
         User $user,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks a uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         $schema = [
-            'uid'    => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
             'domain' => [
-                'type'   => JsonRule::OBJECT_TYPE,
+                'type' => JsonRule::OBJECT_TYPE,
                 'schema' => Domain::getSchema(),
             ],
         ];
-        
+
         $endpoint = new Endpoint('/data/users/%s/relations');
         $endpoint->setResponseValidationSchema(
             new JsonSchema(
@@ -60,29 +61,29 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $relation) : DomainUserRelation => ModelFactory::createDomainUserRelation(
-                                 $relation
-                             ),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$user->getUid()],
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $relation): DomainUserRelation => ModelFactory::createDomainUserRelation(
+                            $relation
+                        ),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
-    
+
     /**
-     * @param User  $user
+     * @param User $user
      * @param Token $jwt
      *
      * @return Response
@@ -92,26 +93,27 @@ class Service extends
     public function deleteAll(
         User $user,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($user->getUid() === null) {
             throw new DataServiceException(
                 'User lacks a uid',
                 DataServiceException::MISSING_USER_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/users/%s/relations',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$user->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$user->getUid()],
+                ]
+            );
     }
 }

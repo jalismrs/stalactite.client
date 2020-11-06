@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Permission;
 
@@ -27,14 +27,14 @@ class EndpointAllTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws JsonException
      * @throws NormalizerException
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequest() : void
+    public function testRequest(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -42,37 +42,37 @@ class EndpointAllTest extends
                 json_encode(
                     [
                         Normalizer::getInstance()
-                                  ->normalize(
-                                      TestableModelFactory::getTestablePermission(),
-                                      [
-                                          AbstractNormalizer::GROUPS => ['main'],
-                                      ]
-                                  ),
+                            ->normalize(
+                                TestableModelFactory::getTestablePermission(),
+                                [
+                                    AbstractNormalizer::GROUPS => ['main'],
+                                ]
+                            ),
                     ],
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->all(JwtFactory::create());
-        
+
         self::assertContainsOnlyInstancesOf(
             Permission::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->all(JwtFactory::create());
     }
 }

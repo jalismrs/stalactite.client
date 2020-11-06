@@ -22,7 +22,7 @@ final class ModelHelper
      *
      * @static
      *
-     * @param array       $models
+     * @param array $models
      * @param string|null $class
      *
      * @return array

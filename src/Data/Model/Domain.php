@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Model;
 
@@ -44,7 +44,7 @@ class Domain extends
      * @var string|null
      */
     private ?string $generationDate = null;
-    
+
     /**
      * getSchema
      *
@@ -53,32 +53,32 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public static function getSchema() : array
+    public static function getSchema(): array
     {
         return [
-            'uid'            => [
+            'uid' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'name'           => [
+            'name' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'type'           => [
+            'type' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'apiKey'         => [
+            'apiKey' => [
                 'type' => JsonRule::STRING_TYPE,
             ],
-            'externalAuth'   => [
+            'externalAuth' => [
                 'type' => JsonRule::BOOLEAN_TYPE,
             ],
             'generationDate' => [
-                'type'        => JsonRule::STRING_TYPE,
+                'type' => JsonRule::STRING_TYPE,
                 'date-format' => 'Y-m-d',
-                'null'        => true,
+                'null' => true,
             ],
         ];
     }
-    
+
     /**
      * getName
      *
@@ -86,11 +86,11 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
-    
+
     /**
      * setName
      *
@@ -100,13 +100,13 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function setName(?string $name) : self
+    public function setName(?string $name): self
     {
         $this->name = $name;
-        
+
         return $this;
     }
-    
+
     /**
      * getType
      *
@@ -114,11 +114,11 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function getType() : ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
-    
+
     /**
      * setType
      *
@@ -128,13 +128,13 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function setType(?string $type) : self
+    public function setType(?string $type): self
     {
         $this->type = $type;
-        
+
         return $this;
     }
-    
+
     /**
      * getApiKey
      *
@@ -142,11 +142,11 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function getApiKey() : ?string
+    public function getApiKey(): ?string
     {
         return $this->apiKey;
     }
-    
+
     /**
      * setApiKey
      *
@@ -156,13 +156,13 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function setApiKey(?string $apiKey) : self
+    public function setApiKey(?string $apiKey): self
     {
         $this->apiKey = $apiKey;
-        
+
         return $this;
     }
-    
+
     /**
      * hasExternalAuth
      *
@@ -170,11 +170,11 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function hasExternalAuth() : bool
+    public function hasExternalAuth(): bool
     {
         return $this->externalAuth;
     }
-    
+
     /**
      * setExternalAuth
      *
@@ -184,13 +184,13 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function setExternalAuth(bool $externalAuth) : self
+    public function setExternalAuth(bool $externalAuth): self
     {
         $this->externalAuth = $externalAuth;
-        
+
         return $this;
     }
-    
+
     /**
      * getGenerationDate
      *
@@ -198,11 +198,11 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function getGenerationDate() : ?string
+    public function getGenerationDate(): ?string
     {
         return $this->generationDate;
     }
-    
+
     /**
      * setGenerationDate
      *
@@ -212,10 +212,10 @@ class Domain extends
      *
      * @codeCoverageIgnore
      */
-    public function setGenerationDate(?string $generationDate) : self
+    public function setGenerationDate(?string $generationDate): self
     {
         $this->generationDate = $generationDate;
-        
+
         return $this;
     }
 }

@@ -27,7 +27,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt) : Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/data/users/me/posts');
         $endpoint->setResponseValidationSchema(
@@ -36,21 +36,21 @@ class Service extends
                 JsonSchema::LIST_TYPE
             )
         )
-                 ->setResponseFormatter(
-                     static function(array $response) : array {
-                         return array_map(
-                             static fn(array $post) : Post => ModelFactory::createPost($post),
-                             $response
-                         );
-                     }
-                 );
-        
-        return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                        ]
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    return array_map(
+                        static fn(array $post): Post => ModelFactory::createPost($post),
+                        $response
                     );
+                }
+            );
+
+        return $this->getClient()
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
 }

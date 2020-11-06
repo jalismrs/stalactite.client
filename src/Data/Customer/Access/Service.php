@@ -25,8 +25,8 @@ class Service extends
 {
     /**
      * @param Customer $customer
-     * @param Domain   $domain
-     * @param Token    $jwt
+     * @param Domain $domain
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -36,37 +36,38 @@ class Service extends
         Customer $customer,
         Domain $domain,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($customer->getUid() === null) {
             throw new DataServiceException(
                 'Customer lacks a uid',
                 DataServiceException::MISSING_CUSTOMER_UID
             );
         }
-        
+
         if ($domain->getUid() === null) {
             throw new DataServiceException(
                 'Domain lacks a uid',
                 DataServiceException::MISSING_DOMAIN_UID
             );
         }
-        
+
         $endpoint = new Endpoint('/data/customers/%s/access/%s');
         $endpoint->setResponseValidationSchema(new JsonSchema(AccessClearance::getSchema()))
-                 ->setResponseFormatter(
-                     static fn(array $response) : AccessClearance => ModelFactory::createAccessClearance($response)
-                 );
-        
+            ->setResponseFormatter(
+                static fn(array $response): AccessClearance => ModelFactory::createAccessClearance($response)
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                            'uriParameters' => [
-                                $customer->getUid(),
-                                $domain->getUid(),
-                            ],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [
+                        $customer->getUid(),
+                        $domain->getUid(),
+                    ],
+                ]
+            );
     }
 }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Authentication\ClientApp;
 
@@ -33,7 +33,7 @@ class Service extends
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt) : Response
+    public function all(Token $jwt): Response
     {
         $endpoint = new Endpoint('/auth/clientApps');
         $endpoint
@@ -44,26 +44,26 @@ class Service extends
                 )
             )
             ->setResponseFormatter(
-                static function(array $response) : array {
+                static function (array $response): array {
                     return array_map(
-                        static fn(array $clientApp) : ClientApp => ModelFactory::createClientApp($clientApp),
+                        static fn(array $clientApp): ClientApp => ModelFactory::createClientApp($clientApp),
                         $response
                     );
                 }
             );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt' => (string)$jwt,
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                ]
+            );
     }
-    
+
     /**
      * @param string $uid
-     * @param Token  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -72,27 +72,28 @@ class Service extends
     public function get(
         string $uid,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $endpoint = new Endpoint('/auth/clientApps/%s');
         $endpoint
             ->setResponseValidationSchema(new JsonSchema(ClientApp::getSchema()))
             ->setResponseFormatter(
-                static fn(array $response) : ClientApp => ModelFactory::createClientApp($response)
+                static fn(array $response): ClientApp => ModelFactory::createClientApp($response)
             );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$uid],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$uid],
+                ]
+            );
     }
-    
+
     /**
      * @param ClientApp $clientApp
-     * @param Token     $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -102,9 +103,10 @@ class Service extends
     public function create(
         ClientApp $clientApp,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         $schema = new JsonSchema(ClientApp::getSchema());
-        
+
         $endpoint = new Endpoint(
             '/auth/clientApps',
             'POST'
@@ -112,30 +114,30 @@ class Service extends
         $endpoint
             ->setResponseValidationSchema($schema)
             ->setResponseFormatter(
-                static fn(array $response) : ClientApp => ModelFactory::createClientApp($response)
+                static fn(array $response): ClientApp => ModelFactory::createClientApp($response)
             );
-        
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $clientApp,
-                              [
-                                  AbstractNormalizer::GROUPS => ['create'],
-                              ]
-                          );
-        
+            ->normalize(
+                $clientApp,
+                [
+                    AbstractNormalizer::GROUPS => ['create'],
+                ]
+            );
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'  => (string)$jwt,
-                            'json' => $data,
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
+                ]
+            );
     }
-    
+
     /**
      * @param ClientApp $clientApp
-     * @param Token     $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -145,42 +147,43 @@ class Service extends
     public function update(
         ClientApp $clientApp,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($clientApp->getUid() === null) {
             throw new AuthenticationServiceException(
                 'ClientApp lacks a uid',
                 AuthenticationServiceException::MISSING_CLIENT_APP_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/auth/clientApps/%s',
             'PUT'
         );
-        
+
         $data = Normalizer::getInstance()
-                          ->normalize(
-                              $clientApp,
-                              [
-                                  AbstractNormalizer::GROUPS => ['update'],
-                              ]
-                          );
-        
+            ->normalize(
+                $clientApp,
+                [
+                    AbstractNormalizer::GROUPS => ['update'],
+                ]
+            );
+
         return $this
             ->getClient()
             ->request(
                 $endpoint,
                 [
-                    'jwt'           => (string)$jwt,
-                    'json'          => $data,
+                    'jwt' => (string)$jwt,
+                    'json' => $data,
                     'uriParameters' => [$clientApp->getUid()],
                 ]
             );
     }
-    
+
     /**
      * @param ClientApp $clientApp
-     * @param Token     $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -189,26 +192,27 @@ class Service extends
     public function delete(
         ClientApp $clientApp,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($clientApp->getUid() === null) {
             throw new AuthenticationServiceException(
                 'ClientApp lacks a uid',
                 AuthenticationServiceException::MISSING_CLIENT_APP_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/auth/clientApps/%s',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => [$clientApp->getUid()],
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => [$clientApp->getUid()],
+                ]
+            );
     }
 }

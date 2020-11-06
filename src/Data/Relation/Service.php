@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Data\Relation;
 
@@ -23,7 +23,7 @@ class Service extends
 {
     /**
      * @param DomainUserRelation $domainUserRelation
-     * @param Token              $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -32,32 +32,33 @@ class Service extends
     public function deleteDomainUserRelation(
         DomainUserRelation $domainUserRelation,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($domainUserRelation->getUid() === null) {
             throw new DataServiceException(
                 'domain/user relation lacks a uid',
                 DataServiceException::MISSING_DOMAIN_USER_RELATION_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/relations/users/%s',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => $domainUserRelation->getUid(),
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => $domainUserRelation->getUid(),
+                ]
+            );
     }
-    
+
     /**
      * @param DomainCustomerRelation $domainCustomerRelation
-     * @param Token                  $jwt
+     * @param Token $jwt
      *
      * @return Response
      * @throws ClientException
@@ -66,26 +67,27 @@ class Service extends
     public function deleteDomainCustomerRelation(
         DomainCustomerRelation $domainCustomerRelation,
         Token $jwt
-    ) : Response {
+    ): Response
+    {
         if ($domainCustomerRelation->getUid() === null) {
             throw new DataServiceException(
                 'domain/customer relation lacks a uid',
                 DataServiceException::MISSING_DOMAIN_CUSTOMER_RELATION_UID
             );
         }
-        
+
         $endpoint = new Endpoint(
             '/data/relations/customers/%s',
             'DELETE'
         );
-        
+
         return $this->getClient()
-                    ->request(
-                        $endpoint,
-                        [
-                            'jwt'           => (string)$jwt,
-                            'uriParameters' => $domainCustomerRelation->getUid(),
-                        ]
-                    );
+            ->request(
+                $endpoint,
+                [
+                    'jwt' => (string)$jwt,
+                    'uriParameters' => $domainCustomerRelation->getUid(),
+                ]
+            );
     }
 }

@@ -1,12 +1,11 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Post;
 
 use Jalismrs\Stalactite\Client\Data\Model\Post;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
-use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
@@ -28,57 +27,57 @@ class EndpointCreateTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testCreate() : void
+    public function testCreate(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
-                              ->normalize(
-                                  TestableModelFactory::getTestablePost(),
-                                  [
-                                      AbstractNormalizer::GROUPS => ['main'],
-                                  ]
-                              ),
+                        ->normalize(
+                            TestableModelFactory::getTestablePost(),
+                            [
+                                AbstractNormalizer::GROUPS => ['main'],
+                            ]
+                        ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->create(
             TestableModelFactory::getTestablePost(),
             JwtFactory::create()
         );
-        
+
         self::assertInstanceOf(
             Post::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws NormalizerException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
-        $mockClient      = $this->createMockClient();
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->create(
             TestableModelFactory::getTestablePost()
-                                ->setUid(null),
+                ->setUid(null),
             JwtFactory::create()
         );
     }

@@ -4,11 +4,15 @@ namespace Jalismrs\Stalactite\Client\Tests;
 
 use Jalismrs\Stalactite\Client\ApiError;
 use Jalismrs\Stalactite\Client\Client;
+use Jalismrs\Stalactite\Client\Exception\ClientException;
+use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
+use JsonException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
@@ -24,19 +28,19 @@ class ClientCacheTest extends
     /**
      * mockCache
      *
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\SimpleCache\CacheInterface
+     * @var MockObject|CacheInterface
      */
     private MockObject $mockCache;
     /**
      * mockClient
      *
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Jalismrs\Stalactite\Client\Client
+     * @var MockObject|Client
      */
     private MockObject $mockClient;
     /**
      * testClient
      *
-     * @var \Jalismrs\Stalactite\Client\Client
+     * @var Client
      */
     private Client $testClient;
     
@@ -45,7 +49,7 @@ class ClientCacheTest extends
      *
      * @return void
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testSetCache() : void
     {
@@ -65,7 +69,7 @@ class ClientCacheTest extends
      *
      * @return void
      *
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function testGetFromCache() : void
     {
@@ -82,12 +86,12 @@ class ClientCacheTest extends
     /**
      * testEndpointCache
      *
-     * @param \Jalismrs\Stalactite\Client\Util\Endpoint $endpoint
+     * @param Endpoint $endpoint
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws ClientException
+     * @throws InvalidArgumentException
      *
      * @dataProvider provideEndpointCache
      */
@@ -116,7 +120,7 @@ class ClientCacheTest extends
     /**
      * provideEndpointCache
      *
-     * @return \Jalismrs\Stalactite\Client\Util\Endpoint[][]
+     * @return Endpoint[]
      */
     public function provideEndpointCache() : array
     {
@@ -141,8 +145,8 @@ class ClientCacheTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws ClientException
+     * @throws InvalidArgumentException
      */
     public function testCacheHit() : void
     {
@@ -177,8 +181,8 @@ class ClientCacheTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws ClientException
+     * @throws InvalidArgumentException
      *
      * @dataProvider provideCacheSetOnSuccess
      */
@@ -213,8 +217,8 @@ class ClientCacheTest extends
      *
      * @return array[]
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\NormalizerException
-     * @throws \JsonException
+     * @throws NormalizerException
+     * @throws JsonException
      */
     public function provideCacheSetOnSuccess() : array
     {

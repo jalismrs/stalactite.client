@@ -35,7 +35,7 @@ class NormalizerTest extends
      *
      * @return void
      *
-     * @throws \Jalismrs\Stalactite\Client\Exception\NormalizerException
+     * @throws NormalizerException
      */
     public function testNormalize() : void
     {

@@ -16,13 +16,13 @@ class Response
     private array $headers;
     /** @var mixed $body */
     private $body;
-    
+
     /**
      * Response constructor.
      *
-     * @param int   $code
+     * @param int $code
      * @param array $headers
-     * @param null  $body
+     * @param null $body
      *
      * @codeCoverageIgnore
      */
@@ -32,7 +32,7 @@ class Response
         $this->headers = $headers;
         $this->body = $body;
     }
-    
+
     /**
      * getCode
      *
@@ -44,7 +44,7 @@ class Response
     {
         return $this->code;
     }
-    
+
     /**
      * getHeaders
      *
@@ -56,7 +56,7 @@ class Response
     {
         return $this->headers;
     }
-    
+
     /**
      * getBody
      *
@@ -68,7 +68,7 @@ class Response
     {
         return $this->body;
     }
-    
+
     /**
      * isSuccessful
      *

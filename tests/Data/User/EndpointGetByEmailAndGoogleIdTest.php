@@ -26,59 +26,59 @@ class EndpointGetByEmailAndGoogleIdTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws JsonException
      * @throws NormalizerException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId() : void
+    public function testGetByEmailAndGoogleId(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
                     Normalizer::getInstance()
-                              ->normalize(
-                                  TestableModelFactory::getTestableUser(),
-                                  [
-                                      AbstractNormalizer::GROUPS => ['main'],
-                                  ]
-                              ),
+                        ->normalize(
+                            TestableModelFactory::getTestableUser(),
+                            [
+                                AbstractNormalizer::GROUPS => ['main'],
+                            ]
+                        ),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->getByEmailAndGoogleId(
             'goodmorning@hello.hi',
             '0123456789',
             JwtFactory::create()
         );
-        
+
         self::assertInstanceOf(
             User::class,
             $response->getBody()
         );
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->getByEmailAndGoogleId(
             'goodmorning@hello.hi',
             '0123456789',
             JwtFactory::create()
         );
     }
-    
+
 }
