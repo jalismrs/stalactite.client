@@ -6,6 +6,7 @@ namespace Jalismrs\Stalactite\Client\Tests;
 use hunomina\DataValidator\Rule\Json\JsonRule;
 use hunomina\DataValidator\Schema\Json\JsonSchema;
 use Jalismrs\Stalactite\Client\ApiError;
+use Jalismrs\Stalactite\Client\Client;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
@@ -84,7 +85,7 @@ class ClientTest extends
      */
     public function testExceptionThrownOnInvalidAPIHost(): void
     {
-        $systemUnderTest = ClientFactory::createBasicClient();
+        $systemUnderTest = new Client('invalid-host');
         $endpoint = new Endpoint('/');
 
         $throwable = null;
