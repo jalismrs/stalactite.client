@@ -80,39 +80,4 @@ class Service extends
                 ]
             );
     }
-
-    /**
-     * @param Customer $customer
-     * @param Token $jwt
-     *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     */
-    public function deleteAll(
-        Customer $customer,
-        Token $jwt
-    ): Response
-    {
-        if ($customer->getUid() === null) {
-            throw new DataServiceException(
-                'Customer lacks a uid',
-                DataServiceException::MISSING_CUSTOMER_UID
-            );
-        }
-
-        $endpoint = new Endpoint(
-            '/data/customers/%s/relations',
-            'DELETE'
-        );
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                    'uriParameters' => [$customer->getUid()],
-                ]
-            );
-    }
 }
