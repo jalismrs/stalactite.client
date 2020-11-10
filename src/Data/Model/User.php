@@ -14,6 +14,8 @@ use Jalismrs\Stalactite\Client\AbstractModel;
 class User extends
     AbstractModel
 {
+    use ModelNameTrait;
+    
     /**
      * email
      *
@@ -26,18 +28,6 @@ class User extends
      * @var string|null
      */
     private ?string $googleId = null;
-    /**
-     * lastName
-     *
-     * @var string|null
-     */
-    private ?string $lastName = null;
-    /**
-     * firstName
-     *
-     * @var string|null
-     */
-    private ?string $firstName = null;
     /**
      * admin
      *
@@ -138,62 +128,6 @@ class User extends
     public function setGoogleId(?string $googleId): self
     {
         $this->googleId = $googleId;
-
-        return $this;
-    }
-
-    /**
-     * getLastName
-     *
-     * @return string|null
-     *
-     * @codeCoverageIgnore
-     */
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * setLastName
-     *
-     * @param string|null $lastName
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function setLastName(?string $lastName): self
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * getFirstName
-     *
-     * @return string|null
-     *
-     * @codeCoverageIgnore
-     */
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * setFirstName
-     *
-     * @param string|null $firstName
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function setFirstName(?string $firstName): self
-    {
-        $this->firstName = $firstName;
 
         return $this;
     }
