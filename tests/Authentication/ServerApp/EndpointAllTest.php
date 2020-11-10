@@ -58,10 +58,7 @@ class EndpointAllTest extends AbstractTestEndpoint
 
         $response = $systemUnderTest->all(JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(
-            ServerApp::class,
-            $response->getBody()['results']
-        );
+        self::checkPaginatedResponse($response, ServerApp::class);
     }
 
     /**

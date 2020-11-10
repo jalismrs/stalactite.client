@@ -55,10 +55,7 @@ class EndpointAllByNameTest extends AbstractTestEndpoint
 
         $response = $systemUnderTest->allByName('name', JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(
-            ClientApp::class,
-            $response->getBody()['results']
-        );
+        self::checkPaginatedResponse($response, ClientApp::class);
     }
 
     /**
