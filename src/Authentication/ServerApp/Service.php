@@ -20,7 +20,6 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * Class Service
  * @package Jalismrs\Stalactite\Client\Authentication\ServerApp
- * @covers Jalismrs\Stalactite\Client\Authentication\ServerApp\Service
  */
 class Service extends AbstractService
 {
