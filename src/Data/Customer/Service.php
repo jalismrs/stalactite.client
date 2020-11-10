@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Data\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
+use Jalismrs\Stalactite\Client\PaginationMetadataTrait;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -23,9 +24,10 @@ use function array_map;
  *
  * @package Jalismrs\Stalactite\Client\Data\Customer
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
+    use PaginationMetadataTrait;
+
     private ?Me\Service       $serviceMe = null;
     private ?Access\Service   $serviceAccess = null;
     private ?Relation\Service $serviceRelation = null;
@@ -71,36 +73,62 @@ class Service extends
 
     /**
      * @param Token $jwt
-     *
+     * @param int $page
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt): Response
+    public function all(Token $jwt, int $page = 1): Response
+    {
+        return $this->getClient()
+            ->request(
+                self::getAllEndpoint(),
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => ['page' => $page],
+                ]
+            );
+    }
+
+    /**
+     * @param string $fullName
+     * @param Token $jwt
+     * @param int $page
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function allByFullName(string $fullName, Token $jwt, int $page = 1): Response
+    {
+        return $this->getClient()
+            ->request(
+                self::getAllEndpoint(),
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => [
+                        'fullName' => $fullName,
+                        'page' => $page
+                    ],
+                ]
+            );
+    }
+
+    private static function getAllEndpoint(): Endpoint
     {
         $endpoint = new Endpoint('/data/customers');
         $endpoint->setResponseValidationSchema(
-            new JsonSchema(
-                Customer::getSchema(),
-                JsonSchema::LIST_TYPE
-            )
+            new JsonSchema(self::getPaginationSchemaFor(Customer::class))
         )
             ->setResponseFormatter(
                 static function (array $response): array {
-                    return array_map(
+                    $response['results'] = array_map(
                         static fn(array $customer): Customer => ModelFactory::createCustomer($customer),
-                        $response
+                        $response['results']
                     );
+                    return $response;
                 }
             );
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                ]
-            );
+        return $endpoint;
     }
 
     /**
@@ -339,7 +367,7 @@ class Service extends
                 $endpoint,
                 [
                     'jwt' => (string)$jwt,
-                    'uriParamters' => [$customer->getUid()],
+                    'uriParameters' => [$customer->getUid()],
                 ]
             );
     }
