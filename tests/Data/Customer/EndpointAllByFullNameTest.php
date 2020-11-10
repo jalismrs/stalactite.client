@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
 
@@ -19,14 +18,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointAllTest
- *
+ * Class EndpointAllByFullNameTest
  * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
- *
  * @covers \Jalismrs\Stalactite\Client\Data\Customer\Service
  */
-class EndpointAllTest extends
-    AbstractTestEndpoint
+class EndpointAllByFullNameTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
@@ -35,6 +31,7 @@ class EndpointAllTest extends
      * @throws InvalidArgumentException
      * @throws JsonException
      * @throws NormalizerException
+     * @throws Exception
      * @throws Exception
      */
     public function testRequest(): void
@@ -59,7 +56,7 @@ class EndpointAllTest extends
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->all(JwtFactory::create());
+        $response = $systemUnderTest->allByFullName('fullName', JwtFactory::create());
 
         self::checkPaginatedResponse($response, Customer::class);
     }
@@ -73,6 +70,6 @@ class EndpointAllTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $systemUnderTest->all(JwtFactory::create());
+        $systemUnderTest->allByFullName('fullName', JwtFactory::create());
     }
 }

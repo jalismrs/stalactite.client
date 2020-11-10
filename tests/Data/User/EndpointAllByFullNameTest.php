@@ -1,10 +1,9 @@
 <?php
-declare(strict_types=1);
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
 use Exception;
-use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -19,22 +18,19 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointAllTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
- *
- * @covers \Jalismrs\Stalactite\Client\Data\Customer\Service
+ * Class EndpointAllByFullNameTest
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User
+ * @covers Jalismrs\Stalactite\Client\Data\User\Service
  */
-class EndpointAllTest extends
-    AbstractTestEndpoint
+class EndpointAllByFullNameTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
     /**
      * @throws ClientException
-     * @throws InvalidArgumentException
-     * @throws JsonException
      * @throws NormalizerException
+     * @throws JsonException
+     * @throws InvalidArgumentException
      * @throws Exception
      */
     public function testRequest(): void
@@ -43,14 +39,13 @@ class EndpointAllTest extends
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    ApiPaginatedResponseFactory::getFor([
-                        Normalizer::getInstance()
-                            ->normalize(
-                                TestableModelFactory::getTestableCustomer(),
-                                [
-                                    AbstractNormalizer::GROUPS => ['main'],
-                                ]
-                            ),
+                    ApiPaginatedResponseFactory::getFor([Normalizer::getInstance()
+                        ->normalize(
+                            TestableModelFactory::getTestableUser(),
+                            [
+                                AbstractNormalizer::GROUPS => ['min'],
+                            ]
+                        ),
                     ]),
                     JSON_THROW_ON_ERROR
                 )
@@ -59,9 +54,9 @@ class EndpointAllTest extends
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->all(JwtFactory::create());
+        $response = $systemUnderTest->allByFullName('fullName', JwtFactory::create());
 
-        self::checkPaginatedResponse($response, Customer::class);
+        self::checkPaginatedResponse($response, User::class);
     }
 
     /**
@@ -73,6 +68,6 @@ class EndpointAllTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $systemUnderTest->all(JwtFactory::create());
+        $systemUnderTest->allByFullName('fullName', JwtFactory::create());
     }
 }

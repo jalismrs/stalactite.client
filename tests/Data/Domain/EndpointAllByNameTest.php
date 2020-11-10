@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
+use Exception;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
+use Jalismrs\Stalactite\Client\Tests\ApiPaginatedResponseFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
@@ -17,14 +19,13 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetByNameTest
+ * Class EndpointAllByNameTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
  *
  * @covers \Jalismrs\Stalactite\Client\Data\Domain\Service
  */
-class EndpointGetByNameTest extends
-    AbstractTestEndpoint
+class EndpointAllByNameTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
@@ -33,6 +34,7 @@ class EndpointGetByNameTest extends
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function testGetByName(): void
     {
@@ -40,13 +42,12 @@ class EndpointGetByNameTest extends
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    Normalizer::getInstance()
-                        ->normalize(
+                    ApiPaginatedResponseFactory::getFor([
+                        Normalizer::getInstance()->normalize(
                             TestableModelFactory::getTestableDomain(),
-                            [
-                                AbstractNormalizer::GROUPS => ['main'],
-                            ]
-                        ),
+                            [AbstractNormalizer::GROUPS => ['main']]
+                        )
+                    ]),
                     JSON_THROW_ON_ERROR
                 )
             )
@@ -54,16 +55,9 @@ class EndpointGetByNameTest extends
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->getByName(
-            TestableModelFactory::getTestableDomain()
-                ->getName(),
-            JwtFactory::create()
-        );
+        $response = $systemUnderTest->allByName('name', JwtFactory::create());
 
-        self::assertInstanceOf(
-            Domain::class,
-            $response->getBody()
-        );
+        self::checkPaginatedResponse($response, Domain::class);
     }
 
     /**
@@ -75,9 +69,8 @@ class EndpointGetByNameTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $systemUnderTest->getByName(
-            TestableModelFactory::getTestableDomain()
-                ->getName(),
+        $systemUnderTest->allByName(
+            TestableModelFactory::getTestableDomain()->getName(),
             JwtFactory::create()
         );
     }

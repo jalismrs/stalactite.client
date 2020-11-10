@@ -13,6 +13,7 @@ use Jalismrs\Stalactite\Client\Data\User\Post\Service as PostService;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\DataServiceException;
+use Jalismrs\Stalactite\Client\PaginationMetadataTrait;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\ModelHelper;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
@@ -30,6 +31,8 @@ use function array_merge;
 class Service extends
     AbstractService
 {
+    use PaginationMetadataTrait;
+
     private ?Lead\Service        $serviceLead = null;
     private ?Me\Service          $serviceMe = null;
     private ?PostService         $servicePost = null;
@@ -105,38 +108,63 @@ class Service extends
 
     /**
      * @param Token $jwt
-     *
+     * @param int $page
      * @return Response
      * @throws ClientException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function all(Token $jwt): Response
+    public function all(Token $jwt, int $page = 1): Response
     {
-        $endpoint = new Endpoint('/data/users');
-        $endpoint->setResponseValidationSchema(
-            new JsonSchema(
-                User::getSchema(),
-                JsonSchema::LIST_TYPE
-            )
-        )
-            ->setResponseFormatter(
-                static function (array $response): array {
-                    return array_map(
-                        static fn(array $user): User => ModelFactory::createUser($user),
-                        $response
-                    );
-                }
-            );
-
         return $this->getClient()
             ->request(
-                $endpoint,
+                self::getAllEndpoint(),
                 [
                     'jwt' => (string)$jwt,
+                    'query' => ['page' => $page],
                 ]
             );
     }
 
+    /**
+     * @param string $fullName
+     * @param Token $jwt
+     * @param int $page
+     * @return Response
+     * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function allByFullName(string $fullName, Token $jwt, int $page = 1): Response
+    {
+        return $this->getClient()
+            ->request(
+                self::getAllEndpoint(),
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => [
+                        'fullName' => $fullName,
+                        'page' => $page
+                    ],
+                ]
+            );
+    }
+
+    private static function getAllEndpoint(): Endpoint
+    {
+        $endpoint = new Endpoint('/data/users');
+        $endpoint->setResponseValidationSchema(
+            new JsonSchema(self::getPaginationSchemaFor(User::class))
+        )
+            ->setResponseFormatter(
+                static function (array $response): array {
+                    $response['results'] = array_map(
+                        static fn(array $user): User => ModelFactory::createUser($user),
+                        $response['results']
+                    );
+                    return $response;
+                }
+            );
+        return $endpoint;
+    }
 
     /**
      * @param string $uid

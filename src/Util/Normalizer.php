@@ -27,10 +27,7 @@ final class Normalizer
     ];
 
     /**
-     * instance
-     *
-     * @static
-     * @var $this |null
+     * @var self|null $instance
      */
     private static ?self $instance = null;
 

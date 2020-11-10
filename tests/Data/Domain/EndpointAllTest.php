@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Data\Domain;
 
+use Exception;
 use Jalismrs\Stalactite\Client\Data\Model\Domain;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
+use Jalismrs\Stalactite\Client\Tests\ApiPaginatedResponseFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\Data\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
@@ -23,8 +25,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @covers \Jalismrs\Stalactite\Client\Data\Domain\Service
  */
-class EndpointAllTest extends
-    AbstractTestEndpoint
+class EndpointAllTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
@@ -33,6 +34,7 @@ class EndpointAllTest extends
      * @throws NormalizerException
      * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function testRequest(): void
     {
@@ -40,7 +42,7 @@ class EndpointAllTest extends
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    [
+                    ApiPaginatedResponseFactory::getFor([
                         Normalizer::getInstance()
                             ->normalize(
                                 TestableModelFactory::getTestableDomain(),
@@ -48,7 +50,7 @@ class EndpointAllTest extends
                                     AbstractNormalizer::GROUPS => ['main'],
                                 ]
                             ),
-                    ],
+                    ]),
                     JSON_THROW_ON_ERROR
                 )
             )
@@ -58,10 +60,7 @@ class EndpointAllTest extends
 
         $response = $systemUnderTest->all(JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(
-            Domain::class,
-            $response->getBody()
-        );
+        self::checkPaginatedResponse($response, Domain::class);
     }
 
     /**

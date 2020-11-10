@@ -12,7 +12,7 @@ use function tmpfile;
  *
  * @package Jalismrs\Stalactite\Client\Tests\Util
  *
- * @covers  \Jalismrs\Stalactite\Client\Util\Normalizer
+ * @covers \Jalismrs\Stalactite\Client\Util\Normalizer
  */
 class NormalizerTest extends
     TestCase
@@ -22,14 +22,14 @@ class NormalizerTest extends
      *
      * @return void
      */
-    public function testSingleton() : void
+    public function testSingleton(): void
     {
         self::assertSame(
             Normalizer::getInstance(),
             Normalizer::getInstance()
         );
     }
-    
+
     /**
      * testNormalize
      *
@@ -37,16 +37,16 @@ class NormalizerTest extends
      *
      * @throws NormalizerException
      */
-    public function testNormalize() : void
+    public function testNormalize(): void
     {
         // arrange
         $systemUnderTest = Normalizer::getInstance();
-        
+
         $input = tmpfile();
-        
+
         // expect
         $this->expectException(NormalizerException::class);
-        
+
         // act
         $systemUnderTest->normalize(
             $input

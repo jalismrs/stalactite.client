@@ -213,39 +213,4 @@ class Service extends
                 ]
             );
     }
-
-    /**
-     * @param Domain $domain
-     * @param Token $jwt
-     *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     */
-    public function deleteAll(
-        Domain $domain,
-        Token $jwt
-    ): Response
-    {
-        if ($domain->getUid() === null) {
-            throw new DataServiceException(
-                'Domain lacks a uid',
-                DataServiceException::MISSING_DOMAIN_UID
-            );
-        }
-
-        $endpoint = new Endpoint(
-            '/data/domains/%s/relations',
-            'DELETE'
-        );
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                    'uriParameters' => [$domain->getUid()],
-                ]
-            );
-    }
 }

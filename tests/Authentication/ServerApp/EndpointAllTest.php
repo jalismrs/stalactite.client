@@ -1,12 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp;
 
+use Exception;
 use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
+use Jalismrs\Stalactite\Client\Tests\ApiPaginatedResponseFactory;
 use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Tests\ClientFactory;
 use Jalismrs\Stalactite\Client\Tests\JwtFactory;
@@ -23,54 +25,51 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
  *
  * @covers \Jalismrs\Stalactite\Client\Authentication\ServerApp\Service
  */
-class EndpointAllTest extends
-    AbstractTestEndpoint
+class EndpointAllTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
-     * @throws NormalizerException
-     * @throws JsonException
      * @throws InvalidArgumentException
+     * @throws JsonException
+     * @throws NormalizerException
+     * @throws Exception
      */
-    public function testRequest() : void
+    public function testRequest(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
             MockHttpClientFactory::create(
                 json_encode(
-                    [
+                    ApiPaginatedResponseFactory::getFor([
                         Normalizer::getInstance()
-                                  ->normalize(
-                                      TestableModelFactory::getTestableServerApp(),
-                                      [AbstractNormalizer::GROUPS => ['main']]
-                                  ),
-                    ],
+                            ->normalize(
+                                TestableModelFactory::getTestableServerApp(),
+                                [AbstractNormalizer::GROUPS => ['main']]
+                            ),
+                    ]),
                     JSON_THROW_ON_ERROR
                 )
             )
         );
-        
+
         $systemUnderTest = $this->createSystemUnderTest($testClient);
-        
+
         $response = $systemUnderTest->all(JwtFactory::create());
-        
-        self::assertContainsOnlyInstancesOf(
-            ServerApp::class,
-            $response->getBody()
-        );
+
+        self::checkPaginatedResponse($response, ServerApp::class);
     }
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->all(JwtFactory::create());
     }
 }
