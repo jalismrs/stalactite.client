@@ -59,10 +59,7 @@ class EndpointAllTest extends
 
         $response = $systemUnderTest->all(JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(
-            ClientApp::class,
-            $response->getBody()['results']
-        );
+        self::checkPaginatedResponse($response, ClientApp::class);
     }
 
     /**

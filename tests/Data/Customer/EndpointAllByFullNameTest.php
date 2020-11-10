@@ -18,10 +18,8 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointAllByNameTest
- *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Domain
- *
+ * Class EndpointAllByFullNameTest
+ * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
  * @covers \Jalismrs\Stalactite\Client\Data\Customer\Service
  */
 class EndpointAllByFullNameTest extends AbstractTestEndpoint
@@ -60,11 +58,7 @@ class EndpointAllByFullNameTest extends AbstractTestEndpoint
 
         $response = $systemUnderTest->allByFullName('fullName', JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(
-            Customer::class,
-            $response->getBody()['results']
-        );
-
+        self::checkPaginatedResponse($response, Customer::class);
     }
 
     /**

@@ -55,12 +55,9 @@ class EndpointAllByNameTest extends AbstractTestEndpoint
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->allByName(
-            TestableModelFactory::getTestableDomain()->getName(),
-            JwtFactory::create()
-        );
+        $response = $systemUnderTest->allByName('name', JwtFactory::create());
 
-        self::assertContainsOnlyInstancesOf(Domain::class, $response->getBody()['results']);
+        self::checkPaginatedResponse($response, Domain::class);
     }
 
     /**
