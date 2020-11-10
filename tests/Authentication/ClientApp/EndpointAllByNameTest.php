@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Tests\Authentication\ClientApp;
 
@@ -19,14 +18,11 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointAllTest
- *
+ * Class EndpointAllByNameTest
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\ClientApp
- *
- * @covers \Jalismrs\Stalactite\Client\Authentication\ClientApp\Service
+ * @covers Jalismrs\Stalactite\Client\Authentication\ClientApp\Service
  */
-class EndpointAllTest extends
-    AbstractTestEndpoint
+class EndpointAllByNameTest extends AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
@@ -57,7 +53,7 @@ class EndpointAllTest extends
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->all(JwtFactory::create());
+        $response = $systemUnderTest->allByName('name', JwtFactory::create());
 
         self::assertContainsOnlyInstancesOf(
             ClientApp::class,
@@ -74,6 +70,6 @@ class EndpointAllTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $systemUnderTest->all(JwtFactory::create());
+        $systemUnderTest->allByName('name', JwtFactory::create());
     }
 }
