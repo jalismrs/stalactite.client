@@ -10,6 +10,7 @@ use Jalismrs\Stalactite\Client\Authentication\Model\ModelFactory;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
+use Jalismrs\Stalactite\Client\PaginationMetadataTrait;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Normalizer;
 use Jalismrs\Stalactite\Client\Util\Response;
@@ -23,42 +24,70 @@ use function array_map;
  *
  * @package Jalismrs\Stalactite\Client\Authentication\ClientApp
  */
-class Service extends
-    AbstractService
+class Service extends AbstractService
 {
+    use PaginationMetadataTrait;
+
     /**
      * @param Token $jwt
-     *
+     * @param int $page
      * @return Response
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function all(Token $jwt): Response
+    public function all(Token $jwt, int $page = 1): Response
+    {
+        return $this->getClient()
+            ->request(
+                self::getAllEndpoint(),
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => ['page' => $page]
+                ]
+            );
+    }
+
+    /**
+     * @param string $name
+     * @param Token $jwt
+     * @param int $page
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function allByName(string $name, Token $jwt, int $page = 1): Response
+    {
+        return $this->getClient()
+            ->request(
+                self::getAllEndpoint(),
+                [
+                    'jwt' => (string)$jwt,
+                    'query' => [
+                        'name' => $name,
+                        'page' => $page
+                    ]
+                ]
+            );
+    }
+
+    private static function getAllEndpoint(): Endpoint
     {
         $endpoint = new Endpoint('/auth/clientApps');
         $endpoint
             ->setResponseValidationSchema(
-                new JsonSchema(
-                    ClientApp::getSchema(),
-                    JsonSchema::LIST_TYPE
-                )
+                new JsonSchema(self::getPaginationSchemaFor(ClientApp::class))
             )
             ->setResponseFormatter(
                 static function (array $response): array {
-                    return array_map(
+                    $response['results'] = array_map(
                         static fn(array $clientApp): ClientApp => ModelFactory::createClientApp($clientApp),
-                        $response
+                        $response['results']
                     );
+                    return $response;
                 }
             );
 
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                ]
-            );
+        return $endpoint;
     }
 
     /**
