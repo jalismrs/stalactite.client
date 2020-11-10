@@ -33,7 +33,7 @@ class EndpointGetByEmailTest extends
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId(): void
+    public function testGetByEmail(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
