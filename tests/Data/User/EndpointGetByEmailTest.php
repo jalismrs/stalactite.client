@@ -1,8 +1,8 @@
 <?php
 
-namespace Jalismrs\Stalactite\Client\Tests\Data\Customer;
+namespace Jalismrs\Stalactite\Client\Tests\Data\User;
 
-use Jalismrs\Stalactite\Client\Data\Model\Customer;
+use Jalismrs\Stalactite\Client\Data\Model\User;
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\NormalizerException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
@@ -16,13 +16,13 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetByEmailAndGoogleIdTest
+ * Class EndpointGetByEmailTest
  *
- * @package Jalismrs\Stalactite\Client\Tests\Data\Customer
+ * @package Jalismrs\Stalactite\Client\Tests\Data\User
  *
- * @covers \Jalismrs\Stalactite\Client\Data\Customer\Service
+ * @covers \Jalismrs\Stalactite\Client\Data\User\Service
  */
-class EndpointGetByEmailAndGoogleIdTest extends
+class EndpointGetByEmailTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
@@ -33,7 +33,7 @@ class EndpointGetByEmailAndGoogleIdTest extends
      * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId(): void
+    public function testGetByEmail(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -41,7 +41,7 @@ class EndpointGetByEmailAndGoogleIdTest extends
                 json_encode(
                     Normalizer::getInstance()
                         ->normalize(
-                            TestableModelFactory::getTestableCustomer(),
+                            TestableModelFactory::getTestableUser(),
                             [
                                 AbstractNormalizer::GROUPS => ['main'],
                             ]
@@ -51,18 +51,15 @@ class EndpointGetByEmailAndGoogleIdTest extends
             )
         );
 
-        $customerModel = TestableModelFactory::getTestableCustomer();
-
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->getByEmailAndGoogleId(
-            $customerModel->getEmail(),
-            $customerModel->getGoogleId(),
+        $response = $systemUnderTest->getByEmail(
+            TestableModelFactory::getTestableUser()->getEmail(),
             JwtFactory::create()
         );
 
         self::assertInstanceOf(
-            Customer::class,
+            User::class,
             $response->getBody()
         );
     }
@@ -76,12 +73,9 @@ class EndpointGetByEmailAndGoogleIdTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $customerModel = TestableModelFactory::getTestableCustomer();
-        $systemUnderTest->getByEmailAndGoogleId(
-            $customerModel->getEmail(),
-            $customerModel->getGoogleId(),
+        $systemUnderTest->getByEmail(
+            TestableModelFactory::getTestableCustomer()->getEmail(),
             JwtFactory::create()
         );
     }
-
 }

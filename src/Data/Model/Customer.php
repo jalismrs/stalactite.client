@@ -15,13 +15,7 @@ class Customer extends
     AbstractModel
 {
     use ModelNameTrait;
-    
-    /**
-     * googleId
-     *
-     * @var string|null
-     */
-    private ?string $googleId = null;
+
     /**
      * email
      *
@@ -40,51 +34,11 @@ class Customer extends
     public static function getSchema(): array
     {
         return [
-            'uid' => [
-                'type' => JsonRule::STRING_TYPE,
-            ],
-            'email' => [
-                'type' => JsonRule::STRING_TYPE,
-            ],
-            'firstName' => [
-                'type' => JsonRule::STRING_TYPE,
-            ],
-            'lastName' => [
-                'type' => JsonRule::STRING_TYPE,
-            ],
-            'googleId' => [
-                'type' => JsonRule::STRING_TYPE,
-                'null' => true,
-            ],
+            'uid' => ['type' => JsonRule::STRING_TYPE],
+            'email' => ['type' => JsonRule::STRING_TYPE],
+            'firstName' => ['type' => JsonRule::STRING_TYPE],
+            'lastName' => ['type' => JsonRule::STRING_TYPE]
         ];
-    }
-
-    /**
-     * getGoogleId
-     *
-     * @return string|null
-     *
-     * @codeCoverageIgnore
-     */
-    public function getGoogleId(): ?string
-    {
-        return $this->googleId;
-    }
-
-    /**
-     * setGoogleId
-     *
-     * @param string|null $googleId
-     *
-     * @return $this
-     *
-     * @codeCoverageIgnore
-     */
-    public function setGoogleId(?string $googleId): self
-    {
-        $this->googleId = $googleId;
-
-        return $this;
     }
 
     /**

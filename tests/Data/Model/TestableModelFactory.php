@@ -65,7 +65,6 @@ class TestableModelFactory
             ->setFirstName('azerty')
             ->setLastName('uiop')
             ->setEmail('goodMorning@hello.hi')
-            ->setGoogleId('0123456789')
             ->setAdmin(false)
             ->addPost(self::getTestablePost())
             ->addLead(self::getTestablePost())
@@ -140,7 +139,6 @@ class TestableModelFactory
             ->setEmail('goodmorning@hello.hi')
             ->setFirstName('azerty')
             ->setLastName('uiop')
-            ->setGoogleId('0123456789')
             ->setUid('azertyuiop');
 
         return $model;

@@ -27,7 +27,6 @@ class ModelFactory
         $model->setAdmin($data['admin'] ?? false)
             ->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
-            ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
             ->setUid($data['uid'] ?? null);
 
@@ -101,7 +100,6 @@ class ModelFactory
         $model = new Customer();
         $model->setEmail($data['email'] ?? null)
             ->setFirstName($data['firstName'] ?? null)
-            ->setGoogleId($data['googleId'] ?? null)
             ->setLastName($data['lastName'] ?? null)
             ->setUid($data['uid'] ?? null);
 

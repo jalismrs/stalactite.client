@@ -61,7 +61,6 @@ class CustomerTest extends
 
         $expected = [
             'uid' => $model->getUid(),
-            'googleId' => $model->getGoogleId(),
             'email' => $model->getEmail(),
             'firstName' => $model->getFirstName(),
             'lastName' => $model->getLastName(),

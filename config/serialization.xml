@@ -71,9 +71,6 @@
             <group>create</group>
             <group>update</group>
         </attribute>
-        <attribute name="googleId">
-            <group>main</group>
-        </attribute>
         <attribute name="lastName">
             <group>main</group>
             <group>create</group>
@@ -175,10 +172,6 @@
             <group>create</group>
             <group>update</group>
             <group>updateMe</group>
-        </attribute>
-        <attribute name="googleId">
-            <group>main</group>
-            <group>min</group>
         </attribute>
         <attribute name="lastName">
             <group>main</group>

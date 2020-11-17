@@ -60,9 +60,6 @@ class ModelFactoryTest extends
             $output->getFirstName()
         );
         self::assertNull(
-            $output->getGoogleId()
-        );
-        self::assertNull(
             $output->getLastName()
         );
         self::assertNull(
@@ -244,9 +241,6 @@ class ModelFactoryTest extends
         );
         self::assertNull(
             $output->getFirstName()
-        );
-        self::assertNull(
-            $output->getGoogleId()
         );
         self::assertNull(
             $output->getLastName()
