@@ -194,6 +194,27 @@ class Service extends
     }
 
     /**
+     * @param string $email
+     * @param Token $token
+     * @return Response
+     * @throws ClientException
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function getByEmail(string $email, Token $token): Response
+    {
+        $endpoint = new Endpoint('/data/users');
+        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
+            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
+
+        return $this->getClient()->request(
+            $endpoint, [
+                'jwt' => (string)$token,
+                'query' => ['email' => $email]
+            ]
+        );
+    }
+
+    /**
      * @param string $uid
      * @param Token $jwt
      *
@@ -217,38 +238,6 @@ class Service extends
                 [
                     'jwt' => (string)$jwt,
                     'uriParameters' => [$uid],
-                ]
-            );
-    }
-
-    /**
-     * @param string $email
-     * @param string $googleId
-     * @param Token $jwt
-     *
-     * @return Response
-     * @throws ClientException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function getByEmailAndGoogleId(
-        string $email,
-        string $googleId,
-        Token $jwt
-    ): Response
-    {
-        $endpoint = new Endpoint('/data/users');
-        $endpoint->setResponseValidationSchema(new JsonSchema(User::getSchema()))
-            ->setResponseFormatter(static fn(array $response): User => ModelFactory::createUser($response));
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                    'query' => [
-                        'email' => $email,
-                        'googleId' => $googleId,
-                    ],
                 ]
             );
     }

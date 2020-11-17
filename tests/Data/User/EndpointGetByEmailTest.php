@@ -16,24 +16,24 @@ use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 /**
- * Class EndpointGetByEmailAndGoogleIdTest
+ * Class EndpointGetByEmailTest
  *
  * @package Jalismrs\Stalactite\Client\Tests\Data\User
  *
  * @covers \Jalismrs\Stalactite\Client\Data\User\Service
  */
-class EndpointGetByEmailAndGoogleIdTest extends
+class EndpointGetByEmailTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
 
     /**
      * @throws ClientException
-     * @throws JsonException
      * @throws NormalizerException
+     * @throws JsonException
      * @throws InvalidArgumentException
      */
-    public function testGetByEmailAndGoogleId(): void
+    public function testGetByEmail(): void
     {
         $testClient = ClientFactory::createClient();
         $testClient->setHttpClient(
@@ -53,9 +53,8 @@ class EndpointGetByEmailAndGoogleIdTest extends
 
         $systemUnderTest = $this->createSystemUnderTest($testClient);
 
-        $response = $systemUnderTest->getByEmailAndGoogleId(
-            'goodmorning@hello.hi',
-            '0123456789',
+        $response = $systemUnderTest->getByEmail(
+            TestableModelFactory::getTestableUser()->getEmail(),
             JwtFactory::create()
         );
 
@@ -74,11 +73,9 @@ class EndpointGetByEmailAndGoogleIdTest extends
         $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
 
-        $systemUnderTest->getByEmailAndGoogleId(
-            'goodmorning@hello.hi',
-            '0123456789',
+        $systemUnderTest->getByEmail(
+            TestableModelFactory::getTestableCustomer()->getEmail(),
             JwtFactory::create()
         );
     }
-
 }
