@@ -67,7 +67,6 @@ class UserTest extends
             'firstName' => $model->getFirstName(),
             'lastName' => $model->getLastName(),
             'email' => $model->getEmail(),
-            'googleId' => $model->getGoogleId(),
             'admin' => $model->isAdmin(),
         ];
 
@@ -102,7 +101,6 @@ class UserTest extends
             'firstName' => $model->getFirstName(),
             'lastName' => $model->getLastName(),
             'email' => $model->getEmail(),
-            'googleId' => $model->getGoogleId(),
             'admin' => $model->isAdmin(),
         ];
 

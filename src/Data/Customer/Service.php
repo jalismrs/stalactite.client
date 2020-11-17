@@ -161,6 +161,27 @@ class Service extends AbstractService
     }
 
     /**
+     * @param string $email
+     * @param Token $token
+     * @return Response
+     * @throws ClientException
+     * @throws InvalidArgumentException
+     */
+    public function getByEmail(string $email, Token $token): Response
+    {
+        $endpoint = new Endpoint('/data/customers');
+        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
+            ->setResponseFormatter(static fn(array $response): Customer => ModelFactory::createCustomer($response));
+
+        return $this->getClient()->request(
+            $endpoint, [
+                'jwt' => (string)$token,
+                'query' => ['email' => $email]
+            ]
+        );
+    }
+
+    /**
      * @param string $uid
      * @param Token $jwt
      *
@@ -184,69 +205,6 @@ class Service extends AbstractService
                 [
                     'jwt' => (string)$jwt,
                     'uriParameters' => [$uid],
-                ]
-            );
-    }
-
-    /**
-     * @param string $email
-     * @param Token $jwt
-     *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     */
-    public function getByEmail(
-        string $email,
-        Token $jwt
-    ): Response
-    {
-        $endpoint = new Endpoint('/data/customers');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
-            ->setResponseFormatter(
-                static fn(array $response): Customer => ModelFactory::createCustomer($response)
-            );
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                    'query' => ['email' => $email],
-                ]
-            );
-    }
-
-    /**
-     * @param string $email
-     * @param string $googleId
-     * @param Token $jwt
-     *
-     * @return Response
-     * @throws ClientException
-     * @throws InvalidArgumentException
-     */
-    public function getByEmailAndGoogleId(
-        string $email,
-        string $googleId,
-        Token $jwt
-    ): Response
-    {
-        $endpoint = new Endpoint('/data/customers');
-        $endpoint->setResponseValidationSchema(new JsonSchema(Customer::getSchema()))
-            ->setResponseFormatter(
-                static fn(array $response): Customer => ModelFactory::createCustomer($response)
-            );
-
-        return $this->getClient()
-            ->request(
-                $endpoint,
-                [
-                    'jwt' => (string)$jwt,
-                    'query' => [
-                        'email' => $email,
-                        'googleId' => $googleId,
-                    ],
                 ]
             );
     }
