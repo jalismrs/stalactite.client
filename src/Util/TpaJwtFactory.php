@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Jalismrs\Stalactite\Client\Util;
 
+use DateTimeImmutable;
 use Jalismrs\Stalactite\Client\Authentication\Model\ServerApp;
-use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\Plain;
 
 /**
  * Class TpaJwtFactory
@@ -19,25 +20,23 @@ final class TpaJwtFactory
     private const JWT_DURATION = 60;
 
     /**
-     * forge
-     *
-     * @static
-     *
      * @param ServerApp $serverApp
      * @param int $duration
-     *
-     * @return Token
+     * @return Plain
      */
-    public static function forge(ServerApp $serverApp, int $duration = self::JWT_DURATION): Token
+    public static function forge(ServerApp $serverApp, int $duration = self::JWT_DURATION): Plain
     {
         $time = time();
 
-        $builder = (new Builder())
-            ->issuedBy($serverApp->getName())
-            ->issuedAt($time)
-            ->expiresAt($time + $duration);
+        $config = Configuration::forSymmetricSigner(
+            new Sha256(),
+            Key\InMemory::plainText($serverApp->getTokenSignatureKey())
+        );
 
-        $signer = new Sha256();
-        return $builder->getToken($signer, new Key($serverApp->getTokenSignatureKey()));
+        return $config->builder()
+            ->issuedBy($serverApp->getName())
+            ->issuedAt(DateTimeImmutable::createFromFormat('U', (string)$time))
+            ->expiresAt(DateTimeImmutable::createFromFormat('U', (string)($time + $duration)))
+            ->getToken($config->signer(), $config->signingKey());
     }
 }

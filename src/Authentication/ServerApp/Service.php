@@ -37,7 +37,7 @@ class Service extends AbstractService
         return $this->getClient()->request(
             self::getAllEndpoint(),
             [
-                'jwt' => (string)$token,
+                'jwt' => $token->toString(),
                 'query' => ['page' => $page]
             ]
         );
@@ -56,7 +56,7 @@ class Service extends AbstractService
         return $this->getClient()->request(
             self::getAllEndpoint(),
             [
-                'jwt' => (string)$token,
+                'jwt' => $token->toString(),
                 'query' => [
                     'name' => $name,
                     'page' => $page
@@ -109,7 +109,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -153,7 +153,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                     'json' => $data,
                 ]
             );
@@ -197,7 +197,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                     'json' => $data,
                     'uriParameters' => [$serverApp->getUid()],
                 ]
@@ -233,7 +233,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                     'uriParameters' => [$serverApp->getUid()],
                 ]
             );
@@ -282,7 +282,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                     'json' => $data,
                     'uriParameters' => [$serverApp->getUid()],
                 ]

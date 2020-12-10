@@ -4,7 +4,7 @@ namespace Jalismrs\Stalactite\Client\Tests\Authentication\Token;
 
 use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Tests\AbstractTestEndpoint;
-use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Configuration;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
@@ -18,18 +18,19 @@ class EndpointValidateTest extends
     AbstractTestEndpoint
 {
     use SystemUnderTestTrait;
-    
+
     /**
      * @throws ClientException
      * @throws InvalidArgumentException
      */
-    public function testRequestMethodCalledOnce() : void
+    public function testRequestMethodCalledOnce(): void
     {
-        $mockToken       = (new Builder())->relatedTo('test-user')
-                                          ->getToken();
-        $mockClient      = $this->createMockClient();
+        $config = Configuration::forUnsecuredSigner();
+
+        $mockToken = $config->builder()->relatedTo('test-user')->getToken($config->signer(), $config->signingKey());
+        $mockClient = $this->createMockClient();
         $systemUnderTest = $this->createSystemUnderTest($mockClient);
-        
+
         $systemUnderTest->validate($mockToken);
     }
 }

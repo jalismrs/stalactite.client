@@ -3,10 +3,13 @@
 namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use Jalismrs\Stalactite\Client\Util\TokenIdentifier;
-use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Signer\Key\LocalFileReference;
+use Lcobucci\JWT\Signer\None;
 use Lcobucci\JWT\Signer\Rsa;
-use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\Plain;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,131 +19,93 @@ use PHPUnit\Framework\TestCase;
  *
  * @covers \Jalismrs\Stalactite\Client\Util\TokenIdentifier
  */
-class TokenIdentifierTest extends
-    TestCase
+class TokenIdentifierTest extends TestCase
 {
     /**
-     * @param Token $token
-     * @param bool  $expected
-     *
+     * @param Plain $token
+     * @param bool $expected
      * @dataProvider appTokenProvider
      */
-    public function testIsAppToken(
-        Token $token,
-        bool $expected
-    ) : void {
-        self::assertSame(
-            $expected,
-            TokenIdentifier::isAppToken($token)
-        );
+    public function testIsAppToken(Plain $token, bool $expected): void
+    {
+        self::assertSame($expected, TokenIdentifier::isAppToken($token));
     }
-    
-    public function appTokenProvider() : array
+
+    public function appTokenProvider(): array
     {
         $signer = new Rsa\Sha256();
-        
+        $config = Configuration::forAsymmetricSigner(
+            $signer,
+            LocalFileReference::file(__DIR__ . '/keys/private.pem'),
+            LocalFileReference::file(__DIR__ . '/keys/public.pem'),
+        );
+
         return [
             [
-                (new Builder())
-                    ->relatedTo('test')
-                    ->withClaim(
-                        'type',
-                        'test'
-                    )
-                    ->withHeader(
-                        'alg',
-                        $signer->getAlgorithmId()
-                    )
-                    ->getToken(),
+                $config->builder()->relatedTo('test')
+                    ->withClaim('type', 'test')
+                    ->getToken($config->signer(), $config->signingKey()),
                 true,
             ],
             [
-                (new Builder())
-                    ->withClaim(
-                        'type',
-                        'test'
-                    )
-                    ->withHeader(
-                        'alg',
-                        $signer->getAlgorithmId()
-                    )
-                    ->getToken(),
+                $config->builder()->withClaim('type', 'test')
+                    ->getToken($config->signer(), $config->signingKey()),
                 false
                 // missing sub
             ],
             [
-                (new Builder())
-                    ->relatedTo('test')
-                    ->withHeader(
-                        'alg',
-                        $signer->getAlgorithmId()
-                    )
-                    ->getToken(),
+                $config->builder()->relatedTo('test')
+                    ->getToken($config->signer(), $config->signingKey()),
                 false
                 // missing type
             ],
             [
-                (new Builder())
-                    ->relatedTo('test')
-                    ->withClaim(
-                        'type',
-                        'test'
-                    )
-                    ->getToken(),
+                $config->builder()->relatedTo('test')
+                    ->withClaim('type', 'test')
+                    ->getToken(new None(), InMemory::empty()),
                 false
                 // missing alg
-            ],
+            ]
         ];
     }
-    
+
     /**
-     * @param Token $token
-     * @param bool  $expected
-     *
+     * @param Plain $token
+     * @param bool $expected
      * @dataProvider tpaTokenProvider
      */
-    public function testIsTpaToken(
-        Token $token,
-        bool $expected
-    ) : void {
-        self::assertSame(
-            $expected,
-            TokenIdentifier::isTpaToken($token)
-        );
-    }
-    
-    public function tpaTokenProvider() : array
+    public function testIsTpaToken(Plain $token, bool $expected): void
     {
-        $signer = new Hmac\Sha256();
-        
+        self::assertSame($expected, TokenIdentifier::isTpaToken($token));
+    }
+
+    public function tpaTokenProvider(): array
+    {
+        $config = Configuration::forSymmetricSigner(
+            new Hmac\Sha256(),
+            InMemory::plainText('test')
+        );
+
         return [
             [
-                (new Builder())
+                $config->builder()
                     ->issuedBy('test')
-                    ->withHeader(
-                        'alg',
-                        $signer->getAlgorithmId()
-                    )
-                    ->getToken(),
+                    ->getToken($config->signer(), $config->signingKey()),
                 true,
             ],
             [
-                (new Builder())
-                    ->withHeader(
-                        'alg',
-                        $signer->getAlgorithmId()
-                    )
-                    ->getToken(),
+                $config->builder()
+                    ->getToken($config->signer(), $config->signingKey()),
                 false
                 // missing iss
             ],
             [
-                (new Builder())
+                $config->builder()
                     ->issuedBy('test')
-                    ->getToken(),
+                    ->getToken(new None(), InMemory::empty()),
                 false
                 // missing alg
-            ],
+            ]
         ];
     }
 }

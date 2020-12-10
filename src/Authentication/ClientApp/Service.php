@@ -41,7 +41,7 @@ class Service extends AbstractService
             ->request(
                 self::getAllEndpoint(),
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'query' => ['page' => $page]
                 ]
             );
@@ -61,7 +61,7 @@ class Service extends AbstractService
             ->request(
                 self::getAllEndpoint(),
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'query' => [
                         'name' => $name,
                         'page' => $page
@@ -114,7 +114,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -158,7 +158,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                 ]
             );
@@ -203,7 +203,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                     'uriParameters' => [$clientApp->getUid()],
                 ]
@@ -239,7 +239,7 @@ class Service extends AbstractService
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$clientApp->getUid()],
                 ]
             );

@@ -53,7 +53,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                 ]
             );
     }
@@ -79,7 +79,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -107,7 +107,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -148,7 +148,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                 ]
             );
@@ -192,7 +192,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                     'uriParameters' => [$permission->getUid()],
                 ]
@@ -228,7 +228,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$permission->getUid()],
                 ]
             );

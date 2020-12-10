@@ -106,7 +106,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$domain->getUid()],
                 ]
             );
@@ -156,7 +156,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$domain->getUid()],
                     'json' => ['user' => $user->getUid()],
                 ]
@@ -207,7 +207,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$domain->getUid()],
                     'json' => ['customer' => $customer->getUid()],
                 ]

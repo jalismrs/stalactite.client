@@ -50,7 +50,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => $domainUserRelation->getUid(),
                 ]
             );
@@ -85,7 +85,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => $domainCustomerRelation->getUid(),
                 ]
             );

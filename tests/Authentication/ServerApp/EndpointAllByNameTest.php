@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 /**
  * Class EndpointAllByNameTest
  * @package Jalismrs\Stalactite\Client\Tests\Authentication\ServerApp
- * @covers Jalismrs\Stalactite\Client\Authentication\ServerApp\Service
+ * @covers \Jalismrs\Stalactite\Client\Authentication\ServerApp\Service
  */
 class EndpointAllByNameTest extends AbstractTestEndpoint
 {

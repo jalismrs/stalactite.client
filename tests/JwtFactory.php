@@ -2,6 +2,7 @@
 
 namespace Jalismrs\Stalactite\Client\Tests;
 
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token;
 
 /**
@@ -19,6 +20,7 @@ class JwtFactory
      */
     public static function create(): Token
     {
-        return new Token();
+        $config = Configuration::forUnsecuredSigner();
+        return $config->builder()->getToken($config->signer(), $config->signingKey());
     }
 }
