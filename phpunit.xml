@@ -1,42 +1,27 @@
-<phpunit
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/6.3/phpunit.xsd"
-        backupGlobals="false"
-        beStrictAboutChangesToGlobalState="true"
-        beStrictAboutCoversAnnotation="false"
-        beStrictAboutOutputDuringTests="true"
-        beStrictAboutTestsThatDoNotTestAnything="true"
-        beStrictAboutTodoAnnotatedTests="true"
-        colors="true"
-        columns="67"
-        forceCoversAnnotation="true"
-        stderr="true"
-        verbose="true"
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         beStrictAboutChangesToGlobalState="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         colors="true"
+         forceCoversAnnotation="true"
+         stderr="true"
+         verbose="true"
 >
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <report>
+            <clover outputFile="var/coverage/clover.xml"/>
+            <html outputDirectory="var/coverage/html"/>
+        </report>
+    </coverage>
     <testsuites>
-        <testsuite
-                name=""
-        >
+        <testsuite name="">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist
-                processUncoveredFilesFromWhitelist="true"
-        >
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log
-                showUncoveredFiles="true"
-                target="var/coverage/clover.xml"
-                type="coverage-clover"
-        />
-        <log
-                showUncoveredFiles="true"
-                target="var/coverage/html"
-                type="coverage-html"
-        />
-    </logging>
+    <logging/>
 </phpunit>
