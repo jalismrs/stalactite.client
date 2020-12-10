@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4']
+        php-versions: [ '7.4', '8.0' ]
     name: PHP ${{ matrix.php-versions }} tests
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        env:
+          - XDEBUG_MODE: coverage
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
