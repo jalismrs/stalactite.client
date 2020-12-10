@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         env:
-          - XDEBUG_MODE: coverage
+          XDEBUG_MODE: coverage
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
