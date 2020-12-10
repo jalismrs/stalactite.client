@@ -73,7 +73,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => ['permissions' => $permissions],
                     'uriParameters' => [$post->getUid()],
                 ]
@@ -132,7 +132,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => ['permissions' => $permissions],
                     'uriParameters' => [$post->getUid()],
                 ]

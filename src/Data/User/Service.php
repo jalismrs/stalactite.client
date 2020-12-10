@@ -119,7 +119,7 @@ class Service extends
             ->request(
                 self::getAllEndpoint(),
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'query' => ['page' => $page],
                 ]
             );
@@ -139,7 +139,7 @@ class Service extends
             ->request(
                 self::getAllEndpoint(),
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'query' => [
                         'fullName' => $fullName,
                         'page' => $page
@@ -187,7 +187,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -208,7 +208,7 @@ class Service extends
 
         return $this->getClient()->request(
             $endpoint, [
-                'jwt' => (string)$token,
+                'jwt' => $token->toString(),
                 'query' => ['email' => $email]
             ]
         );
@@ -236,7 +236,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$uid],
                 ]
             );
@@ -300,7 +300,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                 ]
             );
@@ -342,7 +342,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'json' => $data,
                     'uriParameters' => [$user->getUid()],
                 ]
@@ -378,7 +378,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [$user->getUid()],
                 ]
             );

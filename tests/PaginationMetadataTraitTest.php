@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class PaginationMetadataTraitTest
  * @package Jalismrs\Stalactite\Client\Tests
- * @covers Jalismrs\Stalactite\Client\PaginationMetadataTrait
+ * @covers \Jalismrs\Stalactite\Client\PaginationMetadataTrait
  */
 class PaginationMetadataTraitTest extends TestCase
 {

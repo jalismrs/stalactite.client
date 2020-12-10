@@ -62,7 +62,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$jwt,
+                    'jwt' => $jwt->toString(),
                     'uriParameters' => [
                         $user->getUid(),
                         $domain->getUid(),

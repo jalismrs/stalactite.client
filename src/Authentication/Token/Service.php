@@ -10,8 +10,9 @@ use Jalismrs\Stalactite\Client\Exception\ClientException;
 use Jalismrs\Stalactite\Client\Exception\Service\AuthenticationServiceException;
 use Jalismrs\Stalactite\Client\Util\Endpoint;
 use Jalismrs\Stalactite\Client\Util\Response;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Encoding\JoseEncoder;
 use Lcobucci\JWT\Token;
+use Lcobucci\JWT\Token\Parser;
 use Psr\SimpleCache\InvalidArgumentException;
 use Throwable;
 
@@ -41,7 +42,7 @@ class Service extends
             ->request(
                 $endpoint,
                 [
-                    'jwt' => (string)$token,
+                    'jwt' => $token->toString(),
                 ]
             );
     }
@@ -67,8 +68,9 @@ class Service extends
             ->setResponseValidationSchema(new JsonSchema(['token' => ['type' => JsonRule::STRING_TYPE]]))
             ->setResponseFormatter(
                 static function (array $response): array {
+                    $parser = new Parser(new JoseEncoder());
                     try {
-                        $token = (new Parser())->parse($response['token']);
+                        $token = $parser->parse($response['token']);
                     } catch (Throwable $t) {
                         throw new AuthenticationServiceException(
                             'Invalid token',

@@ -4,38 +4,45 @@ namespace Jalismrs\Stalactite\Client\Tests\Util;
 
 use Jalismrs\Stalactite\Client\Tests\Authentication\Model\TestableModelFactory;
 use Jalismrs\Stalactite\Client\Util\TpaJwtFactory;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class TpaJwtFactoryTest
- *
  * @package Jalismrs\Stalactite\Client\Tests\Util
- *
  * @covers \Jalismrs\Stalactite\Client\Util\TpaJwtFactory
- * @uses \Jalismrs\Stalactite\Client\AbstractModel
- * @uses \Jalismrs\Stalactite\Client\Authentication\Model\ServerApp
  */
-class TpaJwtFactoryTest extends
-    TestCase
+class TpaJwtFactoryTest extends TestCase
 {
-    public function testTpaJwtForge() : void
+    /**
+     * assert that tpa token :
+     * - contains the server app name as issuer
+     * - is signed using the server app token signature key
+     */
+    public function testTpaJwtForge(): void
     {
         $serverApp = TestableModelFactory::getTestableServerApp();
-        $token     = TpaJwtFactory::forge($serverApp);
-        
+        $token = TpaJwtFactory::forge($serverApp);
+
         self::assertSame(
             $serverApp->getName(),
-            $token->getClaim('iss')
+            $token->claims()->get('iss')
         );
-        
+
         $signer = new Sha256();
+        $key = Key\InMemory::plainText($serverApp->getTokenSignatureKey());
+        $config = Configuration::forSymmetricSigner(
+            $signer,
+            $key
+        );
+
         self::assertTrue(
-            $token->verify(
-                $signer,
-                new Key($serverApp->getTokenSignatureKey())
-            )
+            $config->validator()->validate($token, ...[
+                new SignedWith($signer, $key)
+            ])
         );
     }
 }
