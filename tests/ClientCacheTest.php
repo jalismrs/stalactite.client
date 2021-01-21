@@ -234,7 +234,7 @@ class ClientCacheTest extends
                               ->normalize(
                                   new ApiError(
                                       'type',
-                                      1,
+                                      '1',
                                       null
                                   ),
                                   [

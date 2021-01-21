@@ -15,19 +15,17 @@ final class ApiError implements
     /**
      * type
      *
-     * @var string
+     * @var string $type
      */
     private string $type;
     /**
-     * code
-     *
-     * @var int
+     * @var string $code
      */
-    private int $code;
+    private string $code;
     /**
      * message
      *
-     * @var string|null
+     * @var string|null $message
      */
     private ?string $message;
 
@@ -35,14 +33,14 @@ final class ApiError implements
      * ApiError constructor.
      *
      * @param string $type
-     * @param int $code
+     * @param string $code
      * @param string|null $message
      *
      * @codeCoverageIgnore
      */
     public function __construct(
         string $type,
-        int $code,
+        string $code,
         ?string $message = null
     )
     {
@@ -63,7 +61,7 @@ final class ApiError implements
     {
         return [
             'type' => ['type' => JsonRule::STRING_TYPE],
-            'code' => ['type' => JsonRule::INTEGER_TYPE],
+            'code' => ['type' => JsonRule::STRING_TYPE],
             'message' => [
                 'type' => JsonRule::STRING_TYPE,
                 'null' => true,
@@ -86,11 +84,11 @@ final class ApiError implements
     /**
      * getCode
      *
-     * @return int
+     * @return string
      *
      * @codeCoverageIgnore
      */
-    public function getCode(): int
+    public function getCode(): string
     {
         return $this->code;
     }

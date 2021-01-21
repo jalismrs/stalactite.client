@@ -407,7 +407,7 @@ class ClientTest extends
     {
         $apiError = new ApiError(
             'type',
-            1,
+            '1',
             null
         );
 
